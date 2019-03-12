@@ -9,14 +9,14 @@
     <title>{{ config('app.name', 'Alez.pl - pokoje na wynajem') }}</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
-<body class="bg-grey-light">
-    <div class="mb-4 bg-white">
+<body>
+    <div class="bg-white">
         <nav class="container flex justify-between items-center py-3">
             <div>
-                <h2><a href="/">{{ config('app.short', 'Alez.pl') }}</a></h2>
+                <h1><a href="/" class="text-teal font-normal tracking-wide no-underline">{{ config('app.short', 'Alez.pl') }}</a></h1>
             </div>
             <div>
-                @guest
+{{--                 @guest
                     <a href="{{ route('login') }}">{{ __('Login') }}</a>
                     <a href="{{ route('register') }}">{{ __('Register') }}</a>
                 @endguest
@@ -26,11 +26,12 @@
                         @csrf
                         <button type="submit">{{ __('Logout') }}</button>
                     </form>
-                @endauth
+                @endauth --}}
+                <button class="btn">Dodaj ogłoszenie</button>
             </div>
         </nav>
     </div>
-    <div class="container mx-auto">
+    <div class="container mx-auto py-5">
         @yield('content')
     </div>
 </body>

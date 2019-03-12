@@ -39,7 +39,7 @@ class CitiesTest extends TestCase
      * 
      * 
      */
-    public function test_user_can_edit_an_city() 
+    public function test_user_can_edit_a_city() 
     {
         $this->withoutExceptionHandling();
 

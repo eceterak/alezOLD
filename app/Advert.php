@@ -33,6 +33,6 @@ class Advert extends Model
      */
     public function path() 
     {
-        return "/pokoje/{$this->id}";
+        return "/pokoje/{$this->title}";
     }
 }

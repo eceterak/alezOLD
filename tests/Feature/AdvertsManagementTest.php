@@ -49,13 +49,16 @@ class AdvertsManagementTest extends TestCase
      */
     public function test_user_can_create_an_advert()
     {
-        //$this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
         
         $this->authenticated();
 
         $this->get('/pokoje/dodaj')->assertStatus(200);
+
+        $city = factory(City::class)->create();
         
         $advert = [
+            'city_id' => $city->id,
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'rent' => $this->faker->numberBetween(300, 1000)

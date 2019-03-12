@@ -34,10 +34,10 @@ class AdvertTest extends TestCase
      */
     public function test_has_a_path()
     {
+        //$this->withoutExceptionHandling();
+
         $advert = factory('App\Advert')->create();
 
-        $advert->path();
-
-        $this->assertEquals('/pokoje/'.$advert->id, $advert->path());
+        $this->assertEquals('/pokoje/'.$advert->title, $advert->path());
     }
 }
