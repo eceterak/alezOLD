@@ -37,8 +37,23 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Eloquent adverts relationship.
+     *
+     * @return Collection
+     */
     public function adverts() 
     {
         return $this->hasMany(Advert::class);
     }
+
+    /**
+     * Check if user has admin privileges.
+     * 
+     * @return bool
+     */
+     public function isAdmin() 
+     {
+        return $this->role === 1;
+     }
 }

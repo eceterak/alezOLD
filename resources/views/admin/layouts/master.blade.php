@@ -10,13 +10,13 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
-    <div class="bg-white">
-        <nav class="container flex justify-between items-center py-3">
+    <div class="container mx-auto">
+        <nav class="flex justify-between items-center py-3 border-b border-grey">
             <div>
-                <h1><a href="/" class="text-teal font-normal tracking-wide no-underline">{{ env('APP_SHORT', 'Alez.pl') }}</a></h1>
+                <h1><a href="/" class="text-teal font-normal tracking-wide no-underline">{{ config('app.short', 'Alez.pl') }}</a></h1>
             </div>
             <div>
-{{--                 @guest
+                @guest
                     <a href="{{ route('login') }}">{{ __('Login') }}</a>
                     <a href="{{ route('register') }}">{{ __('Register') }}</a>
                 @endguest
@@ -26,13 +26,19 @@
                         @csrf
                         <button type="submit">{{ __('Logout') }}</button>
                     </form>
-                @endauth --}}
-                <button class="btn">Dodaj ogłoszenie</button>
+                @endauth
             </div>
         </nav>
-    </div>
-    <div class="container mx-auto py-5">
-        @yield('content')
+        <nav class="flex">
+            <ul class="flex list-reset">
+                <li>Miasta</li>
+                <li>Ogłoszenia</li>
+                <li>Użytkownicy</li>
+            </ul>
+        </nav>
+        <div class="card py-5">
+            @yield('content')
+        </div>
     </div>
 </body>
 </html>

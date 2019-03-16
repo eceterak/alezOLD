@@ -12,8 +12,36 @@
 */
 
 Auth::routes();
-
 Route::get('/', 'PagesController@index');
+
+/**
+ * --------------------------------------------------------------------------
+ * Admin Routes
+ * --------------------------------------------------------------------------
+ */
+
+Route::get('/admin/login', 'AdminController@login')->middleware('guest')->name('adminLoginPage');
+
+Route::group(['middleware' => 'admin'], function() {
+    Route::get('/admin', 'AdminController@index');
+
+    // Cities
+    Route::get('/admin/miasta', 'AdminCitiesController@index');
+    Route::get('/admin/miasta/dodaj', 'AdminCitiesController@create');
+    Route::post('/admin/miasta', 'AdminCitiesController@store');
+    Route::get('/admin/{city}', 'AdminCitiesController@edit');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
 
 Route::get('/pokoje', 'AdvertsController@index'); // Display all adverts.
 
@@ -23,12 +51,18 @@ Route::group(['middleware' => 'auth'], function() {
     // Adverts actions
     Route::post('/pokoje', 'AdvertsController@store');
     Route::get('/pokoje/edytuj/{advert}', 'AdvertsController@edit'); // Edit advert.
-
-    // Cities actions
-    Route::get('/miasta/dodaj', 'CitiesController@create');
-    Route::post('/miasta', 'CitiesController@store');
-    Route::get('/{city}/edytuj', 'CitiesController@edit');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
 
 Route::get('/miasta', 'CitiesController@index');
 Route::get('/{city}', 'CitiesController@show');
