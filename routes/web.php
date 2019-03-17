@@ -26,8 +26,8 @@ Route::group(['middleware' => 'admin'], function() {
     Route::get('/admin', 'AdminController@index');
 
     // Cities
-    Route::get('/admin/miasta', 'AdminCitiesController@index');
-    Route::get('/admin/miasta/dodaj', 'AdminCitiesController@create');
+    Route::get('/admin/miasta', 'AdminCitiesController@index')->name('cities.index');
+    Route::get('/admin/miasta/dodaj', 'AdminCitiesController@create')->name('cities.create');
     Route::post('/admin/miasta', 'AdminCitiesController@store');
     Route::get('/admin/{city}', 'AdminCitiesController@edit');
 });
