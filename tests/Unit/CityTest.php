@@ -37,4 +37,20 @@ class CityTest extends TestCase
 
         $this->post('/admin/miasta', $city)->assertSessionHasErrors('name');
     }
+
+    /**
+     * City can have adverts.
+     * 
+     * @return test
+     */
+    public function test_city_can_have_adverts() 
+    {
+        $this->authenticated();
+
+        $advert = auth()->user()->adverts()->create(
+            factory(Advert::class)->raw()
+        );
+
+        $this->get($advert->city->path())->assertSee($advert['title']);
+    }
 }

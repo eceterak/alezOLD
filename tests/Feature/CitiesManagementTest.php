@@ -33,7 +33,7 @@ class CitiesTest extends TestCase
 
         $this->assertDatabaseHas('cities', $city);
 
-        $this->get('/admin/miasta')->assertSee($city['name']);
+        $this->get(route('cities.index'))->assertSee($city['name']);
     }
 
     /**
@@ -43,13 +43,13 @@ class CitiesTest extends TestCase
      */
     public function test_admin_can_edit_a_city() 
     {
-        //$this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $this->authenticated(null, true);
 
         $city = factory(City::class)->create();
 
-        $this->get('/admin/'.$city->name)->assertSee($city->name);
+        $this->get(route('admin.cities.edit', $city->name))->assertSee($city->name);
     }
 
     /**

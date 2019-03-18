@@ -4,8 +4,8 @@
     <div class="card">
         <header>
             <h3>
-                Miasta
-                <small class="text-grey-darker">[{{ $cities->count() }}]</small>
+                Pokoje
+                <small class="text-grey-darker">[{{ $adverts->count() }}]</small>
             </h3>
             <a href="/admin/miasta/dodaj" class="btn">Dodaj</a>
         </header>
@@ -19,9 +19,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($cities as $city)
+                    @foreach($adverts as $advert)
                         <tr>
-                            <td><a href="{{ $city->path(true) }}">{{ $city->name }}</a></td>
+                            <td><a href="{{ $advert->path(true) }}">{{ $advert->title }}</a></td>
                         </tr>
                     @endforeach
                 </tbody>

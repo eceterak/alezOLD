@@ -22,12 +22,14 @@ class AdminCitiesController extends Controller
     }
 
     /**
-     * 
+     * Edit a city.
      * 
      * @return view
      */
-    public function edit(City $city) 
+    public function edit($name) 
     {
+        $city = City::where('name', $name)->firstOrFail();
+
         return view('admin.cities.edit')->with([
             'city' => $city
         ]);

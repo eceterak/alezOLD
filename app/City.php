@@ -12,20 +12,20 @@ class City extends Model
     ];
 
     /**
+     * Generate a url.
      * 
-     * 
-     * @return
-    */
-    public function path() 
+     * @return string
+     */
+    public function path($admin = false) 
     {
-        return '/'.$this->name;
+        return ($admin) ? "/admin/{$this->name}" : '/'.$this->name;
     }
 
     /**
+     * Define eloquent relationship between city and adverts.
      * 
-     * 
-     * @return
-    */
+     * @return Collection [Advert]
+     */
     public function adverts() 
     {
         return $this->hasMany(Advert::class);

@@ -24,12 +24,18 @@ Route::get('/admin/login', 'AdminController@login')->middleware('guest')->name('
 
 Route::group(['middleware' => 'admin'], function() {
     Route::get('/admin', 'AdminController@index');
-
+    
+    Route::get('/admin/pokoje', 'AdminAdvertsController@index')->name('admin.adverts');
+    
     // Cities
     Route::get('/admin/miasta', 'AdminCitiesController@index')->name('cities.index');
     Route::get('/admin/miasta/dodaj', 'AdminCitiesController@create')->name('cities.create');
-    Route::post('/admin/miasta', 'AdminCitiesController@store');
-    Route::get('/admin/{city}', 'AdminCitiesController@edit');
+    Route::post('/admin/miasta', 'AdminCitiesController@store')->name('admin.cities.store');
+    Route::get('/admin/{city}', 'AdminCitiesController@edit')->name('admin.cities.edit');
+    
+    // Adverts
+    Route::get('/admin/pokoje/dodaj', 'AdminAdvertsController@create')->name('admin.adverts.create');
+    Route::post('/admin/pokoje/dodaj', 'AdminAdvertsController@store')->name('admin.adverts.store');
 });
 
 /*

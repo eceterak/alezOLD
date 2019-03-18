@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Alez.pl - pokoje na wynajem') }}</title>
     <link rel="stylesheet" href="{{ mix('admin/css/app.css') }}">
+    <link rel="stylesheet" href="{{ mix('admin/css/master.css') }}">
 </head>
 <body class="bg-grey-lighter">
     <div class="container mx-auto">
@@ -15,7 +16,7 @@
             <ul>
                 <li><a href="/" class="bg-teal-darker">{{ config('app.short', 'Alez.pl') }}</a></li>
                 <li><a href="{{ route('cities.index') }}">Miasta</a></li>
-                <li><a href="{{ route('cities.index') }}">Ogłoszenia</a></li>
+                <li><a href="{{ route('admin.adverts') }}">Ogłoszenia</a></li>
                 <li><a href="{{ route('cities.index') }}">Użytkownicy</a></li>
             </ul>
             <div class="ml-auto">

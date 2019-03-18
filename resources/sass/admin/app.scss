@@ -53,6 +53,10 @@
             @apply font-normal;
         }
     }
+
+    .card-content {
+        @apply p-4;
+    }
 }
 
 .navigator {

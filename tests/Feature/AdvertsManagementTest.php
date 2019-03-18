@@ -12,25 +12,9 @@ class AdvertsManagementTest extends TestCase
 {
 
     use WithFaker, RefreshDatabase;
-    
-    /**
-     * 
-     * 
-     * @return
-    */
-    public function test_city_can_have_adverts() 
-    {
-        $this->authenticated();
-
-        $advert = auth()->user()->adverts()->create(
-            factory(Advert::class)->raw()
-        );
-
-        $this->get($advert->city->path())->assertSee($advert['title']);
-    }
 
     /**
-     * A basic feature test example.
+     * Guest cannot manage adverts.
      *
      * @return void
      */
