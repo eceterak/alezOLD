@@ -1,11 +1,10 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\City;
 use App\Advert;
 
 class AdvertsManagementTest extends TestCase
@@ -16,7 +15,7 @@ class AdvertsManagementTest extends TestCase
     /**
      * Admin can create an advert.
      * 
-     * @return
+     * @return test
      */
     public function test_admin_can_create_an_advert()
     {
@@ -33,6 +32,22 @@ class AdvertsManagementTest extends TestCase
         $this->assertDatabaseHas('adverts', $advert);
 
         $this->get(route('admin.adverts'))->assertSee($advert['title']);
+    }
+
+    /**
+     * Admin have permissions to edit an advert.
+     * 
+     * @return
+     */
+    public function test_admin_can_edit_any_advert() 
+    {
+        $this->withoutExceptionHandling();
+        
+        $this->authenticated(null, true);
+
+        $advert = factory(Advert::class)->create();
+        
+        $this->get(route('admin.adverts.edit', [$advert->city->name, $advert->title]))->assertSee($advert->title);
     }
 
 

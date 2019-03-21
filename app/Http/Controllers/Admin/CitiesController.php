@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\City;
 
-class AdminCitiesController extends Controller
+class CitiesController extends Controller
 {
     /**
      * Display all cities.
@@ -28,7 +29,7 @@ class AdminCitiesController extends Controller
      */
     public function edit($name) 
     {
-        $city = City::where('name', $name)->firstOrFail();
+        $city = City::where('name', str_replace('-', ' ', $name))->firstOrFail();
 
         return view('admin.cities.edit')->with([
             'city' => $city

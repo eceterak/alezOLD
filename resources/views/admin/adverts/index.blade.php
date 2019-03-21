@@ -7,15 +7,13 @@
                 Pokoje
                 <small class="text-grey-darker">[{{ $adverts->count() }}]</small>
             </h3>
-            <a href="/admin/miasta/dodaj" class="btn">Dodaj</a>
+            <a href="/admin/pokoje/dodaj" class="btn">Dodaj</a>
         </header>
         <div>
             <table class="table">
                 <thead>
                     <tr>
                         <th class="text-left">Nazwa</th>
-                        <th class="text-left">Ogłoszenia</th>
-                        <th class="text-left">Promowane</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -1,45 +1,45 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\City;
 
-class CitiesTest extends TestCase
+class CitiesManagementTest extends TestCase
 {
 
-    use WithFaker, RefreshDatabase;
+    use WithFaker ,RefreshDatabase;
 
     /**
      * Admin can create a city.
      * 
-     * @return test
+     * @return void
      */
     public function test_admin_can_create_a_city() 
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
         
         $this->authenticated(null, true); // Act as an admin.
 
-        $this->get('/admin/miasta/dodaj')->assertStatus(200);
+        $this->get(route('admin.cities.create'))->assertStatus(200);
 
         $city = [
             'name' => $this->faker->city
         ];
 
-        $this->post('/admin/miasta', $city)->assertRedirect('/admin/miasta');
+        $this->post(route('admin.cities'), $city)->assertRedirect(route('admin.cities'));
 
         $this->assertDatabaseHas('cities', $city);
 
-        $this->get(route('cities.index'))->assertSee($city['name']);
+        $this->get(route('admin.cities'))->assertSee($city['name']);
     }
 
     /**
      * Admin can edit a city.
      * 
-     * @return test
+     * @return void
      */
     public function test_admin_can_edit_a_city() 
     {
@@ -55,35 +55,20 @@ class CitiesTest extends TestCase
     /**
      * Guests and non-admin users cannot create a city.
      * 
-     * @return test
+     * @return void
      */
     public function test_non_admin_cannot_create_a_city() 
     {
         $city = factory('App\City')->raw();
 
         // Guest
-        $this->get('/admin/miasta/dodaj')->assertRedirect('/admin/login');
-        $this->post('/admin/miasta', $city)->assertRedirect('/admin/login');
+        $this->get(route('admin.cities.create'))->assertRedirect(route('admin.login'));
+        $this->post(route('admin.cities.store', $city))->assertRedirect(route('admin.login'));
 
         $this->authenticated(); 
 
         // Non-admin
-        $this->get('/admin/miasta/dodaj')->assertRedirect('/');
-        $this->post('/admin/miasta', $city)->assertRedirect('/');
+        $this->get(route('admin.cities.create'))->assertRedirect('/');
+        $this->post(route('admin.cities'), $city)->assertRedirect('/');
     }
-
-    /**
-     * Anyone can view a city.
-     * 
-     * @return test
-     */
-    public function test_guest_can_view_a_city() 
-    {
-        $this->withoutExceptionHandling();
-
-        $city = factory('App\City')->create();
-
-        $this->get("/{$city->path()}")->assertSee($city->name);
-    }
-
 }

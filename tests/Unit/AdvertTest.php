@@ -11,7 +11,7 @@ class AdvertTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A basic unit test example.
+     * Advert has to belong to an owner.
      *
      * @return void
      */
@@ -23,8 +23,7 @@ class AdvertTest extends TestCase
 
         $this->assertInstanceOf('App\User', $advert->user);
 
-        //$this->assertEquals(auth()->user(), $advert->user);
-
+        $this->assertEquals(auth()->user(), $advert->user);
     }
 
     /**
@@ -32,12 +31,10 @@ class AdvertTest extends TestCase
      *
      * @return void
      */
-    public function test_has_a_path()
+    public function test_advert_has_a_path()
     {
-        //$this->withoutExceptionHandling();
-
         $advert = factory('App\Advert')->create();
 
-        $this->assertEquals('/pokoje/'.$advert->title, $advert->path());
+        $this->assertEquals('/'.preparePath($advert->city->name).'/'.preparePath($advert->title), $advert->path());
     }
 }

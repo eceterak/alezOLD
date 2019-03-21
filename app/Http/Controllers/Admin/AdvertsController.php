@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Advert;
 
-class AdminAdvertsController extends Controller
+class AdvertsController extends Controller
 {
 
     /**
@@ -20,6 +21,17 @@ class AdminAdvertsController extends Controller
         return view('admin.adverts.index')->with([
             'adverts' => $adverts
         ]);
+    }
+
+    /**
+     * 
+     * 
+     * @return
+     */
+    public function edit($city, $title) 
+    {
+        var_dump($city);
+        var_dump($title);
     }
 
     /**

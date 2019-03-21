@@ -16,7 +16,7 @@
                 <h1><a href="/" class="text-teal font-normal tracking-wide no-underline">{{ env('APP_SHORT', 'Alez.pl') }}</a></h1>
             </div>
             <div>
-{{--                 @guest
+                @guest
                     <a href="{{ route('login') }}">{{ __('Login') }}</a>
                     <a href="{{ route('register') }}">{{ __('Register') }}</a>
                 @endguest
@@ -26,7 +26,7 @@
                         @csrf
                         <button type="submit">{{ __('Logout') }}</button>
                     </form>
-                @endauth --}}
+                @endauth
                 <button class="btn">Dodaj ogłoszenie</button>
             </div>
         </nav>

@@ -23,7 +23,7 @@ class Admin {
             }
         }
         else {
-            return redirect()->route('adminLoginPage'); // User is not logged in.
+            return redirect()->route('admin.login'); // User is not logged in.
         }
     }
 }

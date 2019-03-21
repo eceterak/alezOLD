@@ -15,9 +15,8 @@
         <nav class="navigator card flex items-center mt-5 bg-teal text-white">
             <ul>
                 <li><a href="/" class="bg-teal-darker">{{ config('app.short', 'Alez.pl') }}</a></li>
-                <li><a href="{{ route('cities.index') }}">Miasta</a></li>
+                <li><a href="{{ route('admin.cities') }}">Miasta</a></li>
                 <li><a href="{{ route('admin.adverts') }}">Ogłoszenia</a></li>
-                <li><a href="{{ route('cities.index') }}">Użytkownicy</a></li>
             </ul>
             <div class="ml-auto">
                 @auth

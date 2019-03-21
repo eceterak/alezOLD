@@ -14,11 +14,14 @@ class City extends Model
     /**
      * Generate a url.
      * 
+     * @param bool $admin
      * @return string
      */
     public function path($admin = false) 
     {
-        return ($admin) ? "/admin/{$this->name}" : '/'.$this->name;
+        $path = preparePath($this->name);
+
+        return ($admin) ? "/admin/{$path}/edit" : '/'.$path;
     }
 
     /**

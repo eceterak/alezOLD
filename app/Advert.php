@@ -6,9 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Advert extends Model
 {
-    /**
-     * 
-     */
     protected $fillable = [
         'user_id', 'city_id', 'title', 'description', 'rent'
     ];
@@ -29,10 +26,15 @@ class Advert extends Model
     }
 
     /**
+     * Generate a url.
      * 
+     * @param bool $admin
+     * @return string
      */
-    public function path() 
+    public function path($admin = false) 
     {
-        return "/pokoje/{$this->title}";
+        $path = preparePath($this->title);
+
+        return ($admin) ? '/admin/'.preparePath($this->city->name)."/{$path}/edytuj" : '/'.preparePath($this->city->name).'/'.$path;
     }
 }
