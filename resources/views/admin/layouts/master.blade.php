@@ -16,7 +16,7 @@
             <ul>
                 <li><a href="/" class="bg-teal-darker">{{ config('app.short', 'Alez.pl') }}</a></li>
                 <li><a href="{{ route('admin.cities') }}">Miasta</a></li>
-                <li><a href="{{ route('admin.adverts') }}">Ogłoszenia</a></li>
+                <li><a href="{{ route('admin.rooms') }}">Pokoje</a></li>
             </ul>
             <div class="ml-auto">
                 @auth
@@ -27,7 +27,17 @@
                 @endauth
             </div>
         </nav>
-        <div class="py-5">
+        <div>
+            <div id="breadcrumbs" class="my-4">
+                <ul class="flex list-reset">
+                    <li><a href="{{ route('admin') }}">Home</a></li>
+                    @if(count(Request::segments())) 
+                        @for($i = 1; $i < count(Request::segments()); $i++)
+                            <li>&nbsp;/&nbsp;{{ ucfirst(Request::segments()[$i]) }}</li>
+                        @endfor
+                    @endif
+                </ul>
+            </div>
             @yield('content')
         </div>
     </div>

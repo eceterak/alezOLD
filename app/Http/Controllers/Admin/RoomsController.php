@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Advert;
+use App\Room;
 
-class AdvertsController extends Controller
+class RoomsController extends Controller
 {
 
     /**
-     * Display all adverts.
+     * Display all rooms for rent.
      * 
      * @return view
      */
     public function index() 
     {
-        $adverts = Advert::all();
+        $rooms = Room::latest()->get();
 
-        return view('admin.adverts.index')->with([
-            'adverts' => $adverts
+        return view('admin.rooms.index')->with([
+            'rooms' => $rooms
         ]);
     }
 
@@ -28,24 +28,27 @@ class AdvertsController extends Controller
      * 
      * @return
      */
-    public function edit($city, $title) 
+    public function edit($city, $room) 
     {
-        var_dump($city);
-        var_dump($title);
+        $room = Room::where('id', substr($room, strpos($room, 'uuid-', 1) + 5))->firstOrFail();
+        
+        return view('admin.rooms.edit')->with([
+            'room' => $room
+        ]);
     }
 
     /**
-     * Create a new advert.
+     * Create a new room.
      * 
      * @return view
      */
     public function create() 
     {
-        return view('admin.adverts.create');
+        return view('admin.rooms.create');
     }
 
     /**
-     * Store an advert.
+     * Store an room.
      * 
      * @return redirect
      */
@@ -58,8 +61,8 @@ class AdvertsController extends Controller
             'rent' => 'required'
         ]);
 
-        auth()->user()->adverts()->create($attributes);
+        auth()->user()->rooms()->create($attributes);
 
-        return redirect(route('admin.adverts'));
+        return redirect(route('admin.rooms'));
     }
 }

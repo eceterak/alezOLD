@@ -5,7 +5,7 @@
         <header>
             <h3>
                 Pokoje
-                <small class="text-grey-darker">[{{ $adverts->count() }}]</small>
+                <small class="text-grey-darker">[{{ $rooms->count() }}]</small>
             </h3>
             <a href="/admin/pokoje/dodaj" class="btn">Dodaj</a>
         </header>
@@ -17,9 +17,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($adverts as $advert)
+                    @foreach($rooms as $room)
                         <tr>
-                            <td><a href="{{ $advert->path(true) }}">{{ $advert->title }}</a></td>
+                            <td><a href="{{ $room->path(true) }}">{{ $room->title }}</a></td>
                         </tr>
                     @endforeach
                 </tbody>

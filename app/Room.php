@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Advert extends Model
+class Room extends Model
 {
     protected $fillable = [
         'user_id', 'city_id', 'title', 'description', 'rent'
@@ -35,6 +35,6 @@ class Advert extends Model
     {
         $path = preparePath($this->title);
 
-        return ($admin) ? '/admin/'.preparePath($this->city->name)."/{$path}/edytuj" : '/'.preparePath($this->city->name).'/'.$path;
+        return ($admin) ? '/admin/'.preparePath($this->city->name)."/{$path}-uuid-{$this->id}" : '/'.preparePath($this->city->name).'/'.$path;
     }
 }

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Advert;
+use App\Room;
 
-class AdvertsController extends Controller
+class RoomsController extends Controller
 {
 
     /**
@@ -15,9 +15,9 @@ class AdvertsController extends Controller
      */
     public function index() 
     {
-        $adverts = Advert::all();
+        $rooms = Room::all();
         
-        return view('adverts.index')->withAdverts($adverts);
+        return view('rooms.index')->withRooms($rooms);
     }
 
     /**
@@ -25,9 +25,9 @@ class AdvertsController extends Controller
      * 
      * @return view
      */
-    public function show(Advert $advert) 
+    public function show(Room $room) 
     {        
-        return view('adverts.show')->withAdvert($advert);
+        return view('rooms.show')->withRoom($room);
     }
 
     /**
@@ -35,13 +35,13 @@ class AdvertsController extends Controller
      * 
      * @return view
      */
-    public function edit(Advert $advert) 
+    public function edit(Room $room) 
     {    
-        if(auth()->user()->isNot($advert->user)) {
+        if(auth()->user()->isNot($room->user)) {
             abort(403);
         }
         
-        return view('adverts.edit')->withAdvert($advert);
+        return view('rooms.edit')->withRoom($room);
     }
 
     /**
@@ -51,7 +51,7 @@ class AdvertsController extends Controller
     */
     public function create() 
     {
-        return view('adverts.create');
+        return view('rooms.create');
     }
 
     /**
@@ -67,7 +67,7 @@ class AdvertsController extends Controller
             'rent' => 'required'
         ]);
 
-        auth()->user()->adverts()->create($attributes);
+        auth()->user()->rooms()->create($attributes);
 
         return redirect('/pokoje');
     }

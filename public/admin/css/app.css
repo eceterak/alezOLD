@@ -581,6 +581,11 @@ table {
   border-radius: .25rem;
 }
 
+.btn.btn-reverse {
+  background-color: #008080;
+  color: #fff;
+}
+
 .card {
   border-radius: .25rem;
   background-color: #fff;
@@ -650,8 +655,33 @@ table {
   font-weight: 400;
 }
 
+.table td.fit,
+.table th.fit {
+  width: 1px;
+  white-space: nowrap;
+}
+
 .table tr td {
   border-bottom-width: 1px;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+.form-group input[type=text] {
+  display: block;
+  width: 100%;
+  margin-bottom: .5rem;
+  padding: .5rem;
+  border-width: 1px;
+  border-color: #b8c2cc;
+  border-radius: .25rem;
 }
 
 /**

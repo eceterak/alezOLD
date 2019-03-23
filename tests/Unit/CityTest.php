@@ -6,7 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\City;
-use App\Advert;
+use App\Room;
 
 class CityTest extends TestCase
 {
@@ -19,9 +19,11 @@ class CityTest extends TestCase
      */
     public function test_city_has_a_path() 
     {
-        $city = factory('App\City')->create();
+        $city = factory(City::class)->create();
+
+        $name = strtolower(str_replace(' ', '-', ($city->name)));
         
-        $this->assertEquals("/{$city->name}", $city->path());
+        $this->assertEquals("/{$name}", $city->path());
     }
 
     /**
@@ -39,18 +41,20 @@ class CityTest extends TestCase
     }
 
     /**
-     * City can have adverts.
+     * City can have rooms.
      * 
      * @return test
      */
-    public function test_city_can_have_adverts() 
+    public function test_city_can_have_rooms() 
     {
         $this->authenticated();
 
-        $advert = auth()->user()->adverts()->create(
-            factory(Advert::class)->raw()
+        $room = auth()->user()->rooms()->create(
+            factory(Room::class)->raw()
         );
 
-        $this->get($advert->city->path())->assertSee($advert['title']);
+        dd($room->city->path());
+
+        $this->get($room->city->path())->assertSee($room['title']);
     }
 }

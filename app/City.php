@@ -3,34 +3,42 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Advert;
+use App\Room;
 
 class City extends Model
 {
     protected $fillable = [
-        'name'
+        'name',
+        'suggested'
     ];
 
     /**
-     * Generate a url.
+     * Generate a frontend url.
      * 
-     * @param bool $admin
      * @return string
      */
-    public function path($admin = false) 
+    public function path() 
     {
-        $path = preparePath($this->name);
-
-        return ($admin) ? "/admin/{$path}/edit" : '/'.$path;
+        return '/'.preparePath($this->name);
     }
 
     /**
-     * Define eloquent relationship between city and adverts.
+     * Generate a backend url.
      * 
-     * @return Collection [Advert]
+     * @return string
      */
-    public function adverts() 
+    public function adminPath() 
     {
-        return $this->hasMany(Advert::class);
+        return '/admin/'.preparePath($this->name).'/edytuj';
+    }
+
+    /**
+     * Define eloquent relationship between city and rooms.
+     * 
+     * @return Collection [Room]
+     */
+    public function rooms() 
+    {
+        return $this->hasMany(Room::class);
     }
 }

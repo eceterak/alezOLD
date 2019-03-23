@@ -23,19 +23,20 @@ Route::get('/', 'PagesController@index');
 Route::get('/admin/login', 'Admin\AdminController@login')->middleware('guest')->name('admin.login');
 
 Route::group(['namespace' => 'Admin', 'middleware' => 'admin'], function() {
-    Route::get('/admin', 'AdminController@index');
+    Route::get('/admin', 'AdminController@index')->name('admin');
     
     // Cities
     Route::get('/admin/miasta', 'CitiesController@index')->name('admin.cities');
     Route::get('/admin/miasta/dodaj', 'CitiesController@create')->name('admin.cities.create');
     Route::post('/admin/miasta', 'CitiesController@store')->name('admin.cities.store');
-    Route::get('/admin/{city}/edit', 'CitiesController@edit')->name('admin.cities.edit');
+    Route::get('/admin/{city}/edytuj', 'CitiesController@edit')->name('admin.cities.edit');
+    Route::patch('/admin/{city}/edytuj', 'CitiesController@update')->name('admin.cities.update');
     
-    // Adverts
-    Route::get('/admin/pokoje', 'AdvertsController@index')->name('admin.adverts');
-    Route::get('/admin/pokoje/dodaj', 'AdvertsController@create')->name('admin.adverts.create');
-    Route::post('/admin/pokoje', 'AdvertsController@store')->name('admin.adverts.store');
-    Route::get('/admin/{city}/{advert}/edytuj', 'AdvertsController@edit')->name('admin.adverts.edit');
+    // Rooms
+    Route::get('/admin/pokoje', 'RoomsController@index')->name('admin.rooms');
+    Route::get('/admin/pokoje/dodaj', 'RoomsController@create')->name('admin.rooms.create');
+    Route::post('/admin/pokoje', 'RoomsController@store')->name('admin.rooms.store');
+    Route::get('/admin/{city}/{room}', 'RoomsController@edit')->name('admin.rooms.edit');
 });
 
 /*
@@ -49,14 +50,14 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'admin'], function() {
 |
 */
 
-Route::get('/pokoje', 'AdvertsController@index'); // Display all adverts.
+Route::get('/pokoje', 'RoomsController@index'); // Display all adverts.
 
 Route::group(['middleware' => 'auth'], function() {
     Route::get('/home', 'HomeController@index')->name('home');
     
     // Adverts actions
-    Route::post('/pokoje', 'AdvertsController@store');
-    Route::get('/pokoje/edytuj/{advert}', 'AdvertsController@edit'); // Edit advert.
+    Route::post('/pokoje', 'RoomsController@store');
+    Route::get('/pokoje/edytuj/{advert}', 'RoomsController@edit'); // Edit advert.
 });
 
 /*
@@ -72,5 +73,5 @@ Route::group(['middleware' => 'auth'], function() {
 
 Route::get('/miasta', 'CitiesController@index');
 Route::get('/{city}', 'CitiesController@show');
-Route::get('/pokoje/dodaj', 'AdvertsController@create');
-Route::get('/pokoje/{advert}', 'AdvertsController@show'); // Display a single advert.
+Route::get('/pokoje/dodaj', 'RoomsController@create');
+Route::get('/pokoje/{advert}', 'RoomsController@show'); // Display a single advert.

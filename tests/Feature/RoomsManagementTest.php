@@ -6,24 +6,24 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\City;
-use App\Advert;
+use App\Room;
 
-class AdvertsManagementTest extends TestCase
+class RoomsManagementTest extends TestCase
 {
 
     use WithFaker, RefreshDatabase;
 
     /**
-     * Guest cannot manage adverts.
+     * Guest cannot manage rooms.
      *
      * @return void
      */
-    public function test_guest_cannot_manage_an_advert() 
+    public function test_guest_cannot_manage_an_room() 
     {
-        $advert = factory('App\Advert')->create();
+        $room = factory(Room::class)->create();
         
-        $this->post('/pokoje', $advert->toArray())->assertredirect('/login');
-        $this->get("/pokoje/edytuj/{$advert->id}")->assertredirect('/login');
+        $this->post('/pokoje', $room->toArray())->assertredirect('/login');
+        $this->get("/pokoje/edytuj/{$room->id}")->assertredirect('/login');
     }
     
     /**
@@ -31,7 +31,7 @@ class AdvertsManagementTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_create_an_advert()
+    public function test_user_can_create_an_room()
     {
         $this->withoutExceptionHandling();
         
@@ -41,18 +41,18 @@ class AdvertsManagementTest extends TestCase
 
         $city = factory(City::class)->create();
         
-        $advert = [
+        $room = [
             'city_id' => $city->id,
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'rent' => $this->faker->numberBetween(300, 1000)
         ];
         
-        $this->post('/pokoje', $advert)->assertRedirect('/pokoje');
+        $this->post('/pokoje', $room)->assertRedirect('/pokoje');
         
-        $this->assertDatabaseHas('adverts', $advert);
+        $this->assertDatabaseHas('rooms', $room);
         
-        $this->get('/pokoje')->assertSee($advert['title']);
+        $this->get('/pokoje')->assertSee($room['title']);
     }
 
     /**
@@ -60,17 +60,17 @@ class AdvertsManagementTest extends TestCase
      *
      * @return void
      */
-    public function test_user_can_edit_an_advert() 
+    public function test_user_can_edit_an_room() 
     {
         $this->withoutExceptionHandling();
 
         $this->authenticated();
 
-        $advert = factory('App\Advert')->create(['user_id' => auth()->user()->id]);
+        $room = factory(Room::class)->create(['user_id' => auth()->user()->id]);
 
-        $this->get("/pokoje/edytuj/{$advert->id}")
-            ->assertSee($advert->title)
-            ->assertSee($advert->description);
+        $this->get("/pokoje/edytuj/{$room->id}")
+            ->assertSee($room->title)
+            ->assertSee($room->description);
     }
 
     /**
@@ -78,15 +78,15 @@ class AdvertsManagementTest extends TestCase
      * 
      * @return
      */
-    public function test_authenticated_user_cannot_edit_adverts_of_others() 
+    public function test_authenticated_user_cannot_edit_rooms_of_others() 
     {
         //$this->withoutExceptionHandling();
 
         $this->authenticated();
 
-        $advert = factory('App\Advert')->create();
+        $room = factory(Room::class)->create();
 
-        $this->get("/pokoje/edytuj/{$advert->id}")->assertStatus(403);
+        $this->get("/pokoje/edytuj/{$room->id}")->assertStatus(403);
     }
 
     /**
@@ -94,11 +94,11 @@ class AdvertsManagementTest extends TestCase
      *
      * @return void
      */
-    public function test_advert_requires_a_city() 
+    public function test_room_requires_a_city() 
     {
         $this->authenticated();
 
-        $attributes = factory('App\Advert')->raw(['city_id' => '']);
+        $attributes = factory(Room::class)->raw(['city_id' => '']);
 
         $this->post('/pokoje', $attributes)->assertSessionHasErrors('city_id');
     }
@@ -108,11 +108,11 @@ class AdvertsManagementTest extends TestCase
      *
      * @return void
      */
-    public function test_advert_requires_a_title() 
+    public function test_room_requires_a_title() 
     {
         $this->authenticated();
 
-        $attributes = factory('App\Advert')->raw(['title' => '']);
+        $attributes = factory(Room::class)->raw(['title' => '']);
 
         $this->post('/pokoje', $attributes)->assertSessionHasErrors('title');
     }
@@ -122,11 +122,11 @@ class AdvertsManagementTest extends TestCase
      *
      * @return void
      */
-    public function test_advert_requires_a_description() 
+    public function test_room_requires_a_description() 
     {
         $this->authenticated();
 
-        $attributes = factory('App\Advert')->raw(['description' => '']);
+        $attributes = factory(Room::class)->raw(['description' => '']);
 
         $this->post('/pokoje', $attributes)->assertSessionHasErrors('description');
     }
@@ -136,11 +136,11 @@ class AdvertsManagementTest extends TestCase
      *
      * @return void
      */
-    public function test_advert_requires_a_rent() 
+    public function test_room_requires_a_rent() 
     {
         $this->authenticated();
 
-        $attributes = factory('App\Advert')->raw(['rent' => '']);
+        $attributes = factory(Room::class)->raw(['rent' => '']);
 
         $this->post('/pokoje', $attributes)->assertSessionHasErrors('rent');
     }

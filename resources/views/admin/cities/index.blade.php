@@ -14,14 +14,14 @@
                 <thead>
                     <tr>
                         <th class="text-left">Nazwa</th>
-                        <th class="text-left">Ogłoszenia</th>
-                        <th class="text-left">Promowane</th>
+                        <th class="text-left">Pokoje</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($cities as $city)
                         <tr>
-                            <td><a href="{{ $city->path(true) }}">{{ $city->name }}</a></td>
+                            <td><a href="{{ $city->adminPath(true) }}">{{ $city->name }}</a></td>
+                            <td class="fit">{{ $city->rooms->count() }}</td>
                         </tr>
                     @endforeach
                 </tbody>

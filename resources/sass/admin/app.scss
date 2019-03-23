@@ -41,6 +41,10 @@
 
 .btn {
     @apply px-4 py-2 bg-white text-teal border border-teal no-underline rounded;
+
+    &.btn-reverse {
+        @apply bg-teal text-white;
+    }
 }
 
 .card {
@@ -98,9 +102,25 @@
     }
     td, th {
         @apply p-4 font-normal;
+
+        &.fit {
+            @apply w-px whitespace-no-wrap;
+        }
     }
     tr td {
         @apply border-b;
+    }
+}
+
+.form-group {
+    @apply mb-4;
+
+    label {
+        @apply inline-block mb-2;
+    }
+
+    input[type="text"] {
+        @apply block w-full mb-2 p-2 border border-grey rounded;
     }
 }
  

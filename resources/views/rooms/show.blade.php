@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-    <h3 class="font-normal text-lg mb-4">{{ $advert->title }}</h3>
+    <h3 class="font-normal text-lg mb-4">{{ $room->title }}</h3>
     <main class="lg:flex -mx-3">
         <div class="w-3/5 px-3">
             <img src="/storage/room.jpg" class="shadow">
@@ -9,7 +9,7 @@
             <div class="card">
                 <section>
                     <p class="text-grey-darker">
-                        {{ $advert->description }}
+                        {{ $room->description }}
                     </p>
                 </section>
             </div>
@@ -18,7 +18,7 @@
     <div class="card mt-4">
         <section>
             <p class="text-grey-darker">
-                {{ $advert->description }}
+                {{ $room->description }}
             </p>
         </section>
     </div>

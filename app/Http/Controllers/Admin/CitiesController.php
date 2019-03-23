@@ -21,22 +21,7 @@ class CitiesController extends Controller
             'cities' => $cities
         ]);
     }
-
-    /**
-     * Edit a city.
-     * 
-     * @return view
-     */
-    public function edit($name) 
-    {
-        $city = City::where('name', str_replace('-', ' ', $name))->firstOrFail();
-
-        return view('admin.cities.edit')->with([
-            'city' => $city
-        ]);
-    }
-
-
+    
     /**
      * Display a new city form.
      * 
@@ -46,7 +31,7 @@ class CitiesController extends Controller
     {
         return view('admin.cities.create');
     }
-
+    
     /**
      * Create a new city.
      * 
@@ -56,10 +41,42 @@ class CitiesController extends Controller
     {
         $attributes = request()->validate([
             'name' => 'required'
-        ]);
+            ]);
 
-        City::create($attributes);
+            City::create($attributes);
+            
+            return redirect('/admin/miasta');
+        }
+    
+        /**
+         * Edit a city.
+         * 
+         * @param string $name
+         * @return view
+         */
+        public function edit($name) 
+        {            
+            $city = City::where('name', parsePath($name))->firstOrFail();
+            
+            return view('admin.cities.edit')->with([
+                'city' => $city
+            ]);
+        }
+            
+        /**
+         * 
+         * 
+         * @return redirect
+         */
+        public function update($name) 
+        {
+            $city = City::where('name', parsePath($name))->firstOrFail();
 
-        return redirect('/admin/miasta');
+            $city->update([
+                'name' => request('name'),
+                'suggested' => request()->has('suggested')
+            ]);
+
+            return redirect()->route('admin.cities');
+        }
     }
-}

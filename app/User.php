@@ -38,13 +38,13 @@ class User extends Authenticatable
     ];
 
     /**
-     * Eloquent adverts relationship.
+     * Eloquent rooms relationship.
      *
      * @return Collection
      */
-    public function adverts() 
+    public function rooms() 
     {
-        return $this->hasMany(Advert::class);
+        return $this->hasMany(Room::class);
     }
 
     /**

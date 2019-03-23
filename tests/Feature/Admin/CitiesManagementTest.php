@@ -47,9 +47,19 @@ class CitiesManagementTest extends TestCase
 
         $this->authenticated(null, true);
 
-        $city = factory(City::class)->create();
+        $city = factory(City::class)->create([
+            'name' => 'test'
+        ]);
 
-        $this->get(route('admin.cities.edit', $city->name))->assertSee($city->name);
+        $this->get(route('admin.cities.edit', 'test'))->assertSee($city->name);
+
+        $this->patch($city->adminPath(), [
+            'name' => 'Juskilainen'
+        ])->assertRedirect(route('admin.cities'));
+
+        $this->assertDatabaseHas('cities', [
+            'name' => 'Juskilainen'
+        ]);
     }
 
     /**
