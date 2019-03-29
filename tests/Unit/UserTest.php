@@ -21,7 +21,7 @@ class UserTest extends TestCase
     {
         $user = factory('App\User')->create();
 
-        $this->assertInstanceOf(Collection::class, $user->adverts);
+        $this->assertInstanceOf(Collection::class, $user->rooms);
     }
 
     /**
@@ -50,9 +50,7 @@ class UserTest extends TestCase
     {
         $user = factory(User::class)->create(['role' => 1]);
 
-        $this->authenticated($user);
-
-        $this->get('/admin')->assertSee('Hi Admin');
+        $this->actingAs($user)->get('/admin')->assertSee('Hi Admin');
     }
 
     /**

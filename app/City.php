@@ -13,26 +13,6 @@ class City extends Model
     ];
 
     /**
-     * Generate a frontend url.
-     * 
-     * @return string
-     */
-    public function path() 
-    {
-        return '/'.preparePath($this->name);
-    }
-
-    /**
-     * Generate a backend url.
-     * 
-     * @return string
-     */
-    public function adminPath() 
-    {
-        return '/admin/'.preparePath($this->name).'/edytuj';
-    }
-
-    /**
      * Define eloquent relationship between city and rooms.
      * 
      * @return Collection [Room]
@@ -40,5 +20,25 @@ class City extends Model
     public function rooms() 
     {
         return $this->hasMany(Room::class);
+    }
+
+    /**
+     * Populate html form.
+     * 
+     * @return array
+     */
+    static public function form() 
+    {
+        return self::pluck('name', 'id');
+    }
+
+    /**
+     * Transform title into SEO friendly url.
+     * 
+     * @return string
+     */
+    public function path() 
+    {
+        return preparePath($this->name);
     }
 }

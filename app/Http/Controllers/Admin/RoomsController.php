@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Room;
+use App\City;
 
 class RoomsController extends Controller
 {
@@ -24,13 +25,14 @@ class RoomsController extends Controller
     }
 
     /**
+     * Edit a room.
      * 
-     * 
-     * @return
+     * @param string $path
+     * @return view
      */
-    public function edit($city, $room) 
+    public function edit($path) 
     {
-        $room = Room::where('id', substr($room, strpos($room, 'uuid-', 1) + 5))->firstOrFail();
+        $room = Room::getByPath($path);
         
         return view('admin.rooms.edit')->with([
             'room' => $room
@@ -38,7 +40,25 @@ class RoomsController extends Controller
     }
 
     /**
-     * Create a new room.
+     * Update a room.
+     * 
+     * @param string $romm
+     * @return redirect
+     */
+    public function update($room) 
+    {
+        Room::getByPath($room)->update(request()->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'rent' => 'required',
+            'city_id' => 'required'
+        ]));
+
+        return redirect(route('admin.rooms'));
+    }
+
+    /**
+     * Display new room form.
      * 
      * @return view
      */
@@ -48,20 +68,18 @@ class RoomsController extends Controller
     }
 
     /**
-     * Store an room.
+     * Create a new room.
      * 
      * @return redirect
      */
     public function store() 
     {
-        $attributes = request()->validate([
+        auth()->user()->rooms()->create(request()->validate([
             'city_id' => 'required',
             'title' => 'required',
             'description' => 'required',
             'rent' => 'required'
-        ]);
-
-        auth()->user()->rooms()->create($attributes);
+        ]));
 
         return redirect(route('admin.rooms'));
     }

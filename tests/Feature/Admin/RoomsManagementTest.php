@@ -6,6 +6,8 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Room;
+use Tests\Setup\RoomFactory;
+use Tests\Setup\CityFactory;
 
 class RoomsManagementTest extends TestCase
 {
@@ -13,11 +15,11 @@ class RoomsManagementTest extends TestCase
     use WithFaker, RefreshDatabase;
 
     /**
-     * Admin can create an room.
+     * Admin can create a room.
      * 
-     * @return test
+     * @return void
      */
-    public function test_admin_can_create_an_room()
+    public function test_admin_can_create_a_room()
     {
         $this->withoutExceptionHandling();
 
@@ -35,19 +37,28 @@ class RoomsManagementTest extends TestCase
     }
 
     /**
-     * Admin have permissions to edit an room.
+     * Admin can update the room.
      * 
-     * @return
+     * @return void
      */
-    public function test_admin_can_edit_any_room() 
+    public function test_admin_can_update_any_room() 
     {
         $this->withoutExceptionHandling();
         
-        $this->authenticated(null, true);
+        $this->admin();
 
-        $room = factory(Room::class)->create();
+        $city = app(CityFactory::class)->withRooms(1)->create();
         
-        $this->get(route('admin.rooms.edit', [$room->city->name, $room->id]))->assertSee($room->title);
+        $this->get(route('admin.rooms.edit', [$city->rooms->first()->path()]))->assertSee($city->rooms->first()->title);
+
+        $city->rooms->first()->title = 'new title';
+        $city->rooms->first()->city->id = 11;
+
+        $this->patch(route('admin.rooms.update', [$city->rooms->first()->path()]), $city->rooms->first()->toArray())->assertRedirect(route('admin.rooms'));
+
+        $this->assertDatabaseHas('rooms', [
+            'title' => 'new title'
+        ]);
     }
 
 

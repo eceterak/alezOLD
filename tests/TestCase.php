@@ -9,15 +9,32 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
 
     /**
-     * Creates and authenticate a user.
+     * Act as an regular user.
      * @param $user [User/null]
-     * @param $adminPrivileges [bool]
      * 
-     * @return auth()
+     * @return App\User
      */
-    protected function authenticated($user = null, $adminPrivileges = false) 
+    protected function user($user = null) 
     {
-        return ($adminPrivileges == true) ? $this->actingAs($user ?: factory('App\User')->create(['role' => 1])) : $this->actingAs($user ?: factory('App\User')->create());
-    
+        $user = $user ?: factory('App\User')->create(['role' => 1]);
+
+        $this->actingAs($user);
+
+        return $user;
+    }
+
+    /**
+     * Act as an admin.
+     * @param $user [User/null]
+     * 
+     * @return App\User
+     */
+    protected function admin($admin = null) 
+    {
+        $admin = $admin ?: factory('App\User')->create(['role' => 1]);
+
+        $this->actingAs($admin);
+
+        return $admin;
     }
 }

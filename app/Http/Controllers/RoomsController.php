@@ -9,7 +9,7 @@ class RoomsController extends Controller
 {
 
     /**
-     * 
+     * Display all available rooms.
      * 
      * @return view
      */
@@ -21,28 +21,59 @@ class RoomsController extends Controller
     }
 
     /**
+     * Display a single room.
      * 
-     * 
+     * @param string $path
      * @return view
      */
-    public function show(Room $room) 
-    {        
-        return view('rooms.show')->withRoom($room);
+    public function show($city, $room) 
+    {
+        $room = Room::getByPath($room);
+        
+        return view('rooms.show')->with([
+            'room' => $room
+        ]);
+    }
+    
+    /**
+     * Edit a room.
+     * 
+     * @param string $path
+     * @return view
+     */
+    public function edit($path) 
+    {
+        $room = Room::getByPath($path);
+        
+        $this->authorize('update', $room);
+
+        return view('admin.rooms.edit')->with([
+            'room' => $room
+        ]);
     }
 
     /**
+     * Update a room.
      * 
-     * 
-     * @return view
+     * @param string $romm
+     * @return redirect
      */
-    public function edit(Room $room) 
-    {    
-        if(auth()->user()->isNot($room->user)) {
-            abort(403);
-        }
-        
-        return view('rooms.edit')->withRoom($room);
+    public function update($path) 
+    {
+        $room = Room::getByPath($path);
+
+        $this->authorize('update', $room);
+
+        $room->update(request()->validate([
+            'title' => 'required',
+            'description' => 'required',
+            'rent' => 'required',
+            'city_id' => 'required'
+        ]));
+
+        return redirect(route('rooms'));
     }
+
 
     /**
      * 

@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\City;
 use App\Room;
+use Facades\Tests\Setup\RoomFactory;
+use Facades\Tests\Setup\CityFactory;
 
 class RoomsManagementTest extends TestCase
 {
@@ -18,130 +20,84 @@ class RoomsManagementTest extends TestCase
      *
      * @return void
      */
-    public function test_guest_cannot_manage_an_room() 
+    public function test_guest_cannot_manage_a_room() 
     {
-        $room = factory(Room::class)->create();
-        
-        $this->post('/pokoje', $room->toArray())->assertredirect('/login');
-        $this->get("/pokoje/edytuj/{$room->id}")->assertredirect('/login');
+        $room = RoomFactory::create();
+
+        $this->get(route('rooms.mine'))->assertRedirect(route('login'));
+        $this->get(route('rooms.create'))->assertRedirect(route('login'));
+        $this->post(route('rooms.store'), [])->assertRedirect(route('login'));
+        $this->get(route('rooms.edit', $room->path()))->assertRedirect(route('login'));
+        $this->patch(route('rooms.update', $room->path()), [])->assertRedirect(route('login'));
     }
     
     /**
-     * A basic feature test example.
+     * Authenticated user can create a new rom.
      *
      * @return void
      */
-    public function test_user_can_create_an_room()
-    {
-        $this->withoutExceptionHandling();
-        
-        $this->authenticated();
+    public function test_user_can_create_a_room()
+    {   
+        $this->user();
 
-        $this->get('/pokoje/dodaj')->assertStatus(200);
+        $this->get(route('rooms.create'))->assertStatus(200);
 
-        $city = factory(City::class)->create();
+        $city = CityFactory::create();
         
-        $room = [
+        $attributes = [
             'city_id' => $city->id,
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'rent' => $this->faker->numberBetween(300, 1000)
         ];
         
-        $this->post('/pokoje', $room)->assertRedirect('/pokoje');
+        $this->post(route('rooms.store'), $attributes)->assertRedirect(route('rooms'));
+
+        $room = Room::where($attributes)->first();
         
-        $this->assertDatabaseHas('rooms', $room);
-        
-        $this->get('/pokoje')->assertSee($room['title']);
+        $this->get(route('rooms'))->assertSee($attributes['title']);
+
+        $this->get(route('rooms.show', [$city->path(), $room->path()]))->assertSee($attributes['title']);
     }
 
     /**
-     * A basic feature test example.
+     * Only the owner of the room can update it.
      *
      * @return void
      */
-    public function test_user_can_edit_an_room() 
+    public function test_only_the_owner_of_the_room_can_update_it() 
     {
         $this->withoutExceptionHandling();
 
-        $this->authenticated();
+        $room = RoomFactory::ownedBy($this->user())->create();
 
-        $room = factory(Room::class)->create(['user_id' => auth()->user()->id]);
-
-        $this->get("/pokoje/edytuj/{$room->id}")
+        $this->get(route('rooms.edit', $room->path()))
             ->assertSee($room->title)
             ->assertSee($room->description);
+
+        $this->patch(route('rooms.update', $room->path()), $attributes = [
+            'title' => 'updated',
+            'description' => $room->description,
+            'rent' => $room->rent,
+            'city_id' => $room->city->id
+        ])->assertRedirect(route('rooms'));
+
+        $this->assertDatabaseHas('rooms', $attributes);
     }
 
     /**
-     * 
-     * 
-     * @return
-     */
-    public function test_authenticated_user_cannot_edit_rooms_of_others() 
-    {
-        //$this->withoutExceptionHandling();
-
-        $this->authenticated();
-
-        $room = factory(Room::class)->create();
-
-        $this->get("/pokoje/edytuj/{$room->id}")->assertStatus(403);
-    }
-
-    /**
-     * A basic feature test example.
+     * Authenticated user cant edit rooms of others.
      *
      * @return void
      */
-    public function test_room_requires_a_city() 
+    public function test_authenticated_user_cant_edit_rooms_of_others() 
     {
-        $this->authenticated();
+        $this->user();
 
-        $attributes = factory(Room::class)->raw(['city_id' => '']);
+        $room = RoomFactory::create();
 
-        $this->post('/pokoje', $attributes)->assertSessionHasErrors('city_id');
-    }
+        $this->get(route('rooms.edit', $room->path()))->assertStatus(403);
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_room_requires_a_title() 
-    {
-        $this->authenticated();
-
-        $attributes = factory(Room::class)->raw(['title' => '']);
-
-        $this->post('/pokoje', $attributes)->assertSessionHasErrors('title');
-    }
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_room_requires_a_description() 
-    {
-        $this->authenticated();
-
-        $attributes = factory(Room::class)->raw(['description' => '']);
-
-        $this->post('/pokoje', $attributes)->assertSessionHasErrors('description');
-    }
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_room_requires_a_rent() 
-    {
-        $this->authenticated();
-
-        $attributes = factory(Room::class)->raw(['rent' => '']);
-
-        $this->post('/pokoje', $attributes)->assertSessionHasErrors('rent');
+        $this->patch(route('rooms.update', $room->path()), [])->assertStatus(403);
     }
 }

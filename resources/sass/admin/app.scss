@@ -112,15 +112,22 @@
     }
 }
 
-.form-group {
-    @apply mb-4;
+.form {
+    .form-group {
+        @apply mb-4;
+    
+        label {
+            @apply inline-block mb-2;
+        }
+    
+        input:not([type=checkbox]), textarea, select {
+            @apply block w-full mb-2 p-3 border border-grey rounded bg-transparent;
+        }
 
-    label {
-        @apply inline-block mb-2;
-    }
+        textarea {
+            @apply h-32;
+        }
 
-    input[type="text"] {
-        @apply block w-full mb-2 p-2 border border-grey rounded;
     }
 }
  

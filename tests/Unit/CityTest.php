@@ -7,33 +7,20 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\City;
 use App\Room;
+use Facades\Tests\Setup\CityFactory;
 
 class CityTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
     /**
-     * City has a path.
-     * 
-     * @return test
-     */
-    public function test_city_has_a_path() 
-    {
-        $city = factory(City::class)->create();
-
-        $name = strtolower(str_replace(' ', '-', ($city->name)));
-        
-        $this->assertEquals("/{$name}", $city->path());
-    }
-
-    /**
      * City requires a name.
      * 
-     * @return test
+     * @return void
      */
     public function test_city_requires_a_name()
     {
-        $this->authenticated(null, true);
+        $this->admin();
 
         $city = factory(City::class)->raw(['name' => '']);
 
@@ -41,20 +28,35 @@ class CityTest extends TestCase
     }
 
     /**
+     * City has a path.
+     * 
+     * @return void
+     */
+    public function test_city_has_a_path() 
+    {
+        $city = factory(City::class)->create();
+        
+        $this->assertEquals(preparePath($city->name), $city->path());
+    }
+
+    /**
      * City can have rooms.
      * 
-     * @return test
+     * @return void
      */
     public function test_city_can_have_rooms() 
     {
-        $this->authenticated();
+        $this->withExceptionHandling();
 
-        $room = auth()->user()->rooms()->create(
-            factory(Room::class)->raw()
-        );
+        $city = CityFactory::create();
 
-        dd($room->city->path());
+        $room = factory(Room::class)->raw([
+            'title' => 'short title',
+            'user_id' => $this->user()
+        ]);
 
-        $this->get($room->city->path())->assertSee($room['title']);
+        $city->rooms()->create($room);
+
+        $this->get(route('admin.cities.edit', $city->path()))->assertSee($room['title']);
     }
 }

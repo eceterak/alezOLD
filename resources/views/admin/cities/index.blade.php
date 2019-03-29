@@ -20,7 +20,7 @@
                 <tbody>
                     @foreach($cities as $city)
                         <tr>
-                            <td><a href="{{ $city->adminPath(true) }}">{{ $city->name }}</a></td>
+                            <td><a href="{{ route('admin.cities.edit', $city->path()) }}">{{ $city->name }}</a></td>
                             <td class="fit">{{ $city->rooms->count() }}</td>
                         </tr>
                     @endforeach

@@ -11,14 +11,20 @@ class Room extends Model
     ];
 
     /**
+     * Define eloquent relationship between user and Room.
      * 
-     * 
-     * @return
-    */
+     * @return App\User
+     */
     public function user() 
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Define eloquent relationship between city and Room.
+     * 
+     * @return App\City
+     */
 
     public function city()
     {
@@ -26,15 +32,36 @@ class Room extends Model
     }
 
     /**
-     * Generate a url.
+     * Get the instance of a Room.
      * 
-     * @param bool $admin
+     * @param string $path
+     * @return Room
+     */
+    static public function getByPath($path)
+    {
+        $id = substr($path, strrpos($path, '-uid-') + 5); // get last occurence of uid.
+
+        return self::where('id', intval($id, 36))->firstOrFail();
+    }
+    
+    /**
+     * Treansform title into SEO friendly url. 
+     * Replace spaces with dashes and add encoded id at the end.
+     * 
      * @return string
      */
-    public function path($admin = false) 
+    public function path() 
     {
-        $path = preparePath($this->title);
+        return preparePath($this->title).'-uid-'.$this->encodeId();
+    }
 
-        return ($admin) ? '/admin/'.preparePath($this->city->name)."/{$path}-uuid-{$this->id}" : '/'.preparePath($this->city->name).'/'.$path;
+    /**
+     * Encode id.
+     * 
+     * @return string
+     */
+    public function encodeId() 
+    {
+        return base_convert($this->id, 10, 36);
     }
 }

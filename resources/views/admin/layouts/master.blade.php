@@ -41,5 +41,6 @@
             @yield('content')
         </div>
     </div>
+    <script src="{{ mix('admin/js/app.js') }}"></script>
 </body>
 </html>

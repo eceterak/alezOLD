@@ -6,11 +6,28 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\City;
+use Facades\Tests\Setup\CityFactory;
 
 class CitiesManagementTest extends TestCase
 {
 
-    use WithFaker ,RefreshDatabase;
+    use WithFaker, RefreshDatabase;
+
+    /**
+     * Guest shouldn't have any permissions to manage a cities.
+     * 
+     * @return void
+     */
+    public function test_guests_cannot_manage_cities() 
+    {
+        $city = CityFactory::create();
+
+        $this->get(route('admin.cities'))->assertRedirect(route('admin.login'));
+        $this->get(route('admin.cities.create'))->assertRedirect(route('admin.login'));
+        $this->post(route('admin.cities.store'), [])->assertRedirect(route('admin.login'));
+        $this->get(route('admin.cities.edit', [$city->path()]))->assertRedirect(route('admin.login'));
+        $this->patch(route('admin.cities.update', [$city->path()]), [])->assertRedirect(route('admin.login'));
+    }
 
     /**
      * Admin can create a city.
@@ -18,67 +35,39 @@ class CitiesManagementTest extends TestCase
      * @return void
      */
     public function test_admin_can_create_a_city() 
-    {
-        //$this->withoutExceptionHandling();
-        
-        $this->authenticated(null, true); // Act as an admin.
+    {        
+        $this->admin();
 
         $this->get(route('admin.cities.create'))->assertStatus(200);
 
-        $city = [
-            'name' => $this->faker->city
+        $attributes = [
+            'name' => 'brzeszcze'
         ];
 
-        $this->post(route('admin.cities'), $city)->assertRedirect(route('admin.cities'));
+        $this->post(route('admin.cities'), $attributes)->assertRedirect(route('admin.cities'));
 
-        $this->assertDatabaseHas('cities', $city);
-
-        $this->get(route('admin.cities'))->assertSee($city['name']);
+        $city = City::where($attributes)->first();
+        
+        $this->get(route('admin.cities'))->assertSee($attributes['name']);
+        
+        $this->get(route('admin.cities.edit', $city->path()))->assertStatus(200);
     }
 
     /**
-     * Admin can edit a city.
+     * Admin can update a city.
      * 
      * @return void
      */
-    public function test_admin_can_edit_a_city() 
+    public function test_admin_can_update_a_city() 
     {
-        $this->withoutExceptionHandling();
+        $city = CityFactory::withRooms(1)->ownedBy($this->admin())->create();
+        
+        $this->get(route('admin.cities.edit', $city->path()))->assertSee($city->name);
 
-        $this->authenticated(null, true);
-
-        $city = factory(City::class)->create([
-            'name' => 'test'
-        ]);
-
-        $this->get(route('admin.cities.edit', 'test'))->assertSee($city->name);
-
-        $this->patch($city->adminPath(), [
-            'name' => 'Juskilainen'
+        $this->patch(route('admin.cities.update', $city->path()), $attributes = [
+            'name' => 'changed'
         ])->assertRedirect(route('admin.cities'));
 
-        $this->assertDatabaseHas('cities', [
-            'name' => 'Juskilainen'
-        ]);
-    }
-
-    /**
-     * Guests and non-admin users cannot create a city.
-     * 
-     * @return void
-     */
-    public function test_non_admin_cannot_create_a_city() 
-    {
-        $city = factory('App\City')->raw();
-
-        // Guest
-        $this->get(route('admin.cities.create'))->assertRedirect(route('admin.login'));
-        $this->post(route('admin.cities.store', $city))->assertRedirect(route('admin.login'));
-
-        $this->authenticated(); 
-
-        // Non-admin
-        $this->get(route('admin.cities.create'))->assertRedirect('/');
-        $this->post(route('admin.cities'), $city)->assertRedirect('/');
+        $this->assertDatabaseHas('cities', $attributes);
     }
 }

@@ -39,44 +39,47 @@ class CitiesController extends Controller
      */
     public function store() 
     {
-        $attributes = request()->validate([
-            'name' => 'required'
-            ]);
+    $attributes = request()->validate([
+        'name' => 'required'
+        ]);
 
-            City::create($attributes);
-            
-            return redirect('/admin/miasta');
-        }
-    
-        /**
-         * Edit a city.
-         * 
-         * @param string $name
-         * @return view
-         */
-        public function edit($name) 
-        {            
-            $city = City::where('name', parsePath($name))->firstOrFail();
-            
-            return view('admin.cities.edit')->with([
-                'city' => $city
-            ]);
-        }
-            
-        /**
-         * 
-         * 
-         * @return redirect
-         */
-        public function update($name) 
-        {
-            $city = City::where('name', parsePath($name))->firstOrFail();
-
-            $city->update([
-                'name' => request('name'),
-                'suggested' => request()->has('suggested')
-            ]);
-
-            return redirect()->route('admin.cities');
-        }
+        City::create($attributes);
+        
+        return redirect('/admin/miasta');
     }
+
+    /**
+     * Edit a city.
+     * 
+     * @param string $name
+     * @return view
+     */
+    public function edit($name) 
+    {   
+        //dd($name);
+        
+        $city = City::where('name', parsePath($name))->firstOrFail();
+        
+        return view('admin.cities.edit')->with([
+            'city' => $city
+        ]);
+    }
+        
+    /**
+     * Updatae a city.
+     * 
+     * @param string $path
+     * @return redirect
+     */
+    public function update($path) 
+    {
+        $city = City::where('name', parsePath($path))->firstOrFail();
+
+        $city->update([
+            'name' => request('name'),
+            'suggested' => request()->has('suggested')
+        ]);
+
+        return redirect()->route('admin.cities');
+    }
+}
