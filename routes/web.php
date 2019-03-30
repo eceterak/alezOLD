@@ -1,32 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Auth::routes();
-
-Route::get('/', 'PagesController@index');
-
-Route::get('/pokoje', 'RoomsController@index')->name('rooms');
-Route::get('/{city}/pokoje/{room}', 'RoomsController@show')->name('rooms.show');
-
-Route::group(['middleware' => 'auth'], function() 
-{
-    Route::get('/pokoje/moje', 'RoomsController@mine')->name('rooms.mine');
-    Route::get('/pokoje/dodaj', 'RoomsController@create')->name('rooms.create');
-    Route::post('/pokoje', 'RoomsController@store')->name('rooms.store');
-    Route::get('/pokoje/{room}/edytuj', 'RoomsController@edit')->name('rooms.edit');
-    Route::patch('/pokoje/{room}/edytuj', 'RoomsController@update')->name('rooms.update');
-});
-
 /**
  * --------------------------------------------------------------------------
  * Admin Routes
@@ -53,4 +26,26 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'admin'], function()
     Route::post('/admin/pokoje', 'RoomsController@store')->name('admin.rooms.store');
     Route::get('/admin/pokoje/{room}', 'RoomsController@edit')->name('admin.rooms.edit');
     Route::patch('/admin/pokoje/{room}', 'RoomsController@update')->name('admin.rooms.update');
+});
+
+/**
+ * --------------------------------------------------------------------------
+ * Web Routes
+ * --------------------------------------------------------------------------
+ */
+
+Auth::routes();
+
+Route::get('/', 'PagesController@index')->name('index');
+
+Route::get('/pokoje', 'RoomsController@index')->name('rooms');
+Route::get('/{city}/pokoje/{room}', 'RoomsController@show')->name('rooms.show');
+
+Route::group(['middleware' => 'auth'], function() 
+{
+    Route::get('/pokoje/moje', 'RoomsController@mine')->name('rooms.mine');
+    Route::get('/pokoje/dodaj', 'RoomsController@create')->name('rooms.create');
+    Route::post('/pokoje', 'RoomsController@store')->name('rooms.store');
+    Route::get('/pokoje/{room}/edytuj', 'RoomsController@edit')->name('rooms.edit');
+    Route::patch('/pokoje/{room}/edytuj', 'RoomsController@update')->name('rooms.update');
 });

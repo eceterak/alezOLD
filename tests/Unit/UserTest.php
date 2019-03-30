@@ -13,11 +13,11 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * A user can have multiple adverts.
+     * A user can have multiple rooms.
      * 
      * @return test
      */
-    public function test_user_has_adverts() 
+    public function test_user_has_rooms() 
     {
         $user = factory('App\User')->create();
 
@@ -50,22 +50,20 @@ class UserTest extends TestCase
     {
         $user = factory(User::class)->create(['role' => 1]);
 
-        $this->actingAs($user)->get('/admin')->assertSee('Hi Admin');
+        $this->actingAs($user)->get('/admin')->assertStatus(200);
     }
 
     /**
-     * Ensure that guest and casual user cannot enter the backend area.
+     * Ensure that non admins can't enter the backend area.
      * 
      * @return test
      */
-    public function test_guest_cannot_enter_the_backend() 
+    public function test_guest_cant_enter_the_backend() 
     {
-        //$this->withExceptionHandling();
+        $this->get(route('admin'))->assertRedirect(route('admin.login'));
 
-        $this->get('/admin')->assertRedirect('/admin/login');
+        $this->user();
 
-        $this->authenticated();
-
-        $this->get('/admin')->assertRedirect('/');
+        $this->get(route('admin'))->assertRedirect(route('index'));
     }
 }

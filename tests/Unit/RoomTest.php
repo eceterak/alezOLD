@@ -29,83 +29,40 @@ class RoomTest extends TestCase
     }
 
     /**
-     * Room is always associated with one city.
+     * Room is always associated with city.
      * 
      * @return void
      */
     public function test_it_is_associated_with_a_city() 
     {
-        $room = factory(Room::class)->create();
+        $room = RoomFactory::create();
 
         $this->assertInstanceOf(City::class, $room->city);
     }
 
     /**
-     * 
+     * It has a path.
      *
      * @return void
      */
     public function test_it_has_a_path()
     {
-        $room = factory(Room::class)->create();
+        $room = RoomFactory::create();
 
-        $this->assertEquals('/'.preparePath($room->city->name).'/'.preparePath($room->title), $room->path());
+        $this->assertEquals(preparePath($room->title.'-uid-'.$room->id), $room->path());
     }
-
-
+    
     /**
-     * A basic feature test example.
+     * Each room requires some attributes.
      *
      * @return void
      */
-    public function test_room_requires_a_city() 
+    public function test_room_requires_attributes() 
     {
-        $this->authenticated();
+        $this->user();
 
-        $attributes = factory(Room::class)->raw(['city_id' => '']);
-
-        $this->post('/pokoje', $attributes)->assertSessionHasErrors('city_id');
-    }
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_room_requires_a_title() 
-    {
-        $this->authenticated();
-
-        $attributes = factory(Room::class)->raw(['title' => '']);
-
-        $this->post('/pokoje', $attributes)->assertSessionHasErrors('title');
-    }
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_room_requires_a_description() 
-    {
-        $this->authenticated();
-
-        $attributes = factory(Room::class)->raw(['description' => '']);
-
-        $this->post('/pokoje', $attributes)->assertSessionHasErrors('description');
-    }
-
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function test_room_requires_a_rent() 
-    {
-        $this->authenticated();
-
-        $attributes = factory(Room::class)->raw(['rent' => '']);
-
-        $this->post('/pokoje', $attributes)->assertSessionHasErrors('rent');
+        $this->post(route('rooms.store'), [])->assertSessionHasErrors([
+            'city_id', 'title', 'description', 'rent'
+        ]);
     }
 }

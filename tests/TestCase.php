@@ -16,7 +16,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function user($user = null) 
     {
-        $user = $user ?: factory('App\User')->create(['role' => 1]);
+        $user = $user ?: factory('App\User')->create(['role' => 0]);
 
         $this->actingAs($user);
 

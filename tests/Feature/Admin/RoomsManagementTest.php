@@ -5,14 +5,30 @@ namespace Tests\Feature\Admin;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Facades\Tests\Setup\RoomFactory;
+use Facades\Tests\Setup\CityFactory;
 use App\Room;
-use Tests\Setup\RoomFactory;
-use Tests\Setup\CityFactory;
 
 class RoomsManagementTest extends TestCase
 {
 
     use WithFaker, RefreshDatabase;
+
+    /**
+     * Guest shouldn't have any permissions to manage rooms.
+     * 
+     * @return void
+     */
+    public function test_guests_cannot_manage_rooms() 
+    {
+        $room = RoomFactory::create();
+
+        $this->get(route('admin.rooms'))->assertRedirect(route('admin.login'));
+        $this->get(route('admin.rooms.create'))->assertRedirect(route('admin.login'));
+        $this->post(route('admin.rooms.store'), [])->assertRedirect(route('admin.login'));
+        $this->get(route('admin.rooms.edit', [$room->path()]))->assertRedirect(route('admin.login'));
+        $this->patch(route('admin.rooms.update', [$room->path()]), [])->assertRedirect(route('admin.login'));
+    }
 
     /**
      * Admin can create a room.
@@ -21,19 +37,19 @@ class RoomsManagementTest extends TestCase
      */
     public function test_admin_can_create_a_room()
     {
-        $this->withoutExceptionHandling();
+        $city = CityFactory::create();
 
-        $this->authenticated(null, true);
+        $this->admin();
 
-        $this->get(route('admin.rooms.create'))->assertStatus(200);
+        $attributes = factory(Room::class)->raw([
+            'user_id' => auth()->user()->id, 'city_id' => $city->id
+        ]);
 
-        $room = factory(Room::class)->raw(['user_id' => auth()->user()->id]);
+        $this->post(route('admin.rooms.store', $attributes))->assertRedirect(route('admin.rooms'));
 
-        $this->post(route('admin.rooms.store', $room))->assertRedirect(route('admin.rooms'));
+        $room = Room::where($attributes)->first();
 
-        $this->assertDatabaseHas('rooms', $room);
-
-        $this->get(route('admin.rooms'))->assertSee($room['title']);
+        $this->get(route('admin.rooms.edit', $room->path()))->assertSee($attributes['title']);
     }
 
     /**
@@ -43,18 +59,16 @@ class RoomsManagementTest extends TestCase
      */
     public function test_admin_can_update_any_room() 
     {
-        $this->withoutExceptionHandling();
-        
         $this->admin();
 
-        $city = app(CityFactory::class)->withRooms(1)->create();
+        $room = RoomFactory::create();
         
-        $this->get(route('admin.rooms.edit', [$city->rooms->first()->path()]))->assertSee($city->rooms->first()->title);
+        $this->get(route('admin.rooms.edit', [$room->path()]))->assertSee($room->title);
 
-        $city->rooms->first()->title = 'new title';
-        $city->rooms->first()->city->id = 11;
+        $room->title = 'new title';
+        $room->city->id = 11;
 
-        $this->patch(route('admin.rooms.update', [$city->rooms->first()->path()]), $city->rooms->first()->toArray())->assertRedirect(route('admin.rooms'));
+        $this->patch(route('admin.rooms.update', [$room->path()]), $room->toArray())->assertRedirect(route('admin.rooms'));
 
         $this->assertDatabaseHas('rooms', [
             'title' => 'new title'

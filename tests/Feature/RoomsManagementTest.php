@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\City;
 use App\Room;
 use Facades\Tests\Setup\RoomFactory;
 use Facades\Tests\Setup\CityFactory;
@@ -67,11 +66,9 @@ class RoomsManagementTest extends TestCase
      */
     public function test_only_the_owner_of_the_room_can_update_it() 
     {
-        $this->withoutExceptionHandling();
+        $room = RoomFactory::create();
 
-        $room = RoomFactory::ownedBy($this->user())->create();
-
-        $this->get(route('rooms.edit', $room->path()))
+        $this->actingAs($room->user)->get(route('rooms.edit', $room->path()))
             ->assertSee($room->title)
             ->assertSee($room->description);
 
