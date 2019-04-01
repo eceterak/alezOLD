@@ -7,10 +7,33 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Collection;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class UserTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * User can login.
+     * 
+     * @return void
+     */
+    public function test_user_can_login() 
+    {
+        $this->get(route('login'))->assertSuccessful();
+
+        $user = factory(User::class)->create([
+            'password' => bcrypt($password = 'test123')
+        ]);
+
+        $this->post('/login', [
+            'email' => $user->email,
+            'password' => $password
+        ])->assertRedirect('/');
+
+        $this->assertAuthenticatedAs($user);
+        
+    }
 
     /**
      * A user can have multiple rooms.

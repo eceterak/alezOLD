@@ -38,6 +38,7 @@ Auth::routes();
 
 Route::get('/', 'PagesController@index')->name('index');
 
+// Rooms
 Route::get('/pokoje', 'RoomsController@index')->name('rooms');
 Route::get('/{city}/pokoje/{room}', 'RoomsController@show')->name('rooms.show');
 
@@ -49,3 +50,7 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('/pokoje/{room}/edytuj', 'RoomsController@edit')->name('rooms.edit');
     Route::patch('/pokoje/{room}/edytuj', 'RoomsController@update')->name('rooms.update');
 });
+
+// Cities
+Route::get('/miasta', 'CitiesController@index')->name('cities');
+Route::get('/{city}', 'CitiesController@show')->name('cities.show');

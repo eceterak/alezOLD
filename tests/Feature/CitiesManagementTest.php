@@ -1,17 +1,29 @@
 <?php
 
-namespace Tests\Feature\Admin;
+namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\City;
 use Facades\Tests\Setup\CityFactory;
+use App\City;
 
-class CitiesManagementTest extends TestCase
+class CitiesTest extends TestCase
 {
+    use RefreshDatabase;
 
-    use WithFaker, RefreshDatabase;
+    /**
+     * Anyone can view a city.
+     * 
+     * @return void
+     */
+    public function test_guest_can_view_a_city() 
+    {        
+        $city = CityFactory::create();
+
+        $this->get(route('cities'))->assertSee($city->name);
+
+        $this->get(route('cities.show', $city->path()))->assertSee($city->name);
+    }
 
     /**
      * Guest shouldn't have any permissions to manage a cities.
@@ -60,6 +72,8 @@ class CitiesManagementTest extends TestCase
      */
     public function test_admin_can_update_a_city() 
     {
+        $this->admin();
+
         $city = CityFactory::withRooms(1)->ownedBy($this->admin())->create();
         
         $this->get(route('admin.cities.edit', $city->path()))->assertSee($city->name);

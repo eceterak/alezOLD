@@ -40,11 +40,101 @@
   */
 
 .btn {
-    @apply .bg-teal .text-white .no-underline .rounded .shadow .px-4 py-2;
+    @apply px-4 py-2 bg-white text-teal border border-teal no-underline rounded;
+
+    &.btn-reverse {
+        @apply bg-teal text-white;
+    }
 }
 
 .card {
-    @apply .p-3 .rounded .bg-white .shadow;
+    @apply rounded bg-white shadow;
+    
+    header {
+        @apply flex p-4 justify-between items-center;
+
+        h3 {
+            @apply font-normal;
+        }
+    }
+
+    .card-content {
+        @apply p-4;
+    }
+}
+
+.navigator {
+    //@apply p-4;
+
+    a {
+        @apply leading-normal;
+    }
+
+    ul {
+        @apply flex flex-wrap list-reset;
+
+        li {  
+
+            a {
+                @apply block p-4 text-white no-underline;   
+                
+                &:hover {
+                    @apply bg-teal-dark;
+                }
+            }
+
+            &:first-child a {
+                @apply rounded-tl rounded-bl border-none;
+            }
+            
+            &:last-child a {
+                @apply border-0 rounded-tr rounded-br;
+            }
+        }
+    }
+}
+
+.table {
+    @apply w-full;
+
+    thead {
+        @apply bg-grey-light;
+    }
+    td, th {
+        @apply p-4 font-normal;
+
+        &.fit {
+            @apply w-px whitespace-no-wrap;
+        }
+    }
+    tr td {
+        @apply border-b;
+    }
+}
+
+.form {
+    .form-group {
+        @apply mb-4;
+    
+        label {
+            @apply inline-block mb-2;
+        }
+    
+        input:not([type=checkbox]), textarea, select {
+            @apply block w-full p-3 border border-grey rounded bg-transparent;
+        }
+
+        textarea {
+            @apply h-32;
+        }
+
+    }
+
+    .form-group-reverse {
+        input:not([type=checkbox]), textarea, select {
+            @apply block w-full p-3 rounded;
+        }
+    }
 }
  
  /**

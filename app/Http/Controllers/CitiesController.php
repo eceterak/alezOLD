@@ -26,9 +26,11 @@ class CitiesController extends Controller
     */
     public function show($name) 
     {
-        $city = City::where('name', $name)->firstOrFail();
-
-        return view('cities.show')->withCity($city);        
+        $city = City::where('name', parsePath($name))->firstOrFail();
+        
+        return view('cities.show')->with([
+            'city' => $city
+        ]);    
     }
 
     public function create() 

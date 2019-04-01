@@ -55,9 +55,7 @@ class CitiesController extends Controller
      * @return view
      */
     public function edit($name) 
-    {   
-        //dd($name);
-        
+    { 
         $city = City::where('name', parsePath($name))->firstOrFail();
         
         return view('admin.cities.edit')->with([
@@ -66,7 +64,7 @@ class CitiesController extends Controller
     }
         
     /**
-     * Updatae a city.
+     * Update a city.
      * 
      * @param string $path
      * @return redirect

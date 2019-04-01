@@ -22,4 +22,9 @@
             </p>
         </section>
     </div>
+    @auth
+        @if($room->user->id == auth()->user()->id)
+            <a href="{{ route('rooms.edit', $room->path()) }}" class="btn">Edytuj</a>
+        @endif
+    @endauth
 @endsection

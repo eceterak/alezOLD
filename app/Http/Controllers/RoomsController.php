@@ -47,7 +47,7 @@ class RoomsController extends Controller
         
         $this->authorize('update', $room);
 
-        return view('admin.rooms.edit')->with([
+        return view('rooms.edit')->with([
             'room' => $room
         ]);
     }
@@ -64,42 +64,46 @@ class RoomsController extends Controller
 
         $this->authorize('update', $room);
 
-        $room->update(request()->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'rent' => 'required',
-            'city_id' => 'required'
-        ]));
+        $room->update($this->validateRequest());
 
         return redirect(route('rooms'));
     }
 
 
     /**
+     * Display a create new room form.
      * 
-     * 
-     * @return
-    */
+     * @return view
+     */
     public function create() 
     {
         return view('rooms.create');
     }
 
     /**
-     * 
+     * Store a new form in database.
      * 
      * @return redirect
      */
-    public function store() {
-        $attributes = request()->validate([
+    public function store() 
+    {
+        auth()->user()->rooms()->create($this->validateRequest());
+
+        return redirect('/pokoje');
+    }
+
+    /**
+     * Validate a data.
+     * 
+     * @return array
+     */
+    protected function validateRequest() 
+    {
+        return request()->validate([
             'city_id' => 'required',
             'title' => 'required', 
             'description' => 'required', 
             'rent' => 'required'
         ]);
-
-        auth()->user()->rooms()->create($attributes);
-
-        return redirect('/pokoje');
     }
 }

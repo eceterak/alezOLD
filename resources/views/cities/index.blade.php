@@ -2,7 +2,6 @@
 @section('content')
     <header class="flex mb-4 justify-between items-center">
         <h3 class="text-grey-darker">Miasta</h3>
-        <button class="btn">Dodaj</button>
     </header>
     <main class="flex flex-col">
         @forelse($cities as $city)

@@ -13,25 +13,28 @@
     <div class="bg-white">
         <nav class="container flex justify-between items-center py-3">
             <div>
-                <h1><a href="/" class="text-teal font-normal tracking-wide no-underline">{{ env('APP_SHORT', 'Alez.pl') }}</a></h1>
+                <h2><a href="/" class="text-teal text-3xl font-normal tracking-wide no-underline">{{ env('APP_SHORT', 'Alez.pl') }}</a></h2>
             </div>
             <div>
                 @guest
-                    <a href="{{ route('login') }}">{{ __('Login') }}</a>
-                    <a href="{{ route('register') }}">{{ __('Register') }}</a>
+                    <a class="btn mr-2" href="{{ route('login') }}">{{ __('Login') }}</a>
                 @endguest
                 @auth
-                    <span>Hello {{ auth()->user()->name }}</span>
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf
-                        <button type="submit">{{ __('Logout') }}</button>
+                        <button type="submit" class="btn mr-2">{{ __('Logout') }}</button>
                     </form>
                 @endauth
-                <button class="btn">Dodaj ogłoszenie</button>
+                <a href="{{ route('rooms.create') }}" class="btn btn-reverse">Dodaj ogłoszenie</a>
             </div>
         </nav>
     </div>
-    <div class="container mx-auto py-5">
+    <div class="bg-grey-lighter">
+        <div class="container py-8">
+            @yield('lead')
+        </div>
+    </div>
+    <div class="container py-8">
         @yield('content')
     </div>
 </body>
