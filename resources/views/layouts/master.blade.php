@@ -37,5 +37,6 @@
     <div class="container py-8">
         @yield('content')
     </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCR_9fz59qoV8SmAFt2sOycQ1WdEffRsFE&libraries=places&language=pl&region=PL&callback=initAutocomplete" async defer></script>  
 </body>
 </html>

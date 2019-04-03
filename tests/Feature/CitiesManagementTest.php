@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\CityFactory;
 use App\City;
 
-class CitiesTest extends TestCase
+class CitiesManagementTest extends TestCase
 {
     use RefreshDatabase;
 
