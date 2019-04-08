@@ -38,13 +38,38 @@ class User extends Authenticatable
     ];
 
     /**
-     * Eloquent rooms relationship.
+     * User can have many rooms.
      *
      * @return Collection
      */
     public function rooms() 
     {
         return $this->hasMany(Room::class);
+    }
+
+    public function inbox() 
+    {
+        return $this->hasMany(Conversation::class, 'receiver_id');
+    }
+
+    public function sent()
+    {
+        return $this->hasMany(Conversation::class, 'sender_id');
+    }
+
+    /**
+     * A user can hold many conversations.
+     * 
+     * @return
+     */
+    public function conversations() 
+    {
+        return $this->inbox->merge($this->sent);
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 
     /**

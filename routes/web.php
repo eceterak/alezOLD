@@ -37,6 +37,7 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'admin'], function()
 Auth::routes();
 
 Route::get('/', 'PagesController@index')->name('index');
+Route::get('/home', 'PagesController@home')->name('home');
 
 // Rooms
 Route::get('/pokoje', 'RoomsController@index')->name('rooms');
@@ -54,3 +55,12 @@ Route::group(['middleware' => 'auth'], function()
 // Cities
 Route::get('/miasta', 'CitiesController@index')->name('cities');
 Route::get('/{city}', 'CitiesController@show')->name('cities.show');
+
+Route::group(['middleware' => 'auth'], function()
+{
+    // Conversations
+    Route::get('/home/inbox', 'ConversationsController@inbox')->name('conversations.inbox');
+    Route::post('/{city}/pokoje/{room}/odpowiedz', 'ConversationsController@store')->name('conversations.store');
+    Route::get('/home/inbox/{conversation}', 'ConversationsController@show')->name('conversations.show');
+    Route::post('/home/inbox/{conversation}', 'ConversationsController@reply')->name('conversations.reply');
+});

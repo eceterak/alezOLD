@@ -39,8 +39,6 @@ class RoomsManagementTest extends TestCase
      */
     public function test_user_can_create_a_room()
     {   
-        $this->withoutExceptionHandling();
-
         $this->user();
 
         $this->get(route('rooms.create'))->assertStatus(200);
@@ -50,6 +48,15 @@ class RoomsManagementTest extends TestCase
         $attributes = [
             'place_id' => $this->faker->sha1,
             'city_id' => $city->id,
+            'lat' => $this->faker->latitude,
+            'lng' => $this->faker->longitude,
+            'address' => $this->faker->streetAddress,
+            'property_size' => rand(2, 10),
+            'property_type_id' => rand(1, 5),
+            'user_status' => rand(1, 5),
+
+            'living_room' => $this->faker->boolean(),
+
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
             'rent' => $this->faker->numberBetween(300, 1000)
@@ -77,12 +84,11 @@ class RoomsManagementTest extends TestCase
             ->assertSee($room->title)
             ->assertSee($room->description);
 
-        $this->patch(route('rooms.update', $room->path()), $attributes = [
-            'title' => 'updated',
-            'description' => $room->description,
-            'rent' => $room->rent,
-            'city_id' => $room->city->id
-        ])->assertRedirect(route('rooms'));
+        $this->patch(route('rooms.update', $room->path()), $attributes = factory(Room::class)->raw([
+            'user_id' => $room->user->id,
+            'city_id' => $room->city->id,
+            'title' => 'updated'
+        ]))->assertRedirect(route('rooms'));
 
         $this->assertDatabaseHas('rooms', $attributes);
     }
@@ -149,7 +155,8 @@ class RoomsManagementTest extends TestCase
         $this->admin();
 
         $attributes = factory(Room::class)->raw([
-            'user_id' => auth()->user()->id, 'city_id' => $city->id
+            'user_id' => auth()->user()->id, 
+            'city_id' => $city->id
         ]);
 
         $this->post(route('admin.rooms.store', $attributes))->assertRedirect(route('admin.rooms'));

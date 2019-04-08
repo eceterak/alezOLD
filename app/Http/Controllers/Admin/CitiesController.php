@@ -39,8 +39,8 @@ class CitiesController extends Controller
      */
     public function store() 
     {
-    $attributes = request()->validate([
-        'name' => 'required'
+        $attributes = request()->validate([
+            'name' => 'required'
         ]);
 
         City::create($attributes);

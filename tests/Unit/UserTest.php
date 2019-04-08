@@ -46,6 +46,19 @@ class UserTest extends TestCase
 
         $this->assertInstanceOf(Collection::class, $user->rooms);
     }
+    
+
+    /**
+     * A user can hold a conversation.
+     * 
+     * @return
+     */
+    public function test_user_can_hold_a_conversation() 
+    {
+        $user = factory(User::class)->create();
+
+        $this->assertInstanceOf(Collection::class, $user->conversations);
+    }
 
     /**
      * A simple test to check if user has admin privileges.

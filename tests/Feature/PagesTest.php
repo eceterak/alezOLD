@@ -8,11 +8,21 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PagesController extends TestCase
 {
+    use RefreshDatabase;
 
-    public function test_check_if_pages_load()
+    /**
+     * 
+     * 
+     * @return
+     */
+    public function test_authenticated_user_can_login() 
     {
-        $this->withoutExceptionHandling();
+        //$user = 
 
-        $this->get('/')->assertStatus(200);
+        //$this->get
+
+        $this->user();
+
+        $this->get(route('home'))->assertOk();
     }
 }

@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
 {
-    protected $fillable = [
-        'user_id', 'city_id', 'title', 'description', 'rent'
-    ];
+    protected $guarded = [];
 
     /**
      * Define eloquent relationship between user and Room.

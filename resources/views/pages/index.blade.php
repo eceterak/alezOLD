@@ -36,7 +36,11 @@
 
         function submitSearchMasterForm() 
         {
-            form.submit();
+            var place = autocomplete.getPlace();
+
+            console.log(place);
+
+            //form.submit();
         }
 
     </script>

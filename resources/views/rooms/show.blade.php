@@ -27,4 +27,29 @@
             <a href="{{ route('rooms.edit', $room->path()) }}" class="btn">Edytuj</a>
         @endif
     @endauth
+    <div class="card card-content mt-6">
+        <header>
+            <h3>Napisz wiadomosc</h3>
+        </header>
+        <div class="card-content">
+            <form action="{{ route('conversations.store', [$room->city->path(), $room->path()]) }}" method="POST" class="form">
+                @csrf
+                @guest
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="text" name="email" id="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefon</label>
+                        <input type="text" name="phone" id="phone">
+                    </div>
+                @endguest
+                <div class="form-group">
+                    <label for="body">Wiadomosc</label>
+                    <textarea name="body" id="body"></textarea>
+                </div>
+                <button type="submit" class="btn">Wyslij</button>
+            </form>
+        </div>
+    </div>
 @endsection

@@ -89,8 +89,6 @@ class RoomsController extends Controller
     {
         auth()->user()->rooms()->create($this->validateRequest());
 
-        $this->save();
-
         return redirect('/pokoje');
     }
 
@@ -104,6 +102,17 @@ class RoomsController extends Controller
         return request()->validate([
             'place_id' => 'required',
             'city_id' => 'required',
+            'lat' => 'required',
+            'lng' => 'required',
+            'address' => 'required',
+
+            'property_size' => 'required',
+            'property_type_id' => 'required',
+            'user_status' => 'required',
+
+            'living_room' => 'required',
+
+
             'title' => 'required', 
             'description' => 'required', 
             'rent' => 'required'

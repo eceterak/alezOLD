@@ -33,8 +33,8 @@ class RoomFactory
         $city = factory(City::class)->create();
 
         $room = factory(Room::class)->create([
-            'city_id' => $city->id,
-            'user_id' => $this->user ?? factory(User::class)
+            'user_id' => $this->user ?? factory(User::class),
+            'city_id' => $city->id
         ]);
 
         return $room;

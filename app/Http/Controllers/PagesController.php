@@ -15,4 +15,13 @@ class PagesController extends Controller
     {
         return view('pages.index');
     }
+
+    /**
+     * 
+     * @returneb
+     */
+    public function home()
+    {
+        return view('pages.home');
+    }
 }
