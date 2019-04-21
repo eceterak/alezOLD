@@ -1,6 +1,15 @@
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
+// jQuery-ui autocomplete
+/* @import '~jquery-ui/themes/base/core.css';
+@import '~jquery-ui/themes/base/theme.css';
+@import '~jquery-ui/themes/base/autocomplete.css'; */
+@import '~jquery-ui/themes/base/all.css';
+
+// Selectize
+@import '~selectize/dist/css/selectize.css';
+
 /**
  * This injects Tailwind's base styles, which is a combination of
  * Normalize.css and some additional base styles.
@@ -136,7 +145,29 @@
         }
     }
 }
- 
+
+.autocomplete {
+
+    @apply relative;
+
+    ul {
+        @apply -mt-1 bg-white absolute pin-t pin-l text-left list-reset;
+
+        li {
+            @apply p-3;
+            
+            &:firs-child {
+                @apply border-0;
+            }
+
+            &:hover {
+                @apply cursor-pointer;
+            }
+        }
+    }
+
+}
+
  /**
   * This injects all of Tailwind's utility classes, generated based on your
   * config file.

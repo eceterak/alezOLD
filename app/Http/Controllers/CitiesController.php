@@ -11,7 +11,7 @@ class CitiesController extends Controller
      * 
      * 
      * @return
-    */
+     */
     public function index() 
     {
         $cities = City::all();
@@ -23,7 +23,7 @@ class CitiesController extends Controller
      * 
      * 
      * @return
-    */
+     */
     public function show($name) 
     {
         $city = City::where('name', parsePath($name))->firstOrFail();
@@ -31,38 +31,5 @@ class CitiesController extends Controller
         return view('cities.show')->with([
             'city' => $city
         ]);    
-    }
-
-    public function create() 
-    {
-        return view('cities.create');
-    }
-
-    /**
-     * 
-     * 
-     * @return
-    */
-    public function store() 
-    {
-        $attributes = request()->validate([
-            'name' => 'required'
-        ]);
-
-        City::create($attributes);
-
-        return redirect('/miasta');
-    }
-    
-    /**
-     * 
-     * 
-     * @return
-    */
-    public function edit($name) 
-    {
-        $city = City::where('name', $name)->firstOrFail();
-
-        return view('cities.edit')->withCity($city);
     }
 }

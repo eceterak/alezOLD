@@ -30,6 +30,19 @@ class Room extends Model
     }
 
     /**
+     * Scope to get access to QueryBuilder.
+     * 
+     * @param $query
+     * @param QueryFilter $filters
+     * 
+     * @return
+     */
+    public function scopeFilter($query, QueryFilter $filters) 
+    {
+        return $filters->apply($query);
+    }
+
+    /**
      * Get the instance of a Room.
      * 
      * @param string $path

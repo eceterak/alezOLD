@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Room;
+use App\RoomFilters;
+use Illuminate\Http\Request;
 
 class RoomsController extends Controller
 {
@@ -11,13 +12,15 @@ class RoomsController extends Controller
     /**
      * Display all available rooms.
      * 
+     * To filter the results use RoomFilters which are injected trough route model binding.
+     * 
      * @return view
      */
-    public function index() 
+    public function index(RoomFilters $filters) 
     {
-        $rooms = Room::all();
-        
-        return view('rooms.index')->withRooms($rooms);
+        return view('rooms.index')->with([
+            'rooms' => Room::filter($filters)->get()
+        ]);
     }
 
     /**
@@ -27,11 +30,9 @@ class RoomsController extends Controller
      * @return view
      */
     public function show($city, $room) 
-    {
-        $room = Room::getByPath($room);
-        
+    {   
         return view('rooms.show')->with([
-            'room' => $room
+            'room' => Room::getByPath($room)
         ]);
     }
     
@@ -58,13 +59,13 @@ class RoomsController extends Controller
      * @param string $romm
      * @return redirect
      */
-    public function update($path) 
+    public function update($path, Request $request) 
     {
         $room = Room::getByPath($path);
 
         $this->authorize('update', $room);
 
-        $room->update($this->validateRequest());
+        $room->update($request->all());
 
         return redirect(route('rooms'));
     }
@@ -85,9 +86,10 @@ class RoomsController extends Controller
      * 
      * @return redirect
      */
-    public function store() 
+    public function store(Request $request) 
     {
-        auth()->user()->rooms()->create($this->validateRequest());
+        //auth()->user()->rooms()->create($this->validateRequest());
+        auth()->user()->rooms()->create($request->all()); // Update validateRequest()
 
         return redirect('/pokoje');
     }

@@ -11,11 +11,7 @@ class CitiesManagementTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Anyone can view a city.
-     * 
-     * @return void
-     */
+    // @test
     public function test_guest_can_view_a_city() 
     {        
         $city = CityFactory::create();
@@ -25,11 +21,7 @@ class CitiesManagementTest extends TestCase
         $this->get(route('cities.show', $city->path()))->assertSee($city->name);
     }
 
-    /**
-     * Guest shouldn't have any permissions to manage a cities.
-     * 
-     * @return void
-     */
+    // @test
     public function test_guests_cannot_manage_cities() 
     {
         $city = CityFactory::create();
@@ -41,11 +33,7 @@ class CitiesManagementTest extends TestCase
         $this->patch(route('admin.cities.update', [$city->path()]), [])->assertRedirect(route('admin.login'));
     }
 
-    /**
-     * Admin can create a city.
-     * 
-     * @return void
-     */
+    // @test
     public function test_admin_can_create_a_city() 
     {        
         $this->admin();
@@ -65,16 +53,12 @@ class CitiesManagementTest extends TestCase
         $this->get(route('admin.cities.edit', $city->path()))->assertStatus(200);
     }
 
-    /**
-     * Admin can update a city.
-     * 
-     * @return void
-     */
+    // @test
     public function test_admin_can_update_a_city() 
     {
         $this->admin();
 
-        $city = CityFactory::withRooms(1)->ownedBy($this->admin())->create();
+        $city = CityFactory::create();
         
         $this->get(route('admin.cities.edit', $city->path()))->assertSee($city->name);
 

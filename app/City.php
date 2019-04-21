@@ -15,11 +15,21 @@ class City extends Model
     /**
      * Define eloquent relationship between city and rooms.
      * 
-     * @return Collection [Room]
+     * @return Collection App\Room
      */
     public function rooms() 
     {
         return $this->hasMany(Room::class);
+    }
+
+    /**
+     * City can have many streets.
+     * 
+     * @return Collection App\Street
+     */
+    public function streets() 
+    {
+        return $this->hasMany(Street::class);
     }
 
     /**
@@ -40,5 +50,15 @@ class City extends Model
     public function path() 
     {
         return preparePath($this->name);
+    }
+
+    /**
+     * Find and return an instance of city, by its path.
+     * 
+     * @return App\City
+     */
+    static public function getByPath($path) 
+    {
+        return self::where('name', parsePath($path))->firstOrFail();
     }
 }
