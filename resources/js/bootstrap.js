@@ -11,6 +11,8 @@ try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
     require('jquery-ui/ui/widgets/autocomplete');
+    require('jquery-ui/ui/widgets/button');
+    require('jquery-ui/ui/widgets/tooltip');
     require('selectize');
     require('bootstrap');
 } catch (e) {}

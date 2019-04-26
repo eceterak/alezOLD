@@ -41,7 +41,6 @@ $factory->define(App\Room::class, function (Faker $faker) {
         'title' => $faker->sentence,
         'description' => $faker->paragraph,
         'lat' => $faker->latitude,
-        'lng' => $faker->longitude,
-        'address' => $faker->streetAddress        
+        'lng' => $faker->longitude  
     ];
 });

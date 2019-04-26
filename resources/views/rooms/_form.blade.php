@@ -4,10 +4,20 @@
     </header>
     <div class="card-content">
 
-        <form action="{{ route(...$route) }}" method="POST" class="form">
+        <form action="{{ route(...$route) }}" method="POST" name="create_new_advert" class="form">
                 
             @csrf
             @method($method)
+
+            <div class="form-group">
+                <label for="city_id">Miasto</label>
+                <select name="city_id" id="city_id"></select>
+            </div>
+
+            <div class="form-group">
+                <label for="street_id">Ulica</label>
+                <select name="street_id" id="street_id"></select>
+            </div>
 
             {{-- @if(App\City::form()->count())
                 <div class="form-group">

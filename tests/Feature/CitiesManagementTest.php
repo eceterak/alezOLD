@@ -36,15 +36,13 @@ class CitiesManagementTest extends TestCase
     // @test
     public function test_admin_can_create_a_city() 
     {        
+        $this->withoutExceptionHandling();
+
         $this->admin();
 
         $this->get(route('admin.cities.create'))->assertStatus(200);
 
-        $attributes = [
-            'name' => 'brzeszcze'
-        ];
-
-        $this->post(route('admin.cities'), $attributes)->assertRedirect(route('admin.cities'));
+        $this->post(route('admin.cities.store'), $attributes = factory(City::class)->raw())->assertRedirect(route('admin.cities'));
 
         $city = City::where($attributes)->first();
         

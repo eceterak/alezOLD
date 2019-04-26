@@ -89,9 +89,9 @@ class RoomsController extends Controller
     public function store(Request $request) 
     {
         //auth()->user()->rooms()->create($this->validateRequest());
-        auth()->user()->rooms()->create($request->all()); // Update validateRequest()
+        //auth()->user()->rooms()->create($request->all()); // Update validateRequest()
 
-        return redirect('/pokoje');
+        //return redirect('/pokoje');
     }
 
     /**

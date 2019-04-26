@@ -68,3 +68,4 @@ Route::group(['middleware' => 'auth'], function()
 
 // Ajax
 Route::post('/ajax/cities', 'AjaxController@cities')->name('ajax.cities');
+Route::post('/ajax/streets', 'AjaxController@streets')->name('ajax.streets');

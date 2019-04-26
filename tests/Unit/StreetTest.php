@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\StreetFactory;
 use App\Street;
+use App\City;
 
 class StreetTest extends TestCase
 {
@@ -17,34 +18,28 @@ class StreetTest extends TestCase
     {
         $this->admin();
 
-        $street = StreetFactory::raw();
+        $city = factory(City::class)->create();
 
-        $street['name'] = '';
+        $street = factory(City::class)->raw([
+            'name' => ''
+        ]);
 
-        $this->post(route('admin.streets.store'), $street)->assertSessionHasErrors('name');
+        $this->post(route('admin.streets.store', $city->path()), $street)->assertSessionHasErrors('name');
     }
 
     // @test
-    public function test_street_requires_a_city()
+    public function test_street_requires_latitude_and_longtitude()
     {
         $this->admin();
 
-        $street = factory(Street::class)->raw();
+        $city = factory(City::class)->create();
 
-        $this->post(route('admin.streets.store'), $street)->assertSessionHasErrors('city_id');
-    }
+        $street = factory(City::class)->raw([
+            'lat' => '',
+            'lon' => ''
+        ]);
 
-    // @test
-    public function test_street_requires_a_coordinates()
-    {
-        $this->admin();
-
-        $street = StreetFactory::raw();
-
-        $street['lat'] = '';
-        $street['lon'] = '';
-
-        $this->post(route('admin.streets.store'), $street)->assertSessionHasErrors(['lat', 'lon']);
+        $this->post(route('admin.streets.store', $city->path()), $street)->assertSessionHasErrors(['lat', 'lon']);
     }
 
     // @test

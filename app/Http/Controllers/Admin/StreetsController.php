@@ -35,13 +35,19 @@ class StreetsController extends Controller
      */
     public function store($city) 
     {
-        City::getByPath($city)->streets()->create(request()->validate([
+        $city = City::getByPath($city);
+
+        $city->streets()->create(request()->validate([
             'name' => 'required',
+            'type' => 'required',
             'lat' => 'required',
-            'lon' => 'required'
+            'lon' => 'required',
+            'importance' => 'sometimes',
+            //'city' => 'required',
+            'coordinates' => 'required'
         ]));
 
-        return redirect(route('admin.streets'));
+        return redirect(route('admin.cities.streets', $city->path()));
     }
 
     /**
@@ -53,9 +59,12 @@ class StreetsController extends Controller
     {
         Street::getByPath($city, $street)->update(request()->validate([
             'name' => 'required',
-            'city_id' => 'required',
+            'type' => 'required',
             'lat' => 'required',
-            'lon' => 'required'
+            'lon' => 'required',
+            'importance' => 'sometimes',
+            //'city' => 'required',
+            'coordinates' => 'required'
         ]));
 
         return redirect()->route('admin.streets');

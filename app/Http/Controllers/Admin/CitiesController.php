@@ -15,7 +15,7 @@ class CitiesController extends Controller
      */
     public function index() 
     {
-        $cities = City::all();
+        $cities = City::limit(5)->get();
 
         return view('admin.cities.index')->with([
             'cities' => $cities
@@ -37,13 +37,9 @@ class CitiesController extends Controller
      * 
      * @return redirect
      */
-    public function store() 
+    public function store(Request $request) 
     {
-        $attributes = request()->validate([
-            'name' => 'required'
-        ]);
-
-        City::create($attributes);
+        City::create($this->validateRequest($request));
         
         return redirect('/admin/miasta');
     }
@@ -79,5 +75,28 @@ class CitiesController extends Controller
         ]);
 
         return redirect()->route('admin.cities');
+    }
+
+    /**
+     * 
+     */
+    protected function validateRequest(Request $request)
+    {
+        return $request->validate([
+            'name' => 'required',
+            'type' => 'required',
+            'parent' => 'sometimes',
+            'lat' => 'required',
+            'lon' => 'required',
+            'importance' => 'sometimes',
+            'suggested' => 'sometimes',
+            'community' => 'required',
+            'county' => 'required',
+            'state' => 'required',
+            'west' => 'sometimes',
+            'south' => 'sometimes',
+            'east' => 'sometimes',
+            'north' => 'sometimes'
+        ]);
     }
 }

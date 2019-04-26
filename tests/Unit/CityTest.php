@@ -19,11 +19,31 @@ class CityTest extends TestCase
     {
         $this->admin();
 
-        $city = factory(City::class)->raw([
+        $this->post(route('admin.cities.store'), factory(City::class)->raw([
             'name' => ''
-        ]);
+        ]))->assertSessionHasErrors('name');
+    }
 
-        $this->post(route('admin.cities.store'), $city)->assertSessionHasErrors('name');
+    // @test
+    public function test_city_requires_latitude_and_longtitute()
+    {
+        $this->admin();
+
+        $this->post(route('admin.cities.store'), factory(City::class)->raw([
+            'lat' => '',
+            'lon' => '',
+        ]))->assertSessionHasErrors(['lat', 'lon']);
+    }
+
+    // @test
+    public function test_city_requires_a_county_and_a_state()
+    {
+        $this->admin();
+
+        $this->post(route('admin.cities.store'), factory(City::class)->raw([
+            'county' => '',
+            'state' => ''
+        ]))->assertSessionHasErrors(['county', 'state']);
     }
 
     // @test
@@ -46,7 +66,7 @@ class CityTest extends TestCase
         $this->assertInstanceOf('App\Street', $city->streets->first());
     }
 
-    // @test
+/*     // @test
     public function test_city_can_have_rooms() 
     {
         $this->withExceptionHandling();
@@ -61,5 +81,5 @@ class CityTest extends TestCase
         $city->rooms()->create($room);
 
         $this->get(route('admin.cities.edit', $city->path()))->assertSee($room['title']);
-    }
+    } */
 }

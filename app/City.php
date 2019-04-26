@@ -7,10 +7,7 @@ use App\Room;
 
 class City extends Model
 {
-    protected $fillable = [
-        'name',
-        'suggested'
-    ];
+    protected $guarded = [];
 
     /**
      * Define eloquent relationship between city and rooms.

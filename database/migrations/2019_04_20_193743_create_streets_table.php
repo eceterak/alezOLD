@@ -15,10 +15,14 @@ class CreateStreetsTable extends Migration
     {
         Schema::create('streets', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('name', 60);
+            $table->char('name', 100);
             $table->unsignedInteger('city_id');
-            $table->float('lat', 10, 6);
+            $table->char('type', 80);
             $table->float('lon', 10, 6);
+            $table->float('lat', 10, 6);
+            $table->float('importance', 7, 6);
+            //$table->char('city', 60);
+            $table->point('coordinates');
             $table->timestamps();
         });
     }
