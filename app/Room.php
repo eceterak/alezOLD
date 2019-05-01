@@ -8,6 +8,11 @@ class Room extends Model
 {
     protected $guarded = [];
 
+    protected $attributes = [
+        'validated' => false,
+        'active' => false
+    ];
+
     /**
      * Define eloquent relationship between user and Room.
      * 
@@ -27,6 +32,16 @@ class Room extends Model
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    /**
+     * Return a portion of a title.
+     * 
+     * @return string
+     */
+    public function shortTitle() 
+    {
+        return str_limit($this->title, 20, '...');
     }
 
     /**

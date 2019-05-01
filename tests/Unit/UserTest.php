@@ -7,17 +7,12 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Collection;
 use App\User;
-use Illuminate\Support\Facades\Auth;
 
 class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * User can login.
-     * 
-     * @return void
-     */
+    // @test
     public function test_user_can_login() 
     {
         $this->get(route('login'))->assertSuccessful();
@@ -32,14 +27,9 @@ class UserTest extends TestCase
         ])->assertRedirect('/');
 
         $this->assertAuthenticatedAs($user);
-        
     }
 
-    /**
-     * A user can have multiple rooms.
-     * 
-     * @return test
-     */
+    // @test
     public function test_user_has_rooms() 
     {
         $user = factory('App\User')->create();
@@ -47,12 +37,7 @@ class UserTest extends TestCase
         $this->assertInstanceOf(Collection::class, $user->rooms);
     }
     
-
-    /**
-     * A user can hold a conversation.
-     * 
-     * @return
-     */
+    // @test
     public function test_user_can_hold_a_conversation() 
     {
         $user = factory(User::class)->create();
@@ -60,11 +45,7 @@ class UserTest extends TestCase
         $this->assertInstanceOf(Collection::class, $user->conversations);
     }
 
-    /**
-     * A simple test to check if user has admin privileges.
-     * 
-     * @return test
-     */
+    // @test
     public function test_user_can_be_an_admin()
     {
         $user = factory(User::class)->create(['role' => 1]);
@@ -77,11 +58,7 @@ class UserTest extends TestCase
         $this->assertEquals(true, $user->isAdmin());
     }
 
-    /**
-     * Check if user with admin privileges can access the backend area.
-     * 
-     * @return test
-     */
+    // @test
     public function test_admin_can_access_the_backend() 
     {
         $user = factory(User::class)->create(['role' => 1]);
@@ -89,11 +66,7 @@ class UserTest extends TestCase
         $this->actingAs($user)->get('/admin')->assertStatus(200);
     }
 
-    /**
-     * Ensure that non admins can't enter the backend area.
-     * 
-     * @return test
-     */
+    // @test
     public function test_guest_cant_enter_the_backend() 
     {
         $this->get(route('admin'))->assertRedirect(route('admin.login'));

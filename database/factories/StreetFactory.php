@@ -9,7 +9,7 @@ $factory->define(App\Street::class, function (Faker $faker) {
         'lat' => $faker->latitude,
         'lon' => $faker->longitude,
         'importance' => 0.2,
-        //'city' => $faker->city,
+        'ct' => $faker->city,
         'coordinates' => 'point(50, 20)'
     ];
 });

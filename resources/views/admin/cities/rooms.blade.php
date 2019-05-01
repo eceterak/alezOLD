@@ -8,26 +8,25 @@
     </ul>
     <div class="card mt-5">
         <header>
-            <h3>Ulice w {{ $city->name }}<small class="text-grey-darker">&nbsp;[{{ $city->streets->count() }}]</small></h3>
+            <h3>
+                Pokoje w {{ $city->name }}
+                <small class="text-grey-darker">[{{ $city->rooms->count() }}]</small>
+            </h3>
             <a href="/admin/pokoje/dodaj" class="btn">Dodaj</a>
         </header>
         <div>
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Nazwa</th>
-                        <th>Longitude</th>
-                        <th>Latitude</th>
-                        <th class="fit">Action</th>
+                        <th class="text-left">Tytuł</th>
+                        <th class="text-left">Miasto</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($city->streets as $street)
+                    @foreach($city->rooms as $room)
                         <tr>
-                            <td><a href="{{ route('admin.streets.edit', [$street->city->slug, $street->id]) }}">{{ $street->name }}</a></td>
-                            <td>{{ $street->lat }}</td>
-                            <td>{{ $street->lon }}</td>
-                            <td>delete</td>
+                            <td><a href="{{ route('admin.rooms.edit', $room->path()) }}">{{ $room->shortTitle() }}</a></td>
+                            <td><a href="{{ route('admin.cities.edit', $room->city->slug) }}">{{ $room->city->name }}</a></td>
                         </tr>
                     @endforeach
                 </tbody>

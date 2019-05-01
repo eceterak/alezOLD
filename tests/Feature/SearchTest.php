@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\RoomFactory;
 use Facades\Tests\Setup\CityFactory;
@@ -11,7 +10,7 @@ use Facades\Tests\Setup\CityFactory;
 class SearchTest extends TestCase
 {
 
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
 
     // @test
     public function test_search_by_id_of_selected_item_from_autocomplete_list()
@@ -21,7 +20,7 @@ class SearchTest extends TestCase
         $this->get(route('search.index', [
             'city' => 'ignore this value',
             'city_id' => $room->city->id
-        ]))->assertRedirect(route('cities.show', [$room->city->path()]));
+        ]))->assertRedirect(route('cities.show', [$room->city->slug]));
     }
 
     // @test
@@ -34,7 +33,7 @@ class SearchTest extends TestCase
         $this->get(route('search.index', [
             'city' => $room->city->name,
             'city_id' => ''
-        ]))->assertRedirect(route('cities.show', [$room->city->path()]));
+        ]))->assertRedirect(route('cities.show', [$room->city->slug]));
     }
     
     // @test

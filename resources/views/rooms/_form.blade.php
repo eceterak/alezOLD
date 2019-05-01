@@ -9,26 +9,253 @@
             @csrf
             @method($method)
 
-            <div class="form-group">
-                <label for="city_id">Miasto</label>
-                <select name="city_id" id="city_id"></select>
+            <div class="mb-4 pb-1 border-b border-grey">
+                <h3>Informacje podstawowe</h3>
             </div>
 
             <div class="form-group">
-                <label for="street_id">Ulica</label>
-                <select name="street_id" id="street_id"></select>
+                <label for="title">Tytuł ogłoszenia</label>
+                <input type="text" name="title" id="title">
             </div>
 
-            {{-- @if(App\City::form()->count())
-                <div class="form-group">
-                    <label for="city_id">Miasto</label>
-                    <select name="city_id" id="city_id">
-                        @foreach (App\City::form() as $id => $name)
-                            <option value="{{ $id }}" {{ (isset($room->city->id) && $id === $room->city->id) ? 'selected' : '' }}>{{ $name }}</option>
-                        @endforeach
+            <div class="flex -mx-4">
+                <div class="form-group w-1/3 px-4">
+                    <label for="rent">Czynsz</label>
+                    <div class="flex -mx-2">
+                        <div class="w-2/3 px-2">
+                            <input type="number" name="rent" id="rent" value="{{ $room->rent }}">
+                        </div>
+                        <div class="w-1/3 px-2">
+                           <span>zł</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group w-1/3 px-4">
+                    <label for="rent">Opłaty dodatkowe</label>
+                    <input type="number" name="bills" id="bills" value="{{ $room->bills }}">
+                </div>
+
+                <div class="form-group w-1/3 px-4">
+                    <label for="rent">Depozyt</label>
+                    <input type="number" name="deposit" id="deposit" value="{{ $room->rent }}">
+                </div>
+            </div>
+
+            <div class="flex -mx-4">
+                <div class="form-group w-1/3 px-4">
+                    <label for="room_size">Wielkość pokoju</label>
+                    <select name="room_size" id="room_size">
+                        <option value>wybierz</option>
+                        <option value="single">jednoosobowy</option>
+                        <option value="double">dwuosobowy</option>
+                        <option value="three">trzyosobowy</option>
                     </select>
                 </div>
-            @endif
+
+                <div class="form-group w-1/3 px-4">
+                    <label for="room_size">Jestem</label>
+                    <select name="room_size" id="room_size">
+                        <option value="live_in">Właścicielem nieruchomości</option>
+                        <option value="agent">Pośrednikiem</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4 pb-1 border-b border-grey">
+                <h3>Lokalizacja</h3>
+             </div>
+
+            <div class="flex -mx-4">
+                <div class="form-group w-1/2 px-4">
+                    <label for="city_id">Miasto</label>
+                    <select name="city_id" id="city_id"></select>
+                </div>
+    
+                <div class="form-group w-1/2 px-4">
+                    <label for="street_id">Ulica</label>
+                    <select name="street_id" id="street_id"></select>
+                </div>
+            </div>
+
+            <div class="mb-4 pb-1 border-b border-grey">
+                <h3>Informacje szczegółowe</h3>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Opis</label>
+                <textarea name="description" id="description">{{ $room->description }}</textarea>
+            </div>
+
+            <div class="flex -mx-4">
+                <div class="form-group w-1/3 px-4">
+                    <label for="property_type">Rodzaj zabudowy</label>
+                    <select name="property_type" id="property_type">
+                        <option value>wybierz</option>
+                        <option value="block">Blok</option>
+                        <option value="house">Dom wolnostojący</option>
+                        <option value="tenement">Kamienica</option>
+                        <option value="apartment">Apartamentowiec</option>
+                        <option value="loft">Loft</option>
+                    </select>
+                </div>
+                <div class="form-group w-1/3 px-4">
+                    <label for="property_size">Ilość pokoi</label>
+                    <select name="property_size" id="property_size">
+                        @for($i = 1; $i < 13; $i++)
+                            <option value="{{ $i }}">{{ $i }}</option>
+                        @endfor
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-4 pb-1 border-b border-grey">
+                <h3>Dostępność</h3>
+            </div>
+            
+            <div class="flex -mx-4">
+                <div class="form-group w-1/3 px-4">
+                    <label for="available_from">Dostępność od</label>
+                    <input type="text" name="available_from" id="available_from">
+                </div>
+                <div class="form-group w-1/3 px-4">
+                    <label for="minumum_stay">Minimalny czas pobytu</label>
+                    <select name="minimum_stay" id="minimum_stay">
+                        <option value>Brak</option>
+                        <option value="1">1 miesiąc</option>
+                        <option value="2">2 miesiące</option>
+                        <option value="3">3 miesiące</option>
+                        <option value="4">4 miesiące</option>
+                        <option value="5">5 miesięcy</option>
+                        <option value="6">6 miesięcy</option>
+                        <option value="7">7 miesięcy</option>
+                        <option value="8">8 miesięcy</option>
+                        <option value="9">9 miesięcy</option>
+                        <option value="10">10 miesięcy</option>
+                        <option value="11">11 miesięcy</option>
+                        <option value="12">1 rok</option>
+                        <option value="15">1 Rok i 3 miesiące</option>
+                        <option value="18">1 Rok i 6 miesięcy</option>
+                        <option value="24">2 lata</option>
+                    </select>
+                </div>
+                <div class="form-group w-1/3 px-4">
+                    <label for="maximum_stay">Maksymalny czas pobytu</label>
+                    <select name="maximum_stay" id="maximum_stay">
+                            <option value>Brak</option>
+                            <option value="1">1 miesiąc</option>
+                            <option value="2">2 miesiące</option>
+                            <option value="3">3 miesiące</option>
+                            <option value="4">4 miesiące</option>
+                            <option value="5">5 miesięcy</option>
+                            <option value="6">6 miesięcy</option>
+                            <option value="7">7 miesięcy</option>
+                            <option value="8">8 miesięcy</option>
+                            <option value="9">9 miesięcy</option>
+                            <option value="10">10 miesięcy</option>
+                            <option value="11">11 miesięcy</option>
+                            <option value="12">1 rok</option>
+                            <option value="15">1 Rok i 3 miesiące</option>
+                            <option value="18">1 Rok i 6 miesięcy</option>
+                            <option value="24">2 lata</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="mb-4 pb-1 border-b border-grey">
+                <h3>Informacje dodatkowe</h3>
+            </div>            
+
+            <div class="flex -mx-4">
+                <div class="form-group w-1/3 px-4">
+                    <input type="checkbox" name="furnished" id="furnished">
+                    <label for="furnished">Meble</label>
+                </div>
+                <div class="form-group w-1/3 px-4">
+                    <input type="checkbox" name="living_room" id="living_room">
+                    <label for="living_room">Salon</label>
+                </div>
+                <div class="form-group w-1/3 px-4">
+                    <input type="checkbox" name="parking" id="parking">
+                    <label for="parking">Parking</label>
+                </div>
+            </div>
+            <div class="flex -mx-4">
+                <div class="form-group w-1/3 px-4">
+                    <input type="checkbox" name="furnished" id="furnished">
+                    <label for="furnished">Internet</label>
+                </div>
+            </div>
+
+            <div class="mb-4 pb-1 border-b border-grey">
+                <h3>Desired tenetant</h3>
+            </div>
+
+            <div class="flex -mx-4">
+                <div class="form-group w-1/3 px-4">
+                    <label for="gender">Płeć</label>
+                    <select name="gender" id="gender">
+                        <option value="N">Brak preferencji</option>
+                        <option value="N">Kobieta</option>
+                        <option value="N">Męszczyzna</option>
+                    </select>
+                </div>
+                
+                <div class="form-group w-1/3 px-4">
+                    <label for="ocupation">Zatrudnienie</label>
+                    <select name="ocupation" id="ocupation">
+                        <option value="N">Brak preferencji</option>
+                        <option value="N">Student</option>
+                        <option value="N">Zatrudniony</option>
+                    </select>
+                </div>
+                <div class="form-group w-1/3 px-4">
+                    <label for="minimum_age">Przedział wiekowy</label>
+                    <select name="minimum_age" id="minimum_age">
+                        <option value="N">Brak preferencji</option>
+                        <option value="N">18 - 30</option>
+                        <option value="N">31 - 50</option>
+                        <option value="N">51+</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex -mx-4">
+                <div class="form-group w-1/3 px-4">
+                    <label for="minimum_age">Minimalny wiek</label>
+                    <select name="minimum_age" id="minimum_age">
+                        <option value="N">N</option>
+                        <option value="N">M</option>
+                        <option value="N">K</option>
+                    </select>
+                </div>
+                
+                <div class="form-group w-1/3 px-4">
+                    <label for="maximum_age">Maksymalny wiek</label>
+                    <select name="maximum_age" id="maximum_age">
+                        <option value="N">N</option>
+                        <option value="N">M</option>
+                        <option value="N">K</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group w-1/3 px-4">
+                <label for="couples">Pary</label>
+                <input type="checkbox" name="couples" id="couples">
+            </div>
+
+            <div class="form-group w-1/3 px-4">
+                <label for="pets">Zwierzeta</label>
+                <input type="checkbox" name="pets" id="pets">
+            </div>
+
+            <div class="form-group w-1/3 px-4">
+                <label for="smoking">Palacze</label>
+                <input type="checkbox" name="smoking" id="smoking">
+            </div>
+
+            {{--
 
             <div class="form-group">
                 <label for="address">Adres</label>

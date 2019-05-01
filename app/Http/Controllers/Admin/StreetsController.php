@@ -10,63 +10,78 @@ use App\City;
 class StreetsController extends Controller
 {
     /**
+     * Display all streets of a city.
      * 
-     * 
-     * @return
+     * @param string $slug
+     * @return view
      */
-    public function index($city) 
+    public function index($slug) 
     {
         return view('admin.streets.index')->with([
-            'streets' => City::getByPath($city)->streets
+            'city' => City::getBySlug($slug)
         ]);
     }
 
-    public function edit($city, $street)
+    /**
+     * Display edit form.
+     * 
+     * @param string $city
+     * @param string $street
+     * @return view
+     */
+    public function edit($city, $id)
     {
         return view('admin.streets.edit')->with([
-            'street' => Street::getByPath($city, $street)
+            'street' => Street::findOrFail($id)
         ]);
     }
 
     /**
+     * Store new street of the city.
      * 
-     * 
-     * @return
+     * @param string $city
+     * @param Request $request
+     * @return redirect
      */
-    public function store($city) 
+    public function store($city, Request $request) 
     {
-        $city = City::getByPath($city);
+        $city = City::getBySlug($city);
 
-        $city->streets()->create(request()->validate([
+        $city->streets()->create($request->validate([
             'name' => 'required',
             'type' => 'required',
             'lat' => 'required',
             'lon' => 'required',
             'importance' => 'sometimes',
-            //'city' => 'required',
+            'ct' => 'required',
             'coordinates' => 'required'
         ]));
 
-        return redirect(route('admin.cities.streets', $city->path()));
+        return redirect(route('admin.cities.streets', $city->slug));
     }
 
     /**
+     * Update a street.
      * 
-     * 
-     * @return
+     * @param string $city
+     * @param string $street
+     * @param Request $request
+     * @return redirect
      */
-    public function update($city, $street) 
-    {
-        Street::getByPath($city, $street)->update(request()->validate([
+    public function update($city, $id, Request $request) 
+    {           
+        $street = Street::findOrFail($id);
+
+        $street->update($request->validate([
             'name' => 'required',
             'type' => 'required',
             'lat' => 'required',
             'lon' => 'required',
             'importance' => 'sometimes',
-            //'city' => 'required',
+            'ct' => 'required',
             'coordinates' => 'required'
         ]));
 
-        return redirect()->route('admin.streets');
+        return redirect()->route('admin.cities.streets', $street->city->slug);
     }
 }

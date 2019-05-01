@@ -13,6 +13,7 @@ try {
     require('jquery-ui/ui/widgets/autocomplete');
     require('jquery-ui/ui/widgets/button');
     require('jquery-ui/ui/widgets/tooltip');
+    require('jquery-ui/ui/widgets/datepicker');
     require('selectize');
     require('bootstrap');
 } catch (e) {}

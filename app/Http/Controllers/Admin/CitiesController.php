@@ -15,7 +15,7 @@ class CitiesController extends Controller
      */
     public function index() 
     {
-        $cities = City::limit(5)->get();
+        $cities = City::paginate(10);
 
         return view('admin.cities.index')->with([
             'cities' => $cities
@@ -23,7 +23,7 @@ class CitiesController extends Controller
     }
     
     /**
-     * Display a new city form.
+     * Display create new form.
      * 
      * @return view
      */
@@ -33,52 +33,76 @@ class CitiesController extends Controller
     }
     
     /**
-     * Create a new city.
-     * 
-     * @return redirect
-     */
-    public function store(Request $request) 
-    {
-        City::create($this->validateRequest($request));
-        
-        return redirect('/admin/miasta');
-    }
-
-    /**
-     * Edit a city.
+     * Display edit form.
      * 
      * @param string $name
      * @return view
      */
-    public function edit($name) 
-    { 
-        $city = City::where('name', parsePath($name))->firstOrFail();
-        
+    public function edit($slug) 
+    {         
         return view('admin.cities.edit')->with([
-            'city' => $city
+            'city' => City::getBySlug($slug)
         ]);
+    }
+
+    /**
+     * Display adverts.
+     * 
+     * @param string $name
+     * @return view
+     */
+    public function adverts($slug) 
+    {
+        return view('admin.cities.rooms')->with([
+            'city' => City::getBySlug($slug)
+        ]);
+    }
+    
+    /**
+     * Create a new city.
+     * 
+     * @param Request $request
+     * @return redirect
+     */
+    public function store(Request $request) 
+    {
+        $attributes = $this->validateRequest($request); // Refactor?
+        
+        $attributes['slug'] = str_slug($attributes['name']); // Refactor
+
+        City::create($attributes);
+        
+        return redirect('/admin/miasta');
     }
         
     /**
      * Update a city.
      * 
      * @param string $path
+     * @param Request $request
      * @return redirect
      */
-    public function update($path) 
+    public function update($path, Request $request) 
     {
         $city = City::where('name', parsePath($path))->firstOrFail();
 
-        $city->update([
-            'name' => request('name'),
-            'suggested' => request()->has('suggested')
-        ]);
+        $attributes = $this->validateRequest($request);
+
+        if($request->has('suggested')) $attributes['suggested'] = 1; // Refactor
+        else $attributes['suggested'] = 0;
+
+        $attributes['slug'] = str_slug($attributes['name']); // Refactor
+
+        $city->update($attributes);
 
         return redirect()->route('admin.cities');
     }
 
     /**
+     * Perform validation on incoming request.
      * 
+     * @param Request $request
+     * @return array
      */
     protected function validateRequest(Request $request)
     {
@@ -89,7 +113,6 @@ class CitiesController extends Controller
             'lat' => 'required',
             'lon' => 'required',
             'importance' => 'sometimes',
-            'suggested' => 'sometimes',
             'community' => 'required',
             'county' => 'required',
             'state' => 'required',

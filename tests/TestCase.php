@@ -10,8 +10,8 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Act as an regular user.
-     * @param $user [User/null]
      * 
+     * @param $user [User/null]
      * @return App\User
      */
     protected function user($user = null) 
@@ -25,8 +25,8 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Act as an admin.
-     * @param $user [User/null]
      * 
+     * @param $user [User/null]
      * @return App\User
      */
     protected function admin($admin = null) 

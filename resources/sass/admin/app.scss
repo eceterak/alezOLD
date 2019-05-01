@@ -47,8 +47,16 @@
     }
 }
 
+.card-tab {
+    @apply z-0 rounded bg-white items-center mr-2;
+
+    a {
+        @apply block p-3;
+    }
+}
+
 .card {
-    @apply rounded bg-white shadow;
+    @apply z-10 rounded bg-white shadow;
     
     header {
         @apply flex p-4 justify-between items-center;
@@ -99,6 +107,9 @@
 
     thead {
         @apply bg-grey-light;
+    }
+    th {
+        @apply text-left;
     }
     td, th {
         @apply p-4 font-normal;

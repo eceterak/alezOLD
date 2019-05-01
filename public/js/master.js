@@ -265,6 +265,9 @@ $(function () {
   $('#street_id').combobox({
     'disabled': true
   });
+  $('#available_from', 'form[name="create_new_advert"]').datepicker({
+    dateFormat: 'yy-mm-dd'
+  });
 });
 
 /***/ }),

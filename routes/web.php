@@ -14,13 +14,14 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'admin'], function()
     Route::get('/admin/miasta/dodaj', 'CitiesController@create')->name('admin.cities.create');
     Route::post('/admin/miasta', 'CitiesController@store')->name('admin.cities.store');
     Route::get('/admin/miasta/{city}', 'CitiesController@edit')->name('admin.cities.edit');
+    Route::get('/admin/miasta/{city}/pokoje', 'CitiesController@adverts')->name('admin.cities.adverts');
     Route::patch('/admin/miasta/{city}', 'CitiesController@update')->name('admin.cities.update');
 
     // Streets
-    Route::get('/admin/ulice/{city}', 'StreetsController@index')->name('admin.cities.streets');
-    Route::post('/admin/ulice/{city}', 'StreetsController@store')->name('admin.streets.store');
-    Route::get('/admin/ulice/{city}/{street}', 'StreetsController@edit')->name('admin.streets.edit');
-    Route::post('/admin/ulice/{city}/{street}', 'StreetsController@update')->name('admin.streets.update');
+    Route::get('/admin/miasta/{city}/ulice', 'StreetsController@index')->name('admin.cities.streets');
+    Route::post('/admin/miasta/{city}/ulice', 'StreetsController@store')->name('admin.streets.store');
+    Route::get('/admin/miasta/{city}/ulice/{street}', 'StreetsController@edit')->name('admin.streets.edit');
+    Route::post('/admin/miasta/{city}/ulice/{street}', 'StreetsController@update')->name('admin.streets.update');
     
     // Rooms
     Route::get('/admin/pokoje', 'RoomsController@index')->name('admin.rooms');

@@ -22,7 +22,7 @@
                     @foreach($rooms as $room)
                         <tr>
                             <td><a href="{{ route('admin.rooms.edit', $room->path()) }}">{{ str_limit($room->title, 20, '...') }}</a></td>
-                            <td class="fit"><a href="{{ route('admin.cities.edit', $room->city->path()) }}">{{ $room->city->name }}</a></td>
+                            <td class="fit"><a href="{{ route('admin.cities.edit', $room->city->slug) }}">{{ $room->city->name }}</a></td>
                             <td>{{ $room->created_at->day.'/'.$room->created_at->month.'/'.$room->created_at->year }}</td>
                         </tr>
                     @endforeach

@@ -20,12 +20,13 @@
                 <tbody>
                     @foreach($cities as $city)
                         <tr>
-                            <td><a href="{{ route('admin.cities.edit', $city->path()) }}">{{ $city->name }}</a></td>
+                            <td><a href="{{ route('admin.cities.edit', $city->slug) }}">{{ $city->name }}</a></td>
                             <td class="fit">{{ $city->rooms->count() }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            {{ $cities->links() }}
         </div>
     </div>
 @endsection

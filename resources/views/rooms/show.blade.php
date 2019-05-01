@@ -32,7 +32,7 @@
             <h3>Napisz wiadomosc</h3>
         </header>
         <div class="card-content">
-            <form action="{{ route('conversations.store', [$room->city->path(), $room->path()]) }}" method="POST" class="form">
+            <form action="{{ route('conversations.store', [$room->city->slug, $room->path()]) }}" method="POST" class="form">
                 @csrf
                 @guest
                     <div class="form-group">

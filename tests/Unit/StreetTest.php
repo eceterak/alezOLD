@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\StreetFactory;
-use App\Street;
 use App\City;
 
 class StreetTest extends TestCase
@@ -24,7 +23,7 @@ class StreetTest extends TestCase
             'name' => ''
         ]);
 
-        $this->post(route('admin.streets.store', $city->path()), $street)->assertSessionHasErrors('name');
+        $this->post(route('admin.streets.store', $city->slug), $street)->assertSessionHasErrors('name');
     }
 
     // @test
@@ -39,15 +38,7 @@ class StreetTest extends TestCase
             'lon' => ''
         ]);
 
-        $this->post(route('admin.streets.store', $city->path()), $street)->assertSessionHasErrors(['lat', 'lon']);
-    }
-
-    // @test
-    public function test_street_can_be_found_by_a_path()
-    {
-        $street = StreetFactory::create();
-
-        $this->assertInstanceOf('App\Street', Street::getByPath($street->city->path(), $street->path()));
+        $this->post(route('admin.streets.store', $city->slug), $street)->assertSessionHasErrors(['lat', 'lon']);
     }
 
     // @test

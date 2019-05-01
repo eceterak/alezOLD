@@ -18,8 +18,8 @@ class SearchController extends Controller
         else {
             $city = City::where('name', $request->city)->firstOrFail();
         }
-
-        return redirect()->route('cities.show', [$city->path()]);
+        
+        return redirect()->route('cities.show', [$city->slug]);
        
     }
 }

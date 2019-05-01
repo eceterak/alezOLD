@@ -2,34 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\City;
 
 class CitiesController extends Controller
 {
     /**
+     * Display all cities.
      * 
-     * 
-     * @return
+     * @return view
      */
     public function index() 
     {
-        $cities = City::all();
+        $cities = City::limit(10)->get();
 
         return view('cities.index')->withCities($cities);
     }
 
     /**
+     * Display a city.
+     * @param string $slug
      * 
-     * 
-     * @return
+     * @return view
      */
-    public function show($name) 
+    public function show($slug) 
     {
-        $city = City::where('name', parsePath($name))->firstOrFail();
-        
         return view('cities.show')->with([
-            'city' => $city
+            'city' => City::getBySlug($slug)
         ]);    
     }
 }

@@ -10,6 +10,16 @@ class City extends Model
     protected $guarded = [];
 
     /**
+     * Set default attributes.
+     * 
+     * @var array
+     */
+    protected $attributes = [
+        'slug' => '',
+        'suggested' => 0
+    ];
+
+    /**
      * Define eloquent relationship between city and rooms.
      * 
      * @return Collection App\Room
@@ -26,36 +36,29 @@ class City extends Model
      */
     public function streets() 
     {
-        return $this->hasMany(Street::class);
+        return $this->hasMany(Street::class)->orderBy('name');
     }
 
     /**
-     * Populate html form.
+     * Create a slug from name.
      * 
-     * @return array
+     * @return void
      */
-    static public function form() 
+    public function createSlug() 
     {
-        return self::pluck('name', 'id');
+        $this->update([
+            'slug' => str_slug($this->name)
+        ]);
     }
 
     /**
-     * Transform title into SEO friendly url.
+     * Find and return an instance of city, by its unique slug.
      * 
-     * @return string
-     */
-    public function path() 
-    {
-        return preparePath($this->name);
-    }
-
-    /**
-     * Find and return an instance of city, by its path.
-     * 
+     * @param string $slug.
      * @return App\City
      */
-    static public function getByPath($path) 
+    static public function getBySlug($slug) 
     {
-        return self::where('name', parsePath($path))->firstOrFail();
+        return self::where('slug', $slug)->firstOrFail();
     }
 }

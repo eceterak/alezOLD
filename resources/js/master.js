@@ -206,4 +206,8 @@ $(function() {
         'disabled': true
     });
 
+    $('#available_from', 'form[name="create_new_advert"]').datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
+
 });

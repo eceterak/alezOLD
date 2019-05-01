@@ -6,7 +6,6 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\City;
-use App\Room;
 use Facades\Tests\Setup\CityFactory;
 use App\Street;
 
@@ -47,11 +46,21 @@ class CityTest extends TestCase
     }
 
     // @test
-    public function test_city_has_a_path() 
+    public function test_a_slug_can_be_created()
+    {
+        $city = CityFactory::create();
+
+        $city->createSlug();
+
+        $this->assertEquals(str_slug($city->name), $city->slug);
+    }
+
+    // @test
+    public function test_city_has_a_slug() 
     {
         $city = factory(City::class)->create();
         
-        $this->assertEquals(preparePath($city->name), $city->path());
+        $this->assertEquals(str_slug($city->name), $city->slug);
     }
 
     // @test
@@ -66,7 +75,7 @@ class CityTest extends TestCase
         $this->assertInstanceOf('App\Street', $city->streets->first());
     }
 
-/*     // @test
+/*  // @test
     public function test_city_can_have_rooms() 
     {
         $this->withExceptionHandling();
@@ -80,6 +89,6 @@ class CityTest extends TestCase
 
         $city->rooms()->create($room);
 
-        $this->get(route('admin.cities.edit', $city->path()))->assertSee($room['title']);
+        $this->get(route('admin.cities.edit', $city->slug))->assertSee($room['title']);
     } */
 }

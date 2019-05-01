@@ -38,11 +38,11 @@ class conversationsTest extends TestCase
 
         $room = RoomFactory::create();
 
-        $this->get(route('rooms.show', [$room->city->path(), $room->path()]))->assertSee('Napisz wiadomosc');
+        $this->get(route('rooms.show', [$room->city->slug, $room->path()]))->assertSee('Napisz wiadomosc');
 
-        $this->post(route('conversations.store', [$room->city->path(), $room->path()]), $attributes = [
+        $this->post(route('conversations.store', [$room->city->slug, $room->path()]), $attributes = [
             'body' => 'Hi mate I want this room'
-        ])->assertRedirect(route('rooms.show', [$room->city->path(), $room->path()]));
+        ])->assertRedirect(route('rooms.show', [$room->city->slug, $room->path()]));
 
         $this->get(route('conversations.inbox'))->assertSee($attributes['body']);
 

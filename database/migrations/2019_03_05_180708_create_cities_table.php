@@ -17,10 +17,11 @@ class CreateCitiesTable extends Migration
             $table->increments('id');
             $table->string('name', 60);
             $table->string('type', 40);
+            $table->string('slug', 60)->nullable();
             $table->string('parent', 50);
             $table->float('lat', 10, 6);
             $table->float('lon', 10, 6);
-            $table->float('importance');
+            $table->decimal('importance', 7, 6);
             $table->boolean('suggested')->default(false);
             $table->char('community', 50);
             $table->char('county', 50);
@@ -29,6 +30,7 @@ class CreateCitiesTable extends Migration
             $table->float('south', 10, 6);
             $table->float('east', 10, 6);
             $table->float('north', 10, 6);
+            
             $table->timestamps();
         });
     }
