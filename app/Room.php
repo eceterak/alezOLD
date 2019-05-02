@@ -35,6 +35,17 @@ class Room extends Model
     }
 
     /**
+     * Define eloquent relationship between street and Room.
+     * 
+     * @return App\City
+     */
+
+    public function street()
+    {
+        return $this->belongsTo(Street::class);
+    }
+
+    /**
      * Return a portion of a title.
      * 
      * @return string
@@ -60,25 +71,28 @@ class Room extends Model
     /**
      * Get the instance of a Room.
      * 
-     * @param string $path
-     * @return Room
+     * @param string $slug
+     * @return App\Room
      */
-    static public function getByPath($path)
+    static public function getBySlug($slug)
     {
-        $id = substr($path, strrpos($path, '-uid-') + 5); // get last occurence of uid.
+        $id = substr($slug, strrpos($slug, '-uid-') + 5); // get last occurence of uid.
 
         return self::where('id', intval($id, 36))->firstOrFail();
     }
     
     /**
-     * Treansform title into SEO friendly url. 
-     * Replace spaces with dashes and add encoded id at the end.
+     * Generate a slug after new room is added to a database (it uses a id).
      * 
-     * @return string
+     * @return void
      */
-    public function path() 
+    public function generateSlug() 
     {
-        return preparePath($this->title).'-uid-'.$this->encodeId();
+        $slug = str_slug($this->title.'-uid-'.$this->encodeId());
+
+        $this->update([
+            'slug' => $slug
+        ]);
     }
 
     /**

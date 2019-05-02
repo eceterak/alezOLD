@@ -45,9 +45,10 @@ Route::get('/szukaj', 'SearchController@index')->name('search.index');
 Route::get('/pokoje', 'RoomsController@index')->name('rooms');
 Route::get('/{city}/pokoje/{room}', 'RoomsController@show')->name('rooms.show');
 
+Route::get('/pokoje/dodaj', 'RoomsController@create')->name('rooms.create');
+
 Route::group(['middleware' => 'auth'], function() 
 {
-    Route::get('/pokoje/dodaj', 'RoomsController@create')->name('rooms.create');
     Route::get('/pokoje/moje', 'RoomsController@mine')->name('rooms.mine');
     Route::post('/pokoje', 'RoomsController@store')->name('rooms.store');
     Route::get('/pokoje/{room}/edytuj', 'RoomsController@edit')->name('rooms.edit');

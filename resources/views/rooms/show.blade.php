@@ -24,7 +24,7 @@
     </div>
     @auth
         @if($room->user->id == auth()->user()->id)
-            <a href="{{ route('rooms.edit', $room->path()) }}" class="btn">Edytuj</a>
+            <a href="{{ route('rooms.edit', $room->slug) }}" class="btn">Edytuj</a>
         @endif
     @endauth
     <div class="card card-content mt-6">
@@ -32,7 +32,7 @@
             <h3>Napisz wiadomosc</h3>
         </header>
         <div class="card-content">
-            <form action="{{ route('conversations.store', [$room->city->slug, $room->path()]) }}" method="POST" class="form">
+            <form action="{{ route('conversations.store', [$room->city->slug, $room->slug]) }}" method="POST" class="form">
                 @csrf
                 @guest
                     <div class="form-group">

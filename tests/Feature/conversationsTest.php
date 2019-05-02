@@ -3,21 +3,16 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Facades\Tests\Setup\ConversationFactory;
 use Facades\Tests\Setup\RoomFactory;
 use App\Conversation;
-use Facades\Tests\Setup\ConversationFactory;
 
 class conversationsTest extends TestCase
 {
-    use WithFaker, RefreshDatabase;
+    use RefreshDatabase;
 
-    /**
-     * 
-     * 
-     * @return void
-     */
+    // @test
     public function test_only_participant_of_conversation_can_reply() 
     {
         $this->user();
@@ -27,33 +22,25 @@ class conversationsTest extends TestCase
         $this->get(route('conversations.show', $conversation->path()))->assertStatus(403);
     }
 
-    /**
-     * A user can start a conversation.
-     *
-     * @return void
-     */
+    // @test
     public function test_a_user_can_start_a_conversation()
     {
         $this->user();
 
         $room = RoomFactory::create();
 
-        $this->get(route('rooms.show', [$room->city->slug, $room->path()]))->assertSee('Napisz wiadomosc');
+        $this->get(route('rooms.show', [$room->city->slug, $room->slug]))->assertSee('Napisz wiadomosc');
 
-        $this->post(route('conversations.store', [$room->city->slug, $room->path()]), $attributes = [
+        $this->post(route('conversations.store', [$room->city->slug, $room->slug]), $attributes = [
             'body' => 'Hi mate I want this room'
-        ])->assertRedirect(route('rooms.show', [$room->city->slug, $room->path()]));
+        ])->assertRedirect(route('rooms.show', [$room->city->slug, $room->slug]));
 
         $this->get(route('conversations.inbox'))->assertSee($attributes['body']);
 
         // Mail.
     }
 
-    /**
-     * A user can reply.
-     * 
-     * @return void
-     */
+    // @test
     public function test_authenticated_user_can_reply() 
     {
         $this->withoutExceptionHandling();

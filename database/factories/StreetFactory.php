@@ -9,7 +9,7 @@ $factory->define(App\Street::class, function (Faker $faker) {
         'lat' => $faker->latitude,
         'lon' => $faker->longitude,
         'importance' => 0.2,
-        'ct' => $faker->city,
-        'coordinates' => 'point(50, 20)'
+        'ct' => $faker->city
+        //'coordinates' => "ST_GeomFromText(POINT(1 1))"
     ];
 });

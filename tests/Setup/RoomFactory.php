@@ -39,6 +39,28 @@ class RoomFactory
             'street_id' => $street->id
         ]);
 
+        $room->generateSlug();
+
+        return $room;
+    }
+
+    /**
+     * Return a instance of a Room object without saving it to a database.
+     * 
+     * @return App\Room
+     */
+    public function raw() 
+    {
+        $street = StreetFactory::create();
+
+        $room = factory(Room::class)->raw([
+            'user_id' => $this->user ?? factory(User::class),
+            'city_id' => $street->city->id,
+            'street_id' => $street->id
+        ]);
+
+        $room->generateSlug();
+
         return $room;
     }
 }

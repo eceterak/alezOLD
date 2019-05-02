@@ -47,26 +47,41 @@ class User extends Authenticatable
         return $this->hasMany(Room::class);
     }
 
+    /**
+     * Get all received conversations.
+     * 
+     * @return App\Conversation
+     */
     public function inbox() 
     {
         return $this->hasMany(Conversation::class, 'receiver_id');
     }
 
+    /**
+     * Get all sent conversations.
+     * 
+     * @return App\Conversation
+     */
     public function sent()
     {
         return $this->hasMany(Conversation::class, 'sender_id');
     }
 
     /**
-     * A user can hold many conversations.
+     * Return all conversations (both started and received).
      * 
-     * @return
+     * @return Collection
      */
     public function conversations() 
     {
         return $this->inbox->merge($this->sent);
     }
 
+    /**
+     * Get all messages.
+     * 
+     * @return App\Conversation
+     */
     public function messages()
     {
         return $this->hasMany(Message::class);

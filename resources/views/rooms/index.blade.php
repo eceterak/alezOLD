@@ -11,7 +11,7 @@
                 </div>
                 <div class="lg:static lg:w-7/8 lg:pl-2">
                     <header>
-                        <h3 class="font-normal text-lg mb-2"><a href="{{ route('rooms.show', [$room->city->slug, $room->path()]) }}">{{ $room->title }}</a></h3>
+                        <h3 class="font-normal text-lg mb-2"><a href="{{ route('rooms.show', [$room->city->slug, $room->slug]) }}">{{ $room->title }}</a></h3>
                     </header>
                     <section>
                         <p class="text-grey-darker">{{ str_limit($room->description, 100) }}</p>

@@ -20,8 +20,8 @@ class RoomsManagementTest extends TestCase
         $this->get(route('admin.rooms'))->assertRedirect(route('admin.login'));
         $this->get(route('admin.rooms.create'))->assertRedirect(route('admin.login'));
         $this->post(route('admin.rooms.store'), [])->assertRedirect(route('admin.login'));
-        $this->get(route('admin.rooms.edit', [$room->path()]))->assertRedirect(route('admin.login'));
-        $this->patch(route('admin.rooms.update', [$room->path()]), [])->assertRedirect(route('admin.login'));
+        $this->get(route('admin.rooms.edit', [$room->slug]))->assertRedirect(route('admin.login'));
+        $this->patch(route('admin.rooms.update', [$room->slug]), [])->assertRedirect(route('admin.login'));
     }
 
     // @test
@@ -29,20 +29,22 @@ class RoomsManagementTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $city = CityFactory::create();
+        $street = StreetFactory::create();
 
         $this->admin();
 
         $attributes = factory(Room::class)->raw([
-            'user_id' => auth()->user()->id, 
-            'city_id' => $city->id
+            'city_id' => $street->city->id,
+            'street_id' => $street->id
         ]);
 
         $this->post(route('admin.rooms.store', $attributes))->assertRedirect(route('admin.rooms'));
 
         $room = Room::where($attributes)->first();
 
-        $this->get(route('admin.rooms.edit', $room->path()))->assertSee($attributes['title']);
+        $this->get(route('admin.rooms.edit', $room->slug))->assertSee($attributes['title']);
+
+        $this->assertDatabaseHas('rooms', $attributes);
     }
 
     // @test
@@ -51,17 +53,15 @@ class RoomsManagementTest extends TestCase
         $this->admin();
 
         $room = RoomFactory::create();
-        
-        $this->get(route('admin.rooms.edit', [$room->path()]))->assertSee($room->title);
 
-        $room->title = 'new title';
-        $room->city->id = 11;
+        $this->get(route('admin.rooms.edit', $room->slug))->assertSee($room->title);
 
-        $this->patch(route('admin.rooms.update', [$room->path()]), $room->toArray())->assertRedirect(route('admin.rooms'));
+        $this->patch(route('admin.rooms.update', [$room->slug]), $attributes = factory(Room::class)->raw([
+            'city_id' => $room->city->id,
+            'street_id' => $room->street->id
+        ]))->assertRedirect(route('admin.rooms'));
 
-        $this->assertDatabaseHas('rooms', [
-            'title' => 'new title'
-        ]);
+        $this->assertDatabaseHas('rooms', $attributes);
     }
 
 }

@@ -12,7 +12,7 @@
             <h3>Edytuj pokój</h3>
         </header>
         <div class="card-content">
-            <form action="{{ route('admin.rooms.update', $room->path()) }}" method="POST" class="form">
+            <form action="{{ route('admin.rooms.update', $room->slug) }}" method="POST" class="form">
                 @csrf
                 @method('PATCH')
                 <div class="form-group">
@@ -27,16 +27,7 @@
                     <label for="rent">Czynsz</label>
                     <input type="number" name="rent" id="rent" value="{{ $room->rent }}">
                 </div>
-                @if(App\City::form()->count())
-                    <div class="form-group">
-                        <label for="city_id">Miasto</label>
-                        <select name="city_id" id="city_id">
-                            @foreach (App\City::form() as $id => $name)
-                                <option value="{{ $id }}" {{ ($id === $room->city->id) ? 'selected' : '' }}>{{ $name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                @endif
+               
                 <button type="submit" class="btn btn-reverse">Zapisz</button>
             </form>
         </div>

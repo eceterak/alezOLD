@@ -25,34 +25,32 @@ class RoomsController extends Controller
     }
 
     /**
-     * Edit a room.
+     * Display an edit form.
      * 
-     * @param string $path
+     * @param string $slug
      * @return view
      */
-    public function edit($path) 
+    public function edit($slug) 
     {
-        $room = Room::getByPath($path);
-        
         return view('admin.rooms.edit')->with([
-            'room' => $room
+            'room' => Room::getBySlug($slug)
         ]);
     }
 
     /**
      * Update a room.
      * 
-     * @param string $romm
+     * @param string slug
+     * @param Request $request
      * @return redirect
      */
-    public function update($room) 
+    public function update($slug, Request $request) 
     {
-        Room::getByPath($room)->update(request()->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'rent' => 'required',
-            'city_id' => 'required'
-        ]));
+        $room = Room::getBySlug($slug);
+
+        $room->update($this->validateRequest($request));
+
+        $room->generateSlug();
 
         return redirect(route('admin.rooms'));
     }
@@ -68,19 +66,54 @@ class RoomsController extends Controller
     }
 
     /**
-     * Create a new room.
+     * Store a new room in a database.
      * 
+     * @param Request $request
      * @return redirect
      */
-    public function store() 
+    public function store(Request $request) 
     {
-        auth()->user()->rooms()->create(request()->validate([
-            'city_id' => 'required',
-            'title' => 'required',
-            'description' => 'required',
-            'rent' => 'required'
-        ]));
+        $room = auth()->user()->rooms()->create($this->validateRequest($request));
+
+        $room->generateSlug();
 
         return redirect(route('admin.rooms'));
+    }
+
+
+    /**
+     * Validate a data.
+     * 
+     * @param Request $request
+     * @return array
+     */
+    protected function validateRequest() 
+    {
+        return request()->validate([
+            'city_id' => 'required',
+            'street_id' => 'sometimes',
+            'title' => 'required',
+            'description' => 'required',
+            'available_from' => 'sometimes',
+            'minimum_stay' => 'sometimes',
+            'maximum_stay' => 'sometimes',
+            'landlord' => 'sometimes',
+            'rent' => 'required',
+            'deposit' => 'sometimes',
+            'bills' => 'required',
+            'property_type' => 'sometimes',
+            'property_size' => 'sometimes',
+            'living_room' => 'sometimes',
+            'room_size' => 'sometimes',
+            'furnished' => 'sometimes',
+            'broadband' => 'sometimes',
+            'smooking' => 'sometimes',
+            'pets' => 'sometimes',
+            'occupation' => 'sometimes',
+            'couples' => 'sometimes',
+            'gender' => 'sometimes',
+            'minimum_age' => 'sometimes',
+            'maximum_age' => 'sometimes'
+        ]);
     }
 }

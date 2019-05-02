@@ -8,7 +8,7 @@
     </div>
     @endif
     @include('rooms._form', [
-        'route' => ['rooms.edit', $room->path()],
+        'route' => ['rooms.edit', $room->slug],
         'header' => 'Edytuj ogłoszenie',
         'method' => 'PATCH',
         'button' => 'Zapisz'

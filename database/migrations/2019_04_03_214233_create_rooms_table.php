@@ -18,14 +18,15 @@ class CreateRoomsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('city_id');
-            $table->unsignedInteger('street_id');
-            $table->boolean('validated')->default(false);
-            $table->boolean('active')->default(false);
+            $table->unsignedInteger('street_id')->nullable();
+            $table->boolean('validated')->default(false)->nullable();
+            $table->boolean('active')->default(false)->nullable();
+            $table->char('slug', 80)->nullable();
             
             // General info.
-            $table->string('title');
+            $table->char('title', 50);
             $table->text('description');
-            $table->enum('landlord', ['live_in', 'live_out', 'tenetant', 'agent', 'former'])->default('live_in');
+            $table->enum('landlord', ['live_in', 'live_out', 'tenetant', 'agent', 'former'])->nullable();
             
             // $$$.
             $table->unsignedTinyInteger('rent');
@@ -34,28 +35,28 @@ class CreateRoomsTable extends Migration
 
             // Availability.
             $table->timestamp('available_from')->useCurrent();
-            $table->unsignedTinyInteger('minimum_stay')->default(0);
-            $table->unsignedTinyInteger('maximum_stay')->default(0);   
+            $table->unsignedTinyInteger('minimum_stay')->nullable();
+            $table->unsignedTinyInteger('maximum_stay')->nullable();
             
             // Property details.
-            $table->enum('property_type', ['block', 'house', 'tenement', 'apartment', 'loft'])->default('block');
-            $table->unsignedTinyInteger('property_size')->default(2);
-            $table->boolean('living_room')->default(true);
+            $table->enum('property_type', ['block', 'house', 'tenement', 'apartment', 'loft'])->nullable();
+            $table->unsignedTinyInteger('property_size')->default('1');
+            $table->boolean('living_room')->default(false);
             $table->boolean('parking')->default(false);
             
             // Room details.
-            $table->enum('room_size', ['single', 'double', 'triple'])->default('single');
-            $table->boolean('furnished')->default(true);
-            $table->boolean('broadband')->default(true);
+            $table->enum('room_size', ['single', 'double', 'triple'])->default('single')->nullable();
+            $table->boolean('furnished')->default(false);
+            $table->boolean('broadband')->default(false);
             
             // Desired tenetant.
             $table->boolean('smooking')->default(false);
             $table->boolean('pets')->default(false);
             $table->boolean('couples')->default(false);
-            $table->enum('gender', ['n', 'm', 'f'])->default('n');
-            $table->enum('occupation', ['n', 'student', 'professional'])->default('n');
-            $table->unsignedTinyInteger('minimum_age')->default(0);
-            $table->unsignedTinyInteger('maximum_age')->default(0);
+            $table->enum('gender', ['n', 'm', 'f'])->nullable();
+            $table->enum('occupation', ['n', 'student', 'professional'])->nullable();
+            $table->unsignedTinyInteger('minimum_age')->nullable();
+            $table->unsignedTinyInteger('maximum_age')->nullable();
 
             $table->timestamps();
             

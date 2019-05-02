@@ -5,9 +5,11 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\City;
 use Facades\Tests\Setup\CityFactory;
+use Facades\Tests\Setup\StreetFactory;
+use App\City;
 use App\Street;
+use App\Room;
 
 class CityTest extends TestCase
 {
@@ -75,20 +77,22 @@ class CityTest extends TestCase
         $this->assertInstanceOf('App\Street', $city->streets->first());
     }
 
-/*  // @test
+ // @test
     public function test_city_can_have_rooms() 
     {
-        $this->withExceptionHandling();
+        $this->withoutExceptionHandling();
 
-        $city = CityFactory::create();
+        $street = StreetFactory::create();
 
         $room = factory(Room::class)->raw([
-            'title' => 'short title',
-            'user_id' => $this->user()
+            'user_id' => $this->user(),
+            'street_id' => $street->id
         ]);
 
-        $city->rooms()->create($room);
+        $room = $street->city->rooms()->create($room);
 
-        $this->get(route('admin.cities.edit', $city->slug))->assertSee($room['title']);
-    } */
+        $this->assertDatabaseHas('rooms', $room->toArray());
+
+        $this->get(route('cities.show', $street->city->slug))->assertSee($room->title);
+    }
 }

@@ -53,8 +53,7 @@ class StreetsController extends Controller
             'lat' => 'required',
             'lon' => 'required',
             'importance' => 'sometimes',
-            'ct' => 'required',
-            'coordinates' => 'required'
+            'ct' => 'required'
         ]));
 
         return redirect(route('admin.cities.streets', $city->slug));
@@ -78,8 +77,7 @@ class StreetsController extends Controller
             'lat' => 'required',
             'lon' => 'required',
             'importance' => 'sometimes',
-            'ct' => 'required',
-            'coordinates' => 'required'
+            'ct' => 'required'
         ]));
 
         return redirect()->route('admin.cities.streets', $street->city->slug);

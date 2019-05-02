@@ -48,9 +48,9 @@ class ConversationsController extends Controller
      * 
      * @return redirect
      */
-    public function store($city, $room) 
+    public function store($city, $slug) 
     {
-        $room = Room::getByPath($room);
+        $room = Room::getBySlug($slug);
 
         $conversation = auth()->user()->sent()->create([
             'room_id' => $room->id,

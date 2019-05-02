@@ -22,7 +22,7 @@ class CreateStreetsTable extends Migration
             $table->float('lat', 10, 6);
             $table->decimal('importance', 7, 6);
             $table->char('ct', 80);
-            $table->point('coordinates');
+            //$table->point('coordinates');
 
             $table->timestamps();
             

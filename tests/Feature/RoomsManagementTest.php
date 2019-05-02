@@ -21,16 +21,14 @@ class RoomsManagementTest extends TestCase
         $this->get(route('rooms.mine'))->assertRedirect(route('login'));
         $this->get(route('rooms.create'))->assertRedirect(route('login'));
         $this->post(route('rooms.store'), [])->assertRedirect(route('login'));
-        $this->get(route('rooms.edit', $room->path()))->assertRedirect(route('login'));
-        $this->patch(route('rooms.update', $room->path()), [])->assertRedirect(route('login'));
+        $this->get(route('rooms.edit', $room->slug))->assertRedirect(route('login'));
+        $this->patch(route('rooms.update', $room->slug), [])->assertRedirect(route('login'));
     }
     
     // @test
     public function test_user_can_create_a_room()
     {   
         $this->user();
-
-        $this->withoutExceptionHandling();
 
         $this->get(route('rooms.create'))->assertStatus(200);
 
@@ -47,22 +45,21 @@ class RoomsManagementTest extends TestCase
         
         $this->get(route('rooms'))->assertSee($attributes['title']);
 
-        $this->get(route('rooms.show', [$street->city->slug, $room->path()]))->assertSee($attributes['title']);
+        $this->get(route('rooms.show', [$street->city->slug, $room->slug]))->assertSee($attributes['title']);
     }
 
     // @test
     public function test_only_the_owner_of_the_room_can_update_it() 
     {
-        //$this->withoutExceptionHandling();
+        $this->withoutExceptionHandling();
 
         $room = RoomFactory::create();
 
-        $this->actingAs($room->user)->get(route('rooms.edit', $room->path()))
+        $this->actingAs($room->user)->get(route('rooms.edit', $room->slug))
             ->assertSee($room->title)
             ->assertSee($room->description);
 
-        $this->patch(route('rooms.update', $room->path()), $attributes = factory(Room::class)->raw([
-            'user_id' => $room->user->id,
+        $this->patch(route('rooms.update', $room->slug), $attributes = factory(Room::class)->raw([
             'city_id' => $room->city->id,
             'street_id' => $room->city->id,
             'title' => 'updated'
@@ -78,9 +75,9 @@ class RoomsManagementTest extends TestCase
 
         $room = RoomFactory::create();
 
-        $this->get(route('rooms.edit', $room->path()))->assertStatus(403);
+        $this->get(route('rooms.edit', $room->slug))->assertStatus(403);
 
-        $this->patch(route('rooms.update', $room->path()), [])->assertStatus(403);
+        $this->patch(route('rooms.update', $room->slug), [])->assertStatus(403);
     }
 
     // @test
@@ -90,6 +87,6 @@ class RoomsManagementTest extends TestCase
 
         $this->get(route('rooms'))->assertSee($room->title);
 
-        $this->get(route('rooms.show', [$room->city->slug, $room->path()]))->assertSee($room->title);
+        $this->get(route('rooms.show', [$room->city->slug, $room->slug]))->assertSee($room->title);
     }
 }

@@ -3,22 +3,16 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Room;
-use App\City;
+use Facades\Tests\Setup\StreetFactory;
 use Facades\Tests\Setup\RoomFactory;
-use Illuminate\Support\Facades\Auth;
+use App\City;
 
 class RoomTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * Room belongs to an owner.
-     *
-     * @return void
-     */
+    // @test
     public function test_it_belongs_to_an_owner()
     {
         $room = RoomFactory::ownedBy($this->user())->create();
@@ -28,11 +22,7 @@ class RoomTest extends TestCase
         $this->assertEquals(auth()->user()->id, $room->user->id);
     }
 
-    /**
-     * Room is always associated with city.
-     * 
-     * @return void
-     */
+    // @test
     public function test_it_is_associated_with_a_city() 
     {
         $room = RoomFactory::create();
@@ -40,23 +30,15 @@ class RoomTest extends TestCase
         $this->assertInstanceOf(City::class, $room->city);
     }
 
-    /**
-     * It has a path.
-     *
-     * @return void
-     */
-    public function test_it_has_a_path()
+    // @test
+    public function test_it_has_a_slug()
     {
         $room = RoomFactory::create();
 
-        $this->assertEquals(preparePath($room->title.'-uid-'.$room->id), $room->path());
+        $this->assertEquals(str_slug($room->title.'-uid-'.$room->id), $room->slug);
     }
-    
-    /**
-     * Each room requires some attributes.
-     *
-     * @return void
-     */
+
+    // @test
     public function test_room_requires_attributes() 
     {
         $this->user();
@@ -64,5 +46,35 @@ class RoomTest extends TestCase
         $this->post(route('rooms.store'), [])->assertSessionHasErrors([
             'city_id', 'title', 'description', 'rent'
         ]);
+    }
+
+    // @test
+    public function test_user_can_create_a_room()
+    {   
+        $this->withoutExceptionHandling();
+
+        $this->user();
+
+        $this->get(route('rooms.create'))->assertStatus(200);
+
+        $street = StreetFactory::create();
+
+        $attributes = [
+            'city_id' => $street->city->id,
+            'street_id' => $street->id,
+            'title' => 'Hi ho',
+            'description' => 'Hio hio hio',
+            'rent' => 123,
+            'deposit' => 123,
+            'bills' => 100
+        ];
+        
+        $this->post(route('rooms.store'), $attributes)->assertRedirect(route('home'));
+
+        /* $room = Room::where($attributes)->first();
+        
+        $this->get(route('rooms'))->assertSee($attributes['title']);
+
+        $this->get(route('rooms.show', [$street->city->slug, $room->slug]))->assertSee($attributes['title']); */
     }
 }

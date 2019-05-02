@@ -26,13 +26,14 @@ class RoomsController extends Controller
     /**
      * Display a single room.
      * 
-     * @param string $path
+     * @param string $city
+     * @param string $slug
      * @return view
      */
-    public function show($city, $room) 
+    public function show($city, $slug) 
     {   
         return view('rooms.show')->with([
-            'room' => Room::getByPath($room)
+            'room' => Room::getBySlug($slug)
         ]);
     }
     
@@ -44,7 +45,7 @@ class RoomsController extends Controller
      */
     public function edit($path) 
     {
-        $room = Room::getByPath($path);
+        $room = Room::getBySlug($path);
         
         $this->authorize('update', $room);
 
@@ -52,24 +53,6 @@ class RoomsController extends Controller
             'room' => $room
         ]);
     }
-
-    /**
-     * Update a room.
-     * 
-     * @param string $romm
-     * @return redirect
-     */
-    public function update($path, Request $request) 
-    {
-        $room = Room::getByPath($path);
-
-        $this->authorize('update', $room);
-
-        $room->update($request->all());
-
-        return redirect(route('rooms'));
-    }
-
 
     /**
      * Display a create new room form.
@@ -82,13 +65,38 @@ class RoomsController extends Controller
     }
 
     /**
+     * Update a room.
+     * 
+     * @param Request $request
+     * @param string $romm
+     * @return redirect
+     */
+    public function update($path, Request $request) 
+    {
+        $room = Room::getBySlug($path);
+        
+        $this->authorize('update', $room);
+
+        $room->update($this->validateRequest($request));
+
+        $room->generateSlug();
+
+        return redirect(route('rooms'));
+    }
+
+    /**
      * Store a new form in database.
      * 
+     * @param Request $request
      * @return redirect
      */
     public function store(Request $request) 
     {
-        auth()->user()->rooms()->create($this->validateRequest());
+        //dd($this->validateRequest($request));
+
+        $room = auth()->user()->rooms()->create($this->validateRequest($request));
+
+        $room->generateSlug();
 
         return redirect(route('home'));
     }
@@ -96,18 +104,19 @@ class RoomsController extends Controller
     /**
      * Validate a data.
      * 
+     * @param Request $request
      * @return array
      */
-    protected function validateRequest() 
+    protected function validateRequest($request) 
     {
         return request()->validate([
             'city_id' => 'required',
             'street_id' => 'sometimes',
             'title' => 'required',
             'description' => 'required',
-            'available_from' => 'sometimes',
-            'minimum_stay' => 'sometimes',
-            'maximum_stay' => 'sometimes',
+            'available_from' => 'nullable',
+            'minimum_stay' => 'nullable',
+            'maximum_stay' => 'nullable',
             'landlord' => 'sometimes',
             'rent' => 'required',
             'deposit' => 'sometimes',
