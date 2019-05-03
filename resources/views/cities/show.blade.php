@@ -7,7 +7,7 @@
         </p>
     </header>
     <main>
-        @forelse($city->rooms as $room)
+        @forelse($rooms as $room)
             <article class="card lg:flex mb-4">
                 <div class="flex lg:static lg:w-1/8 items-center justify-center mb-0 lg:mb-0 sm:mb-2">
                     <img src="/storage/notfound.png">

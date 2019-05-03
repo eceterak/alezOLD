@@ -15,10 +15,8 @@ class CitiesController extends Controller
      */
     public function index() 
     {
-        $cities = City::paginate(10);
-
         return view('admin.cities.index')->with([
-            'cities' => $cities
+            'cities' => City::paginate(10)
         ]);
     }
     
@@ -35,7 +33,7 @@ class CitiesController extends Controller
     /**
      * Display edit form.
      * 
-     * @param string $name
+     * @param string $slug
      * @return view
      */
     public function edit($slug) 
@@ -72,19 +70,19 @@ class CitiesController extends Controller
 
         City::create($attributes);
         
-        return redirect('/admin/miasta');
+        return redirect(route('admin.cities'));
     }
         
     /**
      * Update a city.
      * 
-     * @param string $path
+     * @param string $slug
      * @param Request $request
      * @return redirect
      */
-    public function update($path, Request $request) 
+    public function update($slug, Request $request) 
     {
-        $city = City::where('name', parsePath($path))->firstOrFail();
+        $city = City::where('slug', $slug)->firstOrFail();
 
         $attributes = $this->validateRequest($request);
 

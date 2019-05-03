@@ -19,19 +19,19 @@ class CreateRoomsTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('city_id');
             $table->unsignedInteger('street_id')->nullable();
-            $table->boolean('validated')->default(false)->nullable();
+            $table->boolean('verified')->default(false)->nullable();
             $table->boolean('active')->default(false)->nullable();
             $table->char('slug', 80)->nullable();
+            
+            // $$$.
+            $table->unsignedSmallInteger('rent');
+            $table->unsignedSmallInteger('deposit');
+            $table->unsignedSmallInteger('bills');
             
             // General info.
             $table->char('title', 50);
             $table->text('description');
             $table->enum('landlord', ['live_in', 'live_out', 'tenetant', 'agent', 'former'])->nullable();
-            
-            // $$$.
-            $table->unsignedTinyInteger('rent');
-            $table->unsignedTinyInteger('deposit');
-            $table->unsignedTinyInteger('bills');
 
             // Availability.
             $table->timestamp('available_from')->useCurrent();
@@ -61,6 +61,7 @@ class CreateRoomsTable extends Migration
             $table->timestamps();
             
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities');
         });
     }
     

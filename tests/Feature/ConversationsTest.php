@@ -8,7 +8,7 @@ use Facades\Tests\Setup\ConversationFactory;
 use Facades\Tests\Setup\RoomFactory;
 use App\Conversation;
 
-class conversationsTest extends TestCase
+class ConversationsTest extends TestCase
 {
     use RefreshDatabase;
 

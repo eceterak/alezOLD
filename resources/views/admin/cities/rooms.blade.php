@@ -25,7 +25,7 @@
                 <tbody>
                     @foreach($city->rooms as $room)
                         <tr>
-                            <td><a href="{{ route('admin.rooms.edit', $room->path()) }}">{{ $room->shortTitle() }}</a></td>
+                            <td><a href="{{ route('admin.rooms.edit', $room->slug) }}">{{ $room->shortTitle() }}</a></td>
                             <td><a href="{{ route('admin.cities.edit', $room->city->slug) }}">{{ $room->city->name }}</a></td>
                         </tr>
                     @endforeach

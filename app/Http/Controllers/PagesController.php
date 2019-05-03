@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 class PagesController extends Controller
 {
     /**
+     * Index.
      * 
-     * 
-     * @return
+     * @return view
      */
     public function index() 
     {
@@ -17,8 +15,9 @@ class PagesController extends Controller
     }
 
     /**
+     * User's home
      * 
-     * @returneb
+     * @return view
      */
     public function home()
     {

@@ -11,9 +11,9 @@ class RoomsController extends Controller
 
     /**
      * Display all available rooms.
-     * 
      * To filter the results use RoomFilters which are injected trough route model binding.
      * 
+     * @param RoomFilters $filters
      * @return view
      */
     public function index(RoomFilters $filters) 
@@ -65,15 +65,28 @@ class RoomsController extends Controller
     }
 
     /**
-     * Update a room.
+     * Store a new room in a database.
      * 
      * @param Request $request
-     * @param string $romm
      * @return redirect
      */
-    public function update($path, Request $request) 
+    public function store(Request $request) 
     {
-        $room = Room::getBySlug($path);
+        $room = auth()->user()->rooms()->create($this->validateRequest($request));
+
+        return redirect(route('home'));
+    }
+
+    /**
+     * Update a room.
+     * 
+     * @param string $slug
+     * @param Request $request
+     * @return redirect
+     */
+    public function update($slug, Request $request) 
+    {
+        $room = Room::getBySlug($slug);
         
         $this->authorize('update', $room);
 
@@ -85,24 +98,22 @@ class RoomsController extends Controller
     }
 
     /**
-     * Store a new form in database.
+     * Delete a room. Accept id instead of slug.
      * 
-     * @param Request $request
+     * @param Room $room
      * @return redirect
      */
-    public function store(Request $request) 
+    public function destroy(Room $room) 
     {
-        //dd($this->validateRequest($request));
+        $this->authorize('update', $room);
 
-        $room = auth()->user()->rooms()->create($this->validateRequest($request));
-
-        $room->generateSlug();
-
-        return redirect(route('home'));
+        $room->delete();
+     
+        return redirect(route('home'));        
     }
 
     /**
-     * Validate a data.
+     * Validate a request.
      * 
      * @param Request $request
      * @return array

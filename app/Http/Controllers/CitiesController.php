@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\City;
+use App\RoomFilters;
+use App\Room;
 
 class CitiesController extends Controller
 {
@@ -13,21 +15,24 @@ class CitiesController extends Controller
      */
     public function index() 
     {
-        $cities = City::limit(10)->get();
-
-        return view('cities.index')->withCities($cities);
+        return view('cities.index')->with([
+            'cities' => City::paginate(10)
+        ]);
     }
 
     /**
      * Display a city.
-     * @param string $slug
      * 
+     * @param string $slug
      * @return view
      */
-    public function show($slug) 
+    public function show($slug, RoomFilters $filters) 
     {
         return view('cities.show')->with([
-            'city' => City::getBySlug($slug)
+            'city' => $city = City::getBySlug($slug),
+            //'rooms' => Room::all()
+            //'rooms' => Room::filter($filters)->where('city_id', $city->id)->get()
+            'rooms' => Room::where('city_id', $city->id)->get()
         ]);    
     }
 }

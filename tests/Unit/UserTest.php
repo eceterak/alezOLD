@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Collection;
 use App\User;
+use Facades\Tests\Setup\RoomFactory;
 
 class UserTest extends TestCase
 {
@@ -31,9 +32,13 @@ class UserTest extends TestCase
     // @test
     public function test_user_has_rooms() 
     {
-        $user = factory('App\User')->create();
+        $user = $this->user();
+
+        $room = RoomFactory::ownedBy($user)->create();
 
         $this->assertInstanceOf(Collection::class, $user->rooms);
+
+        $this->get(route('home'))->assertSee($room->title);
     }
     
     // @test
@@ -64,7 +69,7 @@ class UserTest extends TestCase
     {
         $user = factory(User::class)->create(['role' => 1]);
 
-        $this->actingAs($user)->get('/admin')->assertStatus(200);
+        $this->actingAs($user)->get(route('admin'))->assertStatus(200);
     }
 
     // @test

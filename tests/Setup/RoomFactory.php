@@ -12,6 +12,8 @@ class RoomFactory
 
     protected $user = null;
 
+    protected $city = null;
+
     /**
      * Associate room with a user.
      * 
@@ -20,6 +22,18 @@ class RoomFactory
     public function ownedBy($user)
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Room can belong to a city.
+     * 
+     * @return this
+     */
+    public function belongsTo($city)
+    {
+        $this->city = $city;
 
         return $this;
     }
@@ -39,8 +53,6 @@ class RoomFactory
             'street_id' => $street->id
         ]);
 
-        $room->generateSlug();
-
         return $room;
     }
 
@@ -58,8 +70,6 @@ class RoomFactory
             'city_id' => $street->city->id,
             'street_id' => $street->id
         ]);
-
-        $room->generateSlug();
 
         return $room;
     }

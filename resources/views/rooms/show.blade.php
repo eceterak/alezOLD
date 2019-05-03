@@ -17,14 +17,20 @@
     </main>
     <div class="card mt-4">
         <section>
+            <p>{{ ($room->living_room) ? 'Living room' : 'no living room' }}</p>
             <p class="text-grey-darker">
                 {{ $room->description }}
             </p>
         </section>
     </div>
     @auth
-        @if($room->user->id == auth()->user()->id)
+        @if($room->isOwned())
             <a href="{{ route('rooms.edit', $room->slug) }}" class="btn">Edytuj</a>
+            <form action="{{ route('rooms.destroy', $room->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button class="btn">Usuń</button>
+            </form>
         @endif
     @endauth
     <div class="card card-content mt-6">

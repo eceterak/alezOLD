@@ -4,9 +4,9 @@ namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\City;
 use Facades\Tests\Setup\CityFactory;
 use Facades\Tests\Setup\RoomFactory;
+use App\City;
 
 class CitiesManagementTest extends TestCase
 {
@@ -15,8 +15,6 @@ class CitiesManagementTest extends TestCase
     // @test
     public function test_admin_can_create_a_city() 
     {        
-        $this->withoutExceptionHandling();
-
         $this->admin();
 
         $this->get(route('admin.cities.create'))->assertStatus(200);
@@ -57,6 +55,8 @@ class CitiesManagementTest extends TestCase
     // @test
     public function test_city_adverts_can_be_displayed()
     {
+        $this->withoutExceptionHandling();
+
         $this->admin();
 
         $room = RoomFactory::create();

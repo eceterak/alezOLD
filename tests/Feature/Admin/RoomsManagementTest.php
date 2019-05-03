@@ -27,8 +27,6 @@ class RoomsManagementTest extends TestCase
     // @test
     public function test_admin_can_create_a_room()
     {
-        $this->withoutExceptionHandling();
-
         $street = StreetFactory::create();
 
         $this->admin();
@@ -64,4 +62,32 @@ class RoomsManagementTest extends TestCase
         $this->assertDatabaseHas('rooms', $attributes);
     }
 
+    // @test
+    public function test_rooms_are_listed() 
+    {
+        $this->admin();
+
+        $room = RoomFactory::create();
+
+        $this->get(route('admin.rooms'))->assertSee($room->shortTitle());
+    }
+
+    // @test
+    public function test_room_can_be_verified()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->admin();
+
+        $room = RoomFactory::create();
+
+        $this->patch(route('admin.rooms.update', $room->slug), [
+            'verified' => true
+        ]);
+
+        $room->refresh();
+
+        $this->assertTrue($room->verified);
+        $this->assertTrue($room->active);
+    }
 }

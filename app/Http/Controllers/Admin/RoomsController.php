@@ -5,23 +5,30 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Room;
-use App\City;
 
 class RoomsController extends Controller
 {
 
     /**
-     * Display all rooms for rent.
+     * Display all rooms.
      * 
      * @return view
      */
     public function index() 
     {
-        $rooms = Room::latest()->get();
-
         return view('admin.rooms.index')->with([
-            'rooms' => $rooms
+            'rooms' => Room::latest()->get()
         ]);
+    }
+
+    /**
+     * Display new room form.
+     * 
+     * @return view
+     */
+    public function create() 
+    {
+        return view('admin.rooms.create');
     }
 
     /**
@@ -38,34 +45,6 @@ class RoomsController extends Controller
     }
 
     /**
-     * Update a room.
-     * 
-     * @param string slug
-     * @param Request $request
-     * @return redirect
-     */
-    public function update($slug, Request $request) 
-    {
-        $room = Room::getBySlug($slug);
-
-        $room->update($this->validateRequest($request));
-
-        $room->generateSlug();
-
-        return redirect(route('admin.rooms'));
-    }
-
-    /**
-     * Display new room form.
-     * 
-     * @return view
-     */
-    public function create() 
-    {
-        return view('admin.rooms.create');
-    }
-
-    /**
      * Store a new room in a database.
      * 
      * @param Request $request
@@ -75,12 +54,31 @@ class RoomsController extends Controller
     {
         $room = auth()->user()->rooms()->create($this->validateRequest($request));
 
-        $room->generateSlug();
-
         return redirect(route('admin.rooms'));
     }
 
+    /**
+     * Update a room.
+     * 
+     * @param string $slug
+     * @param Request $request
+     * @return redirect
+     */
+    public function update($slug, Request $request) 
+    {
+        $room = Room::getBySlug($slug);
 
+        if($request->verified) $room->verify();
+        else
+        {
+            $room->update($this->validateRequest($request));
+    
+            $room->generateSlug(); // Refactor?
+        }
+
+        return redirect(route('admin.rooms'));
+    }
+    
     /**
      * Validate a data.
      * 

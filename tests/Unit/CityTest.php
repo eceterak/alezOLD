@@ -77,7 +77,7 @@ class CityTest extends TestCase
         $this->assertInstanceOf('App\Street', $city->streets->first());
     }
 
- // @test
+    // @test
     public function test_city_can_have_rooms() 
     {
         $this->withoutExceptionHandling();
@@ -86,12 +86,13 @@ class CityTest extends TestCase
 
         $room = factory(Room::class)->raw([
             'user_id' => $this->user(),
+            'city_id' => $street->city->id,
             'street_id' => $street->id
         ]);
 
         $room = $street->city->rooms()->create($room);
 
-        $this->assertDatabaseHas('rooms', $room->toArray());
+        $this->assertDatabaseHas('rooms', $room->only('id'));
 
         $this->get(route('cities.show', $street->city->slug))->assertSee($room->title);
     }

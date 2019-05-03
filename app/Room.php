@@ -6,11 +6,33 @@ use Illuminate\Database\Eloquent\Model;
 
 class Room extends Model
 {
+    use RecordsActivity;
+
+    /**
+     * Form request allowed.
+     * 
+     * @var array
+     */
     protected $guarded = [];
 
+    /**
+     * Default attributes.
+     * 
+     * @var array
+     */
     protected $attributes = [
-        'validated' => false,
+        'verified' => false,
         'active' => false
+    ];
+
+    /**
+     * Casts from database to model.
+     * 
+     * @var array
+     */
+    protected $casts = [
+        'verified' => 'boolean',
+        'active' => 'boolean'
     ];
 
     /**
@@ -82,16 +104,14 @@ class Room extends Model
     }
     
     /**
-     * Generate a slug after new room is added to a database (it uses a id).
+     * Generate a slug after room is added to a database (it uses a id).
      * 
      * @return void
      */
     public function generateSlug() 
     {
-        $slug = str_slug($this->title.'-uid-'.$this->encodeId());
-
         $this->update([
-            'slug' => $slug
+            'slug' => str_slug($this->title.'-uid-'.$this->encodeId())
         ]);
     }
 
@@ -103,5 +123,30 @@ class Room extends Model
     public function encodeId() 
     {
         return base_convert($this->id, 10, 36);
+    }
+
+    /**
+     * Verify an advert. Verified advert should be also activated.
+     * 
+     * @return void
+     */
+    public function verify() 
+    {
+        $this->update([
+            'verified' => true,
+            'active' => true
+        ]);
+
+        $this->recordActivity('verified_room');
+    }
+
+    /**
+     * Check if room is owned by authenticated user.
+     * 
+     * @return bool
+     */
+    public function isOwned() 
+    {
+        return auth()->user()->id === $this->user->id;
     }
 }

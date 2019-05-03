@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class AdminController extends Controller
+class AdminDashboardController extends Controller
 {
     /**
-     * Display a admin dashboard.
+     * Display a dashboard.
      * 
      * @return view
      */
@@ -18,9 +17,9 @@ class AdminController extends Controller
     }
     
     /**
+     * Display login page.
      * 
-     * 
-     * @return
+     * @return view
      */
     public function login() 
     {

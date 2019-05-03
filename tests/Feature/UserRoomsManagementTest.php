@@ -8,7 +8,7 @@ use Facades\Tests\Setup\RoomFactory;
 use Facades\Tests\Setup\StreetFactory;
 use App\Room;
 
-class RoomsManagementTest extends TestCase
+class UserRoomsManagementTest extends TestCase
 {
 
     use RefreshDatabase;
@@ -55,9 +55,7 @@ class RoomsManagementTest extends TestCase
 
         $room = RoomFactory::create();
 
-        $this->actingAs($room->user)->get(route('rooms.edit', $room->slug))
-            ->assertSee($room->title)
-            ->assertSee($room->description);
+        $this->actingAs($room->user)->get(route('rooms.edit', $room->slug));
 
         $this->patch(route('rooms.update', $room->slug), $attributes = factory(Room::class)->raw([
             'city_id' => $room->city->id,
@@ -88,5 +86,27 @@ class RoomsManagementTest extends TestCase
         $this->get(route('rooms'))->assertSee($room->title);
 
         $this->get(route('rooms.show', [$room->city->slug, $room->slug]))->assertSee($room->title);
+    }
+
+    // @test
+    public function test_a_owner_of_the_room_can_delete_it()
+    {
+        $room = RoomFactory::create();
+
+        $this->actingAs($room->user)->delete(route('rooms.destroy', $room->id))->assertRedirect(route('home'));
+
+        $this->assertDatabaseMissing('rooms', $room->only('id'));
+    }
+
+    // @test
+    public function test_unauthorized_cannot_delete_projects()
+    {
+        $room = RoomFactory::create();
+
+        $this->delete(route('rooms.destroy', $room->id))->assertRedirect(route('login'));
+
+        $this->user();
+
+        $this->delete(route('rooms.destroy', $room->id))->assertStatus(403);
     }
 }
