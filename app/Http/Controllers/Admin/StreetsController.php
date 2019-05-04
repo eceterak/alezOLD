@@ -82,4 +82,19 @@ class StreetsController extends Controller
 
         return redirect()->route('admin.cities.streets', $street->city->slug);
     }
+
+    /**
+     * Delete a street.
+     * 
+     * @param $city
+     * @param Street $street
+     * @return redirect
+     */
+    public function destroy($city, Street $street) 
+    {
+        $street->delete();
+
+        return redirect()->route('admin.cities.streets', $street->city->slug);
+    }
+
 }

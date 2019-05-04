@@ -30,6 +30,11 @@
                
                 <button type="submit" class="btn btn-reverse">Zapisz</button>
             </form>
+            <form action="{{ route('admin.rooms.destroy', $room->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button class="btn">Usuń</button>
+            </form>
             <div>
                 <ul class="list-reset mt-4">
                     @foreach($room->activities as $activity)

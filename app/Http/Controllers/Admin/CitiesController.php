@@ -97,6 +97,19 @@ class CitiesController extends Controller
     }
 
     /**
+     * Delete a city.
+     * 
+     * @param City $city
+     * @return redirect
+     */
+    public function destroy(City $city) 
+    {
+        $city->delete();
+
+        return redirect(route('admin.cities'));
+    }
+
+    /**
      * Perform validation on incoming request.
      * 
      * @param Request $request

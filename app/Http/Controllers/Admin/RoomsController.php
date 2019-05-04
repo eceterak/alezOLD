@@ -78,6 +78,18 @@ class RoomsController extends Controller
 
         return redirect(route('admin.rooms'));
     }
+
+    /**
+     * Delete a room.
+     * 
+     * @return redirect
+     */
+    public function destroy(Room $room) 
+    {
+        $room->delete();
+
+        return redirect(route('admin.rooms'));
+    }
     
     /**
      * Validate a data.

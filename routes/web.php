@@ -7,7 +7,7 @@ Route::get('/admin/login', 'Admin\AdminController@login')->middleware('guest')->
 Route::group(['namespace' => 'Admin', 'middleware' => 'admin', 'prefix' => 'admin'], function() 
 {
     // Home
-    Route::get('/', 'AdminDashboardController@index')->name('admin');
+    Route::get('/', 'AdminController@index')->name('admin');
     
     // Cities
     Route::get('/miasta', 'CitiesController@index')->name('admin.cities');
@@ -16,6 +16,7 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'admin', 'prefix' => 'admi
     Route::get('/miasta/{city}', 'CitiesController@edit')->name('admin.cities.edit');
     Route::get('/miasta/{city}/pokoje', 'CitiesController@adverts')->name('admin.cities.adverts');
     Route::patch('/miasta/{city}', 'CitiesController@update')->name('admin.cities.update');
+    Route::delete('/miasta/{city}', 'CitiesController@destroy')->name('admin.cities.destroy');
     /* Route::resource('admin/cities', 'CitiesController' [
         'as' => 'admin'
     ]); */
@@ -25,6 +26,7 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'admin', 'prefix' => 'admi
     Route::post('/miasta/{city}/ulice', 'StreetsController@store')->name('admin.streets.store');
     Route::get('/miasta/{city}/ulice/{street}', 'StreetsController@edit')->name('admin.streets.edit');
     Route::post('/miasta/{city}/ulice/{street}', 'StreetsController@update')->name('admin.streets.update');
+    Route::delete('/miasta/{city}/ulice/{street}', 'StreetsController@destroy')->name('admin.streets.destroy');
     
     // Rooms
     Route::get('/pokoje', 'RoomsController@index')->name('admin.rooms');
@@ -32,6 +34,7 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'admin', 'prefix' => 'admi
     Route::post('/pokoje', 'RoomsController@store')->name('admin.rooms.store');
     Route::get('/pokoje/{room}', 'RoomsController@edit')->name('admin.rooms.edit');
     Route::patch('/pokoje/{room}', 'RoomsController@update')->name('admin.rooms.update');
+    Route::delete('/pokoje/{room}', 'RoomsController@destroy')->name('admin.rooms.destroy');
 });
 
 /** Frontend routes */

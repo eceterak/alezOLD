@@ -59,4 +59,30 @@ class StreetsManagementTest extends TestCase
         $this->assertDatabaseHas('streets', $attributes);
     }
 
+    // @test
+    public function test_a_street_can_be_deleted()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->admin();
+
+        $street = StreetFactory::create();
+
+        $this->delete(route('admin.streets.destroy', [$street->city->slug, $street->id]))->assertRedirect(route('admin.cities.streets', $street->city->slug));
+
+        $this->assertDatabaseMissing('streets', $street->only('id'));
+    }
+
+    // @test
+    public function test_unauthorized_cannot_delete_streets()
+    {
+        $street = StreetFactory::create();
+
+        $this->delete(route('admin.streets.destroy', [$street->city->slug, $street->id]))->assertRedirect(route('admin.login'));
+
+        $this->user();
+
+        $this->delete(route('admin.streets.destroy', [$street->city->slug, $street->id]))->assertRedirect(route('index'));
+    }
+
 }

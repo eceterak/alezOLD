@@ -10,7 +10,7 @@
         <header>
             <h3>Edytuj miasto</h3>
         </header>
-        <div class="card-content"_>
+        <div class="card-content">
             <form action="{{ route('admin.cities.update', $city->name) }}" method="POST" class="form">
                 @csrf
                 @method('PATCH')
@@ -77,6 +77,11 @@
                     <label for="suggested">Sugerowane</label>
                 </div>
                 <button type="submit" class="btn btn-reverse">Zapisz</button>
+            </form>
+            <form action="{{ route('admin.cities.destroy', $city->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button class="btn">Usuń</button>
             </form>
         </div>
     </div>

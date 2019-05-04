@@ -73,4 +73,50 @@ class CitiesManagementTest extends TestCase
 
         $this->get(route('admin.cities.streets', $street->city->slug))->assertSee($street->name);
     }
+
+    // @test
+    public function test_a_city_can_be_deleted()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->admin();
+
+        $city = CityFactory::create();
+
+        $this->delete(route('admin.cities.destroy', $city->id))->assertRedirect(route('admin.cities'));
+
+        $this->assertDatabaseMissing('cities', $city->only('id'));
+    }
+
+    // @test
+    public function test_unauthorized_cannot_delete_cities()
+    {
+        $city = CityFactory::create();
+
+        $this->delete(route('admin.cities.destroy', $city->id))->assertRedirect(route('admin.login'));
+
+        $this->user();
+
+        $this->delete(route('admin.cities.destroy', $city->id))->assertRedirect(route('index'));
+    }
+
+    // @test
+    public function test_guests_cannot_manage_cities() 
+    {
+        $city = CityFactory::create();
+
+        $this->get(route('admin.cities'))->assertRedirect(route('admin.login'));
+        $this->get(route('admin.cities.create'))->assertRedirect(route('admin.login'));
+        $this->post(route('admin.cities.store'), [])->assertRedirect(route('admin.login'));
+        $this->get(route('admin.cities.edit', [$city->slug]))->assertRedirect(route('admin.login'));
+        $this->patch(route('admin.cities.update', [$city->slug]), [])->assertRedirect(route('admin.login'));
+
+        $this->user();
+
+        $this->get(route('admin.cities'))->assertRedirect(route('index'));
+        $this->get(route('admin.cities.create'))->assertRedirect(route('index'));
+        $this->post(route('admin.cities.store'), [])->assertRedirect(route('index'));
+        $this->get(route('admin.cities.edit', [$city->slug]))->assertRedirect(route('index'));
+        $this->patch(route('admin.cities.update', [$city->slug]), [])->assertRedirect(route('index'));
+    }
 }

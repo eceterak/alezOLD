@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Activity;
 
-class AdminDashboardController extends Controller
+class AdminController extends Controller
 {
     /**
-     * Display a dashboard.
+     * Display admin dashboard.
      * 
      * @return view
      */
     public function index() 
     {
-        return view('admin.index');
+        return view('admin.dashboard.index')->with([
+            'activities' => Activity::latest()->limit(20)->get()
+        ]);
     }
     
     /**

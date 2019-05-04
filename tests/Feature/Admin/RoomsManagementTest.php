@@ -90,4 +90,30 @@ class RoomsManagementTest extends TestCase
         $this->assertTrue($room->verified);
         $this->assertTrue($room->active);
     }
+
+    // @test
+    public function test_a_room_can_be_deleted()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->admin();
+
+        $room = RoomFactory::create();
+
+        $this->delete(route('admin.rooms.destroy', $room->id))->assertRedirect(route('admin.rooms'));
+
+        $this->assertDatabaseMissing('rooms', $room->only('id'));
+    }
+
+    // @test
+    public function test_unauthorized_cannot_delete_rooms()
+    {
+        $room = RoomFactory::create();
+
+        $this->delete(route('admin.rooms.destroy', $room->id))->assertRedirect(route('admin.login'));
+
+        $this->user();
+
+        $this->delete(route('admin.rooms.destroy', $room->id))->assertRedirect(route('index'));
+    }
 }
