@@ -68,6 +68,16 @@ class Room extends Model
     }
 
     /**
+     * Room can have many conversations.
+     * 
+     * @return App\Conversation
+     */
+    public function conversations() 
+    {
+        return $this->hasMany(Conversation::class);
+    }
+
+    /**
      * Return a portion of a title.
      * 
      * @return string
@@ -148,5 +158,24 @@ class Room extends Model
     public function isOwned() 
     {
         return auth()->user()->id === $this->user->id;
+    }
+
+    /**
+     * Send an inquiry about the room.
+     * 
+     * @param string $body
+     * @return void
+     */
+    public function inquiry($body) 
+    {
+        $conversation = $this->conversations()->create([
+            'receiver_id' => $this->user->id,
+            'sender_id' => auth()->user()->id
+        ]);
+
+        auth()->user()->messages()->create([
+            'conversation_id' => $conversation->id,
+            'body' => $body
+        ]);
     }
 }

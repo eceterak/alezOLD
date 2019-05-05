@@ -2,23 +2,25 @@
 
 @section('content')
 
-    <div class="card">
-        <header>
-            <h3>Ostatnia aktywność</h3>
-        </header>
+<div class="card w-1/2">
+    <header>
+        <h3>Aktywności</h3>
+    </header>
+    @if($activities->count())
+        <table class="table">
+            <tbody>
+                @foreach($activities as $activity)
+                    <tr>
+                        <td>@include("admin.dashboard.activities.{$activity->description}")</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @else
         <div class="card-content">
-            @if($activities->count())
-                <ul class="list-reset">
-                    @foreach($activities as $activity)
-                        <li>
-                            @include("admin.dashboard.activities.{$activity->description}")
-                        </li>
-                    @endforeach
-                </ul>
-            @else
-                <p>Brak aktywności</p>
-            @endif      
+            <p>Brak aktywności</p>
         </div>
-    </div>
+    @endif      
+</div>
 
 @endsection

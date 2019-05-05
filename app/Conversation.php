@@ -28,8 +28,16 @@ class Conversation extends Model
         return $this->belongsTo(Room::class);
     }
 
-    public function path() 
+    /**
+     * 
+     * @param string $body
+     * @return boolean
+     */
+    public function reply($body) 
     {
-        return $this->id;
+        $this->messages()->create([
+            'user_id' => auth()->user()->id,
+            'body' => $body
+        ]);
     }
 }

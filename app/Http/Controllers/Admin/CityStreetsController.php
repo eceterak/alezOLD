@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Street;
 use App\City;
 
-class StreetsController extends Controller
+class CityStreetsController extends Controller
 {
     /**
      * Display all streets of a city.
@@ -18,6 +18,19 @@ class StreetsController extends Controller
     public function index($slug) 
     {
         return view('admin.streets.index')->with([
+            'city' => City::getBySlug($slug)
+        ]);
+    }
+
+    /**
+     * Display all streets of a city.
+     * 
+     * @param string $slug
+     * @return view
+     */
+    public function create($slug) 
+    {
+        return view('admin.streets.create')->with([
             'city' => City::getBySlug($slug)
         ]);
     }
@@ -47,13 +60,13 @@ class StreetsController extends Controller
     {
         $city = City::getBySlug($city);
 
-        $city->streets()->create($request->validate([
+        $city->addStreet($request->validate([
             'name' => 'required',
-            'type' => 'required',
+            'type' => 'sometimes',
             'lat' => 'required',
             'lon' => 'required',
             'importance' => 'sometimes',
-            'ct' => 'required'
+            'ct' => 'sometimes'
         ]));
 
         return redirect(route('admin.cities.streets', $city->slug));
@@ -73,11 +86,11 @@ class StreetsController extends Controller
 
         $street->update($request->validate([
             'name' => 'required',
-            'type' => 'required',
+            'type' => 'sometimes',
             'lat' => 'required',
             'lon' => 'required',
             'importance' => 'sometimes',
-            'ct' => 'required'
+            'ct' => 'sometimes'
         ]));
 
         return redirect()->route('admin.cities.streets', $street->city->slug);

@@ -17,11 +17,11 @@ class CreateStreetsTable extends Migration
             $table->increments('id');
             $table->char('name', 255);
             $table->unsignedInteger('city_id');
-            $table->text('type');
+            $table->text('type')->nullable();
             $table->float('lon', 10, 6);
             $table->float('lat', 10, 6);
-            $table->decimal('importance', 7, 6);
-            $table->char('ct', 80);
+            $table->decimal('importance', 7, 6)->default(0);
+            $table->char('ct', 80)->nullable();
             //$table->point('coordinates');
 
             $table->timestamps();

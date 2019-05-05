@@ -40,6 +40,17 @@ class City extends Model
     }
 
     /**
+     * Add a new street.
+     * 
+     * @param array $attributes
+     * @return bool
+     */
+    public function addStreet($attributes) 
+    {
+        return $this->streets()->create($attributes);
+    }
+
+    /**
      * Create a slug from name.
      * 
      * @return void

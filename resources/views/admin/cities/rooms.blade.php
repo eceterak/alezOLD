@@ -1,12 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('content')
-    <ul class="list-reset flex">
-        <li class="card-tab"><a href="{{ route('admin.cities.edit', $city->slug) }}">Miasto</a></li>
-        <li class="card-tab"><a href="{{ route('admin.cities.streets', $city->slug) }}">Ulice</a></li>
-        <li class="card-tab"><a href="{{ route('admin.cities.adverts', $city->slug) }}">Ogłoszenia</a></li>
-    </ul>
-    <div class="card mt-5">
+    @component('admin.cities._card', ['city' => $city])
         <header>
             <h3>
                 Pokoje w {{ $city->name }}
@@ -32,5 +27,5 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    @endcomponent
 @endsection

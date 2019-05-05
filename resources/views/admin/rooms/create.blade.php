@@ -22,16 +22,6 @@
                     <label for="rent">Czynsz</label>
                     <input type="number" name="rent" id="rent">
                 </div>
-                @if(App\City::form()->count())
-                    <div class="form-group">
-                        <label for="city_id">Miasto</label>
-                        <select name="city_id" id="city_id">
-                            @foreach (App\City::form() as $id => $name)
-                                <option value="{{ $id }}">{{ $name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                @endif
                 <button type="submit" class="btn btn-reverse">Dodaj</button>
             </form>
         </div>

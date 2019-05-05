@@ -29,12 +29,12 @@
             </div>
         </nav>
     </div>
-    <div class="bg-grey-lighter">
-        <div class="container py-8">
+    <div class="bg-grey-lighter border-t border-b border-grey-light">
+        <div class="container pt-6 pb-8">
             @yield('lead')
         </div>
     </div>
-    <div class="container py-8">
+    <div class="container pt-4 pb-8">
         @yield('content')
     </div>
     <script src="{{ asset('js/app.js') }}"></script>

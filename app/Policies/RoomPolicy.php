@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use App\User;
 use App\Room;
 
 class RoomPolicy
@@ -11,9 +11,11 @@ class RoomPolicy
     use HandlesAuthorization;
 
     /**
+     * Checks if given user can manage a room.
      * 
-     * 
-     * @return
+     * @param User $user
+     * @param Room $room
+     * @return bool
      */
     public function update(User $user, Room $room) 
     {

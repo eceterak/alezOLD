@@ -11,6 +11,7 @@ class ConversationPolicy
     use HandlesAuthorization;
 
     /**
+     * Check if a user is an participant of conversation.
      * 
      * @param User $user
      * @param Conversation $conversation

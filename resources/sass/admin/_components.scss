@@ -1,0 +1,98 @@
+
+.btn {
+    @apply px-4 py-2 bg-white text-teal border border-teal no-underline rounded;
+
+    &.btn-reverse {
+        @apply bg-teal text-white;
+    }
+}
+
+.card-tab {
+    @apply z-0  bg-white items-center mr-2;
+
+    a {
+        @apply block p-3 text-black no-underline;
+    }
+}
+
+.card {
+    @apply z-10 bg-white;
+    
+    header {
+        @apply flex p-4 justify-between items-center;
+
+        h3 {
+            @apply font-normal;
+        }
+    }
+
+    .card-content {
+        @apply p-4;
+    }
+}
+
+.navigator {
+
+    @apply z-10 items-center;
+
+    a {
+        @apply leading-normal;
+    }
+
+    ul {
+        @apply list-reset;
+
+        li {  
+
+            a {
+                @apply block py-4 text-white no-underline;   
+                
+                &:hover {
+                    @apply border-b border-grey -mb-px;
+                }
+            }
+        }
+    }
+}
+
+.table {
+    @apply w-full;
+
+    thead {
+        @apply bg-grey-light;
+    }
+    th {
+        @apply text-left;
+    }
+    td, th {
+        @apply p-4 font-normal;
+
+        &.fit {
+            @apply w-px whitespace-no-wrap;
+        }
+    }
+    tr td {
+        @apply border-b;
+    }
+}
+
+.form {
+
+    .input-group {
+
+        @apply mb-5;
+
+        label {
+            @apply inline-block mb-2;
+        }
+
+        textarea {
+            @apply h-32;
+        }
+    }
+
+    .form-control {
+        @apply block w-full p-3 border border-grey rounded bg-white;
+    }
+}
+ 

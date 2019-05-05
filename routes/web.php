@@ -22,11 +22,12 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'admin', 'prefix' => 'admi
     ]); */
 
     // Streets
-    Route::get('/miasta/{city}/ulice', 'StreetsController@index')->name('admin.cities.streets');
-    Route::post('/miasta/{city}/ulice', 'StreetsController@store')->name('admin.streets.store');
-    Route::get('/miasta/{city}/ulice/{street}', 'StreetsController@edit')->name('admin.streets.edit');
-    Route::post('/miasta/{city}/ulice/{street}', 'StreetsController@update')->name('admin.streets.update');
-    Route::delete('/miasta/{city}/ulice/{street}', 'StreetsController@destroy')->name('admin.streets.destroy');
+    Route::get('/miasta/{city}/ulice', 'CityStreetsController@index')->name('admin.cities.streets');
+    Route::get('/miasta/{city}/ulice/dodaj', 'CityStreetsController@create')->name('admin.streets.create');
+    Route::post('/miasta/{city}/ulice', 'CityStreetsController@store')->name('admin.streets.store');
+    Route::get('/miasta/{city}/ulice/{street}', 'CityStreetsController@edit')->name('admin.streets.edit');
+    Route::patch('/miasta/{city}/ulice/{street}', 'CityStreetsController@update')->name('admin.streets.update');
+    Route::delete('/miasta/{city}/ulice/{street}', 'CityStreetsController@destroy')->name('admin.streets.destroy');
     
     // Rooms
     Route::get('/pokoje', 'RoomsController@index')->name('admin.rooms');

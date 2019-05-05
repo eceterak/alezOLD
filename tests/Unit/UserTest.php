@@ -5,8 +5,9 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Collection;
-use App\User;
 use Facades\Tests\Setup\RoomFactory;
+use App\Conversation;
+use App\User;
 
 class UserTest extends TestCase
 {
@@ -40,15 +41,27 @@ class UserTest extends TestCase
 
         $this->get(route('home'))->assertSee($room->title);
     }
-    
+
     // @test
-    public function test_user_can_hold_a_conversation() 
+    public function test_user_has_conversations() 
     {
-        $this->withoutExceptionHandling();
+        $magda = factory(User::class)->create();
+        $magdaRoom = RoomFactory::ownedBy($magda)->create();
 
-        $user = factory(User::class)->create();
+        $marek = $this->user();
+        $magdaRoom->inquiry('Hi Magda, nice room you have');
 
-        $this->assertInstanceOf(Collection::class, $user->conversations());
+        $this->assertCount(1, $marek->conversations());
+        $this->assertCount(1, $magda->conversations());    
+           
+        $wiesiek = $this->user();
+
+        $this->user($wiesiek);
+        $magdaRoom->inquiry('Hi Magda, nice room you have');
+        
+        $this->assertCount(2, $magda->conversations());    
+        $this->assertCount(1, $marek->conversations());
+        $this->assertCount(1, $wiesiek->conversations());
     }
 
     // @test

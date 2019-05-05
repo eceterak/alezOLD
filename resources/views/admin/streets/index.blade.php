@@ -1,17 +1,12 @@
 @extends('admin.layouts.master')
 
 @section('content')
-    <ul class="list-reset flex">
-        <li class="card-tab"><a href="{{ route('admin.cities.edit', $city->slug) }}">Miasto</a></li>
-        <li class="card-tab"><a href="{{ route('admin.cities.streets', $city->slug) }}">Ulice</a></li>
-        <li class="card-tab"><a href="{{ route('admin.cities.adverts', $city->slug) }}">Ogłoszenia</a></li>
-    </ul>
-    <div class="card mt-5">
+    @component('admin.cities._card', ['city' => $city])
         <header>
             <h3>Ulice w {{ $city->name }}<small class="text-grey-darker">&nbsp;[{{ $city->streets->count() }}]</small></h3>
-            <a href="/admin/pokoje/dodaj" class="btn">Dodaj</a>
+            <a href="{{ route('admin.streets.create', $city->slug) }}" class="btn">Dodaj</a>
         </header>
-        <div>
+        @if($city->streets->count())
             <table class="table">
                 <thead>
                     <tr>
@@ -27,11 +22,21 @@
                             <td><a href="{{ route('admin.streets.edit', [$street->city->slug, $street->id]) }}">{{ $street->name }}</a></td>
                             <td>{{ $street->lat }}</td>
                             <td>{{ $street->lon }}</td>
-                            <td>delete</td>
+                            <td>
+                                <form action="{{ route('admin.streets.destroy', [$street->city->slug, $street->id]) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn">Usuń</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+        @else
+        <div class="card-content">
+            <p>Brak ulic w tym mieście</p>
         </div>
-    </div>
+        @endif
+    @endcomponent
 @endsection

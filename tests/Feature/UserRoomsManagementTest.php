@@ -33,13 +33,11 @@ class UserRoomsManagementTest extends TestCase
         $this->get(route('rooms.create'))->assertStatus(200);
 
         $street = StreetFactory::create();
-
-        $attributes = factory(Room::class)->raw([
+        
+        $this->post(route('rooms.store'), $attributes = factory(Room::class)->raw([
             'city_id' => $street->city->id,
             'street_id' => $street->id
-        ]);
-        
-        $this->post(route('rooms.store'), $attributes)->assertRedirect(route('home'));
+        ]))->assertRedirect(route('home'));
 
         $room = Room::where($attributes)->first();
         

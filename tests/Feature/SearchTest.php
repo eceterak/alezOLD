@@ -20,7 +20,8 @@ class SearchTest extends TestCase
         $this->get(route('search.index', [
             'city' => 'ignore this value',
             'city_id' => $room->city->id
-        ]))->assertRedirect(route('cities.show', [$room->city->slug]));
+        ]))
+        ->assertRedirect(route('cities.show', [$room->city->slug]));
     }
 
     // @test
@@ -33,7 +34,8 @@ class SearchTest extends TestCase
         $this->get(route('search.index', [
             'city' => $room->city->name,
             'city_id' => ''
-        ]))->assertRedirect(route('cities.show', [$room->city->slug]));
+        ]))
+        ->assertRedirect(route('cities.show', [$room->city->slug]));
     }
     
     // @test
@@ -43,7 +45,8 @@ class SearchTest extends TestCase
         
         $this->post(route('ajax.cities'), [
             'city' => substr($city->name, 0, 3)
-        ])->assertSee($city->name);
+        ])
+        ->assertSee($city->name);
     }
     
     //@test
@@ -52,7 +55,8 @@ class SearchTest extends TestCase
         $this->get(route('search.index'), [
             'city' => '',
             'city_id' => ''
-        ])->assertRedirect(route('rooms'));
+        ])
+        ->assertRedirect(route('rooms'));
     }
     
 }

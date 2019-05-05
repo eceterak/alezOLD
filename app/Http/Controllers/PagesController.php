@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\City;
+
 class PagesController extends Controller
 {
     /**
@@ -11,7 +13,9 @@ class PagesController extends Controller
      */
     public function index() 
     {
-        return view('pages.index');
+        return view('pages.index')->with([
+            'cities' => City::where('suggested', true)->get()
+        ]);
     }
 
     /**

@@ -5,6 +5,7 @@ use App\Conversation;
 
 use Illuminate\Http\Request;
 use App\Room;
+use App\Http\Requests\ConversationRequest;
 
 class ConversationsController extends Controller
 {
@@ -33,34 +34,29 @@ class ConversationsController extends Controller
         ]);
     }
 
-    public function reply(Conversation $conversation) 
+    /**
+     * 
+     * @param Request $request
+     * @return redirect
+     */
+    public function reply(Conversation $conversation, ConversationRequest $request) 
     {
-        auth()->user()->messages()->create([
-            'conversation_id' => $conversation->id,
-            'body' => request('body')
-        ]);
+        $conversation->reply($request->body);
 
         return redirect()->back();
     }
 
     /**
-     * Initialize a new conversation.
+     * Start a new conversation.
      * 
+     * @param Request $request
      * @return redirect
      */
-    public function store($city, $slug) 
+    public function store($city, $slug, Request $request) 
     {
         $room = Room::getBySlug($slug);
 
-        $conversation = auth()->user()->sent()->create([
-            'room_id' => $room->id,
-            'receiver_id' => $room->user->id
-        ]);
-
-        auth()->user()->messages()->create([
-            'conversation_id' => $conversation->id,
-            'body' => request('body')
-        ]);
+        $room->inquiry($request->body);
 
         return redirect()->back();
     }

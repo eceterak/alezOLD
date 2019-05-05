@@ -24,14 +24,14 @@
         </section>
     </div>
     @auth
-        @if($room->isOwned())
+        @can('update', $room)
             <a href="{{ route('rooms.edit', $room->slug) }}" class="btn">Edytuj</a>
             <form action="{{ route('rooms.destroy', $room->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <button class="btn">Usuń</button>
             </form>
-        @endif
+        @endcan
     @endauth
     <div class="card card-content mt-6">
         <header>

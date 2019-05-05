@@ -74,7 +74,7 @@ class User extends Authenticatable
      */
     public function conversations() 
     {
-        return $this->inbox->merge($this->sent);
+        return Conversation::where('sender_id', $this->id)->orWhere('receiver_id', $this->id)->get();
     }
 
     /**

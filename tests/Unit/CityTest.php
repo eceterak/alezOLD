@@ -62,15 +62,15 @@ class CityTest extends TestCase
     {
         $city = factory(City::class)->create();
         
-        $this->assertEquals(str_slug($city->name), $city->slug);
+        $this->assertIsString($city->slug);
     }
 
     // @test
     public function test_city_has_streets()
     {
-        $city = CityFactory::create();
+        $city = factory(City::class)->create();
 
-        $street = factory(Street::class)->create([
+        factory(Street::class)->create([
             'city_id' => $city->id
         ]);
 
@@ -80,20 +80,17 @@ class CityTest extends TestCase
     // @test
     public function test_city_can_have_rooms() 
     {
-        $this->withoutExceptionHandling();
-
-        $street = StreetFactory::create();
+        $city = factory(City::class)->create();
 
         $room = factory(Room::class)->raw([
             'user_id' => $this->user(),
-            'city_id' => $street->city->id,
-            'street_id' => $street->id
+            'city_id' => $city->id
         ]);
 
-        $room = $street->city->rooms()->create($room);
+        $room = $city->rooms()->create($room);
 
         $this->assertDatabaseHas('rooms', $room->only('id'));
 
-        $this->get(route('cities.show', $street->city->slug))->assertSee($room->title);
+        $this->get(route('cities.show', $city->slug))->assertSee($room->title);
     }
 }

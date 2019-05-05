@@ -12,7 +12,7 @@ class CitiesDisplayTest extends TestCase
     use RefreshDatabase;
 
     // @test
-    public function test_guest_can_view_a_city() 
+    public function test_user_can_view_a_city() 
     {        
         $city = CityFactory::create();
 
@@ -41,4 +41,15 @@ class CitiesDisplayTest extends TestCase
             ->assertSee($room->title)
             ->assertDontSee($roomExcluded->title);
     }
+
+    //@test
+   public function test_display_suggested_cities_on_main_page()
+   {
+       $room = RoomFactory::create();
+       $roomExcluded = RoomFactory::create();
+
+       $this->get(route('cities.show', $room->city->slug))
+           ->assertSee($room->title)
+           ->assertDontSee($roomExcluded->title);
+   }
 }

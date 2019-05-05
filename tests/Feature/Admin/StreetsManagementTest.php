@@ -20,29 +20,13 @@ class StreetsManagementTest extends TestCase
         
         $city = CityFactory::create();
 
+        $this->get(action('Admin\CityStreetsController@create', $city->slug))->assertStatus(200);
+
         $this->post(route('admin.streets.store', $city->slug), $attributes = factory(Street::class)->raw());
 
-        $this->assertDatabaseHas('streets', $attributes);
-    }
-
-    // @test
-    public function test_admin_can_view_streets_of_a_city()
-    {
-        $this->admin();
-
-        $street = StreetFactory::create();
+        $street = Street::where($attributes)->first();
 
         $this->get(route('admin.cities.streets', $street->city->slug))->assertSee($street->name);
-    }
-
-    // @test
-    public function test_admin_can_edit_a_street() 
-    {
-        $this->admin();
-
-        $street = StreetFactory::create();
-
-        $this->get(route('admin.streets.edit', [$street->city->slug, $street->id]))->assertSee($street->name);
     }
 
     // @test
@@ -52,9 +36,12 @@ class StreetsManagementTest extends TestCase
 
         $street = StreetFactory::create();
 
-        $this->post(route('admin.streets.update', [$street->city->slug, $street->id]), $attributes = factory(Street::class)->raw([
+        $this->get(route('admin.streets.edit', [$street->city->slug, $street->id]))->assertSee($street->name);
+
+        $this->patch(route('admin.streets.update', [$street->city->slug, $street->id]), $attributes = factory(Street::class)->raw([
             'city_id' => $street->city->id
-        ]));
+        ]))
+        ->assertRedirect(route('admin.cities.streets', $street->city->slug));
 
         $this->assertDatabaseHas('streets', $attributes);
     }
@@ -72,17 +59,4 @@ class StreetsManagementTest extends TestCase
 
         $this->assertDatabaseMissing('streets', $street->only('id'));
     }
-
-    // @test
-    public function test_unauthorized_cannot_delete_streets()
-    {
-        $street = StreetFactory::create();
-
-        $this->delete(route('admin.streets.destroy', [$street->city->slug, $street->id]))->assertRedirect(route('admin.login'));
-
-        $this->user();
-
-        $this->delete(route('admin.streets.destroy', [$street->city->slug, $street->id]))->assertRedirect(route('index'));
-    }
-
 }
