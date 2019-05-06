@@ -30,7 +30,7 @@ $factory->define(App\Room::class, function (Faker $faker) {
         'broadband' => $faker->boolean(),
 
         // Desired tenetant.
-        'smooking' => $faker->boolean(),
+        'smoking' => $faker->boolean(),
         'pets' => $faker->boolean(),
         'occupation' => $faker->randomElement(['n', 'student', 'professional']),
         'couples' => $faker->boolean(),

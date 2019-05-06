@@ -1,0 +1,33 @@
+.suggested-icon {
+    width: 30px;
+    height: 30px;
+    line-height: 30px!important;
+    border-radius: 30px;
+    text-align: center;
+    white-space: nowrap;
+    color: #FFF;
+    background-color: teal;
+    margin-right: .8rem;  
+    font-size: .875rem; 
+}
+
+.validation {}
+
+.validation .hint-message {
+	font-size: .8em;
+}
+
+.validation .is-valid {
+	border-color: green!important;
+}
+
+.validation .is-invalid {
+	border-color: red!important;
+}
+
+.validation .error-message {
+	color: red;
+    font-size: .8em;
+    letter-spacing: .05rem;
+    word-spacing: 0;
+}

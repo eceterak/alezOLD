@@ -30,9 +30,7 @@ class CitiesController extends Controller
     {
         return view('cities.show')->with([
             'city' => $city = City::getBySlug($slug),
-            //'rooms' => Room::all()
-            //'rooms' => Room::filter($filters)->where('city_id', $city->id)->get()
-            'rooms' => Room::where('city_id', $city->id)->get()
+            'rooms' => Room::filter($filters)->where('city_id', $city->id)->get()
         ]);    
     }
 }

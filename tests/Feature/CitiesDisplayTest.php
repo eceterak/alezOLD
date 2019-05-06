@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\CityFactory;
 use Facades\Tests\Setup\RoomFactory;
+use App\City;
 
 class CitiesDisplayTest extends TestCase
 {
@@ -45,11 +46,15 @@ class CitiesDisplayTest extends TestCase
     //@test
    public function test_display_suggested_cities_on_main_page()
    {
-       $room = RoomFactory::create();
-       $roomExcluded = RoomFactory::create();
+       $citySuggested = factory(City::class)->create([
+           'suggested' => true
+       ]);
 
-       $this->get(route('cities.show', $room->city->slug))
-           ->assertSee($room->title)
-           ->assertDontSee($roomExcluded->title);
+       $cityNotSuggested = factory(City::class)->create([
+        'suggested' => false
+    ]);
+
+       $this->get(route('index'))->assertSee($citySuggested->name);
+       $this->get(route('index'))->assertDontSee($cityNotSuggested->name);
    }
 }

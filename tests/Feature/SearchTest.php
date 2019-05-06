@@ -37,6 +37,20 @@ class SearchTest extends TestCase
         ]))
         ->assertRedirect(route('cities.show', [$room->city->slug]));
     }
+
+    // @test
+    public function test_search_by_query_with_commas() 
+    {
+        $this->withoutExceptionHandling();
+
+        $room = RoomFactory::create();
+
+        $this->get(route('search.index', [
+            'city' => $room->city->name.','.$room->city->community.','.$room->city->state,
+            'city_id' => ''
+        ]))
+        ->assertRedirect(route('cities.show', [$room->city->slug]));
+    }
     
     // @test
     public function test_ajax_autocomplete_suggestions() 

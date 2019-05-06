@@ -117,7 +117,7 @@ class RoomsController extends Controller
             'room_size' => 'sometimes',
             'furnished' => 'sometimes',
             'broadband' => 'sometimes',
-            'smooking' => 'sometimes',
+            'smoking' => 'sometimes',
             'pets' => 'sometimes',
             'occupation' => 'sometimes',
             'couples' => 'sometimes',

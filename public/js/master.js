@@ -132,7 +132,9 @@ $(function () {
   $.widget("custom.combobox", {
     options: {
       url: '/ajax/cities',
-      disabled: false
+      disabled: false,
+      requiredMessage: '',
+      required: false
     },
     _create: function _create() {
       this.wrapper = $("<span>").addClass("custom-combobox").insertAfter(this.element);
@@ -141,7 +143,7 @@ $(function () {
       this._createAutocomplete();
     },
     _createAutocomplete: function _createAutocomplete() {
-      this.input = $("<input>").appendTo(this.wrapper).attr("title", "").addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left").attr('disabled', this.options.disabled).autocomplete({
+      this.input = $("<input>").appendTo(this.wrapper).attr("title", "").attr('required', this.options.required).attr('data-validation-rqmessage', this.options.requiredMessage).addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left").attr('disabled', this.options.disabled).autocomplete({
         delay: 0,
         minLength: 3,
         source: this.options._source ? this.options._source : $.proxy(this, "_source")
@@ -261,12 +263,21 @@ $(function () {
       this.element.show();
     }
   });
-  $('#city_id', 'form[name="create_new_advert"]').combobox();
+  $('#city_id', 'form[name="create_new_advert"]').combobox({
+    'required': true,
+    'requiredMessage': 'Miasto jest wymagane'
+  });
   $('#street_id').combobox({
     'disabled': true
   });
   $('#available_from', 'form[name="create_new_advert"]').datepicker({
     dateFormat: 'yy-mm-dd'
+  });
+  $('#room-form-va').validation({
+    requiredMessage: function requiredMessage(name) {
+      return name + ' jest wymagany';
+    },
+    liveValidation: false
   });
 });
 

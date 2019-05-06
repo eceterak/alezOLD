@@ -50,7 +50,7 @@ class CreateRoomsTable extends Migration
             $table->boolean('broadband')->default(false);
             
             // Desired tenetant.
-            $table->boolean('smooking')->default(false);
+            $table->boolean('smoking')->default(false);
             $table->boolean('pets')->default(false);
             $table->boolean('couples')->default(false);
             $table->enum('gender', ['n', 'm', 'f'])->nullable();

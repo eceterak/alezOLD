@@ -8,6 +8,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Alez.pl - pokoje na wynajem') }}</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/master.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <body>
     <div class="bg-white">
@@ -34,10 +36,25 @@
             @yield('lead')
         </div>
     </div>
-    <div class="container pt-4 pb-8">
+    <div class="container pt-4 pb-8" id="app">
         @yield('content')
+        <div class="border-t border-grey mt-20 pt-4">
+            <div class="flex -mx-4">
+                <div class="w-1/3 px-4 text-xs">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo modi rem, eveniet ipsum expedita incidunt necessitatibus at explicabo nam dolorem dolores quaerat et perspiciatis, non officiis cumque maxime corporis eius.</div>
+                <div class="w-1/3 px-4 text-xs">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo modi rem, eveniet ipsum expedita incidunt necessitatibus at explicabo nam dolorem dolores quaerat et perspiciatis, non officiis cumque maxime corporis eius.</div>
+                <div class="w-1/3 px-4 text-xs">
+                    <ul class="list-reset">
+                        <li>Home</li>
+                        <li>Pokoje</li>
+                        <li>Miasta</li>
+                        <li>Twoje konto</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/poppa.js') }}"></script>
     <script src="{{ asset('js/master.js') }}"></script>
 </body>
 </html>
