@@ -4,31 +4,31 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Room;
+use App\Advert;
 
-class RoomsController extends Controller
+class AdvertsController extends Controller
 {
 
     /**
-     * Display all rooms.
+     * Display all Adverts.
      * 
      * @return view
      */
     public function index() 
     {
-        return view('admin.rooms.index')->with([
-            'rooms' => Room::latest()->get()
+        return view('admin.adverts.index')->with([
+            'adverts' => Advert::latest()->get()
         ]);
     }
 
     /**
-     * Display new room form.
+     * Display new Advert form.
      * 
      * @return view
      */
     public function create() 
     {
-        return view('admin.rooms.create');
+        return view('admin.adverts.create');
     }
 
     /**
@@ -39,26 +39,26 @@ class RoomsController extends Controller
      */
     public function edit($slug) 
     {
-        return view('admin.rooms.edit')->with([
-            'room' => Room::getBySlug($slug)
+        return view('admin.adverts.edit')->with([
+            'advert' => Advert::getBySlug($slug)
         ]);
     }
 
     /**
-     * Store a new room in a database.
+     * Store a new Advert in a database.
      * 
      * @param Request $request
      * @return redirect
      */
     public function store(Request $request) 
     {
-        $room = auth()->user()->rooms()->create($this->validateRequest($request));
+        $Advert = auth()->user()->Adverts()->create($this->validateRequest($request));
 
-        return redirect(route('admin.rooms'));
+        return redirect(route('admin.adverts'));
     }
 
     /**
-     * Update a room.
+     * Update a Advert.
      * 
      * @param string $slug
      * @param Request $request
@@ -66,29 +66,29 @@ class RoomsController extends Controller
      */
     public function update($slug, Request $request) 
     {
-        $room = Room::getBySlug($slug);
+        $Advert = Advert::getBySlug($slug);
 
-        if($request->verified) $room->verify();
+        if($request->verified) $Advert->verify();
         else
         {
-            $room->update($this->validateRequest($request));
+            $Advert->update($this->validateRequest($request));
     
-            $room->generateSlug(); // Refactor?
+            $Advert->generateSlug(); // Refactor?
         }
 
-        return redirect(route('admin.rooms'));
+        return redirect(route('admin.adverts'));
     }
 
     /**
-     * Delete a room.
+     * Delete a Advert.
      * 
      * @return redirect
      */
-    public function destroy(Room $room) 
+    public function destroy(Advert $Advert) 
     {
-        $room->delete();
+        $Advert->delete();
 
-        return redirect(route('admin.rooms'));
+        return redirect(route('admin.adverts'));
     }
     
     /**

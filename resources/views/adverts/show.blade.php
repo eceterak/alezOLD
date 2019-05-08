@@ -1,15 +1,15 @@
 @extends('layouts.master')
 @section('content')
-    <h3 class="font-normal text-lg mb-4">{{ $room->title }}</h3>
+    <h3 class="font-normal text-lg mb-4">{{ $advert->title }}</h3>
     <main class="lg:flex -mx-3">
         <div class="w-3/5 px-3">
-            <img src="/storage/room.jpg" class="shadow">
+            <img src="/storage/advert.jpg" class="shadow">
         </div>
         <div class="lg:w-2/5 px-3">
             <div class="card">
                 <section>
                     <p class="text-grey-darker">
-                        {{ $room->description }}
+                        {{ $advert->description }}
                     </p>
                 </section>
             </div>
@@ -17,16 +17,16 @@
     </main>
     <div class="card mt-4">
         <section>
-            <p>{{ ($room->living_room) ? 'Living room' : 'no living room' }}</p>
+            <p>{{ ($advert->living_advert) ? 'Living advert' : 'no living advert' }}</p>
             <p class="text-grey-darker">
-                {{ $room->description }}
+                {{ $advert->description }}
             </p>
         </section>
     </div>
     @auth
-        @can('update', $room)
-            <a href="{{ route('rooms.edit', $room->slug) }}" class="btn">Edytuj</a>
-            <form action="{{ route('rooms.destroy', $room->id) }}" method="POST">
+        @can('update', $advert)
+            <a href="{{ route('adverts.edit', $advert->slug) }}" class="btn">Edytuj</a>
+            <form action="{{ route('adverts.destroy', $advert->id) }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <button class="btn">Usuń</button>
@@ -38,7 +38,7 @@
             <h3>Napisz wiadomosc</h3>
         </header>
         <div class="card-content">
-            <form action="{{ route('conversations.store', [$room->city->slug, $room->slug]) }}" method="POST" class="form">
+            <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST" class="form">
                 @csrf
                 @guest
                     <div class="form-group">

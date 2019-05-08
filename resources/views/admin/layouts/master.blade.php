@@ -17,8 +17,8 @@
                 <ul>
                     <li><a href="{{ route('admin') }}">Home</a></li>
                     <li><a href="{{ route('admin.cities') }}">Miasta</a></li>
-                    <li><a href="{{ route('admin.rooms') }}">Pokoje</a></li>
-                    <li><a href="{{ route('admin.rooms') }}">Użytkownicy</a></li>
+                    <li><a href="{{ route('admin.adverts') }}">Pokoje</a></li>
+                    <li><a href="{{ route('admin.adverts') }}">Użytkownicy</a></li>
                 </ul>
             </nav>
         </div>

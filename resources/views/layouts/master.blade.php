@@ -27,18 +27,18 @@
                         <button type="submit" class="btn mr-2">{{ __('Logout') }}</button>
                     </form>
                 @endauth
-                <a href="{{ route('rooms.create') }}" class="btn btn-reverse">Dodaj ogłoszenie</a>
+                <a href="{{ route('adverts.create') }}" class="btn btn-reverse">Dodaj ogłoszenie</a>
             </div>
         </nav>
     </div>
     <div class="bg-grey-lighter border-t border-b border-grey-light">
-        <div class="container pt-6 pb-8">
+        <div class="container pt-6 pb-8" id="app">
             @yield('lead')
         </div>
     </div>
-    <div class="container pt-4 pb-8" id="app">
+    <div class="container pt-4 pb-8">
         @yield('content')
-        <div class="border-t border-grey mt-20 pt-4">
+{{--         <footer class="border-t border-grey mt-20 pt-4">
             <div class="flex -mx-4">
                 <div class="w-1/3 px-4 text-xs">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo modi rem, eveniet ipsum expedita incidunt necessitatibus at explicabo nam dolorem dolores quaerat et perspiciatis, non officiis cumque maxime corporis eius.</div>
                 <div class="w-1/3 px-4 text-xs">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo modi rem, eveniet ipsum expedita incidunt necessitatibus at explicabo nam dolorem dolores quaerat et perspiciatis, non officiis cumque maxime corporis eius.</div>
@@ -51,7 +51,7 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </footer> --}}
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/poppa.js') }}"></script>

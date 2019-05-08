@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Faker\Generator as Faker;
+
 use Illuminate\Http\Request;
 use App\City;
 use App\Street;
@@ -41,5 +43,13 @@ class AjaxController extends Controller
                         ->get();
 
         return response()->json($streets);
+    }
+
+    public function upload(Request $request, Faker $faker)
+    {
+        return response()->json([
+            'url' => '/storage/notfound.png',
+            'id' => $faker->randomDigitNotNull
+        ]);
     }
 }

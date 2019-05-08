@@ -117,3 +117,20 @@
     }
 
 }
+
+.inputfile {
+    @apply absolute hidden z-0 w-px h-px opacity-0 overflow-hidden;
+
+    & + label {
+        @apply inline-block text-grey cursor-pointer;
+    }
+
+    &:focus + label, & + label:hover {
+        @apply text-grey-darker;
+    }
+
+    &:focus + label {
+        outline: 1px dotted #000;
+        outline: -webkit-focus-ring-color auto 5px;
+    }
+}

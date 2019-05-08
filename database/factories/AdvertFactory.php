@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Room::class, function (Faker $faker) {
+$factory->define(App\Advert::class, function (Faker $faker) {
     return [
         // General info
         'title' => $faker->text(50),
@@ -24,7 +24,7 @@ $factory->define(App\Room::class, function (Faker $faker) {
         'property_size' => $faker->numberBetween(1, 10),
         'living_room' => $faker->boolean(),
 
-        // Room details
+        // Advert details
         'room_size' => $faker->randomElement(['single', 'double', 'triple']),
         'furnished' => $faker->boolean(),
         'broadband' => $faker->boolean(),

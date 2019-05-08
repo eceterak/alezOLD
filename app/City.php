@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Room;
+use App\Advert;
 
 class City extends Model
 {
@@ -20,13 +20,23 @@ class City extends Model
     ];
 
     /**
-     * Define eloquent relationship between city and rooms.
+     * Replace default key for route model binding.
      * 
-     * @return Collection App\Room
+     * @return string
      */
-    public function rooms() 
+    public function getRouteKeyName() 
     {
-        return $this->hasMany(Room::class);
+        return 'slug';
+    }
+
+    /**
+     * Define eloquent relationship between city and adverts.
+     * 
+     * @return Collection App\Advert
+     */
+    public function adverts() 
+    {
+        return $this->hasMany(Advert::class);
     }
 
     /**

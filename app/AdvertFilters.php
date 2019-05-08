@@ -2,7 +2,7 @@
 
 namespace App;
 
-class RoomFilters extends QueryFilter
+class AdvertFilters extends QueryFilter
 {
 
     public function rent($order = 'desc') 
@@ -10,7 +10,7 @@ class RoomFilters extends QueryFilter
         return $this->builder->orderBy('rent', $order);
     }
 
-    public function livingroom()
+    public function livingRoom()
     {
         return $this->builder->where('living_room', 1);
     }

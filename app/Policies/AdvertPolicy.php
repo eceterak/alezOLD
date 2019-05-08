@@ -4,21 +4,21 @@ namespace App\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 use App\User;
-use App\Room;
+use App\Advert;
 
-class RoomPolicy
+class AdvertPolicy
 {
     use HandlesAuthorization;
 
     /**
-     * Checks if given user can manage a room.
+     * Checks if given user can manage a Advert.
      * 
      * @param User $user
-     * @param Room $room
+     * @param Advert $advert
      * @return bool
      */
-    public function update(User $user, Room $room) 
+    public function update(User $user, Advert $advert) 
     {
-        return $user->is($room->user);
+        return $user->is($advert->user);
     }
 }

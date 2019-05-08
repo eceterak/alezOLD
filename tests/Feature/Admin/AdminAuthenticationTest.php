@@ -5,27 +5,27 @@ namespace Tests\Feature\Admin;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\CityFactory;
-use Facades\Tests\Setup\RoomFactory;
+use Facades\Tests\Setup\AdvertFactory;
 use Facades\Tests\Setup\StreetFactory;
 
 class AdminAuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    // @test
-    public function test_unauthorized_user_cannot_delete_cities()
+    /** @test */
+    public function unauthorized_user_cannot_delete_cities()
     {
+        $this->withoutExceptionHandling();
+
         $city = CityFactory::create();
 
-        $this->delete(route('admin.cities.destroy', $city->id))->assertRedirect(route('admin.login'));
+        $this->delete(route('admin.cities.destroy', $city->slug))->assertRedirect(route('admin.login'));
 
-        $this->user();
-
-        $this->delete(route('admin.cities.destroy', $city->id))->assertRedirect(route('index'));
+        $this->actingAs($this->user())->delete(route('admin.cities.destroy', $city->slug))->assertRedirect(route('index'));
     }
 
-    // @test
-    public function test_guests_cannot_manage_cities() 
+    /** @test */
+    public function guests_cannot_manage_cities() 
     {
         $city = CityFactory::create();
 
@@ -35,7 +35,7 @@ class AdminAuthenticationTest extends TestCase
         $this->get(route('admin.cities.edit', [$city->slug]))->assertRedirect(route('admin.login'));
         $this->patch(route('admin.cities.update', [$city->slug]), [])->assertRedirect(route('admin.login'));
 
-        $this->user();
+        $this->signIn();
 
         $this->get(route('admin.cities'))->assertRedirect(route('index'));
         $this->get(route('admin.cities.create'))->assertRedirect(route('index'));
@@ -44,40 +44,36 @@ class AdminAuthenticationTest extends TestCase
         $this->patch(route('admin.cities.update', [$city->slug]), [])->assertRedirect(route('index'));
     }
 
-    // @test
-    public function test_guests_cannot_manage_rooms() 
+    /** @test */
+    public function guests_cannot_manage_adverts() 
     {
-        $room = RoomFactory::create();
+        $advert = AdvertFactory::create();
 
-        $this->get(route('admin.rooms'))->assertRedirect(route('admin.login'));
-        $this->get(route('admin.rooms.create'))->assertRedirect(route('admin.login'));
-        $this->post(route('admin.rooms.store'), [])->assertRedirect(route('admin.login'));
-        $this->get(route('admin.rooms.edit', [$room->slug]))->assertRedirect(route('admin.login'));
-        $this->patch(route('admin.rooms.update', [$room->slug]), [])->assertRedirect(route('admin.login'));
+        $this->get(route('admin.adverts'))->assertRedirect(route('admin.login'));
+        $this->get(route('admin.adverts.create'))->assertRedirect(route('admin.login'));
+        $this->post(route('admin.adverts.store'), [])->assertRedirect(route('admin.login'));
+        $this->get(route('admin.adverts.edit', [$advert->slug]))->assertRedirect(route('admin.login'));
+        $this->patch(route('admin.adverts.update', [$advert->slug]), [])->assertRedirect(route('admin.login'));
     }
 
-    // @test
-    public function test_unauthorized_cannot_delete_rooms()
+    /** @test */
+    public function unauthorized_cannot_delete_adverts()
     {
-        $room = RoomFactory::create();
+        $advert = AdvertFactory::create();
 
-        $this->delete(route('admin.rooms.destroy', $room->id))->assertRedirect(route('admin.login'));
+        $this->delete(route('admin.adverts.destroy', $advert->id))->assertRedirect(route('admin.login'));
 
-        $this->user();
-
-        $this->delete(route('admin.rooms.destroy', $room->id))->assertRedirect(route('index'));
+        $this->actingAs($this->user())->delete(route('admin.adverts.destroy', $advert->id))->assertRedirect(route('index'));
     }
 
-    // @test
-    public function test_unauthorized_cannot_delete_streets()
+    /** @test */
+    public function unauthorized_cannot_delete_streets()
     {
         $street = StreetFactory::create();
 
         $this->delete(route('admin.streets.destroy', [$street->city->slug, $street->id]))->assertRedirect(route('admin.login'));
 
-        $this->user();
-
-        $this->delete(route('admin.streets.destroy', [$street->city->slug, $street->id]))->assertRedirect(route('index'));
+        $this->actingAs($this->user())->delete(route('admin.streets.destroy', [$street->city->slug, $street->id]))->assertRedirect(route('index'));
     }
 
 }

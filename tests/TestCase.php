@@ -9,12 +9,12 @@ abstract class TestCase extends BaseTestCase
     use CreatesApplication;
 
     /**
-     * Act as an regular user.
+     * Login an user.
      * 
      * @param $user [User/null]
      * @return App\User
      */
-    protected function user($user = null) 
+    protected function signIn($user = null) 
     {
         $user = $user ?: factory('App\User')->create(['role' => 0]);
 
@@ -24,17 +24,37 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
-     * Act as an admin.
+     * Login an admin
      * 
      * @param $user [User/null]
      * @return App\User
      */
-    protected function admin($admin = null) 
+    protected function signInAdmin($admin = null) 
     {
         $admin = $admin ?: factory('App\User')->create(['role' => 1]);
 
         $this->actingAs($admin);
 
         return $admin;
+    }
+
+    /**
+     * Return an instance of a user.
+     * 
+     * @return App\User
+     */
+    protected function user() 
+    {
+        return factory('App\User')->create(['role' => 0]);
+    }
+
+    /**
+     * Return an instance of admin.
+     * 
+     * @return App\User
+     */
+    protected function admin() 
+    {
+        return factory('App\User')->create(['role' => 1]);
     }
 }

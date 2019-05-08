@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Room extends Model
+class Advert extends Model
 {
     use RecordsActivity;
 
@@ -36,7 +36,7 @@ class Room extends Model
     ];
 
     /**
-     * Define eloquent relationship between user and Room.
+     * Define eloquent relationship between user and advert.
      * 
      * @return App\User
      */
@@ -46,7 +46,7 @@ class Room extends Model
     }
 
     /**
-     * Define eloquent relationship between city and Room.
+     * Define eloquent relationship between city and advert.
      * 
      * @return App\City
      */
@@ -57,7 +57,7 @@ class Room extends Model
     }
 
     /**
-     * Define eloquent relationship between street and Room.
+     * Define eloquent relationship between street and advert.
      * 
      * @return App\City
      */
@@ -68,13 +68,35 @@ class Room extends Model
     }
 
     /**
-     * Room can have many conversations.
+     * Advert can have many conversations.
      * 
      * @return App\Conversation
      */
     public function conversations() 
     {
         return $this->hasMany(Conversation::class);
+    }
+
+    /**
+     * Create a temporary advert.
+     * 
+     * @return App\TemporaryAdvert
+     */
+    static public function temporary() 
+    {
+        return TemporaryAdvert::create();
+    }
+
+    /**
+     * Find a temporary advert.
+     * 
+     * @param int $id
+     * @param string $token
+     * @return App\TemporaryAdvert
+     */
+    static public function getTemporary($id, $token) 
+    {
+        return TemporaryAdvert::where('id', $id)->where('token', $token)->firstOrFail();
     }
 
     /**
@@ -101,10 +123,10 @@ class Room extends Model
     }
 
     /**
-     * Get the instance of a Room.
+     * Get the instance of an advert.
      * 
      * @param string $slug
-     * @return App\Room
+     * @return App\Advert
      */
     static public function getBySlug($slug)
     {
@@ -112,9 +134,9 @@ class Room extends Model
 
         return self::where('id', intval($id, 36))->firstOrFail();
     }
-    
+
     /**
-     * Generate a slug after room is added to a database (it uses a id).
+     * Generate a slug after advert is added to a database (it uses a id).
      * 
      * @return void
      */
@@ -147,21 +169,11 @@ class Room extends Model
             'active' => true
         ]);
 
-        $this->recordActivity('verified_room');
+        $this->recordActivity('verified_advert');
     }
 
     /**
-     * Check if room is owned by authenticated user.
-     * 
-     * @return bool
-     */
-    public function isOwned() 
-    {
-        return auth()->user()->id === $this->user->id;
-    }
-
-    /**
-     * Send an inquiry about the room.
+     * Send an inquiry about the advert.
      * 
      * @param string $body
      * @return void

@@ -3,7 +3,7 @@ window._ = require('lodash');
 
 window.Vue = require('vue');
 
-Vue.component('advert-small', require('./components/AdvertSmall.vue').default);
+Vue.component('image-upload', require('./components/ImageUpload.vue').default);
 
 const app = new Vue({
     el: '#app'

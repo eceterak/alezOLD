@@ -20,7 +20,7 @@ class SearchController extends Controller
             $city = City::find($request->city_id);
         }
         elseif(is_null($request->city) && is_null($request->city_id)) {
-            return redirect()->route('rooms');
+            return redirect()->route('adverts');
         }
         else {
             $name = (strpos($request->city, ',')) ? strtolower(explode(',', $request->city)[0]) : $request->city;

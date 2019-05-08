@@ -12,26 +12,26 @@ class CityStreetsController extends Controller
     /**
      * Display all streets of a city.
      * 
-     * @param string $slug
+     * @param City $city
      * @return view
      */
-    public function index($slug) 
+    public function index(City $city) 
     {
         return view('admin.streets.index')->with([
-            'city' => City::getBySlug($slug)
+            'city' => $city
         ]);
     }
 
     /**
      * Display all streets of a city.
      * 
-     * @param string $slug
+     * @param City $city
      * @return view
      */
-    public function create($slug) 
+    public function create(City $city) 
     {
         return view('admin.streets.create')->with([
-            'city' => City::getBySlug($slug)
+            'city' => $city
         ]);
     }
 
@@ -52,14 +52,12 @@ class CityStreetsController extends Controller
     /**
      * Store new street of the city.
      * 
-     * @param string $city
+     * @param City $city
      * @param Request $request
      * @return redirect
      */
-    public function store($city, Request $request) 
+    public function store(City $city, Request $request) 
     {
-        $city = City::getBySlug($city);
-
         $city->addStreet($request->validate([
             'name' => 'required',
             'type' => 'sometimes',

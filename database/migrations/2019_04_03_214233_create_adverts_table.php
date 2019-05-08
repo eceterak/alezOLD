@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRoomsTable extends Migration
+class CreateAdvertsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,24 +13,24 @@ class CreateRoomsTable extends Migration
      */
     public function up()
     {
-        Schema::create('rooms', function (Blueprint $table) {
+        Schema::create('adverts', function (Blueprint $table) {
             
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('city_id');
             $table->unsignedInteger('street_id')->nullable();
-            $table->boolean('verified')->default(false)->nullable();
-            $table->boolean('active')->default(false)->nullable();
+            $table->boolean('verified')->default(false);
+            $table->boolean('active')->default(false);
             $table->char('slug', 80)->nullable();
             
             // $$$.
-            $table->unsignedSmallInteger('rent');
-            $table->unsignedSmallInteger('deposit');
-            $table->unsignedSmallInteger('bills');
+            $table->unsignedSmallInteger('rent')->nullable();
+            $table->unsignedSmallInteger('deposit')->nullable();
+            $table->unsignedSmallInteger('bills')->nullable();
             
             // General info.
-            $table->char('title', 50);
-            $table->text('description');
+            $table->char('title', 50)->nullable();
+            $table->text('description')->nullable();
             $table->enum('landlord', ['live_in', 'live_out', 'tenetant', 'agent', 'former'])->nullable();
 
             // Availability.
@@ -44,7 +44,7 @@ class CreateRoomsTable extends Migration
             $table->boolean('living_room')->default(false);
             $table->boolean('parking')->default(false);
             
-            // Room details.
+            // Advert details.
             $table->enum('room_size', ['single', 'double', 'triple'])->default('single')->nullable();
             $table->boolean('furnished')->default(false);
             $table->boolean('broadband')->default(false);
@@ -72,6 +72,6 @@ class CreateRoomsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rooms');
+        Schema::dropIfExists('adverts');
     }
 }

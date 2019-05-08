@@ -38,13 +38,13 @@ class User extends Authenticatable
     ];
 
     /**
-     * User can have many rooms.
+     * User can have many adverts.
      *
      * @return Collection
      */
-    public function rooms() 
+    public function adverts() 
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(Advert::class);
     }
 
     /**

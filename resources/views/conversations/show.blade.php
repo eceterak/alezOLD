@@ -3,7 +3,7 @@
 @section('lead')
 <div class="card">
     <header>
-        <h3>{{ $conversation->room->title }}</h3>
+        <h3>{{ $conversation->advert->title }}</h3>
     </header>
     <div class="card-content">
         @foreach($conversation->messages as $message)

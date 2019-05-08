@@ -4,7 +4,7 @@ namespace Tests\Setup;
 
 use App\Conversation;
 use App\User;
-use Facades\Tests\Setup\RoomFactory;
+use Facades\Tests\Setup\AdvertFactory;
 
 class ConversationFactory 
 {    
@@ -29,12 +29,12 @@ class ConversationFactory
      */
     public function create() 
     {
-        $room = RoomFactory::create();
+        $advert = AdvertFactory::create();
 
         return factory(Conversation::class)->create([
-            'room_id' => $room->id,
+            'advert_id' => $advert->id,
             'sender_id' => $this->sender ?? factory(User::class),
-            'receiver_id' => $room->user->id
+            'receiver_id' => $advert->user->id
         ]);
     }
 }

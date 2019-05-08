@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Conversation;
 
 use Illuminate\Http\Request;
-use App\Room;
+use App\Advert;
 use App\Http\Requests\ConversationRequest;
 
 class ConversationsController extends Controller
@@ -41,6 +41,10 @@ class ConversationsController extends Controller
      */
     public function reply(Conversation $conversation, ConversationRequest $request) 
     {
+        $request->validate([
+            'body' => 'required'
+        ]);
+
         $conversation->reply($request->body);
 
         return redirect()->back();
@@ -54,9 +58,9 @@ class ConversationsController extends Controller
      */
     public function store($city, $slug, Request $request) 
     {
-        $room = Room::getBySlug($slug);
+        $advert = Advert::getBySlug($slug);
 
-        $room->inquiry($request->body);
+        $advert->inquiry($request->body);
 
         return redirect()->back();
     }

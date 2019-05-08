@@ -5,7 +5,7 @@
         <header>
             <h3>
                 Pokoje w {{ $city->name }}
-                <small class="text-grey-darker">[{{ $city->rooms->count() }}]</small>
+                <small class="text-grey-darker">[{{ $city->adverts->count() }}]</small>
             </h3>
             <a href="/admin/pokoje/dodaj" class="btn">Dodaj</a>
         </header>
@@ -18,10 +18,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($city->rooms as $room)
+                    @foreach($city->adverts as $advert)
                         <tr>
-                            <td><a href="{{ route('admin.rooms.edit', $room->slug) }}">{{ $room->shortTitle() }}</a></td>
-                            <td><a href="{{ route('admin.cities.edit', $room->city->slug) }}">{{ $room->city->name }}</a></td>
+                            <td><a href="{{ route('admin.adverts.edit', $advert->slug) }}">{{ $advert->shortTitle() }}</a></td>
+                            <td><a href="{{ route('admin.cities.edit', $advert->city->slug) }}">{{ $advert->city->name }}</a></td>
                         </tr>
                     @endforeach
                 </tbody>

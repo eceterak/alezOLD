@@ -23,9 +23,9 @@ class Conversation extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function room()
+    public function advert()
     {
-        return $this->belongsTo(Room::class);
+        return $this->belongsTo(Advert::class);
     }
 
     /**

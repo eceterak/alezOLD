@@ -3,7 +3,7 @@
 namespace tests\Setup;
 
 use Illuminate\Support\Facades\Hash;
-use Facades\Tests\Setup\RoomFactory;
+use Facades\Tests\Setup\AdvertFactory;
 use Facades\Tests\Setup\StreetFactory;
 use App\User;
 
@@ -19,8 +19,8 @@ class WorldFactory
         
         for($i = 0; $i < 3; $i++)
         {
-            RoomFactory::street($street)->create();
-            RoomFactory::create();
+            AdvertFactory::street($street)->create();
+            AdvertFactory::create();
         }
         
         factory(User::class)->create([

@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Observers\AdvertObserver;
 use Illuminate\Support\Facades\Route;
-use App\Room;
+use App\Observers\TemporaryAdvertObserver;
+use App\Observers\AdvertObserver;
+use App\TemporaryAdvert;
+use App\Advert;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,7 +28,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Room::observe(AdvertObserver::class);
+        TemporaryAdvert::observe(TemporaryAdvertObserver::class);
+
+        Advert::observe(AdvertObserver::class);
 
         Route::resourceVerbs([
             'create' => 'dodaj',

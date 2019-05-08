@@ -5,17 +5,17 @@ namespace Tests\Feature\Admin;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\CityFactory;
-use Facades\Tests\Setup\RoomFactory;
+use Facades\Tests\Setup\AdvertFactory;
 use App\City;
 
 class CitiesManagementTest extends TestCase
 {
     use RefreshDatabase;
 
-    // @test
-    public function test_admin_can_create_a_city() 
+    /** @test */
+    public function city_can_be_created() 
     {        
-        $this->admin();
+        $this->signInAdmin();
 
         $this->get(action('Admin\CitiesController@create'))->assertStatus(200);
 
@@ -26,10 +26,10 @@ class CitiesManagementTest extends TestCase
         $this->get(route('admin.cities'))->assertSee($city->name);
     }
 
-    // @test
-    public function test_admin_can_update_a_city() 
+    /** @test */
+    public function city_can_be_updated() 
     {
-        $this->admin();
+        $this->signInAdmin();
 
         $city = CityFactory::create();
         
@@ -40,34 +40,34 @@ class CitiesManagementTest extends TestCase
         $this->assertDatabaseHas('cities', $attributes);
     }
 
-    // @test
-    public function test_adverts_from_city_can_be_displayed()
+    /** @test */
+    public function adverts_from_city_can_be_displayed()
     {
-        $this->admin();
+        $this->signInAdmin();
 
-        $room = RoomFactory::create();
+        $advert = AdvertFactory::create();
 
-        $this->get(route('admin.cities.adverts', $room->city->slug))->assertSee($room->shortTitle());
+        $this->get(route('admin.cities.adverts', $advert->city->slug))->assertSee($advert->shortTitle());
     }
 
-    // @test
-    public function test_streets_of_a_city_can_be_displayed()
+    /** @test */
+    public function streets_of_a_city_can_be_displayed()
     {
-        $this->admin();
+        $this->signInAdmin();
 
-        $street = RoomFactory::create();
+        $street = AdvertFactory::create();
 
         $this->get(route('admin.cities.streets', $street->city->slug))->assertSee($street->name);
     }
 
-    // @test
-    public function test_a_city_can_be_deleted()
+    /** @test */
+    public function city_can_be_deleted()
     {
-        $this->admin();
+        $this->signInAdmin();
 
         $city = CityFactory::create();
 
-        $this->delete(route('admin.cities.destroy', $city->id))->assertRedirect(route('admin.cities'));
+        $this->delete(route('admin.cities.destroy', $city->slug))->assertRedirect(route('admin.cities'));
 
         $this->assertDatabaseMissing('cities', $city->only('id'));
     }

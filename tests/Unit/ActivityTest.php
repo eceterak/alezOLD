@@ -4,17 +4,19 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\RoomFactory;
+use Facades\Tests\Setup\AdvertFactory;
 
 class ActivityTest extends TestCase
 {
     use RefreshDatabase;
 
-    // @test
-    public function test_it_has_a_user()
+    /** @test */
+    public function it_has_a_user()
     {
-        $room = RoomFactory::ownedBy($this->user())->create();
+        $user = $this->signIn();
 
-        $this->assertEquals(auth()->user()->id, $room->activities->first()->user->id);
+        $advert = AdvertFactory::ownedBy($user)->create();
+
+        $this->assertEquals(auth()->user()->id, $advert->activities->first()->user->id);
     }
 }

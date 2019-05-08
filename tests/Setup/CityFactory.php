@@ -3,12 +3,12 @@
 namespace Tests\Setup;
 
 use App\City;
-use App\Room;
+use App\Advert;
 use App\User;
 
 class CityFactory 
 {
-    protected $roomsCount = 0;
+    protected $advertsCount = 0;
     
     protected $user;
 
@@ -31,7 +31,7 @@ class CityFactory
      */
     public function withRooms($count) 
     {
-        $this->roomsCount = $count;
+        $this->advertsCount = $count;
 
         return $this;
     }
@@ -45,7 +45,7 @@ class CityFactory
     {
         $city = factory(City::class)->create();
 
-        factory(Room::class, $this->roomsCount)->create([
+        factory(Advert::class, $this->advertsCount)->create([
             'city_id' => $city->id,
             'user_id' => $this->user ?? factory(User::class)
         ]);

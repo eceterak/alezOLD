@@ -29,13 +29,13 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'admin', 'prefix' => 'admi
     Route::patch('/miasta/{city}/ulice/{street}', 'CityStreetsController@update')->name('admin.streets.update');
     Route::delete('/miasta/{city}/ulice/{street}', 'CityStreetsController@destroy')->name('admin.streets.destroy');
     
-    // Rooms
-    Route::get('/pokoje', 'RoomsController@index')->name('admin.rooms');
-    Route::get('/pokoje/dodaj', 'RoomsController@create')->name('admin.rooms.create');
-    Route::post('/pokoje', 'RoomsController@store')->name('admin.rooms.store');
-    Route::get('/pokoje/{room}', 'RoomsController@edit')->name('admin.rooms.edit');
-    Route::patch('/pokoje/{room}', 'RoomsController@update')->name('admin.rooms.update');
-    Route::delete('/pokoje/{room}', 'RoomsController@destroy')->name('admin.rooms.destroy');
+    // Adverts
+    Route::get('/pokoje', 'AdvertsController@index')->name('admin.adverts');
+    Route::get('/pokoje/dodaj', 'AdvertsController@create')->name('admin.adverts.create');
+    Route::post('/pokoje', 'AdvertsController@store')->name('admin.adverts.store');
+    Route::get('/pokoje/{advert}', 'AdvertsController@edit')->name('admin.adverts.edit');
+    Route::patch('/pokoje/{advert}', 'AdvertsController@update')->name('admin.adverts.update');
+    Route::delete('/pokoje/{advert}', 'AdvertsController@destroy')->name('admin.adverts.destroy');
 });
 
 /** Frontend routes */
@@ -43,23 +43,23 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'admin', 'prefix' => 'admi
 Auth::routes();
 
 Route::get('/', 'PagesController@index')->name('index');
-Route::get('/home', 'PagesController@home')->name('home');
 
 // Search
 Route::get('/szukaj', 'SearchController@index')->name('search.index');
 
-// Rooms
-Route::get('/pokoje', 'RoomsController@index')->name('rooms');
-Route::get('/{city}/pokoje/{room}', 'RoomsController@show')->name('rooms.show');
+// Adverts
+Route::get('/pokoje', 'AdvertsController@index')->name('adverts');
+Route::get('/{city}/pokoje/{advert}', 'AdvertsController@show')->name('adverts.show');
 
 Route::group(['middleware' => 'auth'], function() 
 {
-    Route::get('/pokoje/dodaj', 'RoomsController@create')->name('rooms.create');
-    Route::get('/pokoje/moje', 'RoomsController@mine')->name('rooms.mine');
-    Route::post('/pokoje', 'RoomsController@store')->name('rooms.store');
-    Route::get('/pokoje/{room}/edytuj', 'RoomsController@edit')->name('rooms.edit');
-    Route::patch('/pokoje/{room}/edytuj', 'RoomsController@update')->name('rooms.update');
-    Route::delete('/pokoje/{room}', 'RoomsController@destroy')->name('rooms.destroy');
+    Route::get('/home', 'PagesController@home')->name('home');
+    Route::get('/pokoje/dodaj', 'AdvertsController@create')->name('adverts.create');
+    Route::get('/pokoje/moje', 'AdvertsController@mine')->name('adverts.mine');
+    Route::post('/pokoje', 'AdvertsController@store')->name('adverts.store');
+    Route::get('/pokoje/{advert}/edytuj', 'AdvertsController@edit')->name('adverts.edit');
+    Route::patch('/pokoje/{advert}/edytuj', 'AdvertsController@update')->name('adverts.update');
+    Route::delete('/pokoje/{advert}', 'AdvertsController@destroy')->name('adverts.destroy');
 });
 
 // Cities
@@ -70,11 +70,12 @@ Route::group(['middleware' => 'auth'], function()
 {
     // Conversations
     Route::get('/home/inbox', 'ConversationsController@inbox')->name('conversations.inbox');
-    Route::post('/{city}/pokoje/{room}/odpowiedz', 'ConversationsController@store')->name('conversations.store');
+    Route::post('/{city}/pokoje/{advert}/odpowiedz', 'ConversationsController@store')->name('conversations.store');
     Route::get('/home/inbox/{conversation}', 'ConversationsController@show')->name('conversations.show');
     Route::post('/home/inbox/{conversation}', 'ConversationsController@reply')->name('conversations.reply');
 });
 
 // Ajax
-Route::post('/ajax/cities', 'AjaxController@cities')->name('ajax.cities');
-Route::post('/ajax/streets', 'AjaxController@streets')->name('ajax.streets');
+Route::post('/ajax/cities', 'AjaxController@cities');
+Route::post('/ajax/streets', 'AjaxController@streets');
+Route::post('/ajax/images/upload', 'AjaxController@upload');

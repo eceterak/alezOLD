@@ -8,7 +8,7 @@
             </h3>
         </header>
         <div class="card-content">
-            <form action="{{ route('admin.rooms.store') }}" method="POST" class="form">
+            <form action="{{ route('admin.adverts.store') }}" method="POST" class="form">
                 @csrf
                 <div class="form-group">
                     <label for="title">Tytuł</label>

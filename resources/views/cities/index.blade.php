@@ -11,7 +11,7 @@
                 </div>
                 <div class="lg:static lg:w-7/8 lg:pl-2">
                     <header>
-                        <h3 class="font-normal text-lg mb-2"><a href="{{ $city->name }}">{{ $city->name }}</a></h3>
+                        <h3 class="font-normal text-lg mb-2"><a href="{{ $city->slug }}">{{ $city->name }}</a></h3>
                     </header>
                 </div>
             </article>

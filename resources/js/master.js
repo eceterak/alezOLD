@@ -97,7 +97,6 @@ $(function() {
                     }
                 }).done(function(streets) {
                     if(streets.length) {
-                        //console.log(streets);
                         $('#street_id').data('custom-combobox').input.autocomplete('option', 'source', function(request, response) {
                             var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
                             response($.map(streets, function(street) {
@@ -210,14 +209,14 @@ $(function() {
     });
 
     $('#street_id').combobox({
-        'disabled': true,
+        'disabled': true
     });
 
     $('#available_from', 'form[name="create_new_advert"]').datepicker({
         dateFormat: 'yy-mm-dd'
     });
 
-    $('#room-form-va').validation({
+    $('#advert-form-va').validation({
         requiredMessage: function(name) {
             return name + ' jest wymagany';
         },

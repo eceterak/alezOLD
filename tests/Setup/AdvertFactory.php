@@ -5,10 +5,10 @@ namespace Tests\Setup;
 use Facades\Tests\Setup\StreetFactory;
 use App\Street;
 use App\City;
-use App\Room;
+use App\Advert;
 use App\User;
 
-class RoomFactory 
+class AdvertFactory 
 {
 
     protected $user = null;
@@ -18,7 +18,7 @@ class RoomFactory
     protected $street = null;
 
     /**
-     * Associate room with a user.
+     * Associate advert with a user.
      * 
      * @return this
      */
@@ -30,7 +30,7 @@ class RoomFactory
     }
 
     /**
-     * Room can belong to a city.
+     * Advert can belong to a city.
      * 
      * @return this
      */
@@ -42,7 +42,7 @@ class RoomFactory
     }
 
     /**
-     * Rooms street.
+     * Adverts street.
      * 
      * @return this
      */
@@ -55,15 +55,15 @@ class RoomFactory
     }
 
     /**
-     * Create a new instance of Room.
+     * Create a new instance of advert.
      * 
-     * @return Room
+     * @return Advert
      */
     public function create() 
     {
         $street = ($this->street) ? $this->street : StreetFactory::create();
 
-        $room = factory(Room::class)->create([
+        $advert = factory(Advert::class)->create([
             'user_id' => $this->user ?? factory(User::class),
             'city_id' => $this->city ?? $street->city->id,
             'street_id' => $this->street ?? $street->id
@@ -72,19 +72,19 @@ class RoomFactory
         $this->street = null;
         $this->city = null;
 
-        return $room;
+        return $advert;
     }
 
     /**
-     * Return a instance of a Room object without saving it to a database.
+     * Return a instance of a advert object without saving it to a database.
      * 
-     * @return App\Room
+     * @return App\Advert
      */
     public function raw() 
     {
         $street = StreetFactory::create();
 
-        $room = factory(Room::class)->raw([
+        $room = factory(Advert::class)->raw([
             'user_id' => $this->user ?? factory(User::class),
             'city_id' => $street->city->id,
             'street_id' => $street->id

@@ -2,8 +2,8 @@
 
 @section('lead')
 
-    @forelse(auth()->user()->rooms as $room)
-        <p><a href="{{ route('rooms.show', [$room->city->slug, $room->slug]) }}">{{ $room->title }}</a></p>
+    @forelse(auth()->user()->adverts as $advert)
+        <p><a href="{{ route('adverts.show', [$advert->city->slug, $advert->slug]) }}">{{ $advert->title }}</a></p>
     @empty
         
     @endforelse

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\City;
-use App\RoomFilters;
-use App\Room;
+use App\AdvertFilters;
+use App\Advert;
 
 class CitiesController extends Controller
 {
@@ -23,14 +23,14 @@ class CitiesController extends Controller
     /**
      * Display a city.
      * 
-     * @param string $slug
+     * @param City $city
      * @return view
      */
-    public function show($slug, RoomFilters $filters) 
+    public function show(City $city, AdvertFilters $filters) 
     {
         return view('cities.show')->with([
-            'city' => $city = City::getBySlug($slug),
-            'rooms' => Room::filter($filters)->where('city_id', $city->id)->get()
+            'city' => $city,
+            'adverts' => Advert::filter($filters)->where('city_id', $city->id)->get()
         ]);    
     }
 }

@@ -4,47 +4,39 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\CityFactory;
-use Facades\Tests\Setup\RoomFactory;
+use Facades\Tests\Setup\AdvertFactory;
+use App\Advert;
 use App\City;
 
 class CitiesDisplayTest extends TestCase
 {
     use RefreshDatabase;
 
-    // @test
-    public function test_user_can_view_a_city() 
-    {        
-        $city = CityFactory::create();
-
-        $this->get(route('cities'))->assertSee($city->name);
-
-        $this->get(route('cities.show', $city->slug))->assertSee($city->name);
-    }
-
-    //@test
-    public function test_city_can_have_rooms()
+    /** @test */
+    public function a_user_can_view_adverts_from_a_specific_city() 
     {
-        $this->withoutExceptionHandling();
-        
-        $room = RoomFactory::create();
+        $city = factory(City::class)->create();
 
-        $this->get(route('cities.show', $room->city->slug))->assertSee($room->title);
+        $advertInCity = factory(Advert::class)->create([
+            'user_id' => $this->user(),
+            'city_id' => $city->id
+        ]);
+
+        $this->get(route('cities.show', $city->slug))->assertSee($advertInCity->title);               
     }
 
-    //@test
-   public function test_dont_display_rooms_of_other_city()
+    /** @test */
+   public function adverts_from_other_cities_shouldnt_be_visible_in_the_city()
     {
-        $room = RoomFactory::create();
-        $roomExcluded = RoomFactory::create();
+        $city = factory(City::class)->create();
 
-        $this->get(route('cities.show', $room->city->slug))
-            ->assertSee($room->title)
-            ->assertDontSee($roomExcluded->title);
+        $advertNotInCity = AdvertFactory::create();
+
+        $this->get(route('cities.show', $city->slug))->assertDontSee($advertNotInCity->title); 
     }
 
-    //@test
-   public function test_display_suggested_cities_on_main_page()
+    /** @test */
+   public function show_suggested_cities_on_main_page()
    {
        $citySuggested = factory(City::class)->create([
            'suggested' => true
@@ -57,4 +49,14 @@ class CitiesDisplayTest extends TestCase
        $this->get(route('index'))->assertSee($citySuggested->name);
        $this->get(route('index'))->assertDontSee($cityNotSuggested->name);
    }
+
+    /** @test */
+    public function dont_show_nonsuggested_cities_on_main_page()
+    {
+        $cityNotSuggested = factory(City::class)->create([
+        'suggested' => false
+        ]);
+
+        $this->get(route('index'))->assertDontSee($cityNotSuggested->name);
+    }
 }

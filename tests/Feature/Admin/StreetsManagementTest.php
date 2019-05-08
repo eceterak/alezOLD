@@ -13,10 +13,10 @@ class StreetsManagementTest extends TestCase
 
     use RefreshDatabase;
 
-    // @test
-    public function test_admin_can_create_a_street()
+    /** @test */
+    public function street_can_be_created()
     {
-        $this->admin();
+        $this->signInAdmin();
         
         $city = CityFactory::create();
 
@@ -29,10 +29,10 @@ class StreetsManagementTest extends TestCase
         $this->get(route('admin.cities.streets', $street->city->slug))->assertSee($street->name);
     }
 
-    // @test
-    public function test_admin_can_update_a_street()
+    /** @test */
+    public function street_can_be_updated()
     {
-        $this->admin();
+        $this->signInAdmin();
 
         $street = StreetFactory::create();
 
@@ -46,12 +46,12 @@ class StreetsManagementTest extends TestCase
         $this->assertDatabaseHas('streets', $attributes);
     }
 
-    // @test
-    public function test_a_street_can_be_deleted()
+    /** @test */
+    public function street_can_be_deleted()
     {
         $this->withoutExceptionHandling();
 
-        $this->admin();
+        $this->signInAdmin();
 
         $street = StreetFactory::create();
 

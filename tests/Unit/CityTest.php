@@ -6,29 +6,28 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\CityFactory;
-use Facades\Tests\Setup\StreetFactory;
 use App\City;
 use App\Street;
-use App\Room;
+use App\Advert;
 
 class CityTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
-    // @test
-    public function test_city_requires_a_name()
+    /** @test */
+    public function city_requires_a_name()
     {
-        $this->admin();
+        $this->signInAdmin();
 
         $this->post(route('admin.cities.store'), factory(City::class)->raw([
             'name' => ''
         ]))->assertSessionHasErrors('name');
     }
 
-    // @test
-    public function test_city_requires_latitude_and_longtitute()
+    /** @test */
+    public function city_requires_latitude_and_longtitute()
     {
-        $this->admin();
+        $this->signInAdmin();
 
         $this->post(route('admin.cities.store'), factory(City::class)->raw([
             'lat' => '',
@@ -36,10 +35,10 @@ class CityTest extends TestCase
         ]))->assertSessionHasErrors(['lat', 'lon']);
     }
 
-    // @test
-    public function test_city_requires_a_county_and_a_state()
+    /** @test */
+    public function city_requires_a_county_and_a_state()
     {
-        $this->admin();
+        $this->signInAdmin();
 
         $this->post(route('admin.cities.store'), factory(City::class)->raw([
             'county' => '',
@@ -47,8 +46,8 @@ class CityTest extends TestCase
         ]))->assertSessionHasErrors(['county', 'state']);
     }
 
-    // @test
-    public function test_a_slug_can_be_created()
+    /** @test */
+    public function can_create_a_slug()
     {
         $city = CityFactory::create();
 
@@ -57,40 +56,36 @@ class CityTest extends TestCase
         $this->assertEquals(str_slug($city->name), $city->slug);
     }
 
-    // @test
-    public function test_city_has_a_slug() 
+    /** @test */
+    public function city_has_a_slug() 
     {
         $city = factory(City::class)->create();
         
         $this->assertIsString($city->slug);
     }
 
-    // @test
-    public function test_city_has_streets()
+    /** @test */
+    public function city_has_streets()
     {
         $city = factory(City::class)->create();
 
-        factory(Street::class)->create([
+        $street = factory(Street::class)->create([
             'city_id' => $city->id
         ]);
 
-        $this->assertInstanceOf('App\Street', $city->streets->first());
+        $this->assertTrue($city->streets->contains($street));
     }
 
-    // @test
-    public function test_city_can_have_rooms() 
+    /** @test */
+    public function city_has_adverts() 
     {
         $city = factory(City::class)->create();
 
-        $room = factory(Room::class)->raw([
+        $advert = factory(Advert::class)->create([
             'user_id' => $this->user(),
             'city_id' => $city->id
         ]);
 
-        $room = $city->rooms()->create($room);
-
-        $this->assertDatabaseHas('rooms', $room->only('id'));
-
-        $this->get(route('cities.show', $city->slug))->assertSee($room->title);
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $city->adverts);
     }
 }

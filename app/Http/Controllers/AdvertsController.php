@@ -2,83 +2,95 @@
 
 namespace App\Http\Controllers;
 
-use App\Room;
-use App\RoomFilters;
 use Illuminate\Http\Request;
+use App\AdvertFilters;
+use App\Advert;
+use App\City;
 
-class RoomsController extends Controller
+class AdvertsController extends Controller
 {
 
     /**
-     * Display all available rooms.
-     * To filter the results use RoomFilters which are injected trough route model binding.
+     * Display all available Adverts.
+     * To filter the results use AdvertFilters which are injected trough route model binding.
      * 
-     * @param RoomFilters $filters
+     * @param AdvertFilters $filters
      * @return view
      */
-    public function index(RoomFilters $filters) 
+    public function index(AdvertFilters $filters) 
     {
-        return view('rooms.index')->with([
-            'rooms' => Room::filter($filters)->get()
+        return view('adverts.index')->with([
+            'adverts' => Advert::filter($filters)->get()
         ]);
     }
 
     /**
-     * Display a single room.
+     * Display a single advert.
      * 
-     * @param string $city
+     * @param City $city
      * @param string $slug
      * @return view
      */
-    public function show($city, $slug) 
+    public function show(City $city, $slug) 
     {   
-        return view('rooms.show')->with([
-            'room' => Room::getBySlug($slug)
+        return view('adverts.show')->with([
+            'advert' => Advert::getBySlug($slug)
         ]);
     }
     
     /**
-     * Edit a room.
+     * Edit an advert.
      * 
      * @param string $path
      * @return view
      */
     public function edit($path) 
     {
-        $room = Room::getBySlug($path);
+        $advert = Advert::getBySlug($path);
         
-        $this->authorize('update', $room);
+        $this->authorize('update', $advert);
 
-        return view('rooms.edit')->with([
-            'room' => $room
+        return view('adverts.edit')->with([
+            'advert' => $advert
         ]);
     }
 
     /**
-     * Display a create new room form.
+     * Display a create new advert form.
      * 
      * @return view
      */
     public function create() 
     {
-        return view('rooms.create');
+        return view('adverts.create')->with([
+            'temp' => Advert::temporary()
+        ]);
     }
 
     /**
-     * Store a new room in a database.
+     * Store a new advert in a database.
      * 
      * @param Request $request
      * @return redirect
      */
     public function store(Request $request) 
     {
-        $room = auth()->user()->rooms()->create($this->validateRequest($request));
+        auth()->user()->adverts()->create($this->validateRequest($request));
+        // Get temporary advert
+        $temporary = Advert::getTemporary($request->temp, $request->token);
+
+        // Create new advert
+
+        // Update images
+
+        // Delete temporary advert
+        $temporary->delete();
 
         return redirect(route('home'));
     }
 
     /**
-     * Update a room.
+     * Update an advert.
      * 
      * @param string $slug
      * @param Request $request
@@ -86,28 +98,28 @@ class RoomsController extends Controller
      */
     public function update($slug, Request $request) 
     {
-        $room = Room::getBySlug($slug);
+        $advert = Advert::getBySlug($slug);
         
-        $this->authorize('update', $room);
+        $this->authorize('update', $advert);
 
-        $room->update($this->validateRequest($request));
+        $advert->update($this->validateRequest($request));
 
-        $room->generateSlug();
+        $advert->generateSlug();
 
-        return redirect(route('rooms'));
+        return redirect(route('adverts'));
     }
 
     /**
-     * Delete a room. Accept id instead of slug.
+     * Delete an advert. Accept id instead of slug.
      * 
-     * @param Room $room
+     * @param Advert $advert
      * @return redirect
      */
-    public function destroy(Room $room) 
+    public function destroy(Advert $advert) 
     {
-        $this->authorize('update', $room);
+        $this->authorize('update', $advert);
 
-        $room->delete();
+        $advert->delete();
      
         return redirect(route('home'));        
     }
@@ -121,8 +133,8 @@ class RoomsController extends Controller
     protected function validateRequest($request) 
     {
         return request()->validate([
-            'city_id' => 'required',
-            'street_id' => 'sometimes',
+            'city_id' => 'required|exists:cities,id',
+            'street_id' => 'sometimes|exists:streets,id',
             'title' => 'required',
             'description' => 'required',
             'available_from' => 'nullable',

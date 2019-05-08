@@ -5,16 +5,15 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Collection;
-use Facades\Tests\Setup\RoomFactory;
-use App\Conversation;
+use Facades\Tests\Setup\AdvertFactory;
 use App\User;
 
 class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    // @test
-    public function test_user_can_login() 
+    /** @test */
+    public function can_login() 
     {
         $this->get(route('login'))->assertSuccessful();
 
@@ -22,76 +21,52 @@ class UserTest extends TestCase
             'password' => bcrypt($password = 'test123')
         ]);
 
-        $this->post('/login', [
+        $this->post(route('login'), [
             'email' => $user->email,
             'password' => $password
-        ])->assertRedirect('/');
+        ])
+        ->assertRedirect(route('index'));
 
         $this->assertAuthenticatedAs($user);
     }
 
-    // @test
-    public function test_user_has_rooms() 
+    /** @test */
+    public function has_adverts() 
     {
-        $user = $this->user();
+        $advert = AdvertFactory::ownedBy($user = $this->signIn())->create();
 
-        $room = RoomFactory::ownedBy($user)->create();
+        $this->assertInstanceOf(Collection::class, $user->adverts);
 
-        $this->assertInstanceOf(Collection::class, $user->rooms);
-
-        $this->get(route('home'))->assertSee($room->title);
+        $this->get(route('home'))->assertSee($advert->title);
     }
 
-    // @test
-    public function test_user_has_conversations() 
+    /** @test */
+    public function has_conversations() 
     {
         $magda = factory(User::class)->create();
-        $magdaRoom = RoomFactory::ownedBy($magda)->create();
+        $magdaAdvert = AdvertFactory::ownedBy($magda)->create();
 
-        $marek = $this->user();
-        $magdaRoom->inquiry('Hi Magda, nice room you have');
+        $marek = $this->signIn();
+        $magdaAdvert->inquiry('Hi Magda, nice advert you have');
 
         $this->assertCount(1, $marek->conversations());
         $this->assertCount(1, $magda->conversations());    
            
-        $wiesiek = $this->user();
+        $wiesiek = $this->signIn();
 
         $this->user($wiesiek);
-        $magdaRoom->inquiry('Hi Magda, nice room you have');
+        $magdaAdvert->inquiry('Hi Magda, nice advert you have');
         
         $this->assertCount(2, $magda->conversations());    
         $this->assertCount(1, $marek->conversations());
         $this->assertCount(1, $wiesiek->conversations());
     }
 
-    // @test
-    public function test_user_can_be_an_admin()
+    /** @test */
+    public function can_be_an_admin()
     {
         $user = factory(User::class)->create(['role' => 1]);
-
-        $this->assertDatabaseHas('users', [
-            'name' => $user->name,
-            'role' => $user->role
-        ]);
 
         $this->assertEquals(true, $user->isAdmin());
-    }
-
-    // @test
-    public function test_admin_can_access_the_backend() 
-    {
-        $user = factory(User::class)->create(['role' => 1]);
-
-        $this->actingAs($user)->get(route('admin'))->assertStatus(200);
-    }
-
-    // @test
-    public function test_guest_cant_enter_the_backend() 
-    {
-        $this->get(route('admin'))->assertRedirect(route('admin.login'));
-
-        $this->user();
-
-        $this->get(route('admin'))->assertRedirect(route('index'));
     }
 }

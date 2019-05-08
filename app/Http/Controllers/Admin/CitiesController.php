@@ -33,26 +33,26 @@ class CitiesController extends Controller
     /**
      * Display edit form.
      * 
-     * @param string $slug
+     * @param City $city
      * @return view
      */
-    public function edit($slug) 
+    public function edit(City $city) 
     {         
         return view('admin.cities.edit')->with([
-            'city' => City::getBySlug($slug)
+            'city' => $city
         ]);
     }
 
     /**
      * Display adverts.
      * 
-     * @param string $name
+     * @param City $city
      * @return view
      */
-    public function adverts($slug) 
+    public function adverts(City $city) 
     {
-        return view('admin.cities.rooms')->with([
-            'city' => City::getBySlug($slug)
+        return view('admin.cities.adverts')->with([
+            'city' => $city
         ]);
     }
     
@@ -119,7 +119,7 @@ class CitiesController extends Controller
     {
         return $request->validate([
             'name' => 'required',
-            'type' => 'required',
+            'type' => 'sometimes',
             'parent' => 'sometimes',
             'lat' => 'required',
             'lon' => 'required',

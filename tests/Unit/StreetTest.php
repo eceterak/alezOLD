@@ -12,10 +12,10 @@ class StreetTest extends TestCase
 
     use RefreshDatabase;
 
-    // @test
-    public function test_street_requires_a_name()
+    /** @test */
+    public function street_requires_a_name()
     {
-        $this->admin();
+        $this->signInAdmin();
 
         $city = factory(City::class)->create();
 
@@ -26,10 +26,10 @@ class StreetTest extends TestCase
         $this->post(route('admin.streets.store', $city->slug), $street)->assertSessionHasErrors('name');
     }
 
-    // @test
-    public function test_street_requires_latitude_and_longtitude()
+    /** @test */
+    public function street_requires_latitude_and_longtitude()
     {
-        $this->admin();
+        $this->signInAdmin();
 
         $city = factory(City::class)->create();
 
@@ -41,8 +41,8 @@ class StreetTest extends TestCase
         $this->post(route('admin.streets.store', $city->slug), $street)->assertSessionHasErrors(['lat', 'lon']);
     }
 
-    // @test
-    public function test_street_belongs_to_a_city()
+    /** @test */
+    public function street_belongs_to_a_city()
     {
         $street = StreetFactory::create();        
 

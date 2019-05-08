@@ -2,29 +2,30 @@
 
 namespace App\Observers;
 
-use App\Room;
+use App\Advert;
 
 class AdvertObserver
 {
+
     /**
-     * Record created activity and generate a slug.
-     *
-     * @param  \App\Room  $room
+     * Generate a slug when creating a new room.
+     * 
+     * @param  \App\Advert $advert
      * @return void
      */
-    public function created(Room $room)
+    public function created(Advert $advert)
     {
-        $room->generateSlug();
+        $advert->generateSlug();
     }
 
     /**
      * Update slug if title changed but slug didn't.
      *
-     * @param  \App\Room  $room
+     * @param  \App\Advert  $advert
      * @return void
      */
-    public function updated(Room $room)
+    public function updated(Advert $advert)
     {
-        if($room->isDirty('title') && $room->isClean('slug')) $room->generateSlug();
+        if($advert->isDirty('title') && $advert->isClean('slug')) $advert->generateSlug();
     }
 }

@@ -21,7 +21,7 @@
                 @foreach($cities as $city)
                     <tr>
                         <td><a href="{{ route('admin.cities.edit', $city->slug) }}">{{ $city->name }}</a></td>
-                        <td class="fit">{{ $city->rooms->count() }}</td>
+                        <td class="fit">{{ $city->adverts->count() }}</td>
                     </tr>
                 @endforeach
             </tbody>

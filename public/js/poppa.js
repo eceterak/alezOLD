@@ -122,6 +122,7 @@ $(function($) {
 
 				inputs.each($.proxy(function(key, input) {
 
+
 					// Create a custom object with some additional validation methods.
 					input = this.extendWithValidation(input);
 
@@ -132,15 +133,19 @@ $(function($) {
 					var settings = this.getHTML5(input);
 
 					if(!$.isEmptyObject(data)) {
-
+                        
 						// By transform data-validation-length to validationLength.
 						for(var oldKey in data) {
-
-							var newKey = oldKey.replace('validation', '').toLowerCase();
-
-                            data[newKey] =  data[oldKey];
                             
-                            delete data[oldKey];
+                            if(oldKey.includes('validation')) {
+
+                                var newKey = oldKey.replace('validation', '').toLowerCase();
+    
+                                data[newKey] =  data[oldKey];
+                                
+                                delete data[oldKey];
+                                
+                            }
 
 						}
 
