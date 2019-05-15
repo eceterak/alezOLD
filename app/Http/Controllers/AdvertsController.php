@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\AdvertFilters;
+use App\Filters\AdvertFilters;
 use App\Advert;
 use App\City;
 
@@ -28,26 +28,27 @@ class AdvertsController extends Controller
      * Display a single advert.
      * 
      * @param City $city
-     * @param string $slug
+     * @param Advert $advert
      * @return view
      */
-    public function show(City $city, $slug) 
+    public function show(City $city, Advert $advert) 
     {   
+        //return $advert;
+
         return view('adverts.show')->with([
-            'advert' => Advert::getBySlug($slug)
+            'advert' => $advert
         ]);
     }
     
     /**
      * Edit an advert.
      * 
-     * @param string $path
+     * @param City $city
+     * @param Advert $advert
      * @return view
      */
-    public function edit($path) 
-    {
-        $advert = Advert::getBySlug($path);
-        
+    public function edit(City $city, Advert $advert) 
+    {      
         $this->authorize('update', $advert);
 
         return view('adverts.edit')->with([
@@ -76,6 +77,7 @@ class AdvertsController extends Controller
     public function store(Request $request) 
     {
         auth()->user()->adverts()->create($this->validateRequest($request));
+
         // Get temporary advert
         $temporary = Advert::getTemporary($request->temp, $request->token);
 
@@ -86,20 +88,20 @@ class AdvertsController extends Controller
         // Delete temporary advert
         $temporary->delete();
 
-        return redirect(route('home'));
+        return redirect(route('home'))
+            ->with('flash', 'Ogloszenie dodane');
     }
 
     /**
      * Update an advert.
      * 
-     * @param string $slug
+     * @param City $city
+     * @param Advert $advert
      * @param Request $request
      * @return redirect
      */
-    public function update($slug, Request $request) 
-    {
-        $advert = Advert::getBySlug($slug);
-        
+    public function update(City $city, Advert $advert, Request $request) 
+    {        
         $this->authorize('update', $advert);
 
         $advert->update($this->validateRequest($request));
@@ -120,6 +122,11 @@ class AdvertsController extends Controller
         $this->authorize('update', $advert);
 
         $advert->delete();
+
+        if(request()->expectsJson())
+        {
+            return response(['status' => 'Ogłoszenie usunięte']);
+        }
      
         return redirect(route('home'));        
     }

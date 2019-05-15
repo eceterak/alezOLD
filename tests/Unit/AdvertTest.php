@@ -45,7 +45,7 @@ class AdvertTest extends TestCase
     /** @test */
     public function it_requires_a_title() 
     {
-        $this->actingAs($this->user())->post(route('adverts.store'), factory(Advert::class)->raw([
+        $this->actingAs($this->user())->post(route('adverts.store'), raw(Advert::class, [
         'title' => null
         ]))
         ->assertSessionHasErrors('title');
@@ -54,7 +54,7 @@ class AdvertTest extends TestCase
     /** @test */
     public function it_requires_a_rent() 
     {
-        $this->actingAs($this->user())->post(route('adverts.store'), factory(Advert::class)->raw([
+        $this->actingAs($this->user())->post(route('adverts.store'), raw(Advert::class, [
         'rent' => null
         ]))
         ->assertSessionHasErrors('rent');
@@ -63,14 +63,14 @@ class AdvertTest extends TestCase
     /** @test */
     public function it_requires_a_valid_city() 
     {
-        $city = factory(City::class)->create();
+        $city = create(City::class);
 
-        $this->actingAs($this->user())->post(route('adverts.store'), factory(Advert::class)->raw([
+        $this->actingAs($this->user())->post(route('adverts.store'), raw(Advert::class, [
         'city_id' => null
         ]))
         ->assertSessionHasErrors('city_id');
 
-        $this->actingAs($this->user())->post(route('adverts.store'), factory(Advert::class)->raw([
+        $this->actingAs($this->user())->post(route('adverts.store'), raw(Advert::class, [
         'city_id' => 9999
         ]))
         ->assertSessionHasErrors('city_id');
@@ -79,8 +79,8 @@ class AdvertTest extends TestCase
     /** @test */
     public function it_requires_a_description() 
     {
-        $this->actingAs($this->user())->post(route('adverts.store'), factory(Advert::class)->raw([
-        'description' => null
+        $this->actingAs($this->user())->post(route('adverts.store'), raw(Advert::class, [
+            'description' => null
         ]))
         ->assertSessionHasErrors('description');
     }
@@ -111,5 +111,15 @@ class AdvertTest extends TestCase
         Advert::temporary();
 
         $this->assertCount(1, TemporaryAdvert::all());
+    }
+
+    /** @test */
+    public function it_can_check_if_is_favourited_by_current_user()
+    {
+        $this->signIn();
+
+        $this->advert->favourite();
+
+        $this->assertTrue($this->advert->isFavourited());
     }
 }

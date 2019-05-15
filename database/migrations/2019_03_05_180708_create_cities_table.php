@@ -23,9 +23,9 @@ class CreateCitiesTable extends Migration
             $table->float('lon', 10, 6);
             $table->decimal('importance', 7, 6)->nullable();
             $table->boolean('suggested')->default(false);
-            $table->char('community', 50);
-            $table->char('county', 50);
-            $table->char('state', 50);
+            $table->char('community', 60);
+            $table->char('county', 60);
+            $table->char('state', 60);
             $table->float('west', 10, 6)->nullable();
             $table->float('south', 10, 6)->nullable();
             $table->float('east', 10, 6)->nullable();

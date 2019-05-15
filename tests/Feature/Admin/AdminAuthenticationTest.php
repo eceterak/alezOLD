@@ -4,9 +4,9 @@ namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\CityFactory;
 use Facades\Tests\Setup\AdvertFactory;
-use Facades\Tests\Setup\StreetFactory;
+use App\Street;
+use App\City;
 
 class AdminAuthenticationTest extends TestCase
 {
@@ -17,7 +17,7 @@ class AdminAuthenticationTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $city = CityFactory::create();
+        $city = create(City::class);
 
         $this->delete(route('admin.cities.destroy', $city->slug))->assertRedirect(route('admin.login'));
 
@@ -27,7 +27,7 @@ class AdminAuthenticationTest extends TestCase
     /** @test */
     public function guests_cannot_manage_cities() 
     {
-        $city = CityFactory::create();
+        $city = create(City::class);
 
         $this->get(route('admin.cities'))->assertRedirect(route('admin.login'));
         $this->get(route('admin.cities.create'))->assertRedirect(route('admin.login'));
@@ -61,15 +61,15 @@ class AdminAuthenticationTest extends TestCase
     {
         $advert = AdvertFactory::create();
 
-        $this->delete(route('admin.adverts.destroy', $advert->id))->assertRedirect(route('admin.login'));
+        $this->delete(route('admin.adverts.destroy', $advert->slug))->assertRedirect(route('admin.login'));
 
-        $this->actingAs($this->user())->delete(route('admin.adverts.destroy', $advert->id))->assertRedirect(route('index'));
+        $this->actingAs($this->user())->delete(route('admin.adverts.destroy', $advert->slug))->assertRedirect(route('index'));
     }
 
     /** @test */
     public function unauthorized_cannot_delete_streets()
     {
-        $street = StreetFactory::create();
+        $street = create(Street::class);
 
         $this->delete(route('admin.streets.destroy', [$street->city->slug, $street->id]))->assertRedirect(route('admin.login'));
 

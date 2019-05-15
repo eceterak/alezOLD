@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\AdvertFactory;
-use App\Advert;
-use App\City;
 
 class ReadAdvertsTest extends TestCase
 {
@@ -31,5 +29,15 @@ class ReadAdvertsTest extends TestCase
     public function a_user_can_view_a_single_advert()
     {
         $this->get(route('adverts.show', [$this->advert->city->slug, $this->advert->slug]))->assertSee($this->advert->title);
+    }
+
+    /** @test */
+    public function ajax_can_request_adverts_from_a_city()
+    {
+        //$this->withoutExceptionHandling();
+
+        $response = $this->getJson(route('ajax.city.adverts', $this->advert->city->slug))->json();
+
+        $this->assertCount(1, $response['data']);
     }
 }

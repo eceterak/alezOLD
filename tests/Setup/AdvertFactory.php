@@ -2,7 +2,6 @@
 
 namespace Tests\Setup;
 
-use Facades\Tests\Setup\StreetFactory;
 use App\Street;
 use App\City;
 use App\Advert;
@@ -11,10 +10,19 @@ use App\User;
 class AdvertFactory 
 {
 
+    /**
+     * @var App\User
+     */
     protected $user = null;
 
+    /**
+     * @var App\City
+     */
     protected $city = null;
 
+    /**
+     * @var App\Street
+     */
     protected $street = null;
 
     /**
@@ -30,11 +38,11 @@ class AdvertFactory
     }
 
     /**
-     * Advert can belong to a city.
+     * City.
      * 
      * @return this
      */
-    public function belongsTo(City $city)
+    public function city(City $city)
     {
         $this->city = $city;
 
@@ -42,7 +50,7 @@ class AdvertFactory
     }
 
     /**
-     * Adverts street.
+     * Street.
      * 
      * @return this
      */
@@ -57,39 +65,49 @@ class AdvertFactory
     /**
      * Create a new instance of advert.
      * 
-     * @return Advert
+     * @param array $data
+     * @param int $amount
+     * @return App\Advert
      */
-    public function create() 
+    public function create($data = [], $amount = 1) 
     {
-        $street = ($this->street) ? $this->street : StreetFactory::create();
-
-        $advert = factory(Advert::class)->create([
-            'user_id' => $this->user ?? factory(User::class),
-            'city_id' => $this->city ?? $street->city->id,
-            'street_id' => $this->street ?? $street->id
-        ]);
-
-        $this->street = null;
-        $this->city = null;
-
-        return $advert;
+        return $this->make('create', $data, $amount);
     }
 
     /**
-     * Return a instance of a advert object without saving it to a database.
+     * Return an array.
      * 
-     * @return App\Advert
+     * @param array $data
+     * @param int $amount
+     * @return array
      */
-    public function raw() 
+    public function raw($data = [], $amount = 1) 
     {
-        $street = StreetFactory::create();
+        return $this->make('create', $data, $amount);
+    }
+    
+    /**
+     * 
+     * 
+     * @param string $method
+     * @param array $data
+     * @param int $amount
+     * @return mixed
+     */
+    public function make($method = 'create', $data, $amount = 1) 
+    {
+        $street = ($this->street) ? $this->street : create(Street::class);
 
-        $room = factory(Advert::class)->raw([
-            'user_id' => $this->user ?? factory(User::class),
-            'city_id' => $street->city->id,
-            'street_id' => $street->id
-        ]);
+        $attributes = array_merge([
+            'user_id' => $this->user ?? create(User::class),
+            'city_id' => $this->city ?? $street->city->id,
+            'street_id' => $this->street ?? $street->id
+        ], $data);
 
-        return $room;
+        $this->city = null;
+        $this->street = null;
+        $this->user = null;
+
+        return $amount == 1 ? factory(Advert::class)->{$method}($attributes) : factory(Advert::class, $amount)->{$method}($attributes);
     }
 }

@@ -1,0 +1,1 @@
+<p>{{ $activity->user->name }} dodał ogłoszenie do ulubionych {{ $activity->created_at->diffForHumans() }}</p>

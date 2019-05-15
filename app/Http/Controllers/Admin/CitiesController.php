@@ -46,13 +46,14 @@ class CitiesController extends Controller
     /**
      * Display adverts.
      * 
+     * @refactor method adverts?
      * @param City $city
      * @return view
      */
     public function adverts(City $city) 
     {
         return view('admin.cities.adverts')->with([
-            'city' => $city
+            'city' => $city->load('adverts')
         ]);
     }
     
@@ -105,6 +106,11 @@ class CitiesController extends Controller
     public function destroy(City $city) 
     {
         $city->delete();
+
+        if(request()->wantsJson())
+        {
+            return response([], 204);
+        }
 
         return redirect(route('admin.cities'));
     }

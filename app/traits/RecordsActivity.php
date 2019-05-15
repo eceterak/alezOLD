@@ -1,6 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Traits;
+
+use App\Activity;
 
 trait RecordsActivity
 {
@@ -12,7 +14,7 @@ trait RecordsActivity
     protected $oldAttributes = [];
 
     /**
-     * Attributes from before change.
+     * Events to record activity of.
      * 
      * @var array
      */
@@ -27,12 +29,11 @@ trait RecordsActivity
      */
     public static function bootRecordsActivity() 
     {
-
         foreach(self::$recordableEvents as $event)
         {
             static::$event(function($model) use ($event)
             {
-                //dump($model);
+                // Do not record activity when slug is updated.
                 if($model->isClean('slug')) 
                 {
                     $model->recordActivity($model->activityDescription($event));
@@ -48,6 +49,11 @@ trait RecordsActivity
                 });
             }
         }
+
+        static::deleting(function($model) 
+        {
+            $model->activities()->delete();
+        });
     }
 
     /**
@@ -61,13 +67,13 @@ trait RecordsActivity
     }
 
     /**
-     * Return all activities.
+     * Return all activities for model.
      * 
      * @return App\Activity
      */
     public function activities() 
     {
-        return $this->hasMany(Activity::class)->latest();
+        return $this->morphMany(Activity::class, 'subject');
     }
 
     /**
@@ -82,11 +88,11 @@ trait RecordsActivity
             'user_id' => $this->activityOwner()->id,
             'description' => $description,
             'changes' => $this->activityChanges($description)
-        ]);      
+        ]);
     }
 
     /**
-     * Get authenticated user (if logged in).
+     * Who made a changes.
      * 
      * @return App\User
      */

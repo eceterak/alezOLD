@@ -8,7 +8,7 @@
     </div>
     @endif
     @include('adverts._form', [
-        'route' => ['adverts.edit', $advert->slug],
+        'route' => ['adverts.edit', [$advert->city->slug, $advert->slug]],
         'name' => 'create_new_advert',
         'header' => 'Edytuj ogłoszenie',
         'method' => 'PATCH',

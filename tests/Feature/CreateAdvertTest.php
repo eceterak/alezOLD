@@ -4,9 +4,9 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\StreetFactory;
 use App\TemporaryAdvert;
 use App\Advert;
+use App\Street;
 
 class CreateAdvertTest extends TestCase
 {
@@ -15,8 +15,6 @@ class CreateAdvertTest extends TestCase
     /** @test */
     public function visiting_create_new_advert_page_generates_a_temporary_advert()
     {
-        $this->assertEmpty(TemporaryAdvert::all());
-
         $this->actingAs($this->user())->get(route('adverts.create'));
 
         $this->assertCount(1, TemporaryAdvert::all());
@@ -27,11 +25,11 @@ class CreateAdvertTest extends TestCase
     {   
         $this->actingAs($this->user())->get(route('adverts.create'))->assertStatus(200);
 
-        $street = StreetFactory::create();
+        $street = create(Street::class);
 
         $temporary = TemporaryAdvert::first();
         
-        $this->post(route('adverts.store'), $attributes = factory(Advert::class)->raw([
+        $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
             'temp' => $temporary->id,
             'token' => $temporary->token,
             'city_id' => $street->city->id,

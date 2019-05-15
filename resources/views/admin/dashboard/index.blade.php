@@ -9,10 +9,14 @@
     @if($activities->count())
         <table class="table">
             <tbody>
-                @foreach($activities as $activity)
-                    <tr>
-                        <td>@include("admin.dashboard.activities.{$activity->description}")</td>
-                    </tr>
+                @foreach($activities as $type => $act)
+                    @foreach($act as $activity)
+                        <tr>
+                            <td>
+                                @includeIf("admin.dashboard.activities.{$activity->description}")
+                            </td>
+                        </tr>
+                    @endforeach
                 @endforeach
             </tbody>
         </table>

@@ -6,6 +6,7 @@ use App\Conversation;
 use Illuminate\Http\Request;
 use App\Advert;
 use App\Http\Requests\ConversationRequest;
+use App\City;
 
 class ConversationsController extends Controller
 {
@@ -53,13 +54,13 @@ class ConversationsController extends Controller
     /**
      * Start a new conversation.
      * 
+     * @param City $city
+     * @param Advert $advert
      * @param Request $request
      * @return redirect
      */
-    public function store($city, $slug, Request $request) 
+    public function store(City $city, Advert $advert, Request $request) 
     {
-        $advert = Advert::getBySlug($slug);
-
         $advert->inquiry($request->body);
 
         return redirect()->back();

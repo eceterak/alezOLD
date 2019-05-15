@@ -49,7 +49,7 @@ Route::get('/szukaj', 'SearchController@index')->name('search.index');
 
 // Adverts
 Route::get('/pokoje', 'AdvertsController@index')->name('adverts');
-Route::get('/{city}/pokoje/{advert}', 'AdvertsController@show')->name('adverts.show');
+Route::get('/pokoje/{city}/{advert}', 'AdvertsController@show')->name('adverts.show');
 
 Route::group(['middleware' => 'auth'], function() 
 {
@@ -57,14 +57,22 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('/pokoje/dodaj', 'AdvertsController@create')->name('adverts.create');
     Route::get('/pokoje/moje', 'AdvertsController@mine')->name('adverts.mine');
     Route::post('/pokoje', 'AdvertsController@store')->name('adverts.store');
-    Route::get('/pokoje/{advert}/edytuj', 'AdvertsController@edit')->name('adverts.edit');
-    Route::patch('/pokoje/{advert}/edytuj', 'AdvertsController@update')->name('adverts.update');
+    Route::get('/pokoje/{city}/{advert}/edytuj', 'AdvertsController@edit')->name('adverts.edit');
+    Route::patch('/pokoje/{city}/{advert}/edytuj', 'AdvertsController@update')->name('adverts.update');
     Route::delete('/pokoje/{advert}', 'AdvertsController@destroy')->name('adverts.destroy');
+
+    // Favourites
+    Route::post('/pokoje/{advert}/ulubione', 'FavouritesController@store')->name('adverts.favourite.store');
+    Route::delete('/pokoje/{advert}/ulubione', 'FavouritesController@destroy')->name('adverts.favourite.delete');
+
+    // Subscriptions
+    Route::post('/pokoje/{city}/obserwuj', 'CitySubscriptionsController@store')->name('city.subscribe');
+    Route::delete('/pokoje/{city}/obserwuj', 'CitySubscriptionsController@destroy')->name('city.unsubscribe');
 });
 
 // Cities
 Route::get('/miasta', 'CitiesController@index')->name('cities');
-Route::get('/{city}', 'CitiesController@show')->name('cities.show');
+Route::get('/pokoje/{city}', 'CitiesController@show')->name('cities.show');
 
 Route::group(['middleware' => 'auth'], function()
 {
@@ -75,7 +83,15 @@ Route::group(['middleware' => 'auth'], function()
     Route::post('/home/inbox/{conversation}', 'ConversationsController@reply')->name('conversations.reply');
 });
 
+// Users
+Route::get('/uzytkownicy/{user}', 'ProfilesController@show')->name('profiles.show');
+
+// Notifications
+Route::get('/uzytkownicy/{user}/notyfikacje', 'UserNotificationsController@index')->name('profiles.notifications');
+Route::delete('/uzytkownicy/{user}/notyfikacje/{notification}', 'UserNotificationsController@destroy')->name('profiles.notifications.delete');
+
 // Ajax
 Route::post('/ajax/cities', 'AjaxController@cities');
 Route::post('/ajax/streets', 'AjaxController@streets');
 Route::post('/ajax/images/upload', 'AjaxController@upload');
+Route::get('/pokoje/{city}/ajax/adverts', 'AjaxController@index')->name('ajax.city.adverts');

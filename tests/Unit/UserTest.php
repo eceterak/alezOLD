@@ -17,7 +17,7 @@ class UserTest extends TestCase
     {
         $this->get(route('login'))->assertSuccessful();
 
-        $user = factory(User::class)->create([
+        $user = create(User::class, [
             'password' => bcrypt($password = 'test123')
         ]);
 
@@ -43,7 +43,7 @@ class UserTest extends TestCase
     /** @test */
     public function has_conversations() 
     {
-        $magda = factory(User::class)->create();
+        $magda = create(User::class);
         $magdaAdvert = AdvertFactory::ownedBy($magda)->create();
 
         $marek = $this->signIn();
@@ -65,7 +65,7 @@ class UserTest extends TestCase
     /** @test */
     public function can_be_an_admin()
     {
-        $user = factory(User::class)->create(['role' => 1]);
+        $user = create(User::class, ['role' => 1]);
 
         $this->assertEquals(true, $user->isAdmin());
     }

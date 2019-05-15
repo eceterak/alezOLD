@@ -11,6 +11,16 @@ use App\Street;
 class AjaxController extends Controller
 {
     /**
+     * 
+     * 
+     * @return
+     */
+    public function index(City $city) 
+    {
+        return $city->adverts()->paginate(9);
+    }
+
+    /**
      * Fetch cities for autocomplete search suggestions.
      * 
      * @param Request $request

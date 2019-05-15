@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Traits\RecordsActivity;
 
 class User extends Authenticatable
 {
@@ -24,8 +25,8 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
+    protected $visible = [
+        'name', 'role',
     ];
 
     /**
@@ -38,13 +39,23 @@ class User extends Authenticatable
     ];
 
     /**
+     * Replace default key for route model binding.
+     * 
+     * @return string
+     */
+    public function getRouteKeyName() 
+    {
+        return 'name';
+    }
+
+    /**
      * User can have many adverts.
      *
      * @return Collection
      */
     public function adverts() 
     {
-        return $this->hasMany(Advert::class);
+        return $this->hasMany(Advert::class)->latest();
     }
 
     /**
@@ -75,6 +86,16 @@ class User extends Authenticatable
     public function conversations() 
     {
         return Conversation::where('sender_id', $this->id)->orWhere('receiver_id', $this->id)->get();
+    }
+
+    /**
+     * Return all activities for the user.
+     * 
+     * @return App\Activity
+     */
+    public function activities() 
+    {
+        return $this->hasMAny(Activity::class);
     }
 
     /**

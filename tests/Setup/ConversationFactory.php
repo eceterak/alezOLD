@@ -31,9 +31,9 @@ class ConversationFactory
     {
         $advert = AdvertFactory::create();
 
-        return factory(Conversation::class)->create([
+        return create(Conversation::class, [
             'advert_id' => $advert->id,
-            'sender_id' => $this->sender ?? factory(User::class),
+            'sender_id' => $this->sender ?? create(User::class),
             'receiver_id' => $advert->user->id
         ]);
     }

@@ -4,9 +4,8 @@ namespace Tests\Feature\Admin;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\StreetFactory;
-use Facades\Tests\Setup\CityFactory;
 use App\Street;
+use App\City;
 
 class StreetsManagementTest extends TestCase
 {
@@ -18,13 +17,13 @@ class StreetsManagementTest extends TestCase
     {
         $this->signInAdmin();
         
-        $city = CityFactory::create();
+        $city = create(City::class);
 
         $this->get(action('Admin\CityStreetsController@create', $city->slug))->assertStatus(200);
 
-        $this->post(route('admin.streets.store', $city->slug), $attributes = factory(Street::class)->raw());
+        $this->post(route('admin.streets.store', $city->slug), $attributes = raw(Street::class));
 
-        $street = Street::where($attributes)->first();
+        $street = Street::whereName($attributes['name'])->first();
 
         $this->get(route('admin.cities.streets', $street->city->slug))->assertSee($street->name);
     }
@@ -34,11 +33,11 @@ class StreetsManagementTest extends TestCase
     {
         $this->signInAdmin();
 
-        $street = StreetFactory::create();
+        $street = create(Street::class);
 
         $this->get(route('admin.streets.edit', [$street->city->slug, $street->id]))->assertSee($street->name);
 
-        $this->patch(route('admin.streets.update', [$street->city->slug, $street->id]), $attributes = factory(Street::class)->raw([
+        $this->patch(route('admin.streets.update', [$street->city->slug, $street->id]), $attributes = raw(Street::class, [
             'city_id' => $street->city->id
         ]))
         ->assertRedirect(route('admin.cities.streets', $street->city->slug));
@@ -53,7 +52,7 @@ class StreetsManagementTest extends TestCase
 
         $this->signInAdmin();
 
-        $street = StreetFactory::create();
+        $street = create(Street::class);
 
         $this->delete(route('admin.streets.destroy', [$street->city->slug, $street->id]))->assertRedirect(route('admin.cities.streets', $street->city->slug));
 

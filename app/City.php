@@ -20,6 +20,32 @@ class City extends Model
     ];
 
     /**
+     * Register custom attributes.
+     * 
+     * @var array
+     */
+    protected $appends = [
+        'isSubscribed'
+    ];
+
+
+    /**
+     * Boot the model. Eager load the advert count.
+     */
+    protected static function boot() 
+    {
+        parent::boot();
+
+        static::addGlobalScope('advertCount', function($builder) {
+            $builder->withCount('adverts');
+        });
+
+        static::deleting(function($city) {
+            $city->adverts->each->delete();
+        });
+    }
+
+    /**
      * Replace default key for route model binding.
      * 
      * @return string
@@ -50,6 +76,16 @@ class City extends Model
     }
 
     /**
+     * Many users can subscribe to a city.
+     * 
+     * @return App\CitySubscription
+     */
+    public function subscriptions() 
+    {
+        return $this->hasMany(CitySubscription::class);
+    }
+
+    /**
      * Add a new street.
      * 
      * @param array $attributes
@@ -67,19 +103,46 @@ class City extends Model
      */
     public function createSlug() 
     {
+        $no = City::where('name', $this->name);
+
         $this->update([
             'slug' => str_slug($this->name)
         ]);
     }
 
     /**
-     * Find and return an instance of city, by its unique slug.
+     * Subscribe to a city.
      * 
-     * @param string $slug.
-     * @return App\City
+     * @return this
      */
-    static public function getBySlug($slug) 
+    public function subscribe() 
     {
-        return self::where('slug', $slug)->firstOrFail();
+        $this->subscriptions()->create([
+            'user_id' => auth()->id()
+        ]);
+
+        return $this;
+    }
+
+    /**
+     * Unsubscribe from a city.
+     * 
+     * @return void
+     */
+    public function unsubscribe() 
+    {
+        $this->subscriptions()->where('user_id', auth()->id())->delete();
+    }
+
+    /**
+     * Check if authenticated user is subscribing to a city.
+     * 
+     * @return bool
+     */
+    public function getIsSubscribedAttribute() 
+    {
+        return $this->subscriptions()
+            ->where('user_id', auth()->id())
+            ->exists();
     }
 }

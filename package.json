@@ -16,7 +16,6 @@
         "jquery-ui": "^1.12.1",
         "laravel-mix": "^4.0.15",
         "laravel-mix-tailwind": "^0.1.0",
-        "lodash": "^4.17.5",
         "popper.js": "^1.12",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",

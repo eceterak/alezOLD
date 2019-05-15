@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Barryvdh\Debugbar\ServiceProvider as Debugbar;
 use App\Observers\TemporaryAdvertObserver;
 use App\Observers\AdvertObserver;
 use App\TemporaryAdvert;
@@ -18,7 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if($this->app->isLocal())
+        {
+            $this->app->register(Debugbar::class);
+        }
     }
 
     /**

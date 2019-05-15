@@ -4,8 +4,8 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\StreetFactory;
 use App\City;
+use App\Street;
 
 class StreetTest extends TestCase
 {
@@ -17,9 +17,9 @@ class StreetTest extends TestCase
     {
         $this->signInAdmin();
 
-        $city = factory(City::class)->create();
+        $city = create(City::class);
 
-        $street = factory(City::class)->raw([
+        $street = raw(City::class, [
             'name' => ''
         ]);
 
@@ -31,11 +31,11 @@ class StreetTest extends TestCase
     {
         $this->signInAdmin();
 
-        $city = factory(City::class)->create();
+        $city = create(City::class);
 
-        $street = factory(City::class)->raw([
-            'lat' => '',
-            'lon' => ''
+        $street = raw(City::class, [
+            'lon' => '',
+            'lat' => ''
         ]);
 
         $this->post(route('admin.streets.store', $city->slug), $street)->assertSessionHasErrors(['lat', 'lon']);
@@ -44,7 +44,7 @@ class StreetTest extends TestCase
     /** @test */
     public function street_belongs_to_a_city()
     {
-        $street = StreetFactory::create();        
+        $street = create(Street::class);        
 
         $this->assertInstanceOf('App\City', $street->city);
     }

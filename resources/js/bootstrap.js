@@ -1,19 +1,60 @@
+/** Axios */
 
-window._ = require('lodash');
+window.axios = require('axios');
+
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+let token = document.head.querySelector('meta[name="csrf-token"]');
+
+if(token) {
+    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+} 
+else {
+    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+}
+
+/** Vue */
 
 window.Vue = require('vue');
 
+// Make instance of a user available globally.
+window.Vue.prototype.authorize = function(handler) {
+
+    let user = window.App.user;
+
+    return user ? handler(user) : false;
+}
+
+window.events = new Vue();
+
+// Regeister new global method flash.
+window.flash = function(message) {
+
+    window.events.$emit('flash', message);
+
+};
+
+// Load components.
 Vue.component('image-upload', require('./components/ImageUpload.vue').default);
 
+Vue.component('paginator', require('./components/Paginator.vue').default);
+
+Vue.component('favourite', require('./components/Favourite.vue').default);
+
+Vue.component('user-notifications', require('./components/UserNotifications.vue').default);
+
+Vue.component('subscribe-button', require('./components/SubscribeButton.vue').default);
+
+Vue.component('flash-message', require('./components/FlashMessage.vue').default);
+
+Vue.component('city-view', require('./pages/City.vue').default);
+
+// Initialize a Vue.
 const app = new Vue({
     el: '#app'
 });
 
-/**
- * We'll load jQuery and the Bootstrap jQuery plugin which provides support
- * for JavaScript based Bootstrap features such as modals and tabs. This
- * code may be modified to fit the specific needs of your application.
- */
+/** JS */
 
 try {
     window.Popper = require('popper.js').default;
@@ -22,29 +63,4 @@ try {
     require('jquery-ui/ui/widgets/button');
     require('jquery-ui/ui/widgets/tooltip');
     require('jquery-ui/ui/widgets/datepicker');
-    //require('@fortawesome/fontawesome-free/js/all.js')
 } catch (e) {}
-
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-
-window.axios = require('axios');
-
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-/**
- * Next we will register the CSRF Token as a common header with Axios so that
- * all outgoing HTTP requests automatically have it attached. This is just
- * a simple convenience so we don't have to attach every token manually.
- */
-
-let token = document.head.querySelector('meta[name="csrf-token"]');
-
-if (token) {
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-} else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}

@@ -12,6 +12,10 @@ class Activity extends Model
         'changes' => 'array'
     ];
 
+    protected $with = [
+        'user'
+    ];
+
     /**
      * Activity is associated with user.
      * 
@@ -21,4 +25,32 @@ class Activity extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get object associated with activity.
+     * 
+     * @return mixed
+     */
+    public function subject() 
+    {
+        return $this->morphTo();
+    }
+
+    /**
+     * Get object associated with activity.
+     * 
+     * @return mixed
+     */
+    public static function feed($user) 
+    {
+        return static::where('user_id', $user->id)
+            ->latest()
+            ->with('subject')
+            ->take(50)
+            ->get()
+            ->groupBy(function($item) {
+                return $item->created_at->format('Y-m-d');
+            });
+    }
+    
 }

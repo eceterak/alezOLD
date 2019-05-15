@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\CityFactory;
 use App\City;
 use App\Street;
 use App\Advert;
@@ -19,7 +18,7 @@ class CityTest extends TestCase
     {
         $this->signInAdmin();
 
-        $this->post(route('admin.cities.store'), factory(City::class)->raw([
+        $this->post(route('admin.cities.store'), raw(City::class, [
             'name' => ''
         ]))->assertSessionHasErrors('name');
     }
@@ -29,7 +28,7 @@ class CityTest extends TestCase
     {
         $this->signInAdmin();
 
-        $this->post(route('admin.cities.store'), factory(City::class)->raw([
+        $this->post(route('admin.cities.store'), raw(City::class, [
             'lat' => '',
             'lon' => '',
         ]))->assertSessionHasErrors(['lat', 'lon']);
@@ -40,7 +39,7 @@ class CityTest extends TestCase
     {
         $this->signInAdmin();
 
-        $this->post(route('admin.cities.store'), factory(City::class)->raw([
+        $this->post(route('admin.cities.store'), raw(City::class, [
             'county' => '',
             'state' => ''
         ]))->assertSessionHasErrors(['county', 'state']);
@@ -49,7 +48,7 @@ class CityTest extends TestCase
     /** @test */
     public function can_create_a_slug()
     {
-        $city = CityFactory::create();
+        $city = create(City::class);
 
         $city->createSlug();
 
@@ -59,7 +58,7 @@ class CityTest extends TestCase
     /** @test */
     public function city_has_a_slug() 
     {
-        $city = factory(City::class)->create();
+        $city = create(City::class);
         
         $this->assertIsString($city->slug);
     }
@@ -67,9 +66,9 @@ class CityTest extends TestCase
     /** @test */
     public function city_has_streets()
     {
-        $city = factory(City::class)->create();
+        $city = create(City::class);
 
-        $street = factory(Street::class)->create([
+        $street = create(Street::class, [
             'city_id' => $city->id
         ]);
 
@@ -79,13 +78,51 @@ class CityTest extends TestCase
     /** @test */
     public function city_has_adverts() 
     {
-        $city = factory(City::class)->create();
+        $city = create(City::class);
 
-        $advert = factory(Advert::class)->create([
+        $advert = create(Advert::class, [
             'user_id' => $this->user(),
             'city_id' => $city->id
         ]);
 
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Collection', $city->adverts);
+    }
+
+    /** @test */
+    public function city_can_be_subscribed_to()
+    {
+        $user = $this->signIn();
+
+        $city = create(City::class);
+
+        $city->subscribe();
+
+        $this->assertEquals(1, $city->subscriptions()->where('user_id', auth()->user()->id)->count());
+    }
+
+    /** @test */
+    public function city_can_be_unsubscribed_from()
+    {
+        $user = $this->signIn();
+
+        $city = create(City::class);
+
+        $city->subscribe();
+
+        $city->unsubscribe();
+
+        $this->assertCount(0, $city->subscriptions);
+    }
+
+    /** @test */
+    public function it_knows_if_authenticated_user_is_subscribed_to()
+    {
+        $user = $this->signIn();
+
+        $city = create(City::class);
+
+        $city->subscribe();
+
+        $this->assertTrue($city->isSubscribed);
     }
 }

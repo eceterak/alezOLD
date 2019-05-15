@@ -15,9 +15,11 @@ class CitiesDisplayTest extends TestCase
     /** @test */
     public function a_user_can_view_adverts_from_a_specific_city() 
     {
-        $city = factory(City::class)->create();
+        $this->withoutExceptionHandling();
 
-        $advertInCity = factory(Advert::class)->create([
+        $city = create(City::class);
+
+        $advertInCity = create(Advert::class, [
             'user_id' => $this->user(),
             'city_id' => $city->id
         ]);
@@ -28,7 +30,7 @@ class CitiesDisplayTest extends TestCase
     /** @test */
    public function adverts_from_other_cities_shouldnt_be_visible_in_the_city()
     {
-        $city = factory(City::class)->create();
+        $city = create(City::class);
 
         $advertNotInCity = AdvertFactory::create();
 
@@ -38,23 +40,18 @@ class CitiesDisplayTest extends TestCase
     /** @test */
    public function show_suggested_cities_on_main_page()
    {
-       $citySuggested = factory(City::class)->create([
-           'suggested' => true
-       ]);
+        $citySuggested = create(City::class, [
+            'suggested' => true
+        ]);
 
-       $cityNotSuggested = factory(City::class)->create([
-        'suggested' => false
-    ]);
-
-       $this->get(route('index'))->assertSee($citySuggested->name);
-       $this->get(route('index'))->assertDontSee($cityNotSuggested->name);
+        $this->get(route('index'))->assertSee($citySuggested->name);
    }
 
     /** @test */
     public function dont_show_nonsuggested_cities_on_main_page()
     {
-        $cityNotSuggested = factory(City::class)->create([
-        'suggested' => false
+        $cityNotSuggested = create(City::class, [
+            'suggested' => false
         ]);
 
         $this->get(route('index'))->assertDontSee($cityNotSuggested->name);

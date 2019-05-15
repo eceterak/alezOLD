@@ -3,17 +3,31 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Filters\QueryFilter;
+use App\Traits\RecordsActivity;
+use App\Traits\Favouritable;
 
 class Advert extends Model
 {
-    use RecordsActivity;
+    use RecordsActivity, Favouritable;
 
     /**
-     * Form request allowed.
+     * Mass assiggnment.
      * 
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Always eager load user details.
+     * 
+     * @var array
+     */
+    protected $with = [
+        'city',
+        'user', 
+        'favourites'
+    ];
 
     /**
      * Default attributes.
@@ -24,6 +38,25 @@ class Advert extends Model
         'verified' => false,
         'active' => false
     ];
+
+    /**
+     * Register custom attributes.
+     * 
+     * @var array
+     */
+    protected $appends = [
+        'isFavourited'
+    ];
+
+    /**
+     * Replace default key for route model binding.
+     * 
+     * @return string
+     */
+    public function getRouteKeyName() 
+    {
+        return 'slug';
+    }
 
     /**
      * Casts from database to model.
@@ -114,47 +147,11 @@ class Advert extends Model
      * 
      * @param $query
      * @param QueryFilter $filters
-     * 
-     * @return
+     * @return QueryFilters
      */
     public function scopeFilter($query, QueryFilter $filters) 
     {
         return $filters->apply($query);
-    }
-
-    /**
-     * Get the instance of an advert.
-     * 
-     * @param string $slug
-     * @return App\Advert
-     */
-    static public function getBySlug($slug)
-    {
-        $id = substr($slug, strrpos($slug, '-uid-') + 5); // get last occurence of uid.
-
-        return self::where('id', intval($id, 36))->firstOrFail();
-    }
-
-    /**
-     * Generate a slug after advert is added to a database (it uses a id).
-     * 
-     * @return void
-     */
-    public function generateSlug() 
-    {
-        $this->update([
-            'slug' => str_slug($this->title.'-uid-'.$this->encodeId())
-        ]);
-    }
-
-    /**
-     * Encode id.
-     * 
-     * @return string
-     */
-    public function encodeId() 
-    {
-        return base_convert($this->id, 10, 36);
     }
 
     /**
@@ -190,4 +187,27 @@ class Advert extends Model
             'body' => $body
         ]);
     }
+
+    /**
+     * Generate a slug after advert is added to a database (it uses a id).
+     * 
+     * @return void
+     */
+    public function generateSlug() 
+    {
+        $this->update([
+            'slug' => str_slug($this->title.'-uid-'.$this->encodeId())
+        ]);
+    }
+
+    /**
+     * Encode id.
+     * 
+     * @return string
+     */
+    public function encodeId() 
+    {
+        return base_convert($this->id, 10, 36);
+    }
+
 }

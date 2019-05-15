@@ -15,7 +15,7 @@ class AdminController extends Controller
     public function index() 
     {
         return view('admin.dashboard.index')->with([
-            'activities' => Activity::latest()->limit(20)->get()
+            'activities' => Activity::latest()->with('subject')->limit(20)->get()->groupBy('subject_type')
         ]);
     }
     

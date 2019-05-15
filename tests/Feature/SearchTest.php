@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\AdvertFactory;
-use Facades\Tests\Setup\CityFactory;
+use App\City;
 
 class SearchTest extends TestCase
 {
@@ -55,7 +55,7 @@ class SearchTest extends TestCase
     /** @test */
     public function ajax_autocomplete_suggestions() 
     {
-        $city = CityFactory::create();
+        $city = create(City::class);
         
         $this->post(action('AjaxController@cities'), [
             'city' => substr($city->name, 0, 3)

@@ -3,6 +3,9 @@
 use Faker\Generator as Faker;
 
 $factory->define(App\Advert::class, function (Faker $faker) {
+
+    $city = factory('App\City')->create();
+
     return [
         // General info
         'title' => $faker->text(50),

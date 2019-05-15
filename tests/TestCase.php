@@ -16,7 +16,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function signIn($user = null) 
     {
-        $user = $user ?: factory('App\User')->create(['role' => 0]);
+        $user = $user ?: create('App\User', ['role' => 0]);
 
         $this->actingAs($user);
 
@@ -31,7 +31,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function signInAdmin($admin = null) 
     {
-        $admin = $admin ?: factory('App\User')->create(['role' => 1]);
+        $admin = $admin ?: create('App\User', ['role' => 1]);
 
         $this->actingAs($admin);
 
@@ -45,7 +45,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function user() 
     {
-        return factory('App\User')->create(['role' => 0]);
+        return create('App\User', ['role' => 0]);
     }
 
     /**
@@ -55,6 +55,6 @@ abstract class TestCase extends BaseTestCase
      */
     protected function admin() 
     {
-        return factory('App\User')->create(['role' => 1]);
+        return create('App\User', ['role' => 1]);
     }
 }

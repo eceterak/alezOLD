@@ -34,13 +34,13 @@ class AdvertsController extends Controller
     /**
      * Display an edit form.
      * 
-     * @param string $slug
+     * @param Advert $advert
      * @return view
      */
-    public function edit($slug) 
+    public function edit(Advert $advert) 
     {
         return view('admin.adverts.edit')->with([
-            'advert' => Advert::getBySlug($slug)
+            'advert' => $advert
         ]);
     }
 
@@ -60,20 +60,18 @@ class AdvertsController extends Controller
     /**
      * Update a Advert.
      * 
-     * @param string $slug
+     * @param Advert $advert
      * @param Request $request
      * @return redirect
      */
-    public function update($slug, Request $request) 
+    public function update(Advert $advert, Request $request) 
     {
-        $Advert = Advert::getBySlug($slug);
-
-        if($request->verified) $Advert->verify();
+        if($request->verified) $advert->verify();
         else
         {
-            $Advert->update($this->validateRequest($request));
+            $advert->update($this->validateRequest($request));
     
-            $Advert->generateSlug(); // Refactor?
+            $advert->generateSlug(); // Refactor?
         }
 
         return redirect(route('admin.adverts'));

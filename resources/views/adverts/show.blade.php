@@ -1,39 +1,64 @@
 @extends('layouts.master')
-@section('content')
-    <h3 class="font-normal text-lg mb-4">{{ $advert->title }}</h3>
-    <main class="lg:flex -mx-3">
-        <div class="w-3/5 px-3">
-            <img src="/storage/advert.jpg" class="shadow">
+@section('lead')
+    <header class="flex justify-between">
+        <div>
+            <h2 class="font-normal mb-4">{{ $advert->title }}</h2>
+            <p class="text-xs text-grey-darker">{{ $advert->created_at->format('d.m.Y') }}</p>
         </div>
-        <div class="lg:w-2/5 px-3">
+        <div>
+            @can('update', $advert)
+                <form action="{{ route('adverts.destroy', $advert->slug) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <a href="{{ route('adverts.edit', [$advert->city->slug, $advert->slug]) }}" class="btn inline-block">Edytuj</a>
+                    <button class="btn inline-block">Usuń</button>
+                </form>
+            @endcan
+        </div>
+    </header>
+    <main class="lg:flex -mx-3 mt-6">
+        {{-- <div class="w-3/5 px-3">
+            <img src="/storage/notfound.jpg" class="shadow">
+        </div> --}}
+        <div class="w-3/4 px-3">
             <div class="card">
-                <section>
-                    <p class="text-grey-darker">
-                        {{ $advert->description }}
-                    </p>
-                </section>
+                <div class="card-content">
+                    <p class="mb-4">Opis</p>
+                    <p class="text-grey-darker">{{ $advert->description }}</p>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-content">
+                    <div class="mb-4">
+                        <p class="mb-4">Lokalizacja</p>
+                        <p class="text-grey-darker">
+                            <a href="{{ route('cities.show', $advert->city->slug) }}">{{ $advert->city->name }}</a>
+                            @isset($advert->street) ,&nbsp;{{ $advert->street->name }} @endisset
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-1/4 px-3">
+            <div class="card">
+                <div class="card-content text-center">
+                    <div><img src="/storage/notfound.png" class="rounded-full w-32"></div>
+                    <p class="mt-4"><a href="{{ route('profiles.show', $advert->user->name) }}">{{ $advert->user->name }}</a></p>
+                </div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-content">
+                    <p class="mb-2">Czynsz</p>
+                    <p>{{ $advert->rent }}<span class="ml-1 text-xs text-grey-darker">zł miesięcznie</span></p>
+                    <p class="my-2">Media</p>
+                    <p>{{ $advert->bills }}<span class="ml-1 text-xs text-grey-darker">zł miesięcznie</span></p>
+                    <p class="my-2">Kaucja</p>
+                    <p>{{ $advert->deposit }}<span class="ml-1 text-xs text-grey-darker">zł</span></p>
+                </div>
             </div>
         </div>
     </main>
-    <div class="card mt-4">
-        <section>
-            <p>{{ ($advert->living_advert) ? 'Living advert' : 'no living advert' }}</p>
-            <p class="text-grey-darker">
-                {{ $advert->description }}
-            </p>
-        </section>
-    </div>
-    @auth
-        @can('update', $advert)
-            <a href="{{ route('adverts.edit', $advert->slug) }}" class="btn">Edytuj</a>
-            <form action="{{ route('adverts.destroy', $advert->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button class="btn">Usuń</button>
-            </form>
-        @endcan
-    @endauth
-    <div class="card card-content mt-6">
+    <div class="card mt-6">
         <header>
             <h3>Napisz wiadomosc</h3>
         </header>

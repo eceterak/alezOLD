@@ -237,8 +237,10 @@
         <label for="smoking">Palacze</label>
         <input type="checkbox" name="smoking" id="smoking" value="1" {{ (isset($advert)) ? ($advert->smoking) ? 'checked' : '' :  (old('smoking')) ? 'checked' : '' }}>
     </div>
-    <input type="hidden" name="temp" value="{{ $temp->id }}">
-    <input type="hidden" name="token" value="{{ $temp->token }}">  
+    @isset($temp)
+        <input type="hidden" name="temp" value="{{ $temp->id }}">
+        <input type="hidden" name="token" value="{{ $temp->token }}">
+    @endisset
     <button type="submit" class="btn btn-reverse">{{ $button }}</button>
     @include('components._errors')
 </form>

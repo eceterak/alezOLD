@@ -18,7 +18,7 @@ class CityStreetsController extends Controller
     public function index(City $city) 
     {
         return view('admin.streets.index')->with([
-            'city' => $city
+            'city' => $city->load('streets')
         ]);
     }
 

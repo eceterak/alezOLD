@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Filters;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
@@ -8,9 +8,20 @@ use Illuminate\Database\Eloquent\Builder;
 abstract class QueryFilter 
 {
 
+    /**
+     * @var Request $request
+     */
     protected $request;
 
+    /**
+     * @var Builder $builder
+     */
     protected $builder;
+
+    /**
+     * @var array
+     */
+    protected $filters = [];
 
     public function __construct(Request $request)
     {
@@ -21,10 +32,10 @@ abstract class QueryFilter
     {
         $this->builder = $builder;
 
-        foreach($this->filters() as $key => $value) {
-            if(method_exists($this, $key)) {
-                (trim($value)) ? $this->$key($value) : $this->$key();
-            }
+        foreach($this->filters() as $filter => $value) {
+            if(!method_exists($this, $filter)) return;
+
+            (trim($value)) ? $this->$filter($value) : $this->$filter();
         }
 
         return $this->builder;
@@ -32,7 +43,6 @@ abstract class QueryFilter
 
     public function filters()
     {
-        return $this->request->all();
+        return $this->request->only($this->filters);
     }
-
 }

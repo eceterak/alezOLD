@@ -1,6 +1,8 @@
 @extends('admin.layouts.master')
 
 @section('content')
+
+
     @component('admin.cities._card', ['city' => $city])
         <header>
             <h3>Ulice w {{ $city->name }}<small class="text-grey-darker">&nbsp;[{{ $city->streets->count() }}]</small></h3>
@@ -19,11 +21,11 @@
                 <tbody>
                     @foreach($city->streets as $street)
                         <tr>
-                            <td><a href="{{ route('admin.streets.edit', [$street->city->slug, $street->id]) }}">{{ $street->name }}</a></td>
+                            <td><a href="{{ route('admin.streets.edit', [$city->slug, $street->id]) }}">{{ $street->name }}</a></td>
                             <td>{{ $street->lat }}</td>
                             <td>{{ $street->lon }}</td>
                             <td>
-                                <form action="{{ route('admin.streets.destroy', [$street->city->slug, $street->id]) }}" method="POST">
+                                <form action="{{ route('admin.streets.destroy', [$city->slug, $street->id]) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn">Usuń</button>
