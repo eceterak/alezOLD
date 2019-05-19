@@ -16,38 +16,39 @@ else {
 /** Vue */
 
 window.Vue = require('vue');
-
-// Make instance of a user available globally.
-window.Vue.prototype.authorize = function(handler) {
-
-    let user = window.App.user;
-
-    return user ? handler(user) : false;
-}
-
 window.events = new Vue();
 
-// Regeister new global method flash.
-window.flash = function(message) {
+let authorizations = require('./authorizations');
 
-    window.events.$emit('flash', message);
+// Make instance of a user available globally.
+window.Vue.prototype.authorize = function(...params) {
 
-};
+    if(!window.App.signedIn) return false;
+
+    if(typeof params[0] === 'string') {
+        return authorizations[params[0]](params[1]);
+    }
+
+    return params[0](window.App.user);
+}
 
 // Load components.
-Vue.component('image-upload', require('./components/ImageUpload.vue').default);
-
+Vue.component('image-upload-form', require('./components/ImageUploadForm.vue').default);
 Vue.component('paginator', require('./components/Paginator.vue').default);
-
 Vue.component('favourite', require('./components/Favourite.vue').default);
-
 Vue.component('user-notifications', require('./components/UserNotifications.vue').default);
-
 Vue.component('subscribe-button', require('./components/SubscribeButton.vue').default);
-
 Vue.component('flash-message', require('./components/FlashMessage.vue').default);
-
+Vue.component('avatar-form', require('./components/AvatarForm.vue').default);
 Vue.component('city-view', require('./pages/City.vue').default);
+
+
+// Regeister new global method flash.
+window.flash = function(message, level = 'success') {
+
+    window.events.$emit('flash', {message, level});
+
+};
 
 // Initialize a Vue.
 const app = new Vue({

@@ -34,13 +34,14 @@
                 title: this.data.title,
                 slug: this.data.slug,
                 citySlug: this.data.city.slug,
-                editing: false
+                editing: false,
+                advert: this.data
             }
         },
 
         computed: {
             signedIn() {
-                return window.App.signedIn
+                return window.App.signedIn;
             },
 
             isAdmin() {

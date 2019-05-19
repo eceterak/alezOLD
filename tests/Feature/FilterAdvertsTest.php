@@ -25,7 +25,7 @@ class FilterAdvertsTest extends TestCase
             'living_room' => 0
         ]);
 
-        $response = $this->get(route('cities.show', $advertWith->city->slug).'?livingroom=1')
+        $response = $this->get(route('cities.show', [$advertWith->city->slug, 'livingroom' => 1]))
         ->assertSee($advertWith->title)
         ->assertDontSee($advertWithout->title);
     }
@@ -47,7 +47,7 @@ class FilterAdvertsTest extends TestCase
             'rent' => 200
         ]);
 
-        $response = $this->getJson(route('cities.show', $advertWithHighRent->city->slug).'?rent=desc')->json();
+        $response = $this->getJson(route('cities.show', [$advertWithHighRent->city->slug, 'rent' => 'desc']))->json();
 
         $this->assertEquals([1000, 500, 200], array_column($response['data'], 'rent'));
     }

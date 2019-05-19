@@ -100,7 +100,7 @@ $(function () {
     source: function source(request, response) {
       $.ajax({
         url: '/ajax/cities',
-        method: 'POST',
+        method: 'GET',
         dataType: 'json',
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -109,7 +109,6 @@ $(function () {
           city: request.term
         },
         success: function success(cities) {
-          console.log(cities);
           response($.map(cities, function (city) {
             return {
               label: city.name + ', ' + city.county + ', ' + city.state,
@@ -165,7 +164,7 @@ $(function () {
           event.target.value = ui.item.label;
           $.ajax({
             url: '/ajax/streets',
-            method: 'POST',
+            method: 'GET',
             dataType: 'json',
             headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -201,7 +200,7 @@ $(function () {
     _source: function _source(request, response) {
       $.ajax({
         url: this.options.url,
-        method: 'POST',
+        method: 'GET',
         dataType: 'json',
         headers: {
           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

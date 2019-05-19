@@ -52,7 +52,10 @@ class AdvertsController extends Controller
      */
     public function store(Request $request) 
     {
-        $Advert = auth()->user()->Adverts()->create($this->validateRequest($request));
+        $attributes = $this->validateRequest($request);
+        $attributes['slug'] = $request->title;
+
+        $advert = auth()->user()->Adverts()->create($attributes);
 
         return redirect(route('admin.adverts'));
     }
@@ -69,9 +72,9 @@ class AdvertsController extends Controller
         if($request->verified) $advert->verify();
         else
         {
-            $advert->update($this->validateRequest($request));
-    
-            $advert->generateSlug(); // Refactor?
+            $attributes = $this->validateRequest($request);
+            $attributes['slug'] = $request->title;
+            $advert->update($attributes);
         }
 
         return redirect(route('admin.adverts'));

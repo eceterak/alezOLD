@@ -2,12 +2,14 @@
 
 namespace App\Observers;
 
-use App\Advert;
+use App\Mail\AdvertCreatedConfirmationMail;
 use App\Notifications\AdvertWasAdded;
+use Illuminate\Support\Facades\Mail;
+use App\Advert;
+use Illuminate\Support\Facades\App;
 
 class AdvertObserver
 {
-
     /**
      * Generate a slug when creating a new room.
      * 
@@ -16,7 +18,7 @@ class AdvertObserver
      */
     public function created(Advert $advert)
     {
-        $advert->generateSlug();
+        $advert->update(['slug' => $advert->title]);
 
         $advert->city->subscriptions
             ->where('user_id', '!=', $advert->user_id)
@@ -24,9 +26,7 @@ class AdvertObserver
                 $subscription->user->notify(new AdvertWasAdded($advert->city, $advert));
             });
 
-        // OR
-
-        //CitySubscription::where('city_id', $advert->city->id)->each->notify(new AdvertWasAdded);
+        Mail::to($advert->user)->send(new AdvertCreatedConfirmationMail());
     }
 
     /**
@@ -37,6 +37,6 @@ class AdvertObserver
      */
     public function updated(Advert $advert)
     {
-        if($advert->isDirty('title') && $advert->isClean('slug')) $advert->generateSlug();
+        if($advert->isDirty('title') && $advert->isClean('slug')) $advert->update(['slug' => $advert->title]);
     }
 }

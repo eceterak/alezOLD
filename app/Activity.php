@@ -6,18 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Activity extends Model
 {
+    /**
+     * @var array
+     */
     protected $guarded = [];
 
+    /**
+     * @var array
+     */
     protected $casts = [
         'changes' => 'array'
     ];
 
+    /**
+     * Eager load instance of user.
+     * 
+     * @var array
+     */
     protected $with = [
         'user'
     ];
 
     /**
-     * Activity is associated with user.
+     * Activity belongs to user.
      * 
      * @return App\User
      */
@@ -37,9 +48,9 @@ class Activity extends Model
     }
 
     /**
-     * Get object associated with activity.
+     * Get activity feed for given user.
      * 
-     * @return mixed
+     * @return array
      */
     public static function feed($user) 
     {

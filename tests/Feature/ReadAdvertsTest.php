@@ -34,10 +34,18 @@ class ReadAdvertsTest extends TestCase
     /** @test */
     public function ajax_can_request_adverts_from_a_city()
     {
-        //$this->withoutExceptionHandling();
-
         $response = $this->getJson(route('ajax.city.adverts', $this->advert->city->slug))->json();
 
         $this->assertCount(1, $response['data']);
+    }
+
+    /** @test */
+    public function record_a_new_visit_each_time_the_advert_is_read()
+    {
+        $advert = AdvertFactory::create();
+
+        $this->call('GET', route('adverts.show', [$advert->city->slug, $advert->slug]));
+
+        $this->assertEquals(1, $advert->fresh()->visits);
     }
 }

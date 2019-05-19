@@ -17,7 +17,7 @@ class UserNotificationsController extends Controller
     }
 
     /**
-     * Mark given notification as read.
+     * Fetch all unread notifications for a given user.
      * 
      * @return void
      */

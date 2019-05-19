@@ -6,7 +6,6 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\AdvertFactory;
 use App\Advert;
-use App\Favourite;
 
 class ManageAdvertTest extends TestCase
 {
@@ -25,17 +24,30 @@ class ManageAdvertTest extends TestCase
     /** @test */
     public function owner_of_the_advert_can_update_it() 
     {
-        $this->withoutExceptionHandling();
-
         $this->actingAs($this->advert->user)->get(route('adverts.edit', [$this->advert->city->slug, $this->advert->slug]));
 
         $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), $attributes = raw(Advert::class, [
             'city_id' => $this->advert->city->id,
             'street_id' => $this->advert->city->id,
-            'title' => 'updated'
         ]))->assertRedirect(route('adverts'));
 
         $this->assertDatabaseHas('adverts', $attributes);
+    }
+
+    /** @test */
+    public function updating_the_title_also_updates_a_slug() 
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn($this->advert->user);
+
+        $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), $attributes = raw(Advert::class, [
+            'title' => 'The title is updated',
+            'city_id' => $this->advert->city->id,
+            'street_id' => $this->advert->city->id
+        ]))->assertRedirect(route('adverts'));
+
+        $this->assertEquals('the-title-is-updated', $this->advert->fresh()->slug);
     }
 
     /** @test */
@@ -47,7 +59,7 @@ class ManageAdvertTest extends TestCase
 
         $this->actingAs($this->user())->get(route('adverts.edit', [$this->advert->city->slug, $this->advert->slug]));
         
-        $this->patch(route('adverts.update', $this->advert->slug), [])->assertStatus(403);
+        $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), [])->assertStatus(403);
     }
 
     /** @test */
@@ -57,7 +69,7 @@ class ManageAdvertTest extends TestCase
 
         //$response = $this->json('DELETE', route('adverts.destroy', $this->advert->slug));
 
-        $this->actingAs($this->advert->user)->delete(route('adverts.destroy', $this->advert->slug))->assertRedirect(route('home'));
+        $this->actingAs($this->advert->user)->delete(route('adverts.destroy', [$this->advert->city->slug, $this->advert->slug]))->assertRedirect(route('home'));
 
         $this->assertDatabaseMissing('adverts', $this->advert->only('id'));
     }
@@ -65,12 +77,12 @@ class ManageAdvertTest extends TestCase
     /** @test */
     public function guests_cannot_delete_adverts()
     {
-        $this->delete(route('adverts.destroy', $this->advert->slug))->assertRedirect(route('login'));
+        $this->delete(route('adverts.destroy', [$this->advert->city->slug, $this->advert->slug]))->assertRedirect(route('login'));
     }
 
     /** @test */
     public function users_cannot_delete_adverts_of_others()
     {
-        $this->actingAs($this->user())->delete(route('adverts.destroy', $this->advert->slug))->assertStatus(403);
+        $this->actingAs($this->user())->delete(route('adverts.destroy', [$this->advert->city->slug, $this->advert->slug]))->assertStatus(403);
     }
 }

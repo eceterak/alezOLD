@@ -19,7 +19,7 @@ class CitySubscription extends Model
     }
 
     /**
-     * It belongs to an city.
+     * It belongs to a city.
      * 
      * @return App\City
      */

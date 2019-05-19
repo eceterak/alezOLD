@@ -30,11 +30,13 @@ class AjaxController extends Controller
     {
         $city = $request->city;
 
-        $cities = City::where('name', 'LIKE', '%'.$city.'%')
-                        ->orderBy('importance', 'desc')
-                        ->limit(10)
-                        ->select('id', 'name', 'county', 'state')
-                        ->get();
+        //$cities = DB::table('cities')->selectRaw('id, name, county, state')->whereRaw('name COLLATE utf8_polish_ci LIKE ?', $city)->get();
+
+        $cities = City::where('name', 'LIKE', $city.'%')
+                    ->orderBy('importance', 'desc')
+                    ->limit(10)
+                    ->select('id', 'name', 'county', 'state')
+                    ->get();
 
         return response()->json($cities);
     }

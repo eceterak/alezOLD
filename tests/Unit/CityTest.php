@@ -8,6 +8,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\City;
 use App\Street;
 use App\Advert;
+use Facades\Tests\Setup\AdvertFactory;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\AdvertWasAdded;
 
 class CityTest extends TestCase
 {
@@ -50,7 +53,7 @@ class CityTest extends TestCase
     {
         $city = create(City::class);
 
-        $city->createSlug();
+        $city->generateSlug();
 
         $this->assertEquals(str_slug($city->name), $city->slug);
     }
@@ -119,10 +122,22 @@ class CityTest extends TestCase
     {
         $user = $this->signIn();
 
-        $city = create(City::class);
-
-        $city->subscribe();
+        $city = create(City::class)->subscribe();
 
         $this->assertTrue($city->isSubscribed);
+    }
+
+    /** @test */
+    public function it_can_notify_a_subscribers_about_a_when_a_new_advert_is_added()
+    {
+        Notification::fake();
+
+        $this->signIn();
+
+        $city = create(City::class)->subscribe();
+
+        $advert = AdvertFactory::city($city)->create();
+
+        Notification::assertSentTo(auth()->user(), AdvertWasAdded::class);
     }
 }

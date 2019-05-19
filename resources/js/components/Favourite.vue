@@ -1,5 +1,5 @@
 <template>
-    <button class="btn btn-link" @click="addFavourite">
+    <button class="btn btn-link" @click="addFavourite" v-if="authorize('notAnOwner', this.advert)">
         <i :class="classes"></i>
     </button>
 </template>
@@ -10,12 +10,18 @@
             'advert'
         ],
 
+        data() {
+            return {
+                advert: this.advert
+            }
+        },
+
         computed: {
             classes() {
                 return ['fa-heart', this.isFavourited ? 'fas' : 'far'];
             },
             endpoint() {
-                return '/pokoje/' + this.advert.slug + '/ulubione'
+                return '/pokoje/' + this.advert.city.slug + '/' + this.advert.slug + '/ulubione'
             }
         },
 

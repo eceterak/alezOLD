@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\RecordsActivity;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'avatar_path'
     ];
 
     /**
@@ -26,7 +26,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $visible = [
-        'name', 'role',
+        'id', 'name', 'role', 'avatar_path'
     ];
 
     /**
@@ -49,7 +49,7 @@ class User extends Authenticatable
     }
 
     /**
-     * User can have many adverts.
+     * User has many adverts.
      *
      * @return Collection
      */
@@ -89,13 +89,13 @@ class User extends Authenticatable
     }
 
     /**
-     * Return all activities for the user.
+     * User has many activities.
      * 
      * @return App\Activity
      */
     public function activities() 
     {
-        return $this->hasMAny(Activity::class);
+        return $this->hasMany(Activity::class);
     }
 
     /**
@@ -109,12 +109,32 @@ class User extends Authenticatable
     }
 
     /**
+     * Get latest Advert that belongs to user.
+     * 
+     * @return App\Advert
+     */
+    public function lastAdvert()
+    {
+        return $this->hasOne(Advert::class)->latest();
+    }
+
+    /**
      * Check if user has admin privileges.
      * 
      * @return bool
      */
-     public function isAdmin() 
-     {
+    public function isAdmin() 
+    {
         return $this->role === 1;
-     }
+    }
+
+    /**
+     * Return a path to avatar or default image if user has not uploaded one.
+     * 
+     * @return string
+     */
+    public function getAvatarPathAttribute($avatar_path) 
+    {
+        return (!is_null($avatar_path)) ? '/storage/'.$avatar_path : '/storage/avatars/notfound.png';
+    }
 }

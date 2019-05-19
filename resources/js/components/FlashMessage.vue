@@ -1,5 +1,5 @@
 <template>
-    <div class="alert-flash bg-red p-3 text-white rounded" v-show="show">{{ body }}</div>
+    <div class="alert-flash p-3 text-white rounded" :class="'alert-' + level" v-show="show" v-text="body"></div>
 </template>
 
 <script>
@@ -7,24 +7,32 @@
         props: [
             'message'
         ],
+
         data() {
             return {
                 show: false,
+                level: 'sucess',
                 body: this.message
             }
         },
+
         created() {
             if(this.message) {
-                this.flash(this.message);
+                this.flash();
             }
 
-            window.events.$on('flash', message => {
-                this.flash(message);
+            window.events.$on('flash', data => {
+                this.flash(data);
             });
         },
+
         methods: {
-            flash(message) {
-                this.body = message;
+            flash(data) {
+                if(data) {
+                    this.body = data.message;
+                    this.level = data.level;
+                }
+                
                 this.show = true;
 
                 this.hide();

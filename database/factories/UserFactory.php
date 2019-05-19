@@ -23,3 +23,9 @@ $factory->define(App\User::class, function (Faker $faker) {
         'remember_token' => Str::random(10),
     ];
 });
+
+$factory->state(App\User::class, 'unconfirmed', function (Faker $faker) {
+    return [
+        'email_verified_at' => null
+    ];
+});

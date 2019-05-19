@@ -8,6 +8,7 @@ use Facades\Tests\Setup\AdvertFactory;
 use App\TemporaryAdvert;
 use App\Advert;
 use App\City;
+use Carbon\Carbon;
 
 class AdvertTest extends TestCase
 {
@@ -39,7 +40,7 @@ class AdvertTest extends TestCase
     /** @test */
     public function it_has_a_slug()
     {
-        $this->assertEquals(str_slug($this->advert->title.'-uid-'.$this->advert->id), $this->advert->slug);
+        $this->assertEquals(str_slug($this->advert->title), $this->advert->slug);
     }
 
     /** @test */
@@ -121,5 +122,17 @@ class AdvertTest extends TestCase
         $this->advert->favourite();
 
         $this->assertTrue($this->advert->isFavourited());
+    }
+
+    /** @test */
+    public function it_knows_if_it_was_just_published()
+    {
+        $advert = AdvertFactory::create();
+        
+        $this->assertTrue($advert->wasJustPublished());
+        
+        $advert->created_at = Carbon::now()->subMonth();
+
+        $this->assertFalse($advert->wasJustPublished());
     }
 }

@@ -15,8 +15,6 @@ class CitiesDisplayTest extends TestCase
     /** @test */
     public function a_user_can_view_adverts_from_a_specific_city() 
     {
-        $this->withoutExceptionHandling();
-
         $city = create(City::class);
 
         $advertInCity = create(Advert::class, [

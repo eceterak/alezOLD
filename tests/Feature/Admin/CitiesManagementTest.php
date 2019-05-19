@@ -14,6 +14,8 @@ class CitiesManagementTest extends TestCase
     /** @test */
     public function city_can_be_created() 
     {        
+        $this->withoutExceptionHandling();
+        
         $this->signInAdmin();
 
         $this->get(action('Admin\CitiesController@create'))->assertStatus(200);

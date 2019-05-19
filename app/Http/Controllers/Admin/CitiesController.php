@@ -65,9 +65,9 @@ class CitiesController extends Controller
      */
     public function store(Request $request) 
     {
-        $attributes = $this->validateRequest($request); // Refactor?
+        $attributes = $this->validateRequest($request); // Refactor?s
         
-        $attributes['slug'] = str_slug($attributes['name']); // Refactor
+        //$attributes['slug'] = str_slug($attributes['name']); // Refactor
 
         City::create($attributes);
         

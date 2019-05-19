@@ -21,7 +21,8 @@ class CreateAdvertsTable extends Migration
             $table->unsignedInteger('street_id')->nullable();
             $table->boolean('verified')->default(false);
             $table->boolean('active')->default(false);
-            $table->char('slug', 80)->nullable();
+            $table->string('slug')->nullable()->unique();
+            $table->unsignedInteger('visits')->default(0);
             
             // $$$.
             $table->unsignedSmallInteger('rent')->nullable();

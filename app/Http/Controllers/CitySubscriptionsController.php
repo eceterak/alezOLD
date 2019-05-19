@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\City;
 
 class CitySubscriptionsController extends Controller
 {
     /**
+     * Add city to subscriptions.
      * 
      * @param City $city
      * @return void
@@ -18,6 +18,7 @@ class CitySubscriptionsController extends Controller
     }
 
     /**
+     * Remove city from subscriptions.
      * 
      * @param City $city
      * @return void

@@ -9,8 +9,16 @@ class Favourite extends Model
 {
     use RecordsActivity;
 
+    /**
+     * @var array
+     */
     protected $guarded = [];
 
+    /**
+     * It belongs to Advert.
+     * 
+     * @return App\Advert
+     */
     public function advert()
     {
         return $this->belongsTo(Advert::class);

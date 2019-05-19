@@ -15,6 +15,8 @@ class AdvertsManagementTest extends TestCase
     /** @test */
     public function admin_can_create_an_advert()
     {
+        $this->withoutExceptionHandling();
+
         $this->signInAdmin();
 
         $street = create(Street::class);

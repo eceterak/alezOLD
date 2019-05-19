@@ -9,7 +9,7 @@ class Street extends Model
     protected $guarded = [];
 
     /**
-     * Street belongs to a city.
+     * It belongs to a city.
      * 
      * @return App\City
      */

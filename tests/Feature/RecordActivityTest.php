@@ -77,7 +77,7 @@ class RecordActivityTest extends TestCase
     {        
         $advert = AdvertFactory::create();
 
-        $this->actingAs($advert->user)->delete(route('adverts.destroy', $advert->slug))->assertRedirect(route('home'));
+        $this->actingAs($advert->user)->delete(route('adverts.destroy', [$advert->city->slug, $advert->slug]))->assertRedirect(route('home'));
 
         $this->assertDatabaseMissing('activities', [
             'subject_id' => $advert->id,

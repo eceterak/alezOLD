@@ -22,6 +22,8 @@ class NotificationsTest extends TestCase
     /** @test */
     public function a_notification_is_prepared_when_a_subscribed_city_receives_a_new_advert_that_is_not_by_current_user()
     {
+        $this->withoutExceptionHandling();
+
         $city = create(City::class)->subscribe();
         
         tap(auth()->user(), function($user) use ($city) {

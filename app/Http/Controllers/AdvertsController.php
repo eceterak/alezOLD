@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Filters\AdvertFilters;
 use App\Advert;
 use App\City;
+use App\Http\Requests\CreateAdvertRequest;
 
 class AdvertsController extends Controller
 {
@@ -33,25 +34,9 @@ class AdvertsController extends Controller
      */
     public function show(City $city, Advert $advert) 
     {   
-        //return $advert;
+        $advert->increment('visits');
 
         return view('adverts.show')->with([
-            'advert' => $advert
-        ]);
-    }
-    
-    /**
-     * Edit an advert.
-     * 
-     * @param City $city
-     * @param Advert $advert
-     * @return view
-     */
-    public function edit(City $city, Advert $advert) 
-    {      
-        $this->authorize('update', $advert);
-
-        return view('adverts.edit')->with([
             'advert' => $advert
         ]);
     }
@@ -71,25 +56,45 @@ class AdvertsController extends Controller
     /**
      * Store a new advert in a database.
      * 
+     * @Refactor
      * @param Request $request
      * @return redirect
      */
-    public function store(Request $request) 
+    public function store(CreateAdvertRequest $request) 
     {
-        auth()->user()->adverts()->create($this->validateRequest($request));
-
         // Get temporary advert
-        $temporary = Advert::getTemporary($request->temp, $request->token);
+        //$temporary = Advert::getTemporary($request->temp, $request->token);
 
-        // Create new advert
+        $advert = auth()->user()->adverts()->create($request->validated()); // @refactor user->addAdvert();
+
+        if(request()->wantsJson())
+        {
+            return response($advert, 201);
+        }
 
         // Update images
 
         // Delete temporary advert
-        $temporary->delete();
+        //$temporary->delete();
 
         return redirect(route('home'))
             ->with('flash', 'Ogloszenie dodane');
+    }
+    
+    /**
+     * Edit an advert.
+     * 
+     * @param City $city
+     * @param Advert $advert
+     * @return view
+     */
+    public function edit(City $city, Advert $advert) 
+    {      
+        $this->authorize('update', $advert);
+
+        return view('adverts.edit')->with([
+            'advert' => $advert
+        ]);
     }
 
     /**
@@ -97,16 +102,13 @@ class AdvertsController extends Controller
      * 
      * @param City $city
      * @param Advert $advert
-     * @param Request $request
      * @return redirect
      */
-    public function update(City $city, Advert $advert, Request $request) 
+    public function update(City $city, Advert $advert) 
     {        
         $this->authorize('update', $advert);
 
-        $advert->update($this->validateRequest($request));
-
-        $advert->generateSlug();
+        $advert->update($this->validateRequest());
 
         return redirect(route('adverts'));
     }
@@ -114,10 +116,11 @@ class AdvertsController extends Controller
     /**
      * Delete an advert. Accept id instead of slug.
      * 
+     * @param City $city
      * @param Advert $advert
      * @return redirect
      */
-    public function destroy(Advert $advert) 
+    public function destroy(City $city, Advert $advert) 
     {
         $this->authorize('update', $advert);
 
@@ -134,23 +137,22 @@ class AdvertsController extends Controller
     /**
      * Validate a request.
      * 
-     * @param Request $request
      * @return array
      */
-    protected function validateRequest($request) 
+    protected function validateRequest() 
     {
-        return request()->validate([
+        $attributes = request()->validate([
             'city_id' => 'required|exists:cities,id',
             'street_id' => 'sometimes|exists:streets,id',
-            'title' => 'required',
-            'description' => 'required',
+            'title' => 'required|spamfree',
+            'description' => 'required|spamfree',
             'available_from' => 'nullable',
             'minimum_stay' => 'nullable',
             'maximum_stay' => 'nullable',
             'landlord' => 'sometimes',
             'rent' => 'required',
             'deposit' => 'sometimes',
-            'bills' => 'required',
+            'bills' => 'sometimes',
             'property_type' => 'sometimes',
             'property_size' => 'sometimes',
             'living_room' => 'sometimes',
@@ -165,5 +167,7 @@ class AdvertsController extends Controller
             'minimum_age' => 'sometimes',
             'maximum_age' => 'sometimes'
         ]);
+
+        return $attributes;
     }
 }

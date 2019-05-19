@@ -17,7 +17,7 @@ class FavouritesTest extends TestCase
     {
         $advert = AdvertFactory::create();
 
-        $this->post(route('adverts.favourite.store', $advert->slug), [])->assertRedirect(route('login'));
+        $this->post(route('adverts.favourite.store', [$advert->city->slug, $advert->slug]), [])->assertRedirect(route('login'));
     }
 
     /** @test */
@@ -27,7 +27,7 @@ class FavouritesTest extends TestCase
 
         $advert = AdvertFactory::create();
 
-        $this->post(route('adverts.favourite.store', $advert->slug));
+        $this->post(route('adverts.favourite.store', [$advert->city->slug, $advert->slug]));
 
         $favourite = Favourite::first();
 
@@ -41,8 +41,8 @@ class FavouritesTest extends TestCase
 
         $advert = AdvertFactory::create();
 
-        $this->post(route('adverts.favourite.store', $advert->slug));
-        $this->post(route('adverts.favourite.store', $advert->slug));
+        $this->post(route('adverts.favourite.store', [$advert->city->slug, $advert->slug]));
+        $this->post(route('adverts.favourite.store', [$advert->city->slug, $advert->slug]));
 
         $this->assertCount(1, $advert->favourites);
     }
@@ -58,7 +58,7 @@ class FavouritesTest extends TestCase
 
         $advert->favourite();
 
-        $this->delete(route('adverts.favourite.delete', $advert->slug));
+        $this->delete(route('adverts.favourite.delete', [$advert->city->slug, $advert->slug]));
 
         $this->assertCount(0, $advert->favourites);
     }

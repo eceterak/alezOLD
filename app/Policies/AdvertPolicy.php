@@ -21,4 +21,16 @@ class AdvertPolicy
     {
         return $user->is($advert->user);
     }
+
+    /**
+     * Checks if given user can manage a Advert.
+     * 
+     * @param User $user
+     * @param Advert $advert
+     * @return bool
+     */
+    public function create(User $user) 
+    {
+        return (!is_null($user->fresh()->lastAdvert)) ? ! $user->lastAdvert->wasJustPublished() : true;
+    }
 }

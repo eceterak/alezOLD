@@ -15,6 +15,8 @@ class ActivityTest extends TestCase
     /** @test */
     public function it_has_a_user()
     {
+        $this->withoutExceptionHandling();
+
         $user = $this->signIn();
 
         $advert = AdvertFactory::create();

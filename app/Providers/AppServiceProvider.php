@@ -32,13 +32,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        \Validator::extend('spamfree', 'App\Rules\SpamFree@passes');
+
         TemporaryAdvert::observe(TemporaryAdvertObserver::class);
 
         Advert::observe(AdvertObserver::class);
-
-        Route::resourceVerbs([
-            'create' => 'dodaj',
-            'edit' => 'edytuj'
-        ]);
     }
 }

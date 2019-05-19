@@ -7,7 +7,7 @@
         </div>
         <div>
             @can('update', $advert)
-                <form action="{{ route('adverts.destroy', $advert->slug) }}" method="POST">
+                <form action="{{ route('adverts.destroy', [$advert->city->slug, $advert->slug]) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <a href="{{ route('adverts.edit', [$advert->city->slug, $advert->slug]) }}" class="btn inline-block">Edytuj</a>
@@ -42,7 +42,7 @@
         <div class="w-1/4 px-3">
             <div class="card">
                 <div class="card-content text-center">
-                    <div><img src="/storage/notfound.png" class="rounded-full w-32"></div>
+                    <div><img src="{{ $advert->user->avatar_path }}" alt="" class="rounded-full" heiight="30" width="30"></div>
                     <p class="mt-4"><a href="{{ route('profiles.show', $advert->user->name) }}">{{ $advert->user->name }}</a></p>
                 </div>
             </div>

@@ -55,12 +55,12 @@ class SearchTest extends TestCase
     /** @test */
     public function ajax_autocomplete_suggestions() 
     {
-        $city = create(City::class);
-        
-        $this->post(action('AjaxController@cities'), [
-            'city' => substr($city->name, 0, 3)
-        ])
-        ->assertSee($city->name);
+        $city = create(City::class, ['name' => 'Krakow']);
+        $city = create(City::class, ['name' => 'Krakowiany']);
+
+        $results = $this->json('GET', action('AjaxController@cities'), ['city' => substr($city->name, 0, 3)]);
+
+        $this->assertCount(2, $results->json());
     }
     
     //@test

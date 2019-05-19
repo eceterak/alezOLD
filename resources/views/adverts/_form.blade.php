@@ -45,12 +45,12 @@
     </div>
     <div class="flex -mx-4">
         <div class="form-group w-1/3 px-4">
-            <label for="advert_size">Wielkość pokoju</label>
-            <select name="advert_size" id="advert_size">
+            <label for="room_size">Wielkość pokoju</label>
+            <select name="room_size" id="room_size">
                 <option value>wybierz</option>
-                <option value="single" {{ (isset($advert)) ? ($advert->advert_size == 'single') ? 'selected' : '' :  (old('advert_size') == 'single') ? 'selected' : '' }}>jednoosobowy</option>
-                <option value="double" {{ (isset($advert)) ? ($advert->advert_size == 'double') ? 'selected' : '' :  (old('advert_size') == 'double') ? 'selected' : '' }}>dwuosobowy</option>
-                <option value="triple" {{ (isset($advert)) ? ($advert->advert_size == 'triple') ? 'selected' : '' :  (old('advert_size') == 'triple') ? 'selected' : '' }}>trzyosobowy i większy</option>
+                <option value="single" {{ (isset($advert)) ? ($advert->room_size == 'single') ? 'selected' : '' :  (old('room_size') == 'single') ? 'selected' : '' }}>jednoosobowy</option>
+                <option value="double" {{ (isset($advert)) ? ($advert->room_size == 'double') ? 'selected' : '' :  (old('room_size') == 'double') ? 'selected' : '' }}>dwuosobowy</option>
+                <option value="triple" {{ (isset($advert)) ? ($advert->room_size == 'triple') ? 'selected' : '' :  (old('room_size') == 'triple') ? 'selected' : '' }}>trzyosobowy i większy</option>
             </select>
         </div>
         <div class="form-group w-1/3 px-4">
@@ -64,7 +64,7 @@
     <div class="mb-4 pb-1 border-b border-grey">
         <h3>Zdjęcia</h3>
     </div>
-    <image-upload></image-upload>
+    <image-upload-form></image-upload-form>
     <div class="mb-4 pb-1 border-b border-grey">
         <h3>Lokalizacja</h3>
     </div>

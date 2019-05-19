@@ -7,6 +7,9 @@ use App\Advert;
 
 class City extends Model
 {
+    /**
+     * @var array
+     */
     protected $guarded = [];
 
     /**
@@ -28,20 +31,25 @@ class City extends Model
         'isSubscribed'
     ];
 
-
     /**
-     * Boot the model. Eager load the advert count.
+     * Boot the model.
      */
     protected static function boot() 
     {
         parent::boot();
 
+        //Eager load the advert count.
         static::addGlobalScope('advertCount', function($builder) {
             $builder->withCount('adverts');
         });
 
+
+        static::created(function($city) {
+            $city->generateSlug();
+        });
+
         static::deleting(function($city) {
-            $city->adverts->each->delete();
+            $city->adverts->each->delete(); // Be careful about this!
         });
     }
 
@@ -56,17 +64,17 @@ class City extends Model
     }
 
     /**
-     * Define eloquent relationship between city and adverts.
+     * City has many adverts.
      * 
      * @return Collection App\Advert
      */
     public function adverts() 
     {
-        return $this->hasMany(Advert::class);
+        return $this->hasMany(Advert::class)->latest();
     }
 
     /**
-     * City can have many streets.
+     * City has many streets.
      * 
      * @return Collection App\Street
      */
@@ -76,7 +84,7 @@ class City extends Model
     }
 
     /**
-     * Many users can subscribe to a city.
+     * City has many subscribers.
      * 
      * @return App\CitySubscription
      */
@@ -97,13 +105,13 @@ class City extends Model
     }
 
     /**
-     * Create a slug from name.
+     * Generate a slug.
      * 
      * @return void
      */
-    public function createSlug() 
+    public function generateSlug() 
     {
-        $no = City::where('name', $this->name);
+        //$no = City::where('name', $this->name); // Refactor, cities with same name must include unique number.
 
         $this->update([
             'slug' => str_slug($this->name)

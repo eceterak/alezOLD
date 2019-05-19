@@ -6,20 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 use App\Filters\QueryFilter;
 use App\Traits\RecordsActivity;
 use App\Traits\Favouritable;
+use Carbon\Carbon;
 
 class Advert extends Model
 {
     use RecordsActivity, Favouritable;
 
     /**
-     * Mass assiggnment.
-     * 
      * @var array
      */
     protected $guarded = [];
 
     /**
-     * Always eager load user details.
+     * Eager load city, user and favourites.
      * 
      * @var array
      */
@@ -49,16 +48,6 @@ class Advert extends Model
     ];
 
     /**
-     * Replace default key for route model binding.
-     * 
-     * @return string
-     */
-    public function getRouteKeyName() 
-    {
-        return 'slug';
-    }
-
-    /**
      * Casts from database to model.
      * 
      * @var array
@@ -69,7 +58,17 @@ class Advert extends Model
     ];
 
     /**
-     * Define eloquent relationship between user and advert.
+     * Replace default key for route model binding.
+     * 
+     * @return string
+     */
+    public function getRouteKeyName() 
+    {
+        return 'slug';
+    }
+
+    /**
+     * Advert belongs to user.
      * 
      * @return App\User
      */
@@ -79,7 +78,7 @@ class Advert extends Model
     }
 
     /**
-     * Define eloquent relationship between city and advert.
+     * Advert belongs to city.
      * 
      * @return App\City
      */
@@ -90,7 +89,7 @@ class Advert extends Model
     }
 
     /**
-     * Define eloquent relationship between street and advert.
+     * Advert belongs to street.
      * 
      * @return App\City
      */
@@ -155,9 +154,9 @@ class Advert extends Model
     }
 
     /**
-     * Verify an advert. Verified advert should be also activated.
+     * Verify an advert.
      * 
-     * @return void
+     * @return this
      */
     public function verify() 
     {
@@ -167,11 +166,14 @@ class Advert extends Model
         ]);
 
         $this->recordActivity('verified_advert');
+
+        return $this;
     }
 
     /**
      * Send an inquiry about the advert.
      * 
+     * @refactor
      * @param string $body
      * @return void
      */
@@ -180,7 +182,9 @@ class Advert extends Model
         $conversation = $this->conversations()->create([
             'receiver_id' => $this->user->id,
             'sender_id' => auth()->user()->id
-        ]);
+        ]); 
+
+        // Conversation should be responsible for creating a new message?
 
         auth()->user()->messages()->create([
             'conversation_id' => $conversation->id,
@@ -189,15 +193,20 @@ class Advert extends Model
     }
 
     /**
-     * Generate a slug after advert is added to a database (it uses a id).
+     * Set a unique slug based on the title and id.
      * 
-     * @return void
+     * @param string $title
      */
-    public function generateSlug() 
+    public function setSlugAttribute($title) 
     {
-        $this->update([
-            'slug' => str_slug($this->title.'-uid-'.$this->encodeId())
-        ]);
+        $slug = str_slug($title);
+
+        if(static::where('slug', $slug)->exists())
+        {
+            $slug = $slug.'-'.$this->id;
+        }
+
+        $this->attributes['slug'] = $slug;
     }
 
     /**
@@ -208,6 +217,17 @@ class Advert extends Model
     public function encodeId() 
     {
         return base_convert($this->id, 10, 36);
+    }
+
+    /**
+     * Check if advert was published within the last minute.
+     * 
+     * @return boolean
+     */
+    public function wasJustPublished() 
+    {
+        // gt stands for Greater Than, subMinute, substracts a minute from current time.
+        return $this->created_at->gt(Carbon::now()->subMinute());
     }
 
 }
