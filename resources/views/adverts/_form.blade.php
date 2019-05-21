@@ -1,19 +1,19 @@
-<form action="{{ route(...$route) }}" method="POST" name="{{ $name }}" class="form" id="advert-form-va">  
+<form action="{{ route(...$route) }}" method="POST" name="{{ $name }}" class="form" id="advert-form-va" enctype="multipart/form-data">  
     @csrf
     @method($method)
     <div class="mb-4 pb-1 border-b border-grey">
         <h3>Informacje podstawowe</h3>
     </div>
     <div class="form-group">
-        <label for="title">Tytuł ogłoszenia</label>
-        <input type="text" name="title" id="title" value="{{ (isset($advert)) ? $advert->title :  old('title') }}" data-validation-length="min:3" data-validation-name="Tytuł" data-validation-rqmessage="Tytuł jest wymagany" required>
+        <label for="title">Tytuł ogłoszenia*</label>
+        <input type="text" name="title" id="title" value="{{ (isset($advert)) ? $advert->title :  old('title') }}" data-validation-length="min:5" data-validation-name="Tytuł" data-validation-rqmessage="Tytuł jest wymagany" required>
     </div>
     <div class="flex -mx-4">
         <div class="form-group w-1/3 px-4">
-            <label for="rent">Czynsz</label>
+            <label for="rent">Czynsz*</label>
             <div class="flex -mx-2">
                 <div class="w-2/3 px-2">
-                    <input type="number" name="rent" id="rent" value="{{ (isset($advert)) ? $advert->rent :  old('rent') }}">
+                    <input type="number" name="rent" id="rent" value="{{ (isset($advert)) ? $advert->rent :  old('rent') }}" data-validation-range="min:100" required>
                 </div>
                 <div class="w-1/3 flex px-2">
                     <span class="self-end">zł</span>
@@ -24,7 +24,7 @@
             <label for="rent">Opłaty dodatkowe</label>
             <div class="flex -mx-2">
                 <div class="w-2/3 px-2">
-                    <input type="number" name="bills" id="bills" value="{{ (isset($advert)) ? $advert->bills :  old('bills') }}">
+                    <input type="number" name="bills" id="bills" value="{{ (isset($advert)) ? $advert->bills :  old('bills') }}" placeholder="0">
                 </div>
                 <div class="w-1/3 flex px-2">
                     <span class="self-end">zł</span>
@@ -35,7 +35,7 @@
             <label for="rent">Kaucja</label>
             <div class="flex -mx-2">
                 <div class="w-2/3 px-2">
-                    <input type="number" name="deposit" id="deposit" value="{{ (isset($advert)) ? $advert->deposit :  old('deposit') }}">
+                    <input type="number" name="deposit" id="deposit" value="{{ (isset($advert)) ? $advert->deposit :  old('deposit') }}" placeholder="0">
                 </div>
                 <div class="w-1/3 flex px-2">
                     <span class="self-end">zł</span>
@@ -43,35 +43,27 @@
             </div>
         </div>
     </div>
-    <div class="flex -mx-4">
+    {{-- <div class="flex -mx-4">
         <div class="form-group w-1/3 px-4">
             <label for="room_size">Wielkość pokoju</label>
             <select name="room_size" id="room_size">
                 <option value>wybierz</option>
                 <option value="single" {{ (isset($advert)) ? ($advert->room_size == 'single') ? 'selected' : '' :  (old('room_size') == 'single') ? 'selected' : '' }}>jednoosobowy</option>
                 <option value="double" {{ (isset($advert)) ? ($advert->room_size == 'double') ? 'selected' : '' :  (old('room_size') == 'double') ? 'selected' : '' }}>dwuosobowy</option>
-                <option value="triple" {{ (isset($advert)) ? ($advert->room_size == 'triple') ? 'selected' : '' :  (old('room_size') == 'triple') ? 'selected' : '' }}>trzyosobowy i większy</option>
             </select>
         </div>
-        <div class="form-group w-1/3 px-4">
-            <label for="landlord">Jestem</label>
-            <select name="landlord" id="landlord">
-                <option value="live_in" {{ (isset($advert)) ? ($advert->landlord == 'live_in') ? 'selected' : '' :  (old('landlord') == 'live_in') ? 'selected' : '' }}>Właścicielem nieruchomości</option>
-                <option value="agent" {{ (isset($advert)) ? ($advert->landlord == 'agent') ? 'selected' : '' :  (old('landlord') == 'agent') ? 'selected' : '' }}>Pośrednikiem</option>
-            </select>
-        </div>
-    </div>
+    </div> --}}
     <div class="mb-4 pb-1 border-b border-grey">
         <h3>Zdjęcia</h3>
     </div>
-    <image-upload-form></image-upload-form>
+    <image-upload-form :temp=" {{ 123 }}"></image-upload-form>
     <div class="mb-4 pb-1 border-b border-grey">
         <h3>Lokalizacja</h3>
     </div>
     @if(isset($advert->city))
         <div class="flex -mx-4">
             <div class="form-group w-1/2 px-4">
-                <label for="city_id">Miasto</label>
+                <label for="city_id">Miasto*</label>
                 <input type="text" value="{{ $advert->city->name }}" disabled>
                 <input type="hidden" name="city_id" value="{{ $advert->city->id }}">
             </div>
@@ -97,8 +89,8 @@
         <h3>Informacje szczegółowe</h3>
     </div>
     <div class="form-group">
-        <label for="description">Opis</label>
-        <textarea name="description" id="description">{{ (isset($advert)) ? $advert->description :  old('description') }}</textarea>
+        <label for="description">Opis*</label>
+        <textarea name="description" id="description" data-validation-length="min:30" required>{{ (isset($advert)) ? $advert->description :  old('description') }}</textarea>
     </div>
     <div class="flex -mx-4">
         <div class="form-group w-1/3 px-4">
@@ -208,39 +200,43 @@
             </select>
         </div>
         <div class="form-group w-1/3 px-4">
-            <label for="minimum_age">Przedział wiekowy</label>
+            <label for="minimum_age">Minimalny wiek</label>
             <select name="minimum_age" id="minimum_age">
                 <option value>Brak preferencji</option>
                 <option value="18">18</option>
-                <option value="N">31 - 50</option>
-                <option value="N">51+</option>
             </select>
         </div>
     </div>
-    <div class="form-group w-1/3 px-4">
-        <label for="maximum_age">Maksymalny wiek</label>
-        <select name="maximum_age" id="maximum_age">
-            <option value>N</option>
-            <option value="99">99</option>
-            <option value="N">K</option>
-        </select>
+    <div class="flex -mx-4">
+        <div class="form-group w-1/3 px-4">
+            <label for="maximum_age">Maksymalny wiek</label>
+            <select name="maximum_age" id="maximum_age">
+                <option value>N</option>
+                <option value="99">99</option>
+            </select>
+        </div>
     </div>
-    <div class="form-group w-1/3 px-4">
-        <label for="couples">Pary</label>
-        <input type="checkbox" name="couples" id="couples" value="1" {{ (isset($advert)) ? ($advert->couples) ? 'checked' : '' :  (old('couples')) ? 'checked' : '' }}>
+    <div class="flex -mx-4">
+        <div class="form-group w-1/3 px-4">
+            <input type="checkbox" name="couples" id="couples" value="1" {{ (isset($advert)) ? ($advert->couples) ? 'checked' : '' :  (old('couples')) ? 'checked' : '' }}>
+            <label for="couples">Pary</label>
+        </div>
+        <div class="form-group w-1/3 px-4">
+            <input type="checkbox" name="pets" id="pets" value="1" {{ (isset($advert)) ? ($advert->pets) ? 'checked' : '' :  (old('pets')) ? 'checked' : '' }}>
+            <label for="pets">Zwierzeta</label>
+        </div>
+        <div class="form-group w-1/3 px-4">
+            <input type="checkbox" name="smoking" id="smoking" value="1" {{ (isset($advert)) ? ($advert->smoking) ? 'checked' : '' :  (old('smoking')) ? 'checked' : '' }}>
+            <label for="smoking">Palacze</label>
+        </div>
     </div>
-    <div class="form-group w-1/3 px-4">
-        <label for="pets">Zwierzeta</label>
-        <input type="checkbox" name="pets" id="pets" value="1" {{ (isset($advert)) ? ($advert->pets) ? 'checked' : '' :  (old('pets')) ? 'checked' : '' }}>
+    <div class="flex -mx-4">
+        <div class="px-4 w-full">
+            <p>Dodając ogłoszenie ackeptuję Regulamin serwisu alez.pl.</p>
+        </div>
     </div>
-    <div class="form-group w-1/3 px-4">
-        <label for="smoking">Palacze</label>
-        <input type="checkbox" name="smoking" id="smoking" value="1" {{ (isset($advert)) ? ($advert->smoking) ? 'checked' : '' :  (old('smoking')) ? 'checked' : '' }}>
+    <div>
+        <button type="submit" class="btn btn-reverse mt-4">{{ $button }}</button>
     </div>
-    @isset($temp)
-        <input type="hidden" name="temp" value="{{ $temp->id }}">
-        <input type="hidden" name="token" value="{{ $temp->token }}">
-    @endisset
-    <button type="submit" class="btn btn-reverse">{{ $button }}</button>
     @include('components._errors')
 </form>

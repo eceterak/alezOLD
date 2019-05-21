@@ -101,6 +101,7 @@ Route::get('/pokoje/{city}/ajax/adverts', 'AjaxController@index')->name('ajax.ci
 
 // Api
 Route::post('/api/uzytkownicy/{user}/avatars', 'Api\AvatarsController@store')->middleware('auth')->name('api.users.avatars.store');
+Route::post('/api/ogloszenia/zdjecia/upload', 'Api\PhotosUploadController@store')->middleware('auth')->name('api.adverts.photos.store');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

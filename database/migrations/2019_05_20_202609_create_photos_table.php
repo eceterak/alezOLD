@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTemporaryAdvertsTable extends Migration
+class CreatePhotosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,14 @@ class CreateTemporaryAdvertsTable extends Migration
      */
     public function up()
     {
-        Schema::create('temporary_adverts', function (Blueprint $table) {
+        Schema::create('photos', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('token', 40);
+            $table->unsignedInteger('temporary_advert_id')->nullable();
+            $table->unsignedInteger('advert_id')->nullable();
+            $table->string('url')->unique();
             $table->timestamps();
+
+            $table->foreign('advert_id')->references('id')->on('adverts')->onDelete('cascade');
         });
     }
 
@@ -27,6 +31,6 @@ class CreateTemporaryAdvertsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('temporary_adverts');
+        Schema::dropIfExists('photos');
     }
 }

@@ -24,5 +24,8 @@
         "vue-template-compiler": "^2.6.8",
         "cross-env": "^5.1",
         "resolve-url-loader": "^2.3.1"
+    },
+    "dependencies": {
+        "js-cookie": "^2.2.0"
     }
 }

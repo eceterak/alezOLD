@@ -1,27 +1,22 @@
+import Axios from "axios";
+
 $(function() {
 
-    // index city autocomplete
     $('#city', 'form[name="search_master_form"]').autocomplete({
         minLength: 3,
+        delay: 600,
         source: function(request, response) {
-            $.ajax({
-                url: '/ajax/cities',
-                method: 'GET',
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {
+            axios.get('/ajax/cities', {
+                params: {
                     city: request.term
-                },
-                success: function(cities) {
-                    response($.map(cities, function(city) {
-                        return {
-                            label: city.name + ', ' + city.county + ', ' + city.state,
-                            value: city.id
-                        }
-                    }));
                 }
+            }).then(function(cities) {
+                response($.map(cities.data, function(city) {
+                    return {
+                        label: city.name + ', ' + city.county + ', ' + city.state,
+                        value: city.id
+                    }
+                }));       
             });
         },
         focus: function(event, ui) {
@@ -219,7 +214,7 @@ $(function() {
         requiredMessage: function(name) {
             return name + ' jest wymagany';
         },
-        liveValidation: false
+        liveValidation: true
     });
 
 });

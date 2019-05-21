@@ -19,18 +19,14 @@
 }
 
 .card {
-    @apply rounded bg-white shadow;
-    
-    header {
-        @apply flex p-4 justify-between items-center;
+    @apply relative flex flex-col min-w-0 break-words bg-white rounded bg-white shadow;
 
-        h3 {
-            @apply font-normal;
-        }
+    .card-body {
+        @apply p-4 flex-auto;
     }
 
-    .card-content {
-        @apply p-4;
+    .card-title {
+        @apply mb-3;
     }
 }
 

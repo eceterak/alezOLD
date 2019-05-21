@@ -1,16 +1,15 @@
 @extends('layouts.master')
 
 @section('lead')
+
     <div class="card">
-        <header>
-            <h3>Dodaj ogłoszenie</h3>
-        </header>
-        <div class="card-content"> 
+        <div class="card-body"> 
+            <h3 class="mb-5">Dodaj ogłoszenie</h3>
             @include('adverts._form', [
-                'route' => ['adverts.store'],
+                'route' => ['adverts.store', session('create_advert_token')],
                 'name' => 'create_new_advert',
                 'method' => 'POST',
-                'button' => 'Dodaj'
+                'button' => 'Dodaj ogłoszenie'
             ])
         </div>
     </div>

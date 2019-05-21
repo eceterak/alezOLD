@@ -5,7 +5,6 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\AdvertFactory;
-use App\TemporaryAdvert;
 use App\Advert;
 use App\City;
 use Carbon\Carbon;
@@ -46,19 +45,15 @@ class AdvertTest extends TestCase
     /** @test */
     public function it_requires_a_title() 
     {
-        $this->actingAs($this->user())->post(route('adverts.store'), raw(Advert::class, [
-        'title' => null
-        ]))
-        ->assertSessionHasErrors('title');
+        $this->actingAs($this->user())->post(route('adverts.store'))
+            ->assertSessionHasErrors('title');
     }
 
     /** @test */
     public function it_requires_a_rent() 
     {
-        $this->actingAs($this->user())->post(route('adverts.store'), raw(Advert::class, [
-        'rent' => null
-        ]))
-        ->assertSessionHasErrors('rent');
+        $this->actingAs($this->user())->post(route('adverts.store'))
+            ->assertSessionHasErrors('rent');
     }
 
     /** @test */
@@ -66,24 +61,19 @@ class AdvertTest extends TestCase
     {
         $city = create(City::class);
 
-        $this->actingAs($this->user())->post(route('adverts.store'), raw(Advert::class, [
-        'city_id' => null
-        ]))
-        ->assertSessionHasErrors('city_id');
+        $this->actingAs($this->user())->post(route('adverts.store'))
+            ->assertSessionHasErrors('city_id');
 
         $this->actingAs($this->user())->post(route('adverts.store'), raw(Advert::class, [
         'city_id' => 9999
-        ]))
-        ->assertSessionHasErrors('city_id');
+        ]))->assertSessionHasErrors('city_id');
     }
 
     /** @test */
     public function it_requires_a_description() 
     {
-        $this->actingAs($this->user())->post(route('adverts.store'), raw(Advert::class, [
-            'description' => null
-        ]))
-        ->assertSessionHasErrors('description');
+        $this->actingAs($this->user())->post(route('adverts.store'))
+            ->assertSessionHasErrors('description');
     }
 
     /** @test */
@@ -104,14 +94,6 @@ class AdvertTest extends TestCase
         $this->advert->inquiry('hi');
 
         $this->assertCount(1, $this->advert->conversations);
-    }
-
-    /** @test */
-    public function it_can_create_a_temporary_advert()
-    {
-        Advert::temporary();
-
-        $this->assertCount(1, TemporaryAdvert::all());
     }
 
     /** @test */

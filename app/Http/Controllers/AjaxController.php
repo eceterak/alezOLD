@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Faker\Generator as Faker;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\City;
 use App\Street;
@@ -30,13 +31,7 @@ class AjaxController extends Controller
     {
         $city = $request->city;
 
-        //$cities = DB::table('cities')->selectRaw('id, name, county, state')->whereRaw('name COLLATE utf8_polish_ci LIKE ?', $city)->get();
-
-        $cities = City::where('name', 'LIKE', $city.'%')
-                    ->orderBy('importance', 'desc')
-                    ->limit(10)
-                    ->select('id', 'name', 'county', 'state')
-                    ->get();
+        $cities = DB::table('cities')->selectRaw('id, name, county, state')->whereRaw("name COLLATE utf8mb4_unicode_520_ci LIKE ?", $city.'%')->get();
 
         return response()->json($cities);
     }

@@ -3,10 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 use App\Advert;
 
 class City extends Model
 {
+
+    use Searchable;
+
     /**
      * @var array
      */
@@ -61,6 +65,18 @@ class City extends Model
     public function getRouteKeyName() 
     {
         return 'slug';
+    }
+
+    /**
+     * 
+     * 
+     * @return
+     */
+    public function toSearchableArray() 
+    {
+        return [
+            'name' => $this->name
+        ];
     }
 
     /**

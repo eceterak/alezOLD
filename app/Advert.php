@@ -110,27 +110,15 @@ class Advert extends Model
     }
 
     /**
-     * Create a temporary advert.
      * 
-     * @return App\TemporaryAdvert
-     */
-    static public function temporary() 
-    {
-        return TemporaryAdvert::create();
-    }
-
-    /**
-     * Find a temporary advert.
      * 
-     * @param int $id
-     * @param string $token
-     * @return App\TemporaryAdvert
+     * @return App\Photo
      */
-    static public function getTemporary($id, $token) 
+    public function photos() 
     {
-        return TemporaryAdvert::where('id', $id)->where('token', $token)->firstOrFail();
+        return $this->hasMany(Photo::class);
     }
-
+    
     /**
      * Return a portion of a title.
      * 

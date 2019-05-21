@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Filters\AdvertFilters;
+use App\Http\Requests\CreateAdvertRequest;
+use Illuminate\Support\Facades\DB;
 use App\Advert;
 use App\City;
-use App\Http\Requests\CreateAdvertRequest;
 
 class AdvertsController extends Controller
 {
@@ -48,9 +49,9 @@ class AdvertsController extends Controller
      */
     public function create() 
     {
-        return view('adverts.create')->with([
-            'temp' => Advert::temporary()
-        ]);
+        request()->session()->put('create_advert_token', str_random(30).substr(md5(now()->createFromTime()), 0, 10));
+
+        return view('adverts.create');
     }
 
     /**
@@ -62,20 +63,21 @@ class AdvertsController extends Controller
      */
     public function store(CreateAdvertRequest $request) 
     {
-        // Get temporary advert
-        //$temporary = Advert::getTemporary($request->temp, $request->token);
-
         $advert = auth()->user()->adverts()->create($request->validated()); // @refactor user->addAdvert();
 
+        if(request()->has('photos'))
+        {
+            $photos = explode(',', request('photos'));
+
+            $images = DB::table('photos')->whereIn('id', $photos)->update([
+                'advert_id' => $advert->id
+            ]);
+        }
+    
         if(request()->wantsJson())
         {
             return response($advert, 201);
         }
-
-        // Update images
-
-        // Delete temporary advert
-        //$temporary->delete();
 
         return redirect(route('home'))
             ->with('flash', 'Ogloszenie dodane');

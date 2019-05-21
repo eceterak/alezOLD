@@ -83,7 +83,7 @@ class AdvertFactory
      */
     public function raw($data = [], $amount = 1) 
     {
-        return $this->make('create', $data, $amount);
+        return $this->make('raw', $data, $amount);
     }
     
     /**

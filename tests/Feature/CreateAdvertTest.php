@@ -7,7 +7,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Mail\AdvertCreatedConfirmationMail;
 use Facades\Tests\Setup\AdvertFactory;
 use Illuminate\Support\Facades\Mail;
-use App\TemporaryAdvert;
 use App\Advert;
 use App\Street;
 use App\User;
@@ -17,18 +16,8 @@ class CreateAdvertTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function visiting_create_new_advert_page_generates_a_temporary_advert()
-    {
-        $this->actingAs($this->user())->get(route('adverts.create'));
-
-        $this->assertCount(1, TemporaryAdvert::all());
-    }
-
-    /** @test */
     public function a_user_must_confirm_email_address_before_adding_a_new_advert()
     {
-        $this->withoutExceptionHandling();
-
         $user = factory(User::class)->states('unconfirmed')->create();
 
         $this->actingAs($user)->get(route('adverts.create'))
@@ -46,53 +35,40 @@ class CreateAdvertTest extends TestCase
 
         $this->assertEquals($firstAdvert->fresh()->slug, 'hi-ho-lets-go');
 
-        $secondAdvert = $this->postJson(route('adverts.store', $firstAdvert->toArray()))->json();
+        $secondAdvert = AdvertFactory::create([
+            'title' => 'hi ho lets go',
+        ]);
 
-        $this->assertEquals('hi-ho-lets-go-'.$secondAdvert['id'], $secondAdvert['slug']);
+        $this->assertEquals('hi-ho-lets-go-'.$secondAdvert->id, $secondAdvert->slug);
     }
 
     /** @test */
     public function user_can_create_an_advert()
     {   
-        $this->withoutExceptionHandling();
-
         $this->actingAs($this->user())->get(route('adverts.create'))->assertStatus(200);
 
         $street = create(Street::class);
-
-        $temporary = TemporaryAdvert::first();
         
         $response = $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
-            'temp' => $temporary->id,
-            'token' => $temporary->token,
             'city_id' => $street->city->id,
             'street_id' => $street->id
-        ]))
-        ->assertRedirect(route('home'));
-
-        //dd($response->headers->get('Location'))
-
+        ]))->assertRedirect(route('home'));
+        
         Advert::where('title', $attributes['title'])->first();
-                
-        //$this->assertEmpty(TemporaryAdvert::all());
+        
+        //dd($response->headers->get('Location'))
     }
 
     /** @test */
     public function email_is_sent_to_owner_after_adding_a_new_advert()
     {
-        $this->withoutExceptionHandling();
-
         Mail::fake();
 
         $this->actingAs($this->user())->get(route('adverts.create'))->assertStatus(200);
 
         $street = create(Street::class);
-
-        $temporary = TemporaryAdvert::first();
         
         $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
-            'temp' => $temporary->id,
-            'token' => $temporary->token,
             'city_id' => $street->city->id,
             'street_id' => $street->id
         ]))
@@ -110,7 +86,7 @@ class CreateAdvertTest extends TestCase
     /** @test */
     public function guest_cannot_create_advert()
     {
-        $this->post(route('adverts.store'))->assertRedirect(route('login'));
+        $this->post(route('adverts.store', [1, 0]))->assertRedirect(route('login'));
     }
 
     /** @test */
@@ -119,18 +95,10 @@ class CreateAdvertTest extends TestCase
         $this->withoutExceptionHandling();
 
         $this->signIn();
-
-        $street = create(Street::class);
-
-        $temporary = create(TemporaryAdvert::class);
         
         $this->expectException(\Exception::class);
         
         $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
-            'temp' => $temporary->id,
-            'token' => $temporary->token,
-            'city_id' => $street->city->id,
-            'street_id' => $street->id,
             'description' => 'spam message'
         ]));
     }
@@ -143,27 +111,14 @@ class CreateAdvertTest extends TestCase
         $this->signIn();
 
         $street = create(Street::class);
-
-        $temporary = create(TemporaryAdvert::class);
                 
         $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
-            'temp' => $temporary->id,
-            'token' => $temporary->token,
             'city_id' => $street->city->id,
             'street_id' => $street->id
-        ]))
-        ->assertRedirect(route('home'));
-
-        $temporary = create(TemporaryAdvert::class);
+        ]))->assertRedirect(route('home'));
 
         $this->expectException(\Exception::class);
                         
-        $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
-            'temp' => $temporary->id,
-            'token' => $temporary->token,
-            'city_id' => $street->city->id,
-            'street_id' => $street->id
-        ]))
-        ->assertRedirect();
+        $this->post(route('adverts.store'))->assertRedirect();
     }
 }

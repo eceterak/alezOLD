@@ -34,8 +34,6 @@ class AppServiceProvider extends ServiceProvider
     {
         \Validator::extend('spamfree', 'App\Rules\SpamFree@passes');
 
-        TemporaryAdvert::observe(TemporaryAdvertObserver::class);
-
         Advert::observe(AdvertObserver::class);
     }
 }
