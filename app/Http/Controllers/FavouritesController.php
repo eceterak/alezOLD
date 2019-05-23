@@ -3,18 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Advert;
-use App\City;
 
 class FavouritesController extends Controller
 {
     /**
-     * Favourite an advert.
+     * User added advert to her favourites.
      * 
      * @param Advert $advert
-     * @param City $city
+     * @param $city
      * @return redirect
      */
-    public function store(City $city, Advert $advert) 
+    public function store($city, Advert $advert) 
     {
         $advert->favourite();
 
@@ -22,13 +21,13 @@ class FavouritesController extends Controller
     }
 
     /**
-     * Unfavourite an advert.
+     * User removed advert from her favourites.
      * 
      * @param Advert $advert
-     * @param City $city
+     * @param $city
      * @return redirect
      */
-    public function destroy(City $city, Advert $advert) 
+    public function destroy($city, Advert $advert) 
     {
         $advert->unfavourite();
         

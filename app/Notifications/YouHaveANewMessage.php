@@ -7,31 +7,23 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class AdvertWasAdded extends Notification
+class YouHaveANewMessage extends Notification
 {
     use Queueable;
 
     /**
-     * @var App\City
+     * @var App\Conversation
      */
-    protected $city;
-
-    /**
-     * @var App\Advert
-     */
-    protected $advert;
+    protected $conversation;
 
     /**
      * Create a new notification instance.
-     * 
-     * @param City $city
-     * @param Advert $advert
+     *
      * @return void
      */
-    public function __construct($city, $advert)
+    public function __construct($conversation)
     {
-        $this->city = $city;
-        $this->advert = $advert;
+        $this->conversation = $conversation;
     }
 
     /**
@@ -42,7 +34,7 @@ class AdvertWasAdded extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -68,8 +60,8 @@ class AdvertWasAdded extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => 'Nowe ogłoszenie w '.$this->city->name,
-            'link' => route('adverts.show', [$this->city->slug, $this->advert->slug])
+            'message' => 'Masz nowa wiadomosc '.$this->conversation->advert->title,
+            //'link' => route('adverts.show', [$this->city->slug, $this->advert->slug])
         ];
     }
 }

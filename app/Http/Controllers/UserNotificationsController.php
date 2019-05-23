@@ -2,26 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-
 class UserNotificationsController extends Controller
 {
     /**
-     * Apply a middleware.
+     * Fetch all unread notifications for a authenticated user.
+     * Always use auth()->user() so no one will play with 
+     * fetching notifications for given user name.
      * 
-     * @return
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Fetch all unread notifications for a given user.
-     * 
+     * @param string $user
      * @return void
      */
-    public function index(User $user) 
+    public function index($user) 
     {
         return auth()->user()->unreadNotifications;
     }
@@ -29,9 +20,10 @@ class UserNotificationsController extends Controller
     /**
      * Mark given notification as read.
      * 
+     * @param string $user
      * @return void
      */
-    public function destroy(User $user, $notificationId) 
+    public function destroy($user, $notificationId) 
     {
         auth()->user()->notifications()->findOrFail($notificationId)->markAsRead();
     }

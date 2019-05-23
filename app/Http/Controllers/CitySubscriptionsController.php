@@ -7,7 +7,8 @@ use App\City;
 class CitySubscriptionsController extends Controller
 {
     /**
-     * Add city to subscriptions.
+     * User is adding city to subscribed and will receive 
+     * notifications about new adverts added to it.
      * 
      * @param City $city
      * @return void
@@ -18,7 +19,7 @@ class CitySubscriptionsController extends Controller
     }
 
     /**
-     * Remove city from subscriptions.
+     * User removes city from subscribed.
      * 
      * @param City $city
      * @return void

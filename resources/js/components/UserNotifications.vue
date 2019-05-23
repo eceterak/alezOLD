@@ -1,5 +1,5 @@
 <template>
-    <div class="inline-block dropdown" v-if="notifications">
+    <div class="inline-block dropdown" v-if="notifications.length">
         <span class="text-teal mr-4"><i class="far fa-bell"></i></span>
         <ul class="dropdown-content list-reset w-48">
             <li v-for="notification in notifications" v-bind:key="notification.data.id">
@@ -15,6 +15,10 @@
             return {
                 notifications: false
             }
+        },
+
+        computed: {
+
         },
 
         created() {

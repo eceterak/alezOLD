@@ -2767,6 +2767,11 @@ table {
   }
 }
 
+a {
+  text-decoration: none;
+  color: #008080;
+}
+
 .btn {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -2823,6 +2828,17 @@ table {
   margin-bottom: .75rem;
 }
 
+ul {
+  display: flex;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+}
+
+ul li {
+  padding-left: .5rem;
+  padding-right: .5rem;
+}
+
 .navigator a {
   line-height: 1.5;
 }
@@ -2859,6 +2875,7 @@ table {
 
 .table {
   width: 100%;
+  background-color: #fff;
 }
 
 .table thead {
@@ -2868,6 +2885,7 @@ table {
 .table td,
 .table th {
   padding: 1rem;
+  text-align: left;
   font-weight: 400;
 }
 

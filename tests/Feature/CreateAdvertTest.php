@@ -27,8 +27,6 @@ class CreateAdvertTest extends TestCase
     /** @test */
     public function advert_requires_a_unique_slug()
     {
-        $this->signIn();
-
         $firstAdvert = AdvertFactory::create([
             'title' => 'hi ho lets go',
         ]);

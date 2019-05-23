@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Filters\AdvertFilters;
 use App\Http\Requests\CreateAdvertRequest;
-use Illuminate\Support\Facades\DB;
 use App\Advert;
 use App\City;
+use App\Photo;
 
 class AdvertsController extends Controller
 {
-
     /**
      * Display all available Adverts.
      * To filter the results use AdvertFilters which are injected trough route model binding.
@@ -29,11 +28,11 @@ class AdvertsController extends Controller
     /**
      * Display a single advert.
      * 
-     * @param City $city
+     * @param string $city
      * @param Advert $advert
      * @return view
      */
-    public function show(City $city, Advert $advert) 
+    public function show($city, Advert $advert) 
     {   
         $advert->increment('visits');
 
@@ -49,8 +48,6 @@ class AdvertsController extends Controller
      */
     public function create() 
     {
-        request()->session()->put('create_advert_token', str_random(30).substr(md5(now()->createFromTime()), 0, 10));
-
         return view('adverts.create');
     }
 
@@ -69,28 +66,37 @@ class AdvertsController extends Controller
         {
             $photos = explode(',', request('photos'));
 
-            $images = DB::table('photos')->whereIn('id', $photos)->update([
-                'advert_id' => $advert->id
-            ]);
-        }
-    
-        if(request()->wantsJson())
-        {
-            return response($advert, 201);
+            foreach($photos as $key => $photo)
+            {
+                reset($photos);
+                if($key === key($photos))
+                {
+                    Photo::find($photo)->update([
+                        'advert_id' => $advert->id,
+                        'featured' => true
+                    ]);
+                }
+                else 
+                {
+                    Photo::find($photo)->update([
+                        'advert_id' => $advert->id,
+                    ]);
+                }
+            }
         }
 
         return redirect(route('home'))
-            ->with('flash', 'Ogloszenie dodane');
+            ->with('flash', 'Ogloszenie dodane'); // @todo display on the page ;)
     }
     
     /**
-     * Edit an advert.
+     * Display an edit form.
      * 
-     * @param City $city
+     * @param string $city
      * @param Advert $advert
      * @return view
      */
-    public function edit(City $city, Advert $advert) 
+    public function edit($city, Advert $advert) 
     {      
         $this->authorize('update', $advert);
 
@@ -102,27 +108,27 @@ class AdvertsController extends Controller
     /**
      * Update an advert.
      * 
-     * @param City $city
+     * @param string $city
      * @param Advert $advert
      * @return redirect
      */
-    public function update(City $city, Advert $advert) 
+    public function update($city, Advert $advert) 
     {        
         $this->authorize('update', $advert);
 
-        $advert->update($this->validateRequest());
+        $advert->update($this->validateRequest()); // @refactor - move to form request
 
         return redirect(route('adverts'));
     }
 
     /**
-     * Delete an advert. Accept id instead of slug.
+     * Delete an advert.
      * 
-     * @param City $city
+     * @param $city
      * @param Advert $advert
      * @return redirect
      */
-    public function destroy(City $city, Advert $advert) 
+    public function destroy($city, Advert $advert) 
     {
         $this->authorize('update', $advert);
 
@@ -130,10 +136,10 @@ class AdvertsController extends Controller
 
         if(request()->expectsJson())
         {
-            return response(['status' => 'Ogłoszenie usunięte']);
+            return response(['status' => 'Ogłoszenie usunięte']); // @refactor - vue component
         }
      
-        return redirect(route('home'));        
+        return redirect()->back();        
     }
 
     /**

@@ -17,18 +17,34 @@
         </div>
     </header>
     <main class="lg:flex -mx-3 mt-6">
-        {{-- <div class="w-3/5 px-3">
-            <img src="/storage/notfound.jpg" class="shadow">
-        </div> --}}
-        <div class="w-3/4 px-3">
+        <div class="w-2/5 px-3">
+            <img src="{{ $advert->featured_photo_path }}" class="shadow">      
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div><img src="{{ $advert->user->avatar_path }}" alt="" class="rounded-full" heiight="30" width="30"></div>
+                        <p class="mt-4"><a href="{{ route('profiles.show', $advert->user->name) }}">{{ $advert->user->name }}</a></p>
+                    </div>
+                </div>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <p class="mb-2">Czynsz</p>
+                        <p>{{ $advert->rent }}<span class="ml-1 text-xs text-grey-darker">zł miesięcznie</span></p>
+                        <p class="my-2">Media</p>
+                        <p>{{ $advert->bills }}<span class="ml-1 text-xs text-grey-darker">zł miesięcznie</span></p>
+                        <p class="my-2">Kaucja</p>
+                        <p>{{ $advert->deposit }}<span class="ml-1 text-xs text-grey-darker">zł</span></p>
+                    </div>
+                </div>
+        </div>
+        <div class="w-3/5 px-3">
             <div class="card">
-                <div class="card-content">
+                <div class="card-body">
                     <p class="mb-4">Opis</p>
                     <p class="text-grey-darker">{{ $advert->description }}</p>
                 </div>
             </div>
             <div class="card mt-4">
-                <div class="card-content">
+                <div class="card-body">
                     <div class="mb-4">
                         <p class="mb-4">Lokalizacja</p>
                         <p class="text-grey-darker">
@@ -39,30 +55,12 @@
                 </div>
             </div>
         </div>
-        <div class="w-1/4 px-3">
-            <div class="card">
-                <div class="card-content text-center">
-                    <div><img src="{{ $advert->user->avatar_path }}" alt="" class="rounded-full" heiight="30" width="30"></div>
-                    <p class="mt-4"><a href="{{ route('profiles.show', $advert->user->name) }}">{{ $advert->user->name }}</a></p>
-                </div>
-            </div>
-            <div class="card mt-4">
-                <div class="card-content">
-                    <p class="mb-2">Czynsz</p>
-                    <p>{{ $advert->rent }}<span class="ml-1 text-xs text-grey-darker">zł miesięcznie</span></p>
-                    <p class="my-2">Media</p>
-                    <p>{{ $advert->bills }}<span class="ml-1 text-xs text-grey-darker">zł miesięcznie</span></p>
-                    <p class="my-2">Kaucja</p>
-                    <p>{{ $advert->deposit }}<span class="ml-1 text-xs text-grey-darker">zł</span></p>
-                </div>
-            </div>
-        </div>
     </main>
     <div class="card mt-6">
         <header>
             <h3>Napisz wiadomosc</h3>
         </header>
-        <div class="card-content">
+        <div class="card-body">
             <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST" class="form">
                 @csrf
                 @guest

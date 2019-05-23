@@ -43,17 +43,19 @@ class City extends Model
         parent::boot();
 
         //Eager load the advert count.
-        static::addGlobalScope('advertCount', function($builder) {
+        static::addGlobalScope('advertCount', function($builder) 
+        {
             $builder->withCount('adverts');
         });
 
-
-        static::created(function($city) {
-            $city->generateSlug();
+        static::created(function($city) 
+        {
+            $city->update(['slug' => $city->name]);
         });
 
-        static::deleting(function($city) {
-            $city->adverts->each->delete(); // Be careful about this!
+        static::deleting(function($city) 
+        {
+            $city->adverts->each->delete(); // Be careful with this!
         });
     }
 
@@ -65,18 +67,6 @@ class City extends Model
     public function getRouteKeyName() 
     {
         return 'slug';
-    }
-
-    /**
-     * 
-     * 
-     * @return
-     */
-    public function toSearchableArray() 
-    {
-        return [
-            'name' => $this->name
-        ];
     }
 
     /**
@@ -121,17 +111,20 @@ class City extends Model
     }
 
     /**
-     * Generate a slug.
+     * Set a unique slug based on the name.
      * 
-     * @return void
+     * @param string $title
      */
-    public function generateSlug() 
+    public function setSlugAttribute($name) 
     {
-        //$no = City::where('name', $this->name); // Refactor, cities with same name must include unique number.
+        $slug = str_slug($name);
 
-        $this->update([
-            'slug' => str_slug($this->name)
-        ]);
+        if(static::where('slug', $slug)->exists())
+        {
+            $slug = $slug.'-'.$this->id;
+        }
+
+        $this->attributes['slug'] = $slug;
     }
 
     /**

@@ -47,9 +47,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-/*         if($exception instanceof ValidationException && $request->wantsJson()) return response(422);
+        //dd($exception->getMessage());
+        //if($exception instanceof ValidationException && $request->wantsJson()) return response(422);
 
-        if($exception instanceof ThrottleException) return response(429); */
+        //if($exception instanceof ThrottleException) return response(429);
 
         return parent::render($request, $exception);
     }

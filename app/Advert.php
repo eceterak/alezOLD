@@ -44,7 +44,7 @@ class Advert extends Model
      * @var array
      */
     protected $appends = [
-        'isFavourited'
+        'isFavourited', 'FeaturedPhotoPath'
     ];
 
     /**
@@ -163,7 +163,7 @@ class Advert extends Model
      * 
      * @refactor
      * @param string $body
-     * @return void
+     * @return App\Conversation
      */
     public function inquiry($body) 
     {
@@ -172,12 +172,9 @@ class Advert extends Model
             'sender_id' => auth()->user()->id
         ]); 
 
-        // Conversation should be responsible for creating a new message?
+        $conversation->reply($body);
 
-        auth()->user()->messages()->create([
-            'conversation_id' => $conversation->id,
-            'body' => $body
-        ]);
+        return $conversation;
     }
 
     /**
@@ -216,6 +213,18 @@ class Advert extends Model
     {
         // gt stands for Greater Than, subMinute, substracts a minute from current time.
         return $this->created_at->gt(Carbon::now()->subMinute());
+    }
+
+    /**
+     * Get the path to the featured photo if any found.
+     * 
+     * @return string
+     */
+    public function getFeaturedPhotoPathAttribute() 
+    {
+        $featured = $this->photos()->where('featured', true)->first();
+
+        return ($featured) ? '/storage/'.$featured->url : '/storage/avatars/notfound.png';
     }
 
 }

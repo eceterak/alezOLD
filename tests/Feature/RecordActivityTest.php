@@ -13,7 +13,7 @@ class RecordActivityTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function creating_an_advert()
+    public function creating_an_advert_records_an_activity()
     {
         $this->withoutExceptionHandling();
 
@@ -36,7 +36,7 @@ class RecordActivityTest extends TestCase
     }
 
     /** @test */
-    public function updating_an_advert()
+    public function updating_an_advert_records_an_activity()
     {
         $advert = AdvertFactory::create();
 
@@ -62,7 +62,7 @@ class RecordActivityTest extends TestCase
     }
 
     /** @test */
-    public function verifying_an_advert()
+    public function verifying_an_advert_records_an_activity()
     {
         $advert = AdvertFactory::create();
 
@@ -77,7 +77,7 @@ class RecordActivityTest extends TestCase
     {        
         $advert = AdvertFactory::create();
 
-        $this->actingAs($advert->user)->delete(route('adverts.destroy', [$advert->city->slug, $advert->slug]))->assertRedirect(route('home'));
+        $this->actingAs($advert->user)->delete(route('adverts.destroy', [$advert->city->slug, $advert->slug]));
 
         $this->assertDatabaseMissing('activities', [
             'subject_id' => $advert->id,

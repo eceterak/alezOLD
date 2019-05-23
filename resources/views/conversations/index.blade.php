@@ -1,16 +1,33 @@
 @extends('layouts.master')
 
 @section('lead')
-<div class="card">
-    <header>
-        <h3>Wysłane</h3>
-    </header>
-    <div class="card-content">
-        @forelse(auth()->user()->conversations() as $conversation)
-            <a href="{{ route('conversations.show', $conversation->id) }}">{{ $conversation->messages->first()->body }}</p>
-        @empty
-            <h3>Brak wiadomosci</h3>
-        @endforelse
-    </div>
-</div>
+
+    @include('pages._menu', ['title' => 'Odebrane'])
+
+    @if($conversations->count())
+
+        <table class="table">
+            <tbody>
+                @foreach($conversations as $conversation)
+                    <tr>
+                        <td>
+                            @if($conversation->hasNewMessagesFor($profile))
+                                <p><strong><a href="{{ route('conversations.show', $conversation->id) }}">{{ $conversation->messages()->first()->body }}</a></strong></p>
+                            @else
+                                <p><a href="{{ route('conversations.show', $conversation->id) }}">{{ $conversation->messages()->first()->body }}</a></p>    
+                            @endif
+                        </td>
+                        <td class="fit">
+                            <p class="text-xs text-grey-darkest">{{ $conversation->sender->name }}</p>
+                        </td>
+                        <td class="fit">
+                            <p class="text-xs text-grey-darkest">{{ $conversation->created_at }}</p>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+    @endif
+
 @endsection

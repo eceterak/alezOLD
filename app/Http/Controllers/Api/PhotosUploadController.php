@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Photo;
+use Illuminate\Support\Facades\Storage;
 
 class PhotosUploadController extends Controller
 {
@@ -15,7 +16,7 @@ class PhotosUploadController extends Controller
     public function store() 
     {
         request()->validate([
-            'photo' => 'required|image|max:200'
+            'photo' => 'required|image|max:1000'
         ]);
 
         $photo = Photo::create([
@@ -26,5 +27,19 @@ class PhotosUploadController extends Controller
             'id' => $photo->id,
             'url' => '/storage/'.$photo->url
         ]);
+    }
+
+    /**
+     * Remove a file from storage and database.
+     * 
+     * @return response
+     */
+    public function destroy(Photo $photo) 
+    {
+        Storage::disk('public')->delete($photo->url);
+
+        $photo->delete();
+
+        return response(204);
     }
 }

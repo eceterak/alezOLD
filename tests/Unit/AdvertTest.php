@@ -8,6 +8,7 @@ use Facades\Tests\Setup\AdvertFactory;
 use App\Advert;
 use App\City;
 use Carbon\Carbon;
+use App\Photo;
 
 class AdvertTest extends TestCase
 {
@@ -116,5 +117,24 @@ class AdvertTest extends TestCase
         $advert->created_at = Carbon::now()->subMonth();
 
         $this->assertFalse($advert->wasJustPublished());
+    }
+
+    /** @test */
+    public function it_can_determine_its_featured_image()
+    {
+        $this->withoutExceptionHandling();
+
+        $advert = AdvertFactory::create();
+        
+        $this->assertEquals('/storage/avatars/notfound.png', $advert->featured_photo_path);
+        
+        $photo = Photo::create([
+            'advert_id' => $advert->id,
+            'url' => 'photos/room.jpg',
+            'featured' => true
+        ]);
+        
+        $this->assertEquals('/storage/photos/room.jpg', $advert->featured_photo_path);
+
     }
 }

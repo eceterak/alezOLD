@@ -49,21 +49,11 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function can_create_a_slug()
-    {
-        $city = create(City::class);
-
-        $city->generateSlug();
-
-        $this->assertEquals(str_slug($city->name), $city->slug);
-    }
-
-    /** @test */
-    public function city_has_a_slug() 
+    public function has_a_slug() 
     {
         $city = create(City::class);
         
-        $this->assertIsString($city->slug);
+        $this->assertEquals(str_slug($city->name), $city->slug);
     }
 
     /** @test */

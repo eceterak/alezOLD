@@ -37,8 +37,6 @@ class ManageAdvertTest extends TestCase
     /** @test */
     public function updating_the_title_also_updates_a_slug() 
     {
-        $this->withoutExceptionHandling();
-
         $this->signIn($this->advert->user);
 
         $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), $attributes = raw(Advert::class, [
@@ -65,11 +63,7 @@ class ManageAdvertTest extends TestCase
     /** @test */
     public function owner_of_the_advert_can_delete_it()
     {
-        //$this->signIn($this->advert->user);
-
-        //$response = $this->json('DELETE', route('adverts.destroy', $this->advert->slug));
-
-        $this->actingAs($this->advert->user)->delete(route('adverts.destroy', [$this->advert->city->slug, $this->advert->slug]))->assertRedirect(route('home'));
+        $this->actingAs($this->advert->user)->delete(route('adverts.destroy', [$this->advert->city->slug, $this->advert->slug]))->assertRedirect();
 
         $this->assertDatabaseMissing('adverts', $this->advert->only('id'));
     }
@@ -81,7 +75,7 @@ class ManageAdvertTest extends TestCase
     }
 
     /** @test */
-    public function users_cannot_delete_adverts_of_others()
+    public function authenticated_user_cannot_delete_adverts_of_others()
     {
         $this->actingAs($this->user())->delete(route('adverts.destroy', [$this->advert->city->slug, $this->advert->slug]))->assertStatus(403);
     }

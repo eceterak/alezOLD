@@ -17,14 +17,4 @@ class PagesController extends Controller
             'cities' => City::where('suggested', true)->limit(12)->orderBy('importance', 'DESC')->get()
         ]);
     }
-
-    /**
-     * User's home
-     * 
-     * @return view
-     */
-    public function home()
-    {
-        return view('pages.home');
-    }
 }

@@ -1996,7 +1996,7 @@ __webpack_require__.r(__webpack_exports__);
 $(function () {
   $('#city', 'form[name="search_master_form"]').autocomplete({
     minLength: 3,
-    delay: 600,
+    delay: 500,
     source: function source(request, response) {
       axios.get('/ajax/cities', {
         params: {

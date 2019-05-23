@@ -65,11 +65,7 @@ class CitiesController extends Controller
      */
     public function store(Request $request) 
     {
-        $attributes = $this->validateRequest($request); // Refactor?s
-        
-        //$attributes['slug'] = str_slug($attributes['name']); // Refactor
-
-        City::create($attributes);
+        City::create($this->validateRequest($request));
         
         return redirect(route('admin.cities'));
     }
@@ -77,20 +73,16 @@ class CitiesController extends Controller
     /**
      * Update a city.
      * 
-     * @param string $slug
+     * @param City $city
      * @param Request $request
      * @return redirect
      */
-    public function update($slug, Request $request) 
+    public function update(City $city, Request $request) 
     {
-        $city = City::where('slug', $slug)->firstOrFail();
-
         $attributes = $this->validateRequest($request);
 
         if($request->has('suggested')) $attributes['suggested'] = 1; // Refactor
         else $attributes['suggested'] = 0;
-
-        $attributes['slug'] = str_slug($attributes['name']); // Refactor
 
         $city->update($attributes);
 

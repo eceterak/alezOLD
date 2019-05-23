@@ -1,3 +1,7 @@
+a {
+    @apply no-underline text-teal;
+}
+
 .btn {
     @apply px-4 py-2 bg-transparent text-teal border border-teal no-underline rounded;
 
@@ -27,6 +31,14 @@
 
     .card-title {
         @apply mb-3;
+    }
+}
+
+ul {
+    @apply flex -mx-2;
+
+    li {
+        @apply px-2;
     }
 }
 
@@ -62,13 +74,13 @@
 }
 
 .table {
-    @apply w-full;
+    @apply w-full bg-white;
 
     thead {
         @apply bg-grey-light;
     }
     td, th {
-        @apply p-4 font-normal;
+        @apply p-4 text-left font-normal;
 
         &.fit {
             @apply w-px whitespace-no-wrap;

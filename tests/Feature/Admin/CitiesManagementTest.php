@@ -28,6 +28,23 @@ class CitiesManagementTest extends TestCase
     }
 
     /** @test */
+    public function city_requires_a_unique_slug()
+    {
+
+        $johanesburg = create(City::class, [
+            'name' => 'johanesburg mir sea'
+        ]);
+
+        $this->assertEquals('johanesburg-mir-sea', $johanesburg->fresh()->slug);
+
+        $johanesburgTwo = create(City::class, [
+            'name' => 'johanesburg mir sea'
+        ]);
+
+        $this->assertEquals('johanesburg-mir-sea-'.$johanesburgTwo->id, $johanesburgTwo->slug);
+    }
+
+    /** @test */
     public function city_can_be_updated() 
     {
         $this->signInAdmin();

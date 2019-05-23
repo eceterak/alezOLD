@@ -15,7 +15,7 @@
             <div class="border-b border-grey py-6">ALEZ.pl</div>
             <nav class="navigator">
                 <ul>
-                    <li><a href="{{ route('admin') }}">Home</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}">Home</a></li>
                     <li><a href="{{ route('admin.cities') }}">Miasta</a></li>
                     <li><a href="{{ route('admin.adverts') }}">Pokoje</a></li>
                     <li><a href="{{ route('admin.adverts') }}">Użytkownicy</a></li>
@@ -26,7 +26,7 @@
             <div class="border-b border-grey p-6">
                 <div id="breadcrumbs">
                     <ul class="flex list-reset">
-                        <li><a href="{{ route('admin') }}">Home</a></li>
+                        <li><a href="{{ route('admin.dashboard') }}">Home</a></li>
                         @if(count(Request::segments())) 
                             @for($i = 1; $i < count(Request::segments()); $i++)
                                 <li>&nbsp;/&nbsp;{{ ucfirst(Request::segments()[$i]) }}</li>

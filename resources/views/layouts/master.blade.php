@@ -24,16 +24,18 @@
                 <div>
                     <h2><a href="/" class="text-teal text-3xl font-normal tracking-wide no-underline">{{ env('APP_SHORT', 'Alez.pl') }}</a></h2>
                 </div>
-                <div>
+                <div class="flex items-center">
                     @guest
                         <a class="btn mr-2" href="{{ route('login') }}">{{ __('Login') }}</a>
                     @endguest
                     @auth
                         <user-notifications></user-notifications>
-                        <form action="{{ route('logout') }}" method="POST" class="inline">
+                        <img src="{{ auth()->user()->avatar_path }}" class="rounded-full w-8">
+                        <p class="ml-2 mr-4 text-sm"><a href="{{ route('home') }}">{{ auth()->user()->name }}</a></p>
+                        {{-- <form action="{{ route('logout') }}" method="POST" class="inline">
                             @csrf
                             <button type="submit" class="btn mr-2">{{ __('Logout') }}</button>
-                        </form>
+                        </form> --}}
                     @endauth
                     <a href="{{ route('adverts.create') }}" class="btn btn-reverse">Dodaj ogłoszenie</a>
                 </div>

@@ -15,9 +15,9 @@ class CreatePhotosTable extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('temporary_advert_id')->nullable();
             $table->unsignedInteger('advert_id')->nullable();
             $table->string('url')->unique();
+            $table->boolean('featured')->default(false);
             $table->timestamps();
 
             $table->foreign('advert_id')->references('id')->on('adverts')->onDelete('cascade');

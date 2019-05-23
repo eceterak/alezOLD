@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Traits\RecordsActivity;
+use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -65,7 +65,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function inbox() 
     {
-        return $this->hasMany(Conversation::class, 'receiver_id');
+        return $this->hasMany(Conversation::class, 'receiver_id')->latest();
     }
 
     /**
@@ -136,5 +136,27 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getAvatarPathAttribute($avatar_path) 
     {
         return (!is_null($avatar_path)) ? '/storage/'.$avatar_path : '/storage/avatars/notfound.png';
+    }
+
+    /**
+     * User read the conversation.
+     * 
+     * @param App\Conversation $conversation
+     * @return void
+     */
+    public function read($conversation) 
+    {
+        cache()->forever($this->visitedConversationCacheKey($conversation), Carbon::now());
+    }
+
+    /**
+     * Return a cache key for visited conversation.
+     * 
+     * @param App\Conversation $conversation
+     * @return string
+     */
+    public function visitedConversationCacheKey($conversation) 
+    {
+        return sprintf("users.%d.visits.%d", $this->id, $conversation->id);
     }
 }

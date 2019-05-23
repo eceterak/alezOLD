@@ -15,41 +15,47 @@ class SearchTest extends TestCase
     /** @test */
     public function search_by_id_of_selected_item_from_autocomplete_list()
     {        
-        $advert = AdvertFactory::create();
+        $city = create(City::class);
 
         $this->get(route('search.index', [
             'city' => 'ignore this value',
-            'city_id' => $advert->city->id
-        ]))
-        ->assertRedirect(route('cities.show', [$advert->city->slug]));
+            'city_id' => $city->id
+        ]))->assertRedirect(route('cities.show', [$city->slug]));
     }
 
     /** @test */
     public function search_by_query() 
     {
-        $this->withoutExceptionHandling();
-
-        $advert = AdvertFactory::create();
+        $city = create(City::class);
 
         $this->get(route('search.index', [
-            'city' => $advert->city->name,
+            'city' => $city->name,
             'city_id' => ''
-        ]))
-        ->assertRedirect(route('cities.show', [$advert->city->slug]));
+        ]))->assertRedirect(route('cities.show', [$city->slug]));
     }
 
     /** @test */
     public function search_by_query_with_commas() 
     {
-        $this->withoutExceptionHandling();
-
-        $advert = AdvertFactory::create();
+        $city = create(City::class);
 
         $this->get(route('search.index', [
-            'city' => $advert->city->name.','.$advert->city->community.','.$advert->city->state,
+            'city' => $city->name.','.$city->community.','.$city->state,
             'city_id' => ''
-        ]))
-        ->assertRedirect(route('cities.show', [$advert->city->slug]));
+        ]))->assertRedirect(route('cities.show', [$city->slug]));
+    }
+    
+    /** @test */
+    public function if_no_city_is_found_display_all_available_adverts()
+    {
+        $this->withoutExceptionHandling();
+
+        $advert = AdvertFactory::create();    
+
+        $this->get(route('search.index', [
+            'city' => '',
+            'city_id' => 'You wont be able to find this city because it doesent exists.'
+        ]))->assertRedirect(route('adverts'));
     }
     
     /** @test */
@@ -63,14 +69,13 @@ class SearchTest extends TestCase
         $this->assertCount(2, $results->json());
     }
     
-    //@test
+    /** @test */
     public function empty_search_query_redirect_to_adverts_index()
     {
         $this->get(route('search.index'), [
             'city' => '',
             'city_id' => ''
-        ])
-        ->assertRedirect(route('adverts'));
+        ])->assertRedirect(route('adverts'));
     }
     
 }

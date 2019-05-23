@@ -2,14 +2,16 @@
     <div class="mb-4">
         <p class="mb-2 text-xs text-grey-darkest">Pierwsze zdjęcie jest miniaturką.</p>
         <div class="w-full p-4 rounded border-grey border">
-            <div class="flex flex-row flex-wrap items-center -mx-2">
-                <div class="w-1/6 px-2" v-for="image in images">
-                    <div class="flex items-center justify-center h-32 border-grey border rounded text-grey">
+            <draggable v-model="images" draggable=".photo" class="flex flex-row flex-wrap items-center -mx-2">
+                <div class="w-1/6 px-2 photo" v-for="(image, index) in images" :key="image.id">
+                    <div class="flex relative items-center justify-center h-32 border-grey border rounded text-grey">
+                        <p class="absolute p-2" style="top: 0; right: 0;">
+                            <a href="#" @click.prevent="destroy(image, index)"><i class="fas fa-times"></i></a>
+                        </p>
                         <img :src="image.url">
-                        <input type="hidden" name="img[]" v-model="image.id">
                     </div>
                 </div>
-                <div class="w-1/6 px-2">
+                <div class="w-1/6 px-2" slot="footer">
                     <div class="flex items-center justify-center h-32 border-grey border rounded">
                         <input type="file"
                             ref="file"
@@ -21,24 +23,28 @@
                         <label @click="launchFilePicker()"><i class="fas fa-plus-circle fa-3x"></i></label>
                     </div>
                 </div>
-            </div>
+            </draggable>
         </div>
         <p class="mt-2 text-xs text-grey-darkest">Możesz dodać 6 zdjęć.</p>
+        <p v-if="error" v-text="error" class="text-red"></p>
         <input type="hidden" name="photos" v-if="ids" :value="ids">
     </div>
 </template>
 
 <script>
-    import Cookies from 'js-cookie';
+    import drragable from 'vuedraggable';
 
     export default {
         props: ['temp'],
+
+        components: { drragable },
 
         data() {
             return {
                 maxSize: 2048,
                 images: [],
-                ids: false
+                ids: false,
+                error: false
             }
         },
 
@@ -74,8 +80,16 @@
                 var data = new FormData();
                 data.append('photo', photo);
 
-                axios.post('/api/ogloszenia/zdjecia/upload', data)
-                    .then(response => this.images.push(response.data));
+                axios.post('/api/ogloszenia/zdjecia', data)
+                    .then(response => this.images.push(response.data))
+                    .catch(error => flash(error.response.data.errors.photo[0]));
+            },
+            destroy(image, index) {
+                this.images.splice(index, 1);
+
+                axios.delete('/api/ogloszenia/zdjecia/' + image.id)
+                    .then()
+                    .catch(error => flash(error.response.data.errors.photo[0]));
             }
         }
     }

@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 use App\Conversation;
 
 use Illuminate\Http\Request;
-use App\Advert;
 use App\Http\Requests\ConversationRequest;
-use App\City;
+use App\Advert;
 
 class ConversationsController extends Controller
 {
@@ -14,21 +13,28 @@ class ConversationsController extends Controller
     /**
      * Show inbox.
      * 
+     * @refactor should be inbox / sent
      * @return view
      */
-    public function inbox() 
+    public function index() 
     {
-        return view('conversations.index');
+        return view('conversations.index')->with([
+            'profile' => $user = auth()->user(),
+            'conversations' => $user->inbox
+        ]);
     }
 
     /**
+     * Display a single conversation between two users.
      * 
-     * 
-     * @return
+     * @return view
      */
     public function show(Conversation $conversation) 
     {
         $this->authorize('view', $conversation);
+
+        // User read the conversation so it wont be 'bolded'.
+        auth()->user()->read($conversation);
 
         return view('conversations.show')->with([
             'conversation' => $conversation
@@ -36,6 +42,8 @@ class ConversationsController extends Controller
     }
 
     /**
+     * @Refactor - it should be in MessagesController
+     * @refactor - I dont need ConversationRequest
      * 
      * @param Request $request
      * @return redirect
@@ -54,14 +62,13 @@ class ConversationsController extends Controller
     /**
      * Start a new conversation.
      * 
-     * @param City $city
+     * @param $city
      * @param Advert $advert
-     * @param Request $request
      * @return redirect
      */
-    public function store(City $city, Advert $advert, Request $request) 
+    public function store($city, Advert $advert) 
     {
-        $advert->inquiry($request->body);
+        $advert->inquiry(request()->body);
 
         return redirect()->back();
     }

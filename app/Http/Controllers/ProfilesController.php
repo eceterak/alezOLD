@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\User;
 
 class ProfilesController extends Controller
 {
     /**
+     * Display a users profile and her adverts.
      * 
-     * 
-     * @return
+     * @param App\User $user
+     * @return view
      */
     public function show(User $user) 
     {

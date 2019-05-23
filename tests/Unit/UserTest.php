@@ -24,8 +24,7 @@ class UserTest extends TestCase
         $this->post(route('login'), [
             'email' => $user->email,
             'password' => $password
-        ])
-        ->assertRedirect(route('home'));
+        ])->assertRedirect(route('home'));
 
         $this->assertAuthenticatedAs($user);
     }

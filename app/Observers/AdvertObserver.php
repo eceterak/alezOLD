@@ -6,7 +6,6 @@ use App\Mail\AdvertCreatedConfirmationMail;
 use App\Notifications\AdvertWasAdded;
 use Illuminate\Support\Facades\Mail;
 use App\Advert;
-use Illuminate\Support\Facades\App;
 
 class AdvertObserver
 {
