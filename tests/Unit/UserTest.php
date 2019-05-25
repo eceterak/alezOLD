@@ -13,7 +13,7 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function can_login() 
+    public function user_can_login() 
     {
         $this->get(route('login'))->assertSuccessful();
 
@@ -30,7 +30,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function has_adverts() 
+    public function user_can_have_adverts() 
     {
         $advert = AdvertFactory::ownedBy($user = $this->signIn())->create();
 
@@ -40,7 +40,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function has_conversations() 
+    public function user_can_have_conversations() 
     {
         $magda = create(User::class);
         $magdaAdvert = AdvertFactory::ownedBy($magda)->create();
@@ -48,21 +48,11 @@ class UserTest extends TestCase
         $marek = $this->signIn();
         $magdaAdvert->inquiry('Hi Magda, nice advert you have');
 
-        $this->assertCount(1, $marek->conversations());
-        $this->assertCount(1, $magda->conversations());    
-           
-        $wiesiek = $this->signIn();
-
-        $this->user($wiesiek);
-        $magdaAdvert->inquiry('Hi Magda, nice advert you have');
-        
-        $this->assertCount(2, $magda->conversations());    
-        $this->assertCount(1, $marek->conversations());
-        $this->assertCount(1, $wiesiek->conversations());
+        $this->assertCount(1, $magda->conversations);
     }
 
     /** @test */
-    public function can_be_an_admin()
+    public function user_can_be_an_admin()
     {
         $user = create(User::class, ['role' => 1]);
 
@@ -70,7 +60,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_fetch_their_most_recent_advert()
+    public function a_user_can_fetch_her_most_recent_advert()
     {
         $user = create(User::class);
 
@@ -80,7 +70,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function user_can_determine_their_avatar_path()
+    public function user_can_determine_her_avatar_path()
     {
         $user = create(User::class);
 
@@ -105,4 +95,30 @@ class UserTest extends TestCase
 
         $this->assertNull($user->email_verified_at);
     }
+
+    /** @test */
+    public function a_user_has_favourite_adverts()
+    {
+        $user = $this->signIn();
+        
+        $advert = AdvertFactory::create();
+
+        $advert->favourite();
+
+        $this->assertCount(1, $user->favourites);
+    }
+
+    /** @test */
+    public function a_user_can_view_her_settings()
+    {
+        $this->signIn();
+
+        $this->get(route('settings'))->assertSee('Zmień hasło');
+    }
+
+    // /** @test */
+    // public function a_user_can_change_her_password()
+    // {
+    //     $user = $this->signIn();        
+    // }
 }

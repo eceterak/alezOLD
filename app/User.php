@@ -59,33 +59,13 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get all received conversations.
+     * Get all conversations user participates in.
      * 
      * @return App\Conversation
-     */
-    public function inbox() 
-    {
-        return $this->hasMany(Conversation::class, 'receiver_id')->latest();
-    }
-
-    /**
-     * Get all sent conversations.
-     * 
-     * @return App\Conversation
-     */
-    public function sent()
-    {
-        return $this->hasMany(Conversation::class, 'sender_id');
-    }
-
-    /**
-     * Return all conversations (both started and received).
-     * 
-     * @return Collection
      */
     public function conversations() 
     {
-        return Conversation::where('sender_id', $this->id)->orWhere('receiver_id', $this->id)->get();
+        return $this->belongsToMany(Conversation::class);
     }
 
     /**
@@ -106,6 +86,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    /**
+     * Get all favourites.
+     * 
+     * @return App\Favourite
+     */
+    public function favourites() 
+    {
+        return $this->hasMany(Favourite::class);
     }
 
     /**

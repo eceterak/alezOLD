@@ -1,5 +1,5 @@
 @forelse($adverts as $advert)
-    <div class="card mb-4">
+    <div class="card mb-6">
         <div class="flex -mx-2">
             <div class="flex lg:static lg:w-1/6 items-center justify-center mb-0 lg:mb-0 sm:mb-2 px-2">
                 <img src="{{ $advert->featured_photo_path }}">
@@ -13,6 +13,8 @@
                 </div>
                 <section>
                     <p class="text-grey-darker">{{ str_limit($advert->description, 100) }}</p>
+                    <p class="text-grey-darker">{{ $advert->rent }}</p>
+                    <p class="text-grey-darker">{{ $advert->created_at }}</p>
                 </section>
             </div>
         </div>

@@ -35,7 +35,11 @@ abstract class QueryFilter
         foreach($this->filters() as $filter => $value) {
             if(!method_exists($this, $filter)) return;
 
-            (trim($value)) ? $this->$filter($value) : $this->$filter();
+            if(trim($value)) $this->$filter($value);
+            else
+            {
+                request()->request->remove($filter);
+            }
         }
 
         return $this->builder;

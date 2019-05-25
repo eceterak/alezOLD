@@ -23,7 +23,6 @@ class CreateAdvertsTable extends Migration
             $table->boolean('active')->default(false);
             $table->string('slug')->nullable()->unique();
             $table->unsignedInteger('visits')->default(0);
-            $table->unsignedInteger('photo_id')->nullable();
             
             // $$$.
             $table->unsignedSmallInteger('rent')->nullable();

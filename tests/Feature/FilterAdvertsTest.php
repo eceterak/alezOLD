@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\AdvertFactory;
-use Facades\Tests\Setup\WorldFactory;
-use App\Street;
 use App\City;
 
 class FilterAdvertsTest extends TestCase
@@ -31,7 +29,7 @@ class FilterAdvertsTest extends TestCase
     }
 
     /** @test */
-    public function aadverts_can_be_ordered_by_rent()
+    public function aadverts_can_be_ordered_by_rent_asc_and_desc()
     {
         $city = create(City::class);
 
@@ -47,8 +45,12 @@ class FilterAdvertsTest extends TestCase
             'rent' => 200
         ]);
 
-        $response = $this->getJson(route('cities.show', [$advertWithHighRent->city->slug, 'rent' => 'desc']))->json();
+        $response = $this->getJson(route('cities.show', [$advertWithHighRent->city->slug, 'sort' => 'rent_desc']))->json();
 
         $this->assertEquals([1000, 500, 200], array_column($response['data'], 'rent'));
+
+        $response = $this->getJson(route('cities.show', [$advertWithHighRent->city->slug, 'sort' => 'rent_asc']))->json();
+
+        $this->assertEquals([200, 500, 1000], array_column($response['data'], 'rent'));
     }
 }

@@ -1904,7 +1904,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
@@ -26023,6 +26022,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("img", { staticClass: "rounded-full w-32", attrs: { src: _vm.avatar } }),
+    _vm._v(" "),
     _vm.canUpdate
       ? _c(
           "form",
@@ -26031,17 +26032,11 @@ var render = function() {
             _c("image-upload", {
               attrs: { name: "avatar" },
               on: { loaded: _vm.onLoad }
-            }),
-            _vm._v(" "),
-            _c("button", { staticClass: "btn btn-primary" }, [
-              _vm._v("Dodaj avatar")
-            ])
+            })
           ],
           1
         )
-      : _vm._e(),
-    _vm._v(" "),
-    _c("img", { staticClass: "rounded-full w-32", attrs: { src: _vm.avatar } })
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -26156,7 +26151,9 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mb-4" }, [
     _c("p", { staticClass: "mb-2 text-xs text-grey-darkest" }, [
-      _vm._v("Pierwsze zdjęcie jest miniaturką.")
+      _vm._v(
+        "Pierwsze zdjęcie jest miniaturką. Możesz przeciągać zdjęcia aby zmienić ich kolejność."
+      )
     ]),
     _vm._v(" "),
     _c(
@@ -42739,7 +42736,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-// removed by extract-text-webpack-plugin
+throw new Error("Module build failed (from ./node_modules/css-loader/index.js):\nModuleBuildError: Module build failed (from ./node_modules/sass-loader/lib/loader.js):\n\n@import '~bootstrap/scss/bootstrap';\n       ^\n      Can't find stylesheet to import.\n  ╷\n8 │ @import '~bootstrap/scss/bootstrap';\n  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  ╵\n  stdin 8:9  root stylesheet\n      in /var/www/alez/resources/sass/app.scss (line 8, column 9)\n    at runLoaders (/var/www/alez/node_modules/webpack/lib/NormalModule.js:301:20)\n    at /var/www/alez/node_modules/loader-runner/lib/LoaderRunner.js:367:11\n    at /var/www/alez/node_modules/loader-runner/lib/LoaderRunner.js:233:18\n    at context.callback (/var/www/alez/node_modules/loader-runner/lib/LoaderRunner.js:111:13)\n    at render (/var/www/alez/node_modules/sass-loader/lib/loader.js:52:13)\n    at Function.$2 (/var/www/alez/node_modules/sass/sass.dart.js:24382:48)\n    at wO.$2 (/var/www/alez/node_modules/sass/sass.dart.js:15310:15)\n    at uT.vr (/var/www/alez/node_modules/sass/sass.dart.js:9042:42)\n    at uT.vq (/var/www/alez/node_modules/sass/sass.dart.js:9044:32)\n    at iz.uD (/var/www/alez/node_modules/sass/sass.dart.js:8392:46)\n    at us.$0 (/var/www/alez/node_modules/sass/sass.dart.js:8534:7)\n    at Object.eG (/var/www/alez/node_modules/sass/sass.dart.js:1512:80)\n    at ad.ba (/var/www/alez/node_modules/sass/sass.dart.js:8455:3)\n    at iN.ba (/var/www/alez/node_modules/sass/sass.dart.js:8385:25)\n    at iN.cv (/var/www/alez/node_modules/sass/sass.dart.js:8372:6)\n    at py.cv (/var/www/alez/node_modules/sass/sass.dart.js:8162:35)\n    at Object.m (/var/www/alez/node_modules/sass/sass.dart.js:1383:19)\n    at /var/www/alez/node_modules/sass/sass.dart.js:5070:51\n    at xe.a (/var/www/alez/node_modules/sass/sass.dart.js:1394:71)\n    at xe.$2 (/var/www/alez/node_modules/sass/sass.dart.js:8177:23)\n    at vR.$2 (/var/www/alez/node_modules/sass/sass.dart.js:8172:25)\n    at uT.vr (/var/www/alez/node_modules/sass/sass.dart.js:9042:42)\n    at uT.vq (/var/www/alez/node_modules/sass/sass.dart.js:9044:32)\n    at iz.uD (/var/www/alez/node_modules/sass/sass.dart.js:8392:46)\n    at us.$0 (/var/www/alez/node_modules/sass/sass.dart.js:8534:7)\n    at Object.eG (/var/www/alez/node_modules/sass/sass.dart.js:1512:80)\n    at ad.ba (/var/www/alez/node_modules/sass/sass.dart.js:8455:3)\n    at iN.ba (/var/www/alez/node_modules/sass/sass.dart.js:8385:25)\n    at iN.cv (/var/www/alez/node_modules/sass/sass.dart.js:8372:6)\n    at Object.eval (eval at CK (/var/www/alez/node_modules/sass/sass.dart.js:648:15), <anonymous>:3:37)\n    at uT.vr (/var/www/alez/node_modules/sass/sass.dart.js:9042:42)\n    at uT.vq (/var/www/alez/node_modules/sass/sass.dart.js:9044:32)\n    at iz.uD (/var/www/alez/node_modules/sass/sass.dart.js:8392:46)\n    at us.$0 (/var/www/alez/node_modules/sass/sass.dart.js:8534:7)\n    at Object.eG (/var/www/alez/node_modules/sass/sass.dart.js:1512:80)\n    at ad.ba (/var/www/alez/node_modules/sass/sass.dart.js:8455:3)");
 
 /***/ }),
 

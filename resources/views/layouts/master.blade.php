@@ -26,7 +26,7 @@
                 </div>
                 <div class="flex items-center">
                     @guest
-                        <a class="btn mr-2" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        <a class="btn mr-2" href="{{ route('login') }}">Zaloguj</a>
                     @endguest
                     @auth
                         <user-notifications></user-notifications>

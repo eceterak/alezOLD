@@ -30,7 +30,7 @@ trait Favouritable
     }
 
     /**
-     * @return void
+     * @return this
      */
     public function favourite() 
     {

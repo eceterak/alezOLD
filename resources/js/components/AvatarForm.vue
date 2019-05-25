@@ -1,10 +1,9 @@
 <template>
     <div>
+        <img :src="avatar" class="rounded-full w-32">
         <form v-if="canUpdate" method="POST" enctype="multipart/form-data">
             <image-upload name="avatar" @loaded="onLoad"></image-upload>
-            <button class="btn btn-primary">Dodaj avatar</button>
         </form>
-        <img :src="avatar" class="rounded-full w-32">
     </div>
 </template>
 

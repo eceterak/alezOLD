@@ -10,13 +10,25 @@ class Conversation extends Model
      * @var array
      */
     protected $guarded = [];
-
+    
     /**
-     * @array
+     * Get an advert associated with a conversation.
+     * 
+     * @return App\Advert
      */
-    protected $with = [
-        'sender', 'receiver'
-    ];
+    public function advert()
+    {
+        return $this->belongsTo(Advert::class);
+    }
+    /**
+     * Get both of the users participating in the conversation.
+     * 
+     * @return
+     */
+    public function users() 
+    {
+        return $this->belongsToMany(User::class);
+    }
 
     /**
      * Get all messages sorted by date.
@@ -29,45 +41,40 @@ class Conversation extends Model
     }
 
     /**
-     * Get a user who received a message.
+     * Define who sent first message.
      * 
      * @return App\User
      */
-    public function receiver()
+    public function sender() 
     {
-        return $this->belongsTo(User::class, 'receiver_id');
+        return $this->messages()->first()->user;
     }
 
     /**
-     * Get a user who sent a message.
+     * Register sender as a custom property.
      * 
      * @return App\User
      */
-    public function sender()
+    public function getSenderAttribute() 
     {
-        return $this->belongsTo(User::class, 'sender_id');
+        return $this->sender();
     }
 
     /**
-     * Get an advert associated with a message.
-     * 
-     * @return App\User
-     */
-    public function advert()
-    {
-        return $this->belongsTo(Advert::class);
-    }
-
-    /**
-     * Send a message to reply.
+     * Send a message.
      * 
      * @param string $body
+     * @param App\Advert $advert
+     * @param App\User $user
      * @return void
      */
-    public function reply($body) 
+    public function reply($body, $advert, $user = null) 
     {
+        $user = $user ?? auth()->user();
+
         $this->messages()->create([
-            'user_id' => auth()->user()->id,
+            'user_id' => $user->id,
+            'to_id' => $advert->user->id,
             'body' => $body
         ]);
     }
@@ -81,6 +88,6 @@ class Conversation extends Model
     {
         $key = auth()->user()->visitedConversationCacheKey($this);
 
-        return !! $this->updated_at > cache($key);
+        return $this->updated_at > cache($key);
     }
 }

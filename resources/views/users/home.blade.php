@@ -2,15 +2,11 @@
 
 @section('lead')
 
-    @include('pages._menu', ['title' => 'Twoje ogłoszenia'])
+    @include('users._menu', ['title' => 'Twoje ogłoszenia'])
 
     @if($adverts->count())
 
         <table class="table">
-            <thead>
-                <th colspan="4">Ogłoszenie</th>
-                <th>Akcja</th>
-            </thead>
             <tbody>
                 @foreach($adverts as $advert)
                     <tr>

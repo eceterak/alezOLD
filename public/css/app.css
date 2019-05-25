@@ -2828,13 +2828,13 @@ a {
   margin-bottom: .75rem;
 }
 
-ul {
+ul.menu {
   display: flex;
   margin-left: -0.5rem;
   margin-right: -0.5rem;
 }
 
-ul li {
+ul.menu li {
   padding-left: .5rem;
   padding-right: .5rem;
 }

@@ -13,6 +13,9 @@ class Message extends Model
     protected $guarded = [];
 
     /**
+     * Touch the conversation, to update the timestamps.
+     * Use it to define if user read all messages from given conversation.
+     * 
      * @var array
      */
     protected $touches = ['conversation'];
@@ -24,22 +27,14 @@ class Message extends Model
     {
         parent::boot();
 
-        // @refactor :>
         static::created(function($message)
         {
-            if($message->conversation->sender->id !== $message->user_id)
-            {
-                $message->conversation->sender->notify(new YouHaveANewMessage($message->conversation));
-            }
-            else
-            {
-                $message->conversation->receiver->notify(new YouHaveANewMessage($message->conversation));
-            }
+            $message->conversation->users->except(auth()->id())[0]->notify(new YouHaveANewMessage($message->conversation));
         });
     }
 
     /**
-     * 
+     * Get the conversation.
      * 
      * @return App\Conversation
      */
@@ -49,7 +44,7 @@ class Message extends Model
     }
 
     /**
-     * Get
+     * Get a user who sent a message.
      * 
      * @return App\User
      */

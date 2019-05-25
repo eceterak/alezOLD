@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\AdvertFactory;
+use App\Favourite;
 
 class FavouriteTest extends TestCase
 {
@@ -30,10 +31,21 @@ class FavouriteTest extends TestCase
         $advert = AdvertFactory::create();
 
         $advert->favourite();
+
         $advert->unfavourite();
 
         $this->assertCount(0, $advert->favourites);
-
     }
 
+    /** @test */
+    public function it_is_associated_with_an_advert()
+    {
+        $this->signIn();
+
+        $advert = AdvertFactory::create();
+
+        $advert->favourite();
+        
+        $this->assertInstanceOf(Favourite::class, $advert->favourites->first());
+    }
 }

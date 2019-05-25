@@ -62,4 +62,18 @@ class FavouritesTest extends TestCase
 
         $this->assertCount(0, $advert->favourites);
     }
+
+    /** @test */
+    public function a_user_can_view_her_favourites()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn();
+
+        $advert = AdvertFactory::create();
+
+        $advert->favourite();
+
+        $this->get(route('favourites'))->assertSee($advert->title);
+    }
 }

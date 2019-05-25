@@ -1,7 +1,7 @@
 <form action="{{ route(...$route) }}" method="POST" name="{{ $name }}" class="form" id="advert-form-va" enctype="multipart/form-data">  
     @csrf
     @method($method)
-    <div class="mb-4 pb-1 border-b border-grey">
+    <div class="my-5 pb-1 border-b border-grey">
         <h3>Informacje podstawowe</h3>
     </div>
     <div class="form-group">
@@ -43,21 +43,11 @@
             </div>
         </div>
     </div>
-    {{-- <div class="flex -mx-4">
-        <div class="form-group w-1/3 px-4">
-            <label for="room_size">Wielkość pokoju</label>
-            <select name="room_size" id="room_size">
-                <option value>wybierz</option>
-                <option value="single" {{ (isset($advert)) ? ($advert->room_size == 'single') ? 'selected' : '' :  (old('room_size') == 'single') ? 'selected' : '' }}>jednoosobowy</option>
-                <option value="double" {{ (isset($advert)) ? ($advert->room_size == 'double') ? 'selected' : '' :  (old('room_size') == 'double') ? 'selected' : '' }}>dwuosobowy</option>
-            </select>
-        </div>
-    </div> --}}
-    <div class="mb-4 pb-1 border-b border-grey">
+    <div class="my-5 pb-1 border-b border-grey">
         <h3>Zdjęcia</h3>
     </div>
     <image-upload-form :temp=" {{ 123 }}"></image-upload-form>
-    <div class="mb-4 pb-1 border-b border-grey">
+    <div class="my-5 pb-1 border-b border-grey">
         <h3>Lokalizacja</h3>
     </div>
     @if(isset($advert->city))
@@ -76,7 +66,7 @@
     @else
         <div class="flex -mx-4">
             <div class="form-group w-1/2 px-4">
-                <label for="city_id">Miasto</label>
+                <label for="city_id">Miasto*</label>
                 <select name="city_id" id="city_id"></select>
             </div>
             <div class="form-group w-1/2 px-4">
@@ -85,7 +75,7 @@
             </div>
         </div>
     @endif
-    <div class="mb-4 pb-1 border-b border-grey">
+    <div class="my-5 pb-1 border-b border-grey">
         <h3>Informacje szczegółowe</h3>
     </div>
     <div class="form-group">
@@ -93,6 +83,15 @@
         <textarea name="description" id="description" data-validation-length="min:30" required>{{ (isset($advert)) ? $advert->description :  old('description') }}</textarea>
     </div>
     <div class="flex -mx-4">
+        <div class="form-group w-1/3 px-4">
+            <label for="room_size">Wielkość pokoju</label>
+            <select name="room_size" id="room_size">
+                <option value>wybierz</option>
+                <option value="single" {{ (isset($advert)) ? ($advert->room_size == 'single') ? 'selected' : '' :  (old('room_size') == 'single') ? 'selected' : '' }}>jednoosobowy</option>
+                <option value="double" {{ (isset($advert)) ? ($advert->room_size == 'double') ? 'selected' : '' :  (old('room_size') == 'double') ? 'selected' : '' }}>dwuosobowy</option>
+                <option value="triple" {{ (isset($advert)) ? ($advert->room_size == 'triple') ? 'selected' : '' :  (old('room_size') == 'triple') ? 'selected' : '' }}>trzyosobowy lub większy</option>
+            </select>
+        </div>
         <div class="form-group w-1/3 px-4">
             <label for="property_type">Rodzaj zabudowy</label>
             <select name="property_type" id="property_type">
@@ -113,7 +112,7 @@
             </select>
         </div>
     </div>
-    <div class="mb-4 pb-1 border-b border-grey">
+    <div class="my-5 pb-1 border-b border-grey">
         <h3>Dostępność</h3>
     </div>
     <div class="flex -mx-4">
@@ -156,7 +155,7 @@
             </select>
         </div>
     </div>
-    <div class="mb-4 pb-1 border-b border-grey">
+    <div class="my-5 pb-1 border-b border-grey">
         <h3>Informacje dodatkowe</h3>
     </div>            
     <div class="flex -mx-4">
@@ -165,8 +164,8 @@
             <label for="furnished">Meble</label>
         </div>
         <div class="form-group w-1/3 px-4">
-            <input type="checkbox" name="living_advert" id="living_advert" value="1" {{ (isset($advert)) ? ($advert->living_advert) ? 'checked' : '' :  (old('living_advert')) ? 'checked' : '' }}>
-            <label for="living_advert">Salon</label>
+            <input type="checkbox" name="living_room" id="living_room" value="1" {{ (isset($advert)) ? ($advert->living_room) ? 'checked' : '' :  (old('living_room')) ? 'checked' : '' }}>
+            <label for="living_room">Salon</label>
         </div>
         <div class="form-group w-1/3 px-4">
             <input type="checkbox" name="parking" id="parking" value="1" {{ (isset($advert)) ? ($advert->parking) ? 'checked' : '' :  (old('parking')) ? 'checked' : '' }}>
@@ -179,8 +178,8 @@
             <label for="broadband">Internet</label>
         </div>
     </div>
-    <div class="mb-4 pb-1 border-b border-grey">
-        <h3>Desired tenetant</h3>
+    <div class="my-5 pb-1 border-b border-grey">
+        <h3>Preferencje względem lokatora</h3>
     </div>
     <div class="flex -mx-4">
         <div class="form-group w-1/3 px-4">
@@ -192,13 +191,15 @@
             </select>
         </div>
         <div class="form-group w-1/3 px-4">
-            <label for="ocupation">Zatrudnienie</label>
-            <select name="ocupation" id="ocupation">
+            <label for="occupation">Zatrudnienie</label>
+            <select name="occupation" id="occupation">
                 <option value="N">Brak preferencji</option>
-                <option value="student" {{ (isset($advert)) ? ($advert->ocupation == 'student') ? 'selected' : '' :  (old('ocupation') == 'student') ? 'selected' : '' }}>Student</option>
-                <option value="professional" {{ (isset($advert)) ? ($advert->ocupation == 'professional') ? 'selected' : '' :  (old('ocupation') == 'professional') ? 'selected' : '' }}>Zatrudniony</option>
+                <option value="student" {{ (isset($advert)) ? ($advert->occupation == 'student') ? 'selected' : '' :  (old('occupation') == 'student') ? 'selected' : '' }}>Student</option>
+                <option value="professional" {{ (isset($advert)) ? ($advert->occupation == 'professional') ? 'selected' : '' :  (old('occupation') == 'professional') ? 'selected' : '' }}>Zatrudniony</option>
             </select>
         </div>
+    </div>
+    <div class="flex -mx-4">
         <div class="form-group w-1/3 px-4">
             <label for="minimum_age">Minimalny wiek</label>
             <select name="minimum_age" id="minimum_age">
@@ -206,8 +207,6 @@
                 <option value="18">18</option>
             </select>
         </div>
-    </div>
-    <div class="flex -mx-4">
         <div class="form-group w-1/3 px-4">
             <label for="maximum_age">Maksymalny wiek</label>
             <select name="maximum_age" id="maximum_age">
@@ -227,12 +226,12 @@
         </div>
         <div class="form-group w-1/3 px-4">
             <input type="checkbox" name="smoking" id="smoking" value="1" {{ (isset($advert)) ? ($advert->smoking) ? 'checked' : '' :  (old('smoking')) ? 'checked' : '' }}>
-            <label for="smoking">Palacze</label>
+            <label for="smoking">Tylko dla niepalących</label>
         </div>
     </div>
     <div class="flex -mx-4">
         <div class="px-4 w-full">
-            <p>Dodając ogłoszenie ackeptuję Regulamin serwisu alez.pl.</p>
+            <small>Dodając ogłoszenie ackeptuję Regulamin serwisu alez.pl.</small>
         </div>
     </div>
     <div>

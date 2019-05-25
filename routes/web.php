@@ -59,13 +59,21 @@ Route::group(['middleware' => ['auth', 'verified']], function()
 
     // User account
     Route::get('/moj-alez', 'HomeController@index')->name('home');
+    Route::get('/moj-alez/ustawienia', 'Auth\UserSettingsController@index')->name('settings');
     Route::get('/moj-alez/ogloszenia', 'AdvertsController@mine')->name('adverts.mine'); // @Refactor
 
+    // Passwords
+    Route::get('/moj-alez/zmien-haslo', 'Auth\PasswordChangeController@index')->name('password.change');
+    Route::post('/moj-alez/zmien-haslo', 'Auth\PasswordChangeController@update')->name('password.change.store');
+
     // Conversations
-    Route::get('/moj-alez/odebrane', 'ConversationsController@index')->name('conversations.inbox');
-    Route::post('/pokoje/{city}/{advert}/odpowiedz', 'ConversationsController@store')->name('conversations.store');
-    Route::get('/moj-alez/odebrane/{conversation}', 'ConversationsController@show')->name('conversations.show');
-    Route::post('/moj-alez/odebrane/{conversation}', 'ConversationsController@reply')->name('conversations.reply'); // Should be message controller@store
+    Route::group(['namespace' => 'Conversations'], function() {
+        Route::get('/moj-alez/odebrane', 'InboxController@index')->name('conversations.inbox');
+        Route::get('/moj-alez/wyslane', 'SentController@index')->name('conversations.sent');
+        Route::post('/pokoje/{city}/{advert}/odpowiedz', 'ConversationsController@store')->name('conversations.store');
+        Route::get('/moj-alez/odebrane/{conversation}', 'ConversationsController@show')->name('conversations.show');
+        Route::post('/moj-alez/odebrane/{conversation}', 'MessagesController@store')->name('conversations.reply');
+    });
 
     // Adverts
     Route::get('/pokoje/dodaj', 'AdvertsController@create')->name('adverts.create');
@@ -75,6 +83,7 @@ Route::group(['middleware' => ['auth', 'verified']], function()
     Route::delete('/pokoje/{city}/{advert}', 'AdvertsController@destroy')->name('adverts.destroy');
 
     // Favourites //@refactor to API
+    Route::get('/moj-alez/obserwowane', 'FavouritesController@index')->name('favourites');
     Route::post('/pokoje/{city}/{advert}/ulubione', 'FavouritesController@store')->name('adverts.favourite.store');
     Route::delete('/pokoje/{city}/{advert}/ulubione', 'FavouritesController@destroy')->name('adverts.favourite.delete');
 

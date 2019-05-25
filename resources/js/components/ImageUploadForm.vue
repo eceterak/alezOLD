@@ -1,6 +1,6 @@
 <template>
     <div class="mb-4">
-        <p class="mb-2 text-xs text-grey-darkest">Pierwsze zdjęcie jest miniaturką.</p>
+        <p class="mb-2 text-xs text-grey-darkest">Pierwsze zdjęcie jest miniaturką. Możesz przeciągać zdjęcia aby zmienić ich kolejność.</p>
         <div class="w-full p-4 rounded border-grey border">
             <draggable v-model="images" draggable=".photo" class="flex flex-row flex-wrap items-center -mx-2">
                 <div class="w-1/6 px-2 photo" v-for="(image, index) in images" :key="image.id">

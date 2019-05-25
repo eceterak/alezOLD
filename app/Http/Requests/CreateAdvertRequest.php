@@ -51,6 +51,7 @@ class CreateAdvertRequest extends FormRequest
             'property_type' => 'sometimes',
             'property_size' => 'sometimes',
             'living_room' => 'sometimes',
+            'parking' => 'sometimes',
             'room_size' => 'sometimes',
             'furnished' => 'sometimes',
             'broadband' => 'sometimes',

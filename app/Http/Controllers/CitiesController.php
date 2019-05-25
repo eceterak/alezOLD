@@ -32,7 +32,7 @@ class CitiesController extends Controller
     {        
         $adverts = $this->getAdverts($city, $filters);
 
-        // Leave it, in the case I will use and vue to display advers.
+        // Leave it in the case I will use and vue to display advers.
         if(request()->wantsJson())
         {
             return $adverts;
@@ -61,6 +61,6 @@ class CitiesController extends Controller
         }
 
         // Append any get parameters to keep them in url after navigating to a different page.
-        return $adverts->paginate(10)->appends(Input::except('page'));
+        return $adverts->paginate(20)->appends(Input::except('page'));
     }
 }

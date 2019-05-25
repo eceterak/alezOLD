@@ -28,6 +28,10 @@ class SearchController extends Controller
         if($city) return redirect()->route('cities.show', [$city->slug]);
         
         return redirect()->route('adverts'); // City not found, display all adverts.
-               
+    }
+
+    public function test()
+    {
+        
     }
 }

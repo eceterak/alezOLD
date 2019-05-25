@@ -1904,7 +1904,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user'],
@@ -26023,6 +26022,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
+    _c("img", { staticClass: "rounded-full w-32", attrs: { src: _vm.avatar } }),
+    _vm._v(" "),
     _vm.canUpdate
       ? _c(
           "form",
@@ -26031,17 +26032,11 @@ var render = function() {
             _c("image-upload", {
               attrs: { name: "avatar" },
               on: { loaded: _vm.onLoad }
-            }),
-            _vm._v(" "),
-            _c("button", { staticClass: "btn btn-primary" }, [
-              _vm._v("Dodaj avatar")
-            ])
+            })
           ],
           1
         )
-      : _vm._e(),
-    _vm._v(" "),
-    _c("img", { staticClass: "rounded-full w-32", attrs: { src: _vm.avatar } })
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -26156,7 +26151,9 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mb-4" }, [
     _c("p", { staticClass: "mb-2 text-xs text-grey-darkest" }, [
-      _vm._v("Pierwsze zdjęcie jest miniaturką.")
+      _vm._v(
+        "Pierwsze zdjęcie jest miniaturką. Możesz przeciągać zdjęcia aby zmienić ich kolejność."
+      )
     ]),
     _vm._v(" "),
     _c(

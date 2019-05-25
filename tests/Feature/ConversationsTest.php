@@ -5,10 +5,10 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
-use Facades\Tests\Setup\ConversationFactory;
 use App\Notifications\YouHaveANewMessage;
 use Facades\Tests\Setup\AdvertFactory;
-use Illuminate\Support\Facades\Mail;
+use Facades\Tests\Setup\ConversationFactory;
+use App\User;
 
 class ConversationsTest extends TestCase
 {
@@ -17,10 +17,6 @@ class ConversationsTest extends TestCase
     /** @test */
     public function a_user_can_start_a_conversation()
     {
-        $this->withoutExceptionHandling();
-
-        Mail::fake();
-
         $this->signIn();
         
         $advert = AdvertFactory::create();
@@ -30,30 +26,36 @@ class ConversationsTest extends TestCase
         $this->get(route('adverts.show', [$advert->city->slug, $advert->slug]))->assertSee('Napisz wiadomosc');
         
         $this->post(route('conversations.store', [$advert->city->slug, $advert->slug]), $attributes = [
-            'body' => 'Hi mate I want this advert'
+            'body' => 'Hi mate I want this room'
         ])->assertRedirect(route('adverts.show', [$advert->city->slug, $advert->slug]));
 
-        // We can see new conversation in the sent folder @todo sent folder is not yet working
-        //$this->get(route('conversations.inbox'))->assertSee($attributes['body']);
+        $this->assertCount(1, $advert->conversations);
 
         Notification::assertSentTo($advert->user, YouHaveANewMessage::class);
     }
 
     /** @test */
-    public function participant_can_reply() 
+    public function participant_of_conversation_can_reply() 
     {
-        $conversation = ConversationFactory::create();
-        
-        $this->signIn($conversation->receiver); // Acting as someone who received a message.
-        
+        $advert = AdvertFactory::create();
+
+        $john = $this->signIn();
+
+        $conversation = $advert->inquiry('Hi mate');
+
+        $this->signIn($advert->user);
+
         $this->get(route('conversations.show', $conversation->id))->assertSee($conversation->body);
-    
+
+        Notification::fake();
+
         $this->post(route('conversations.reply', $conversation->id), $attributes = [
             'body' => 'I do agree'
-        ])
-        ->assertRedirect(route('conversations.show', $conversation->id));
-        
+        ])->assertRedirect(route('conversations.show', $conversation->id));
+
         $this->get(route('conversations.show', $conversation->id))->assertSee($attributes['body']);
+
+        Notification::assertSentTo($john, YouHaveANewMessage::class);
     }
 
     /** @test */
@@ -83,5 +85,38 @@ class ConversationsTest extends TestCase
     
             $this->assertFalse($conversation->hasNewMessagesFor($user));
         });
+    }
+        
+    /** @test */
+    public function a_user_can_participate_in_many_conversations()
+    {
+        $magda = create(User::class);
+        $magdaAdvert = AdvertFactory::ownedBy($magda)->create();
+
+        $this->signIn();
+        $magdaAdvert->inquiry('Hi Magda, nice advert you have');
+
+        $this->assertCount(1, $magda->conversations);
+           
+        $this->signIn();
+        $magdaAdvert->inquiry('Hi Magda, nice advert you have');
+        
+        $this->assertCount(2, $magda->fresh()->conversations);
+    }
+
+    /** @test */
+    public function a_user_has_inbox()
+    {
+        $conversation = ConversationFactory::create();
+
+        $this->actingAs($conversation->advert->user)->get(route('conversations.inbox'))->assertSee($conversation->messages->first()->body);
+    }
+
+    /** @test */
+    public function a_user_has_sent_folder()
+    {
+        $conversation = ConversationFactory::create();
+
+        $this->actingAs($conversation->sender)->get(route('conversations.sent'))->assertSee($conversation->messages->first()->body);
     }
 }

@@ -3,11 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Route;
 use Barryvdh\Debugbar\ServiceProvider as Debugbar;
-use App\Observers\TemporaryAdvertObserver;
 use App\Observers\AdvertObserver;
-use App\TemporaryAdvert;
 use App\Advert;
 
 class AppServiceProvider extends ServiceProvider

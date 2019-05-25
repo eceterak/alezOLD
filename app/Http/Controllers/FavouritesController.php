@@ -13,6 +13,23 @@ class FavouritesController extends Controller
      * @param $city
      * @return redirect
      */
+    public function index() 
+    {
+        $user = auth()->user();
+
+        return view('users.favourites.index')->with([
+            'profile' => $user = auth()->user(),
+            'favourites' => $user->favourites
+        ]);
+    }
+
+    /**
+     * User added advert to her favourites.
+     * 
+     * @param Advert $advert
+     * @param $city
+     * @return redirect
+     */
     public function store($city, Advert $advert) 
     {
         $advert->favourite();

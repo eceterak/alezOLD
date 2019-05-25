@@ -2,7 +2,7 @@
 
 @section('lead')
 
-    @include('pages._menu', ['title' => 'Odebrane'])
+    @include('users._menu', ['title' => 'Wysłane'])
 
     @if($conversations->count())
 
@@ -18,10 +18,10 @@
                             @endif
                         </td>
                         <td class="fit">
-                            <p class="text-xs text-grey-darkest">{{ $conversation->sender->name }}</p>
+                            <p class="text-xs text-grey-darkest"></p>
                         </td>
                         <td class="fit">
-                            <p class="text-xs text-grey-darkest">{{ $conversation->created_at }}</p>
+                            <p class="text-xs text-grey-darkest">{{ $conversation->updated_at }}</p>
                         </td>
                     </tr>
                 @endforeach

@@ -5,17 +5,18 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\ConversationFactory;
+use Facades\Tests\Setup\AdvertFactory;
 
 class ConversationTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function it_has_sender()
+    public function it_has_exactly_two_participants()
     {
         $conversation = ConversationFactory::create();
 
-        $this->assertInstanceOf('App\User', $conversation->sender);
+        $this->assertCount(2, $conversation->users);
     }
 
     /** @test */
@@ -25,9 +26,9 @@ class ConversationTest extends TestCase
 
         $conversation = ConversationFactory::create();
         
-        $conversation->reply('Thanks mate');
+        $conversation->reply('Thanks mate', $conversation->advert);
 
-        $this->assertCount(1, $conversation->messages);
+        $this->assertCount(2, $conversation->messages);
     }
 
     /** @test */
@@ -35,9 +36,20 @@ class ConversationTest extends TestCase
     {
         $conversation = ConversationFactory::create();
 
-        $this->actingAs($conversation->sender)->post(route('conversations.reply', $conversation->id), [
+        $this->actingAs($conversation->users[0])->post(route('conversations.reply', $conversation->id), [
             'body' => null
-        ])
-        ->assertSessionHasErrors('body');
+        ])->assertSessionHasErrors('body');
+    }
+
+    /** @test */
+    public function it_can_define_who_sent_inquiry()
+    {
+        $advert = AdvertFactory::create();
+
+        $user = $this->signIn();
+
+        $conversation = $advert->inquiry('Hi bruh');
+
+        $this->assertSame($user->id, $conversation->sender->id);
     }
 }

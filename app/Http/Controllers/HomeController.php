@@ -11,7 +11,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('pages.home')->with([
+        return view('users.home')->with([
             'profile' => $user = auth()->user(),
             'adverts' => $user->adverts()->paginate()
         ]);

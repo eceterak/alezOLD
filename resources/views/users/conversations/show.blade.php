@@ -2,18 +2,16 @@
 
 @section('lead')
 <div class="card">
-    <header>
-        <h3>{{ $conversation->advert->title }}</h3>
-    </header>
-    <div class="card-content">
+    <div class="card-body">
+        <h3 class="mb-4"><a href="{{ route('adverts.show', [$conversation->advert->city->slug, $conversation->advert->slug]) }}">{{ $conversation->advert->title }}</a></h3>
         @foreach($conversation->messages as $message)
             @if($message->user->id == auth()->id())
-                <p><h5>{{ $message->user->name }} @ {{ $message->created_at }}</h5></p>                
+                <h5 class="mb-2">{{ $message->user->name }} @ {{ $message->created_at }}</h5>
                 <p class="mb-4 p-4 border-l-2 border-green bg-green-lightest">{{ $message->body }}</p>
             @else  
                 <div>
-                    <p><h5>{{ $message->user->name }} @ {{ $message->created_at }}</h5></p>
-                    <p class="mb-4 p-4 text-right border-l-2 border-red bg-red-lightest">{{ $message->body }}</p>
+                    <h5 class="mb-2">{{ $message->user->name }} @ {{ $message->created_at }}</h5>
+                    <p class="mb-4 p-4 border-l-2 border-orange bg-orange-lightest">{{ $message->body }}</p>
                 </div> 
             @endif
         @endforeach

@@ -24,8 +24,7 @@ class Advert extends Model
      */
     protected $with = [
         'city',
-        'user', 
-        'favourites'
+        'user'
     ];
 
     /**
@@ -110,7 +109,7 @@ class Advert extends Model
     }
 
     /**
-     * 
+     * Get photos.
      * 
      * @return App\Photo
      */
@@ -161,18 +160,21 @@ class Advert extends Model
     /**
      * Send an inquiry about the advert.
      * 
-     * @refactor
      * @param string $body
+     * @param App\User $user
      * @return App\Conversation
      */
-    public function inquiry($body) 
+    public function inquiry($body, $user = null) 
     {
-        $conversation = $this->conversations()->create([
-            'receiver_id' => $this->user->id,
-            'sender_id' => auth()->user()->id
-        ]); 
+        $user = ($user) ?? auth()->user();
 
-        $conversation->reply($body);
+        $conversation = $this->conversations()->create();
+
+        // Update the conversation_user pivot table.
+        $conversation->users()->sync([$user->id, $this->user->id]);
+
+        // Send a message.
+        $conversation->reply($body, $this, $user);
 
         return $conversation;
     }

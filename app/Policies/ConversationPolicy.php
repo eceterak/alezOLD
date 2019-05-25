@@ -19,6 +19,6 @@ class ConversationPolicy
      */
     public function view(User $user, Conversation $conversation) 
     {
-        return $user->is($conversation->sender) || $user->is($conversation->receiver);
+        return $conversation->users->contains($user);
     }
 }

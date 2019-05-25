@@ -8,7 +8,6 @@
                 Ogłoszenia użytkownika
             </p>
         </div>
-        <avatar-form :user="{{ $profile }}"></avatar-form>
     </header>
     @include('adverts._list')
 @endsection
