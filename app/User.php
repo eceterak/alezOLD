@@ -246,4 +246,53 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->notifications()->delete();
         $this->activities()->delete();
     }
+
+    /**
+     * Check if user has unready notifications of a given type.
+     * 
+     * @param string $type
+     * @return Collection
+     */
+    public function hasUnreadNotificationsOfType($type)
+    {
+        $count = $this->unreadNotifications()->where('type', "App\\Notifications\\{$type}")->count();
+
+        return ($count > 99) ? '99+' : $count;
+    }
+
+    /**
+     * If notifications count is greater than 99, return 99+ so it won't breake design.
+     * 
+     * @return null/string/int
+     */
+    public function getNotificationsCountAttribute($notifications_count = null) 
+    {
+        $count = $notifications_count ?? $this->unreadNotifications()->count();
+
+        return $this->attributes['notifications_count'] = ($count > 99) ? '99+' : $count;
+    }
+
+    /**
+     * When visiting a subject, check if user has any notifications
+     * about it and mark them as read.
+     * 
+     * @param mixed $subject
+     * @return
+     */
+    public function sawNotificationsFor($subject) 
+    {
+        $notification = $this->unreadNotifications()->where('subject_type', get_class($subject))->where('subject_id', $subject->id)->get();
+
+        if($notification) $notification->markAsRead();
+    }
+
+    /**
+     * Check if user accepts notifications for a given channel.
+     * 
+     * @return boolean
+     */
+    public function acceptsEmailNotifications()
+    {
+        return $this->email_notifications;
+    }
 }

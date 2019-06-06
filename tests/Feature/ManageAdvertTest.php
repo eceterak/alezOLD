@@ -65,7 +65,7 @@ class ManageAdvertTest extends TestCase
             'description' => 'description has been updated',
             'rent' => 2000,
             'pets' => 1
-        ])->assertRedirect(route('adverts'));
+        ])->assertRedirect(route('home'));
 
         tap($this->advert->fresh(), function($advert) 
         {
@@ -87,7 +87,7 @@ class ManageAdvertTest extends TestCase
             'title' => 'The title is updated',
             'city_id' => $this->advert->city->id,
             'street_id' => $this->advert->city->id
-        ]))->assertRedirect(route('adverts'));
+        ]));
 
         $this->advert->fresh()->acceptRevision();
 
