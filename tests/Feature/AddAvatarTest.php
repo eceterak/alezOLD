@@ -30,8 +30,6 @@ class AddAvatarTest extends TestCase
     /** @test */
     public function a_user_may_add_an_avatar_to_their_profile()
     {
-        $this->withoutExceptionHandling();
-
         $user = $this->signIn();
 
         Storage::fake('public');
@@ -45,5 +43,49 @@ class AddAvatarTest extends TestCase
         $this->assertEquals("/storage/avatars/{$file->hashName()}", auth()->user()->avatar_path);
         
         Storage::disk('public')->assertExists("avatars/{$file->hashName()}");
+    }
+
+    /** @test */
+    public function when_user_uploads_new_avatar_old_one_is_deleted()
+    {
+        $user = $this->signIn();
+
+        Storage::fake('public');
+
+        $oldAvatar = UploadedFile::fake()->image('avatar.jpg');
+
+        $this->json('POST', route('api.users.avatars.store', $user->name), [
+            'avatar' => $oldAvatar
+        ]);
+
+        $newAvatar = UploadedFile::fake()->image('newavatar.jpg');
+
+        $this->json('POST', route('api.users.avatars.store', $user->name), [
+            'avatar' => $newAvatar
+        ]);
+        
+        Storage::disk('public')->assertExists("avatars/{$newAvatar->hashName()}");
+
+        Storage::disk('public')->assertMissing("avatars/{$oldAvatar->hashName()}");
+    }
+
+    /** @test */
+    public function a_user_can_delete_her_avatar()
+    {
+        $user = $this->signIn();
+
+        Storage::fake('public');
+
+        $oldAvatar = UploadedFile::fake()->image('avatar.jpg');
+
+        $this->json('POST', route('api.users.avatars.store', $user->name), [
+            'avatar' => $oldAvatar
+        ]);
+
+        $this->json('DELETE', route('api.users.avatars.delete', $user->name));
+
+        Storage::disk('public')->assertMissing("avatars/{$oldAvatar->hashName()}");
+
+        $this->assertEquals('/storage/avatars/notfound.jpg', $user->avatar_path);
     }
 }

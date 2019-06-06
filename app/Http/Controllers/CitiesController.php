@@ -17,7 +17,7 @@ class CitiesController extends Controller
     public function index() 
     {
         return view('cities.index')->with([
-            'cities' => City::paginate(10)
+            'stateCities' => City::where('importance', '>=', '0.75')->orderBy('importance', 'desc')->get()->groupBy('state')
         ]);
     }
 
@@ -53,7 +53,7 @@ class CitiesController extends Controller
      */
     protected function getAdverts(City $city, AdvertFilters $filters)
     {
-        $adverts = Advert::latest()->filter($filters);
+        $adverts = Advert::latest()->where('verified', true)->where('archived', false)->filter($filters);
 
         if($city->exists)
         {
@@ -61,6 +61,6 @@ class CitiesController extends Controller
         }
 
         // Append any get parameters to keep them in url after navigating to a different page.
-        return $adverts->paginate(20)->appends(Input::except('page'));
+        return $adverts->paginate(24)->appends(Input::except('page'));
     }
 }

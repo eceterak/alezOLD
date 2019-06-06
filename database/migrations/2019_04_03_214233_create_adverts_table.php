@@ -20,9 +20,10 @@ class CreateAdvertsTable extends Migration
             $table->unsignedInteger('city_id');
             $table->unsignedInteger('street_id')->nullable();
             $table->boolean('verified')->default(false);
-            $table->boolean('active')->default(false);
+            $table->boolean('archived')->default(false);
             $table->string('slug')->nullable()->unique();
             $table->unsignedInteger('visits')->default(0);
+            $table->text('revision')->nullable();
             
             // $$$.
             $table->unsignedSmallInteger('rent')->nullable();
@@ -54,14 +55,13 @@ class CreateAdvertsTable extends Migration
             $table->boolean('smoking')->default(false);
             $table->boolean('pets')->default(false);
             $table->boolean('couples')->default(false);
-            $table->enum('gender', ['n', 'm', 'f'])->nullable();
-            $table->enum('occupation', ['n', 'student', 'professional'])->nullable();
+            $table->enum('gender', ['m', 'f'])->nullable();
+            $table->enum('occupation', ['student', 'professional'])->nullable();
             $table->unsignedTinyInteger('minimum_age')->nullable();
             $table->unsignedTinyInteger('maximum_age')->nullable();
 
             $table->timestamps();
             
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('city_id')->references('id')->on('cities');
         });
     }

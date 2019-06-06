@@ -5,6 +5,7 @@ namespace App\Policies;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Conversation;
 use App\User;
+use App\Advert;
 
 class ConversationPolicy
 {

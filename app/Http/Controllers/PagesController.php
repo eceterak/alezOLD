@@ -14,7 +14,37 @@ class PagesController extends Controller
     public function index() 
     {
         return view('pages.index')->with([
-            'cities' => City::where('suggested', true)->limit(12)->orderBy('importance', 'DESC')->get()
+            'suggestedCities' => City::where('suggested', true)->limit(12)->orderBy('importance', 'DESC')->get()
         ]);
+    }
+
+    /**
+     * 
+     * 
+     * @return view
+     */
+    public function termsAndConditions() 
+    {
+        return view('pages.termsAndConditions');
+    }
+
+    /**
+     * 
+     * 
+     * @return view
+     */
+    public function aboutUs() 
+    {
+        return view('pages.aboutUs');
+    }
+
+    /**
+     * 
+     * 
+     * @return view
+     */
+    public function privacyPolicy() 
+    {
+        return view('pages.privacyPolicy');
     }
 }

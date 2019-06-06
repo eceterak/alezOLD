@@ -1,28 +1,32 @@
 @forelse($adverts as $advert)
-    <div class="card mb-6">
-        <div class="flex -mx-2">
-            <div class="flex lg:static lg:w-1/6 items-center justify-center mb-0 lg:mb-0 sm:mb-2 px-2">
-                <img src="{{ $advert->featured_photo_path }}">
+    <div class="card mb-4 shadow-sm">
+        <div class="row no-gutters">
+            <div class="d-flex col-md-2 align-items-center py-2 pl-2">
+                <img src="{{ $advert->featured_photo_path }}" class="img-fluid">
             </div>
-            <div class="card-body lg:static lg:w-5/6 px-2">
-                <div class="flex justify-between">
-                    <h3 class="font-normal text-lg mb-4"><a href="{{ route('adverts.show', [$advert->city->slug, $advert->slug])}}">{{ $advert->title }}</a></h3>
-                    @auth
+            <div class="col-md-10">
+                <div class="card-body h-100">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title"><a href="{{ route('adverts.show', [$advert->city->slug, $advert->slug]) }}">{{ $advert->title }}</a></h5>
+                        <h3 color="text-warning">{{ $advert->rent }}<small class="text-muted">&nbsp;zł/mc</small></h3>
+                    </div>
+                    <div class="card-text">{{ str_limit($advert->description, 100) }}</div>
+                    <div class="d-flex align-items-end justify-content-between">
+                        <small>{{ $advert->created_at->toFormattedDateString() }}</small>
                         <favourite :advert="{{ $advert }}"></favourite>
-                    @endauth
+                    </div>
                 </div>
-                <section>
-                    <p class="text-grey-darker">{{ str_limit($advert->description, 100) }}</p>
-                    <p class="text-grey-darker">{{ $advert->rent }}</p>
-                    <p class="text-grey-darker">{{ $advert->created_at }}</p>
-                </section>
             </div>
         </div>
     </div>
+    {{ $adverts->onEachSide(1)->links() }}
 @empty
-    <div>Brak ogloszen</div>
+    @if(request()->except(['sort', 'page']))
+        <p>Nie znaleziono żadnych ogłoszeń spełniających podane kryteria.</p>
+    @else
+        <p>Brak ogłoszeń</p>
+    @endif
 @endforelse
-{{ $adverts->links() }}
 
 {{-- Vue.js aproach --}}
 {{--<city-view :initial-adverts-count="{{ $city->adverts_count }}" inline-template>

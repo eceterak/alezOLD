@@ -13,7 +13,7 @@ class HomeController extends Controller
     {
         return view('users.home')->with([
             'profile' => $user = auth()->user(),
-            'adverts' => $user->adverts()->paginate()
+            'adverts' => $user->adverts()->where('archived', false)->paginate(24)
         ]);
     }
 }

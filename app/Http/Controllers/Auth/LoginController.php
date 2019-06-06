@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Iluminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class LoginController extends Controller
 {
@@ -29,16 +30,28 @@ class LoginController extends Controller
      */
     public function __construct()
     {
+        $this->redirectTo = URL::previous();
+
         $this->middleware('guest')->except('logout');
     }
 
     /**
-     * Redirect to home after successfull login.
-     * 
-     * @return string
+     * Handle an authentication attempt.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return Response
      */
-    public function redirectTo() 
+    public function authenticate(Request $request)
     {
-        return route('home');
+        $credentials = $request->only('email', 'password');
+
+        $email = $request->email;
+        $password = $request->password;
+
+        if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'active' => true])) 
+        {
+            return redirect()->{$this->redirectTo()};
+        }
     }
 }

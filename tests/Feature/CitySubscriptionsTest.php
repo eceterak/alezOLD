@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\City;
-use Facades\Tests\Setup\AdvertFactory;
-use App\CitySubscription;
 
 class CitySubscriptionsTest extends TestCase
 {
@@ -15,7 +13,7 @@ class CitySubscriptionsTest extends TestCase
     /** @test */
     public function a_user_can_subscribe_to_city()
     {
-        $user = $this->signIn();
+        $this->signIn();
 
         $city = create(City::class);
 
@@ -27,9 +25,7 @@ class CitySubscriptionsTest extends TestCase
     /** @test */
     public function a_user_can_unsubscribe_from_city()
     {
-        $this->withoutExceptionHandling();
-
-        $user = $this->signIn();
+        $this->signIn();
 
         $city = create(City::class);
 
@@ -38,5 +34,17 @@ class CitySubscriptionsTest extends TestCase
         $this->delete(route('city.unsubscribe', $city->slug));
 
         $this->assertCount(0, $city->subscriptions);
+    }
+
+    /** @test */
+    public function a_user_can_view_her_subscribtions()
+    {
+        $this->signIn();
+
+        $city = create(City::class);
+
+        $city->subscribe();
+
+        $this->get(route('subscriptions'))->assertSee($city->name);
     }
 }

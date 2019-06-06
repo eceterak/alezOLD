@@ -3,7 +3,7 @@
 @section('lead')
     <div class="card">
         <div class="card-body"> 
-            <h3 class="mb-5">Dodaj ogłoszenie</h3>
+            <h3 class="card-title mb-4">Dodaj ogłoszenie</h3>
             @include('adverts._form', [
                 'route' => ['adverts.store', session('create_advert_token')],
                 'name' => 'create_new_advert',
@@ -13,27 +13,27 @@
         </div>
     </div>
 
-    {{-- <div class="mx-auto w-7/8">
-        <h3 class="mb-6">Wybierz swój formularz</h3>
-        <div class="flex -mx-6">
-            <div class="w-1/2 px-5">
+    {{-- <div class="mx-auto col-11">
+        <h4 class="mb-4">Wybierz swój formularz</h4>
+        <div class="row">
+            <div class="col-6">
                 <div class="card">
                     <div class="card-body">
-                        <h3>Prosty formularz</h3>
-                        <p class="my-4 leading-loose">Masz pokój na wynajem i niewiele wolnego czasu? Skorzystaj z prostego formularza i dodaj ogłoszenie w kilka minut!</p>
+                        <h5 class="card-title">Prosty formularz</h5>
+                        <p class="card-text">Masz wolny pokój na wynajem i niewiele wolnego czasu? Skorzystaj z prostego formularza i dodaj ogłoszenie w kilka minut!</p>
                         <div class="text-center">
                             <button class="btn btn-primary">Dodaj ogłoszenie</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="w-1/2 px-6">
+            <div class="col-6">
                 <div class="card">
                     <div class="card-body">
-                        <h3>Formularz szczegółowy</h3>
-                        <p class="my-4 leading-loose">Dla wymagających użytkowników chcących dokładnie określić na jakich warunkach pokój będzie wynajmowany.</p>
+                        <h5 class="card-title">Formularz szczegółowy</h5>
+                        <p class="card-text">Dla wymagających użytkowników chcących dokładnie określić na jakich warunkach pokój będzie wynajmowany.</p>
                         <div class="text-center">
-                            <button class="btn btn-reverse">Dodaj ogłoszenie</button>
+                            <button class="btn btn-secondary">Dodaj ogłoszenie</button>
                         </div>
                     </div>        
                 </div>        

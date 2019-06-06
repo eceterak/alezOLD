@@ -1,5 +1,4 @@
 /** Axios */
-
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -14,7 +13,6 @@ else {
 }
 
 /** Vue */
-
 window.Vue = require('vue');
 window.events = new Vue();
 
@@ -22,15 +20,22 @@ let authorizations = require('./authorizations');
 
 // Make instance of a user available globally.
 window.Vue.prototype.authorize = function(...params) {
-
-    if(!window.App.signedIn) return false;
-
+    
     if(typeof params[0] === 'string') {
         return authorizations[params[0]](params[1]);
     }
 
     return params[0](window.App.user);
 }
+
+Vue.mixin({
+    methods: {
+        cccd: function() {
+            console.log('hi');
+        }
+    }
+});
+
 
 // Load components.
 Vue.component('image-upload-form', require('./components/ImageUploadForm.vue').default);
@@ -56,12 +61,14 @@ const app = new Vue({
 });
 
 /** JS */
-
 try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
+
     require('jquery-ui/ui/widgets/autocomplete');
     require('jquery-ui/ui/widgets/button');
-    require('jquery-ui/ui/widgets/tooltip');
+    //require('jquery-ui/ui/widgets/tooltip');
     require('jquery-ui/ui/widgets/datepicker');
+
+    require('bootstrap');
 } catch (e) {}

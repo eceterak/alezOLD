@@ -2,32 +2,50 @@
 
 @section('lead')
 
-    @include('users._menu', ['title' => 'Odebrane'])
+    @include('users._menu', [
+        'title' => 'Odebrane',
+        'subtitle' => 'Wiadomości od innych użytkowników'
+    ])
 
     @if($conversations->count())
-
-        <table class="table">
-            <tbody>
-                @foreach($conversations as $conversation)
-                    <tr>
-                        <td>
-                            @if($conversation->hasNewMessagesFor($profile))
-                                <p><strong><a href="{{ route('conversations.show', $conversation->id) }}">{{ $conversation->messages()->first()->body }}</a></strong></p>
-                            @else
-                                <p><a href="{{ route('conversations.show', $conversation->id) }}">{{ $conversation->messages()->first()->body }}</a></p>    
-                            @endif
-                        </td>
-                        <td class="fit">
-                            <p class="text-xs text-grey-darkest"></p>
-                        </td>
-                        <td class="fit">
-                            <p class="text-xs text-grey-darkest">{{ $conversation->updated_at }}</p>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
+        <div class="card">
+            <table class="table">
+                <tbody>
+                    @foreach($conversations as $conversation)
+                        <tr>
+                            <td>
+                                <p class="card-text">
+                                    @if($conversation->hasNewMessagesFor($profile))
+                                        <strong><a href="{{ route('conversations.show', $conversation->id) }}">{{ str_limit($conversation->messages()->first()->body, 80) }}</a></strong>
+                                    @else
+                                        <a href="{{ route('conversations.show', $conversation->id) }}">{{ str_limit($conversation->messages()->first()->body, 80) }}</a>
+                                    @endif
+                                </p>
+                            </td>
+                            <td class="fit small">
+                                <p @if($conversation->advert->archived) style="text-decoration: line-through;" @endif class="mb-0">
+                                    <a href="{{ route('adverts.show', [$conversation->advert->city->slug, $conversation->advert->slug]) }}">{{ $conversation->advert->title }}<i class="fas fa-link fa-xs ml-1"></i></a>
+                                </p>
+                            </td>
+                            <td class="fit">
+                                <p class="mb-0">{!! $conversation->interlocutor->path !!}</p>
+                            </td>
+                            <td class="fit">
+                                @if($conversation->updated_at->diffInDays() < 1)
+                                    <p class="card-text text-muted">{{ $conversation->updated_at->format('H:i') }}</p>
+                                @else
+                                    @if($conversation->updated_at->diffInYears() < 1)
+                                        <p class="card-text text-muted">{{ $conversation->updated_at->format('j F') }}</p>
+                                    @else
+                                        <p class="card-text text-muted">{{ $conversation->updated_at->format('j F Y') }}</p>
+                                    @endif
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     @endif
 
 @endsection

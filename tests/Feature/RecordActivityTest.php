@@ -15,8 +15,6 @@ class RecordActivityTest extends TestCase
     /** @test */
     public function creating_an_advert_records_an_activity()
     {
-        $this->withoutExceptionHandling();
-
         $this->signIn();
 
         $advert = AdvertFactory::create();
@@ -53,8 +51,14 @@ class RecordActivityTest extends TestCase
             $this->assertEquals('updated_advert', $activity->description);
 
             $expected = [
-                'before' => ['title' => $title],
-                'after' => ['title' => 'updated']
+                'before' => [
+                    'title' => $title,
+                    'slug' => str_slug($title)
+                ],
+                'after' => [
+                    'title' => 'updated',
+                    'slug' => 'updated'
+                ]
             ];
 
             $this->assertEquals($expected, $activity->changes);
@@ -64,25 +68,24 @@ class RecordActivityTest extends TestCase
     /** @test */
     public function verifying_an_advert_records_an_activity()
     {
-        $advert = AdvertFactory::create();
+        $advert = AdvertFactory::create([
+            'verified' => false
+        ]);
 
         $advert->verify();
 
-        $this->assertCount(3, $advert->activities);
-        $this->assertEquals('verified_advert', $advert->activities->last()->description);
+        $this->assertCount(2, $advert->activities);
     }
 
     /** @test */
-    public function deleting_advert_deletes_all_activites_assorted_with_it()
-    {        
+    public function deleting_an_advert_records_an_activity()
+    {
         $advert = AdvertFactory::create();
 
-        $this->actingAs($advert->user)->delete(route('adverts.destroy', [$advert->city->slug, $advert->slug]));
+        $advert->archive();
 
-        $this->assertDatabaseMissing('activities', [
-            'subject_id' => $advert->id,
-            'subject_type' => get_class($advert)
-        ]);
+        $this->assertCount(2, $advert->activities);
+        //$this->assertEquals('deleted_advert', $advert->activities->last()->description);
     }
 
     /** @test */

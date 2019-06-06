@@ -9,6 +9,7 @@ use App\Advert;
 use App\City;
 use Carbon\Carbon;
 use App\Photo;
+use App\Street;
 
 class AdvertTest extends TestCase
 {
@@ -78,13 +79,40 @@ class AdvertTest extends TestCase
     }
 
     /** @test */
+    public function it_must_be_unverified_by_default()
+    {
+        $this->signIn();
+
+        $street = create(Street::class);
+        
+        $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
+            'city_id' => $street->city->id,
+            'street_id' => $street->id,
+        ]))->assertRedirect(route('home'));
+
+        $advert = Advert::where('title', $attributes['title'])->first();
+
+        $this->assertFalse($advert->verified);
+    }
+
+    /** @test */
     public function it_can_be_verified()
     {
-        $this->actingAs($this->admin())->patch(route('admin.adverts.update', $this->advert->slug), [
-            'verified' => true
+        $advert = AdvertFactory::create([
+            'verified' => false
         ]);
+        
+        $advert->verify();
 
-        $this->assertTrue($this->advert->refresh()->verified);
+        $this->assertTrue($advert->refresh()->verified);
+    }
+
+    /** @test */
+    public function it_can_be_archived()
+    {
+        $this->advert->archive();
+
+        $this->assertTrue($this->advert->refresh()->archived);
     }
 
     /** @test */
@@ -122,19 +150,72 @@ class AdvertTest extends TestCase
     /** @test */
     public function it_can_determine_its_featured_image()
     {
-        $this->withoutExceptionHandling();
-
         $advert = AdvertFactory::create();
         
-        $this->assertEquals('/storage/avatars/notfound.png', $advert->featured_photo_path);
+        $this->assertEquals('/storage/photos/notfound.jpg', $advert->featured_photo_path);
         
         $photo = Photo::create([
             'advert_id' => $advert->id,
             'url' => 'photos/room.jpg',
-            'featured' => true
+            'order' => 0
         ]);
         
         $this->assertEquals('/storage/photos/room.jpg', $advert->featured_photo_path);
+    }
 
+    /** @test */
+    public function it_can_check_for_pending_revision()
+    {
+        $advert = AdvertFactory::create();
+
+        $advert->revision = [
+            'title' => 'foo',
+            'description' => 'bar'
+        ];
+        
+        $this->assertTrue($advert->has_pending_revision);
+    }
+
+    /** @test */
+    public function it_can_update_its_current_attributes_with_revision()
+    {
+        $advert = AdvertFactory::create();
+
+        $advert->revision = [
+            'title' => 'foo',
+            'description' => 'bar'
+        ];
+
+        $advert->loadPendingRevision();
+        
+        $this->assertEquals($advert->title, 'foo');
+        $this->assertNotEquals($advert->fresh()->title, 'foo');
+    }
+
+    /** @test */
+    public function it_can_accept_pending_revisions()
+    {
+        $advert = AdvertFactory::create();
+
+        $advert->revision = [
+            'title' => 'foo',
+            'description' => 'bar'
+        ];
+
+        $advert->acceptRevision();
+        
+        $this->assertEquals($advert->fresh()->title, 'foo');
+    }
+
+    /** @test */
+    public function if_advert_is_deleted_its_name_reflects_that_fact()
+    {
+        $advert = AdvertFactory::create();
+
+        $title = $advert->title;
+
+        $advert->archive();
+
+        $this->assertEquals($title.' (zakończone)', $advert->fresh()->title);
     }
 }

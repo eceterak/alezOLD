@@ -9,6 +9,13 @@ class CitySubscription extends Model
     protected $guarded = [];
 
     /**
+     * Eager load city.
+     * 
+     * @var array
+     */
+    protected $with = ['city'];
+
+    /**
      * It belongs to an user.
      * 
      * @return App\User

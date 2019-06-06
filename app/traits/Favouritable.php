@@ -40,7 +40,7 @@ trait Favouritable
 
         if(!$this->favourites()->where($attributes)->exists()) 
         {
-            $this->favourites()->create($attributes);
+            return $this->favourites()->create($attributes);
         }
     }
 

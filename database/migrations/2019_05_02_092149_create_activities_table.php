@@ -23,7 +23,7 @@ class CreateActivitiesTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            //$table->foreign('subject_id')->references('id')->on('adverts')->onDelete('cascade');
+            $table->foreign('subject_id')->references('id')->on('adverts')->onDelete('cascade');
         });
     }
 

@@ -37,7 +37,7 @@ class CreateAdvertTest extends TestCase
             'title' => 'hi ho lets go',
         ]);
 
-        $this->assertEquals('hi-ho-lets-go-'.$secondAdvert->id, $secondAdvert->slug);
+        $this->assertNotEquals($firstAdvert->slug, $secondAdvert->slug);
     }
 
     /** @test */

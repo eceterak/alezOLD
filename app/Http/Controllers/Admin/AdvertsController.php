@@ -55,7 +55,7 @@ class AdvertsController extends Controller
         $attributes = $this->validateRequest($request);
         $attributes['slug'] = $request->title;
 
-        $advert = auth()->user()->Adverts()->create($attributes);
+        $advert = auth()->user()->adverts()->create($attributes);
 
         return redirect(route('admin.adverts'));
     }

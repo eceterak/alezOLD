@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -17,7 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'avatar_path'
+        'name', 'active', 'email', 'password', 'bio', 'email_notifications', 'avatar_path', 'notifications_count', 'deleted_at'
     ];
 
     /**
@@ -26,7 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $visible = [
-        'id', 'name', 'role', 'avatar_path'
+        'id', 'name', 'role', 'avatar_path', 'email_verified_at', 'notifications_count'
     ];
 
     /**
@@ -35,18 +36,10 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $casts = [
+        'active' => 'boolean',
         'email_verified_at' => 'datetime',
+        'email_notifications' => 'boolean'
     ];
-
-    /**
-     * Replace default key for route model binding.
-     * 
-     * @return string
-     */
-    public function getRouteKeyName() 
-    {
-        return 'name';
-    }
 
     /**
      * User has many adverts.
@@ -81,7 +74,7 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Get all messages.
      * 
-     * @return App\Conversation
+     * @return App\Message
      */
     public function messages()
     {
@@ -96,6 +89,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function favourites() 
     {
         return $this->hasMany(Favourite::class);
+    }
+
+    /**
+     * Get all favourites.
+     * 
+     * @return App\CitySubscription
+     */
+    public function subscriptions() 
+    {
+        return $this->hasMany(CitySubscription::class);
     }
 
     /**
@@ -119,13 +122,45 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Returns name or message if account is deleted.
+     * 
+     * @return string
+     */
+    public function getNameAttribute($name) 
+    {
+        return (!$this->active) ? 'Konto usunięte' : $name;
+    }
+
+    /**
+     * Returns full path to users account.
+     * In case if user deleted an account, return apprioprate message.
+     * 
+     * @return string
+     */
+    public function getPathAttribute() 
+    {
+        return (!$this->active) ? '<span class="text-muted">konto usunięte</span>' : '<a href="'.route('profiles.show', $this->id).'">'.$this->name.'</a>';
+    }
+
+    /**
      * Return a path to avatar or default image if user has not uploaded one.
      * 
      * @return string
      */
     public function getAvatarPathAttribute($avatar_path) 
     {
-        return (!is_null($avatar_path)) ? '/storage/'.$avatar_path : '/storage/avatars/notfound.png';
+        return (!is_null($avatar_path)) ? '/storage/'.$avatar_path : $this->avatarNotFoundPath();
+    }
+
+    /**
+     * As there is a custom getter on avatar_path, 
+     * to determine if user has uploaded a avatar compare her avatar_path with default, not found path.
+     * 
+     * @return bool
+     */
+    public function hasUploadedAvatar() 
+    {
+        return $this->avatarNotFoundPath() != $this->avatar_path;
     }
 
     /**
@@ -148,5 +183,67 @@ class User extends Authenticatable implements MustVerifyEmail
     public function visitedConversationCacheKey($conversation) 
     {
         return sprintf("users.%d.visits.%d", $this->id, $conversation->id);
+    }
+
+    /**
+     * Return a path to notFound avatar/dummy user image.
+     * 
+     * @return string
+     */
+    public function avatarNotFoundPath() 
+    {
+        return '/storage/avatars/notfound.jpg';
+    }
+
+    /**
+     * Check if user has uploaded a avatar, remove it
+     * and update avatar_path to null.
+     * 
+     * @return void
+     */
+    public function deleteAvatar() 
+    {
+        if($this->hasUploadedAvatar())
+        {
+            $path = str_replace('/storage/', '', $this->avatar_path);
+
+            Storage::disk('public')->delete($path);
+    
+            $this->update([
+                'avatar_path' => null
+            ]);
+        }
+    }
+
+    /**
+     * Desactivate the account, archive all of users adverts.
+     * Favourites, subscriptions and notifications are deleted trough
+     * mysql foreign key cascade delete.
+     * 
+     * @return
+     */
+    public function deleteAccount() 
+    {
+        auth()->logout();
+        
+        $this->update([
+            'name' => 'deleted',
+            'active' => false,
+            'email' => 'deleted',
+            'password' => 'deleted',
+            'bio' => 'deleted',
+            'deleted_at' => now()
+        ]);
+
+        $this->adverts()->update([
+            'archived' => true
+        ]);
+
+        $this->deleteAvatar();
+
+        $this->favourites()->delete();
+        $this->subscriptions()->delete();
+        $this->notifications()->delete();
+        $this->activities()->delete();
     }
 }

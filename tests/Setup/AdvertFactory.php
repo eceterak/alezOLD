@@ -101,7 +101,8 @@ class AdvertFactory
         $attributes = array_merge([
             'user_id' => $this->user ?? create(User::class),
             'city_id' => $this->city ?? $street->city->id,
-            'street_id' => $this->street ?? $street->id
+            'street_id' => $this->street ?? $street->id,
+            'verified' => true
         ], $data);
 
         $this->city = null;

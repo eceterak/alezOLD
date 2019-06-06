@@ -39,6 +39,16 @@ class VerificationController extends Controller
      */
     public function redirectTo() 
     {
-        return route('home');
+        return route('verification.success');
+    }
+
+    /**
+     * Redirect to home after successfull verification.
+     * 
+     * @return string
+     */
+    public function success() 
+    {
+        return view('auth.verified');
     }
 }

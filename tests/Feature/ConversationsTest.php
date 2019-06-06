@@ -17,6 +17,8 @@ class ConversationsTest extends TestCase
     /** @test */
     public function a_user_can_start_a_conversation()
     {
+        $this->withoutExceptionHandling();
+
         $this->signIn();
         
         $advert = AdvertFactory::create();
@@ -31,23 +33,25 @@ class ConversationsTest extends TestCase
 
         $this->assertCount(1, $advert->conversations);
 
-        Notification::assertSentTo($advert->user, YouHaveANewMessage::class);
+        Notification::assertSentTo($advert->user, YouHaveANewMessage::class, function($notification, $channels) {
+            return (in_array('mail', $channels) && in_array('database', $channels));
+        });
     }
 
     /** @test */
     public function participant_of_conversation_can_reply() 
     {
         $advert = AdvertFactory::create();
-
+        
         $john = $this->signIn();
-
+        
         $conversation = $advert->inquiry('Hi mate');
-
+        
         $this->signIn($advert->user);
+        
+        Notification::fake();
 
         $this->get(route('conversations.show', $conversation->id))->assertSee($conversation->body);
-
-        Notification::fake();
 
         $this->post(route('conversations.reply', $conversation->id), $attributes = [
             'body' => 'I do agree'
@@ -118,5 +122,27 @@ class ConversationsTest extends TestCase
         $conversation = ConversationFactory::create();
 
         $this->actingAs($conversation->sender)->get(route('conversations.sent'))->assertSee($conversation->messages->first()->body);
+    }
+
+    /** @test */
+    public function a_user_can_read_all_conversations_about_the_advert()
+    {
+        $this->withoutExceptionHandling();
+
+        $conversation = ConversationFactory::create();
+
+        $this->signIn($conversation->advert->user);
+
+        $this->get(route('conversations.advert', $conversation->advert->slug))->assertSee($conversation->messages->first()->body);
+    }
+
+    /** @test */
+    public function a_user_should_not_be_able_to_start_a_conversation_with_herself()
+    {
+        $user = $this->signIn();
+        
+        $advert = AdvertFactory::ownedBy($user)->create();
+        
+        $response = $this->post(route('conversations.store', [$advert->city->slug, $advert->slug]))->assertRedirect()->assertSessionHasErrors();
     }
 }

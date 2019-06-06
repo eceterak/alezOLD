@@ -19,7 +19,7 @@ class AdvertWasAdded extends Notification
     /**
      * @var App\Advert
      */
-    protected $advert;
+    public $subject;
 
     /**
      * Create a new notification instance.
@@ -31,7 +31,7 @@ class AdvertWasAdded extends Notification
     public function __construct($city, $advert)
     {
         $this->city = $city;
-        $this->advert = $advert;
+        $this->subject = $advert;
     }
 
     /**
@@ -65,11 +65,14 @@ class AdvertWasAdded extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toDatabase($notifiable)
     {
+        $message = '<small>Nowe ogłoszenie w <a href="'.route('cities.show', $this->city->slug).'">'.$this->city->name.'</a></small>
+                    <a href="'.route('adverts.show', [$this->city->slug, $this->subject->slug]).'">'.$this->subject->title.'</a>';
+
         return [
-            'message' => 'Nowe ogłoszenie w '.$this->city->name,
-            'link' => route('adverts.show', [$this->city->slug, $this->advert->slug])
+            'message' => $message,
+            'date' => $this->subject->created_at->diffForHumans()
         ];
     }
 }

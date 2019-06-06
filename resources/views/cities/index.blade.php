@@ -1,22 +1,23 @@
 @extends('layouts.master')
-@section('content')
+@section('lead')
     <header class="flex mb-4 justify-between items-center">
         <h3 class="text-grey-darker">Miasta</h3>
     </header>
-    <main class="flex flex-col">
-        @forelse($cities as $city)
-            <article class="card lg:flex mb-4">
-                <div class="flex lg:static lg:w-1/8 items-center justify-center mb-0 lg:mb-0 sm:mb-2">
-                    <img src="/storage/notfound.png">
+    <main class="card">
+        <div class="card-body">
+            @forelse($stateCities as $state => $cities)
+                <p>{{ $state }}</p>
+                <div class="row">
+                    @foreach($cities as $city)
+                        <div class="col-2">
+                            <a href="{{ route('cities.show', $city->slug) }}">{{ $city->name }} <small>[{{ $city->adverts_count }}]</small></a>
+                        </div>
+                    @endforeach
                 </div>
-                <div class="lg:static lg:w-7/8 lg:pl-2">
-                    <header>
-                        <h3 class="font-normal text-lg mb-2"><a href="{{ $city->slug }}">{{ $city->name }}</a></h3>
-                    </header>
-                </div>
-            </article>
-        @empty
-            <div>Brak ogloszen</div>
-        @endforelse
+            @empty
+                <div>Brak ogloszen</div>
+            @endforelse
+        </div>
+
     </main>
 @endsection

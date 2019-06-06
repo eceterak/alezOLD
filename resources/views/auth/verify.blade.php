@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
-@section('content')
+@section('lead')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -8,9 +8,9 @@
                 <div class="card-header">{{ __('Verify Your Email Address') }}</div>
 
                 <div class="card-body">
-                    @if (session('resent'))
+                    @if (session('flash'))
                         <div class="alert alert-success" role="alert">
-                            {{ __('A fresh verification link has been sent to your email address.') }}
+                            {{ session('flash') }}
                         </div>
                     @endif
 

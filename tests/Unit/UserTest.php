@@ -7,6 +7,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Database\Eloquent\Collection;
 use Facades\Tests\Setup\AdvertFactory;
 use App\User;
+use App\City;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class UserTest extends TestCase
 {
@@ -24,7 +27,7 @@ class UserTest extends TestCase
         $this->post(route('login'), [
             'email' => $user->email,
             'password' => $password
-        ])->assertRedirect(route('home'));
+        ])->assertRedirect();
 
         $this->assertAuthenticatedAs($user);
     }
@@ -74,7 +77,7 @@ class UserTest extends TestCase
     {
         $user = create(User::class);
 
-        $this->assertEquals('/storage/avatars/notfound.png', $user->avatar_path);
+        $this->assertEquals('/storage/avatars/notfound.jpg', $user->avatar_path);
         
         $user->avatar_path = 'avatars/me.jpg';
 
@@ -106,19 +109,65 @@ class UserTest extends TestCase
         $advert->favourite();
 
         $this->assertCount(1, $user->favourites);
+    } 
+
+    /** @test */
+    public function a_user_has_subscribed_cities()
+    {
+        $user = $this->signIn();
+
+        $city = create(City::class);
+
+        $city->subscribe();
+
+        $this->assertCount(1, $user->subscriptions);
     }
 
     /** @test */
-    public function a_user_can_view_her_settings()
+    public function a_user_can_specify_if_she_wants_to_receive_email_notifications()
     {
-        $this->signIn();
+        $user = $this->signIn();
 
-        $this->get(route('settings'))->assertSee('Zmień hasło');
+        $this->assertTrue($user->fresh()->acceptsEmailNotifications());
     }
 
-    // /** @test */
-    // public function a_user_can_change_her_password()
-    // {
-    //     $user = $this->signIn();        
-    // }
+    /** @test */
+    public function user_account_can_delete_itself()
+    {
+        $user = create(User::class);
+
+        $user->deleteAccount();
+
+        $this->assertFalse($user->fresh()->active);
+    }
+
+    /** @test */
+    public function it_can_delete_avatar()
+    {
+        $user = $this->signIn();
+
+        Storage::fake('public');
+
+        $oldAvatar = UploadedFile::fake()->image('avatar.jpg');
+
+        $this->json('POST', route('api.users.avatars.store', $user->name), [
+            'avatar' => $oldAvatar
+        ]);
+
+        $user->deleteAvatar();
+        
+        Storage::disk('public')->assertMissing("avatars/{$oldAvatar->hashName()}");
+
+        $this->assertEquals('/storage/avatars/notfound.jpg', $user->avatar_path);
+    }
+
+    /** @test */
+    public function it_can_generate_a_link_to_its_profile()
+    {
+        $user = create(User::class);
+
+        $user->refresh();
+
+        $this->assertEquals('<a href="'.route('profiles.show', $user->id).'">'.$user->name.'</a>', $user->path);
+    }
 }

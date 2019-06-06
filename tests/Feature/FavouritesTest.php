@@ -50,8 +50,6 @@ class FavouritesTest extends TestCase
     /** @test */
     public function a_user_can_unfavourite_an_advert()
     {
-        $this->withoutExceptionHandling();
-
         $this->signIn();
 
         $advert = AdvertFactory::create();
@@ -66,8 +64,6 @@ class FavouritesTest extends TestCase
     /** @test */
     public function a_user_can_view_her_favourites()
     {
-        $this->withoutExceptionHandling();
-
         $this->signIn();
 
         $advert = AdvertFactory::create();

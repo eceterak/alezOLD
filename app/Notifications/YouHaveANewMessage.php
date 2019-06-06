@@ -6,15 +6,16 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use App\User;
 
 class YouHaveANewMessage extends Notification
 {
     use Queueable;
 
     /**
-     * @var App\Conversation
+     * @var App\subject
      */
-    protected $conversation;
+    public $subject;
 
     /**
      * Create a new notification instance.
@@ -23,18 +24,19 @@ class YouHaveANewMessage extends Notification
      */
     public function __construct($conversation)
     {
-        $this->conversation = $conversation;
+        $this->subject = $conversation;
     }
 
     /**
      * Get the notification's delivery channels.
+     * If user has email notifications disabled, sent notification just trough database.
      *
      * @param  mixed  $notifiable
      * @return array
      */
     public function via($notifiable)
     {
-        return ['database', 'mail'];
+        return ($notifiable instanceof User && $notifiable->acceptsEmailNotifications()) ? ['database', 'mail'] : ['database'];
     }
 
     /**
@@ -60,7 +62,7 @@ class YouHaveANewMessage extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => 'Masz nowa wiadomosc '.$this->conversation->advert->title,
+            'message' => 'Masz nowa wiadomosc '.$this->subject->advert->title,
             //'link' => route('adverts.show', [$this->city->slug, $this->advert->slug])
         ];
     }

@@ -15,54 +15,144 @@
             'user' => Auth::user()
         ]) !!};
     </script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <body>
     <div id="app">
         <div class="bg-white">
-            <nav class="container flex justify-between items-center py-3">
-                <div>
-                    <h2><a href="/" class="text-teal text-3xl font-normal tracking-wide no-underline">{{ env('APP_SHORT', 'Alez.pl') }}</a></h2>
-                </div>
-                <div class="flex items-center">
+            <nav class="container d-flex justify-content-between py-2">
+                <a class="navbar-brand" href="/">Alez.pl</a>                
+                <div id="navbarSupportedContent">
                     @guest
-                        <a class="btn mr-2" href="{{ route('login') }}">Zaloguj</a>
+                        <a class="btn btn-secondary mr-2" href="{{ route('login') }}">Zaloguj</a>
                     @endguest
                     @auth
-                        <user-notifications></user-notifications>
-                        <img src="{{ auth()->user()->avatar_path }}" class="rounded-full w-8">
-                        <p class="ml-2 mr-4 text-sm"><a href="{{ route('home') }}">{{ auth()->user()->name }}</a></p>
-                        {{-- <form action="{{ route('logout') }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" class="btn mr-2">{{ __('Logout') }}</button>
-                        </form> --}}
+                        {{-- <user-notifications></user-notifications> --}}
+                        <div class="dropdown d-inline-block mx-2">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                {{ auth()->user()->name }}
+                                @if($notifications = auth()->user()->notifications_count)
+                                    <span class="badge badge-light mx-1">{{ $notifications }}</span>
+                                @endif
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{{ route('home') }}">Moje ogłoszenia</a>
+                                <a class="dropdown-item" href="{{ route('conversations.inbox') }}">
+                                    Wiadomości 
+                                    @if($unreadMessages = auth()->user()->hasUnreadNotificationsOfType('YouHaveANewMessage')) 
+                                        <span class="badge badge-danger ml-2">{{ $unreadMessages }}</span>
+                                    @endif
+                                </a>
+                                <a class="dropdown-item" href="{{ route('subscriptions') }}">
+                                    Obserwowane
+                                    @if($unreadAdverts = auth()->user()->hasUnreadNotificationsOfType('AdvertWasAdded')) 
+                                        <span class="badge badge-danger ml-2">{{ $unreadAdverts }}</span>
+                                    @endif
+                                </a>
+                                <a class="dropdown-item" href="{{ route('favourites') }}">Ulubione</a>
+                                <a class="dropdown-item" href="{{ route('settings') }}">Ustawienia</a>
+                                <form action="{{ route('logout') }}" method="POST" class="dropdown-item">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-secondary">Wyloguj</button>
+                                </form>
+                            </div>
+                        </div>
                     @endauth
-                    <a href="{{ route('adverts.create') }}" class="btn btn-reverse">Dodaj ogłoszenie</a>
+                    <a href="{{ route('adverts.create') }}" class="btn btn-primary">Dodaj ogłoszenie</a>
                 </div>
             </nav>
-        </div>
-        <div class="bg-grey-lightest border-t border-b border-grey-light">
-            <div class="container pt-6 pb-8">
-                @yield('lead')
+            <div class="bg-light">
+                <div class="container py-4">
+                    @yield('lead')
+                </div>
             </div>
-        </div>
-        <div class="container pt-4 pb-8">
-            @yield('content')
-    {{--         <footer class="border-t border-grey mt-20 pt-4">
-                <div class="flex -mx-4">
-                    <div class="w-1/3 px-4 text-xs">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo modi rem, eveniet ipsum expedita incidunt necessitatibus at explicabo nam dolorem dolores quaerat et perspiciatis, non officiis cumque maxime corporis eius.</div>
-                    <div class="w-1/3 px-4 text-xs">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo modi rem, eveniet ipsum expedita incidunt necessitatibus at explicabo nam dolorem dolores quaerat et perspiciatis, non officiis cumque maxime corporis eius.</div>
-                    <div class="w-1/3 px-4 text-xs">
-                        <ul class="list-reset">
-                            <li>Home</li>
-                            <li>Pokoje</li>
-                            <li>Miasta</li>
-                            <li>Twoje konto</li>
-                        </ul>
+            <div class="container py-4">
+                @yield('content')
+                    <footer>
+                        <div class="row">
+
+                            <div class="col-3">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item border-0 p-0">Alez.pl</li>
+                                    <li class="list-group-item border-0 p-0"><a href="{{ route('aboutUs') }}">O nas</a></li>
+                                    <li class="list-group-item border-0 p-0"><a href="{{ route('privacyPolicy') }}">Polityka prywatności</a></li>
+                                    <li class="list-group-item border-0 p-0"><a href="{{ route('termsAndConditions') }}">Regulamin serwisu</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-3">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item border-0 p-0">Mapa strony</li>
+                                    <li class="list-group-item border-0 p-0"><a href="{{ route('cities') }}">Miasta</a></li>
+                                    <li class="list-group-item border-0 p-0"><a href="{{ route('home') }}">Twoje konto</a></li>
+                                    <li class="list-group-item border-0 p-0"><a href="{{ route('adverts.create') }}">Dodaj ogłoszenie</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-3">
+                                <p class="mb-0">Kontakt</p>
+                                <p>Możesz skontaktować się z nami od poniedziałku do piątku w godzinach od 9:00 do 17:00</p>
+                            </div>
+                            <div class="col-3">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item border-0 p-0"><a href="#"><i class="fas fa-phone mr-2 fa-xs"></i>+48 777 888 999</a></li>
+                                    <li class="list-group-item border-0 p-0"><a href="#"><i class="fas fa-envelope mr-2 fa-xs"></i>help@alez.pl</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between text-left small pt-2">
+                            <p class="mb-0">Copyright &copy; {{ \Carbon\Carbon::now()->year }} alez.pl</p>
+                            <p class="mb-0">Korzystanie z serwisu oznacza akceptację <a href="{{ route('termsAndConditions') }}">regulaminu</a></p>
+                        </div>
+                    </footer>
+                </div>
+            <flash-message message="{{ session('flash') }}"></flash-message>
+            @if(!auth()->user())
+                <div class="modal fade" id="accountWarningnModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Zaloguj się aby kontynuować</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <nav class="nav nav-tabs mb-0" role="tablist">
+                                    <a class="nav-link active" data-toggle="tab" href="#login">Zaloguj się</a>
+                                    <a class="nav-link" data-toggle="tab" href="#register">Zarejestruj się</a>
+                                </nav>
+                                <div class="tab-content py-4">
+                                    <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                        @include('auth.forms._login')
+                                    </div>
+                                    <div class="tab-pane fade" id="register" role="tabpanel">
+                                        @include('auth.forms._register')
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </footer> --}}
-            <flash-message message="{{ session('flash') }}"></flash-message>
+            @elseif(auth()->user() && !auth()->user()->hasVerifiedEmail())
+                <div class="modal fade" id="accountWarningnModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Ta akcja wymaga potwierdzenia adresu email.</p>
+                                <p>Kliknij <a href="{{ route('verification.resend') }}">tutaj</a> jeżeli nie otrzymałeś/aś wiadomości weryfikacyjnej.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>

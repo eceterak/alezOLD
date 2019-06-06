@@ -8,6 +8,8 @@ $factory->define(App\Advert::class, function (Faker $faker) {
         // General info
         'title' => $faker->text(50),
         'description' => $faker->paragraph,
+        'verified' => true,
+        'archived' => false,
         'visits' => 0,
         'landlord' => $faker->randomElement(['live_in', 'live_out', 'tenetant', 'agent', 'former']),
         
@@ -34,9 +36,9 @@ $factory->define(App\Advert::class, function (Faker $faker) {
         // Desired tenetant.
         'smoking' => $faker->boolean(),
         'pets' => $faker->boolean(),
-        'occupation' => $faker->randomElement(['n', 'student', 'professional']),
+        'occupation' => $faker->randomElement(['student', 'professional']),
         'couples' => $faker->boolean(),
-        'gender' => $faker->randomElement(['n', 'm', 'f']),
+        'gender' => $faker->randomElement(['m', 'f']),
         'minimum_age' => $faker->numberBetween(16, 80),
         'maximum_age' => $faker->numberBetween(16, 80)
     ];

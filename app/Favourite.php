@@ -10,6 +10,15 @@ class Favourite extends Model
     use RecordsActivity;
 
     /**
+     * Eager the advert.
+     * 
+     * @var array
+     */
+    protected $with = [
+        'advert'
+    ];
+
+    /**
      * @var array
      */
     protected $guarded = [];

@@ -26,10 +26,9 @@ class AdvertsManagementTest extends TestCase
         $this->post(route('admin.adverts.store', $attributes = raw(Advert::class, [
             'city_id' => $street->city->id,
             'street_id' => $street->id
-        ])))
-        ->assertRedirect(route('admin.adverts'));
+        ])))->assertRedirect(route('admin.adverts'));
 
-        $advert = Advert::where($attributes)->first();
+        $advert = Advert::where('title', $attributes['title'])->first();
 
         $this->get(route('admin.adverts'))->assertSee($advert->shortTitle());
     }
@@ -39,15 +38,17 @@ class AdvertsManagementTest extends TestCase
     {   
         $this->signInAdmin();
 
-        $advert = AdvertFactory::create();
+        $advert = AdvertFactory::create([
+            'verified' => false
+        ]);
 
         $this->get(route('admin.adverts.edit', $advert->slug))->assertSee($advert->title);
 
         $this->patch(route('admin.adverts.update', [$advert->slug]), $attributes = raw(Advert::class, [
             'city_id' => $advert->city->id,
-            'street_id' => $advert->street->id
-        ]))
-        ->assertRedirect(route('admin.adverts'));
+            'street_id' => $advert->street->id,
+            'verified' => false
+        ]))->assertRedirect(route('admin.adverts'));
 
         $this->assertDatabaseHas('adverts', $attributes);
     }
@@ -60,6 +61,8 @@ class AdvertsManagementTest extends TestCase
         $advert = AdvertFactory::create();
 
         $this->delete(route('admin.adverts.destroy', $advert->slug))->assertRedirect(route('admin.adverts'));
+
+        //$this->assertTrue($advert->fresh()->archive);
 
         $this->assertDatabaseMissing('adverts', $advert->only('id'));
     }

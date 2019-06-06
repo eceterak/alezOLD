@@ -73,7 +73,7 @@ class PhotosUploadTest extends TestCase
         $user = $this->signIn();
 
         $response = $this->json('POST', route('api.adverts.photos.store'), [
-            'avatar' => 'Not an image'
+            'photo' => 'Not an image'
         ])->assertStatus(422);
     }
 
@@ -117,5 +117,121 @@ class PhotosUploadTest extends TestCase
         $this->assertCount(0, Photo::all());
 
         Storage::disk('public')->assertMissing("photos/{$file->hashName()}");
+    }
+
+    /** @test */
+    public function a_user_can_change_order_of_photos()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create();
+
+        $firstPhoto = create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 1
+        ]);
+        
+        $secondPhoto = create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 2
+        ]);
+                
+        $secondPhoto = create(Photo::class, [
+            'order' => 1
+        ]);
+
+        $this->json('PATCH', route('api.photos.order.update', $advert->slug), [
+            'photos' => '2, 1'
+        ]);
+
+        $response = $this->getJson(route('adverts.show', [$advert->city->slug, $advert->slug]))->json();
+
+        $this->assertEquals([2, 1], array_column($response['photos'], 'id'));
+    }
+
+
+    /** @test */
+    public function order_can_be_only_changed_on_photos_which_belongs_to_an_advert()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create();
+
+        $firstPhoto = create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 1
+        ]);
+        
+        $secondPhoto = create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 2
+        ]);
+                
+        $notBelongsToAnAdvert = create(Photo::class, [
+            'order' => 1
+        ]);
+
+        $this->json('PATCH', route('api.photos.order.update', $advert->slug), [
+            'photos' => '2, 1, 3'
+        ]);
+
+        $response = $this->getJson(route('adverts.show', [$advert->city->slug, $advert->slug]))->json();
+
+        $this->assertEquals([2, 1], array_column($response['photos'], 'id'));
+    }
+
+    /** @test */
+    public function a_user_can_add_photos_to_existing_advert()
+    {
+        $this->withoutExceptionHandling();
+
+        Storage::fake('public');
+
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create();
+
+        create(Photo::class, [
+            'advert_id' => $advert->id
+        ]);
+
+        $file = UploadedFile::fake()->image('photo.jpg');
+
+        $upload = $this->json('PATCH', route('api.adverts.photos.update', $advert->slug), [
+            'photo' => $file
+        ])->decodeResponseJson();
+
+        $this->assertArrayHasKey('url', $upload);
+        $this->assertArrayHasKey('id', $upload);;
+
+        $this->assertCount(2, $advert->photos);
+    }
+
+    /** @test */
+    public function uploaded_photo_must_determine_its_order()
+    {
+        $this->withoutExceptionHandling();
+
+        Storage::fake('public');
+
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create();
+
+        create(Photo::class, [
+            'advert_id' => $advert->id
+        ]);
+
+        $file = UploadedFile::fake()->image('photozz.jpg');
+
+        $upload = $this->json('PATCH', route('api.adverts.photos.update', $advert->slug), [
+            'photo' => $file
+        ])->decodeResponseJson();
+        
+        $this->assertEquals(1, $advert->photos->last()->order);
     }
 }

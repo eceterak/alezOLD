@@ -2,9 +2,9 @@
 
 @section('lead')
     @if(!$advert->validated)
-        <div class="card flex justify-between mb-5 py-2 px-4 text-white bg-orange">
-            <p class="font-bold mb-2">Ogłoszenie oczekuje na weryfikację</p>
-            <p>Do czasu weryfikacji ogłoszenia przez Administratora nie będzie ono widoczne dla użytkowników. Prosimy o cierpliwość.</p>
+        <div class="alert alert-warning shadow-sm">
+            <p class="mb-2 font-weight-bold">Ogłoszenie oczekuje na weryfikację</p>
+            <p class="mb-0">Do czasu weryfikacji ogłoszenia przez Administratora nie będzie ono widoczne dla użytkowników. Prosimy o cierpliwość.</p>
         </div>
     @endif
     <div class="card">

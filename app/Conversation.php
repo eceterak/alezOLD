@@ -51,6 +51,27 @@ class Conversation extends Model
     }
 
     /**
+     * As conversation has always only two participants
+     * and one of them is logged in, grab the second one who is the interlocutor.
+     * 
+     * @return App\User
+     */
+    public function interlocutor() 
+    {
+        return $this->users->except(auth()->id())[0];
+    }
+
+    /**
+     * Register interlocutor as a custom property.
+     * 
+     * @return App\User
+     */
+    public function getInterlocutorAttribute() 
+    {
+        return $this->interlocutor();
+    }
+
+    /**
      * Register sender as a custom property.
      * 
      * @return App\User
@@ -74,7 +95,7 @@ class Conversation extends Model
 
         $this->messages()->create([
             'user_id' => $user->id,
-            'to_id' => $advert->user->id,
+            'to_id' => $this->interlocutor->id,
             'body' => $body
         ]);
     }

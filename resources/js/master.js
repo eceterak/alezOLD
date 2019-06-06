@@ -1,5 +1,3 @@
-import Axios from "axios";
-
 $(function() {
 
     $('#city', 'form[name="search_master_form"]').autocomplete({
@@ -52,7 +50,7 @@ $(function() {
         .attr("title", "")
         .attr('required', this.options.required)
         .attr('data-validation-rqmessage', this.options.requiredMessage)
-        .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+        .addClass("form-control custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
         .attr('disabled', this.options.disabled)
         .autocomplete({
             delay: 0,
@@ -215,6 +213,39 @@ $(function() {
             return name + ' jest wymagany';
         },
         liveValidation: true
+    });
+
+    // Bootstrap
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    if(!window.App.signedIn || !(window.App.user && window.App.user.email_verified_at)) {
+        $('.accountWarning').on('focus click', function(event) {
+            event.preventDefault();
+
+            $('#accountWarningnModal').modal('toggle');
+        });
+    }
+
+    $('#advertDeleteConfirmationModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget);
+        var endpoint = button.data('endpoint');
+        
+        $(this).find('form#confirmationForm').attr('action', endpoint);
+    });
+
+    $('form[name="advertFiltersForm"]').submit(function(e) {
+        var inputs = $('input, select', this);
+
+        inputs.each(function(key, input) {
+            $input = $(input);
+
+            if($input.val() == '') {
+                $input.attr('disabled', true);
+            }
+        });
     });
 
 });

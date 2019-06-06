@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Photo;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use App\Advert;
 
 class PhotosUploadController extends Controller
 {
@@ -25,7 +27,7 @@ class PhotosUploadController extends Controller
 
         return response()->json([
             'id' => $photo->id,
-            'url' => '/storage/'.$photo->url
+            'url' => $photo->url
         ]);
     }
 
@@ -41,5 +43,28 @@ class PhotosUploadController extends Controller
         $photo->delete();
 
         return response(204);
+    }
+
+    /**
+     * Add another photo to existing advert.
+     * 
+     * @param Advert $advert
+     * @return response
+     */
+    public function update(Advert $advert) 
+    {
+        request()->validate([
+            'photo' => 'required|image|max:1000'
+        ]);
+
+        $photo = $advert->photos()->create([
+            'url' => request()->file('photo')->store('photos', 'public'),
+            'order' => ($advert->photos()->max('order') + 1)
+        ]);
+
+        return response()->json([
+            'id' => $photo->id,
+            'url' => $photo->url
+        ]);
     }
 }

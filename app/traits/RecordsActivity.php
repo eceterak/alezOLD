@@ -33,11 +33,7 @@ trait RecordsActivity
         {
             static::$event(function($model) use ($event)
             {
-                // Do not record activity when slug is updated.
-                if($model->isClean('slug')) 
-                {
-                    $model->recordActivity($model->activityDescription($event));
-                } 
+                $model->recordActivity($model->activityDescription($event));
             });
 
             if($event == 'updated')

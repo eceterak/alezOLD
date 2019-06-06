@@ -26,17 +26,7 @@ class Advert extends Model
         'city',
         'user'
     ];
-
-    /**
-     * Default attributes.
-     * 
-     * @var array
-     */
-    protected $attributes = [
-        'verified' => false,
-        'active' => false
-    ];
-
+    
     /**
      * Register custom attributes.
      * 
@@ -53,7 +43,8 @@ class Advert extends Model
      */
     protected $casts = [
         'verified' => 'boolean',
-        'active' => 'boolean'
+        'archived' => 'boolean',
+        'revision' => 'array'
     ];
 
     /**
@@ -117,6 +108,16 @@ class Advert extends Model
     {
         return $this->hasMany(Photo::class);
     }
+
+    /**
+     * Display additional info if advert is deleted (archived).
+     * 
+     * @return string
+     */
+    public function getTitleAttribute($title) 
+    {
+        return ($this->archived) ? $title.' (zakończone)' : $title;
+    }
     
     /**
      * Return a portion of a title.
@@ -148,11 +149,26 @@ class Advert extends Model
     public function verify() 
     {
         $this->update([
-            'verified' => true,
-            'active' => true
+            'verified' => true
         ]);
 
-        $this->recordActivity('verified_advert');
+        //$this->recordActivity('verified_advert');
+
+        return $this;
+    }
+
+    /**
+     * Archive an advert.
+     * 
+     * @return this
+     */
+    public function archive() 
+    {
+        $this->update([
+            'archived' => true
+        ]);
+
+        //$this->recordActivity('deleted_advert');
 
         return $this;
     }
@@ -190,7 +206,7 @@ class Advert extends Model
 
         if(static::where('slug', $slug)->exists())
         {
-            $slug = $slug.'-'.$this->id;
+            $slug = $slug.'-'.substr(md5(now()), 0, 3).str_random(2);
         }
 
         $this->attributes['slug'] = $slug;
@@ -224,9 +240,46 @@ class Advert extends Model
      */
     public function getFeaturedPhotoPathAttribute() 
     {
-        $featured = $this->photos()->where('featured', true)->first();
+        $featured = $this->photos()->where('order', 0)->first();
 
-        return ($featured) ? '/storage/'.$featured->url : '/storage/avatars/notfound.png';
+        return ($featured) ? '/storage/'.$featured->url : '/storage/photos/notfound.jpg';
     }
 
+    /**
+     * Register has_pending_revision attribute.
+     * 
+     * @return bool
+     */
+    public function getHasPendingRevisionAttribute() 
+    {
+        return ! empty($this->revision);
+    }
+
+    /**
+     * Check if there are any unsaved (unverified) changes to the model and update the model.
+     * 
+     * @return $this
+     */
+    public function loadPendingRevision() 
+    {
+        if($this->has_pending_revision)
+        {
+            foreach($this->revision as $key => $value)
+            {
+                $this->{$key} = $value;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Accept revision.
+     * 
+     * @return void
+     */
+    public function acceptRevision() 
+    {
+        $this->loadPendingRevision()->save();
+    }
 }

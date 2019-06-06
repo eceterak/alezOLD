@@ -8,6 +8,7 @@ use App\Http\Requests\CreateAdvertRequest;
 use App\Advert;
 use App\City;
 use App\Photo;
+use App\Http\Requests\UpdateAdvertRequest;
 
 class AdvertsController extends Controller
 {
@@ -21,7 +22,7 @@ class AdvertsController extends Controller
     public function index(AdvertFilters $filters) 
     {
         return view('adverts.index')->with([
-            'adverts' => Advert::filter($filters)->get()
+            'adverts' => Advert::filter($filters)->where('verified', true)->where('archived', false)->get()
         ]);
     }
 
@@ -34,10 +35,23 @@ class AdvertsController extends Controller
      */
     public function show($city, Advert $advert) 
     {   
+        $this->authorize('view', $advert);
+
         $advert->increment('visits');
 
+        if(auth()->check()) auth()->user()->sawNotificationsFor($advert);
+
+        if(request()->expectsJson())
+        {
+            return $advert->load(array('photos' => function($query) {
+                $query->orderBy('order', 'asc');
+            }));
+        }
+
         return view('adverts.show')->with([
-            'advert' => $advert
+            'advert' => $advert->load(array('photos' => function($query) {
+                $query->orderBy('order', 'asc');
+            }))
         ]);
     }
 
@@ -68,20 +82,10 @@ class AdvertsController extends Controller
 
             foreach($photos as $key => $photo)
             {
-                reset($photos);
-                if($key === key($photos))
-                {
-                    Photo::find($photo)->update([
-                        'advert_id' => $advert->id,
-                        'featured' => true
-                    ]);
-                }
-                else 
-                {
-                    Photo::find($photo)->update([
-                        'advert_id' => $advert->id,
-                    ]);
-                }
+                Photo::find($photo)->update([
+                    'advert_id' => $advert->id,
+                    'order' => $key
+                ]);
             }
         }
 
@@ -100,8 +104,12 @@ class AdvertsController extends Controller
     {      
         $this->authorize('update', $advert);
 
+        $advert->loadPendingRevision();
+
         return view('adverts.edit')->with([
-            'advert' => $advert
+            'advert' => $advert->load(array('photos' => function($query) {
+                $query->orderBy('order', 'asc');
+            }))
         ]);
     }
 
@@ -112,11 +120,11 @@ class AdvertsController extends Controller
      * @param Advert $advert
      * @return redirect
      */
-    public function update($city, Advert $advert) 
+    public function update($city, Advert $advert, UpdateAdvertRequest $request) 
     {        
-        $this->authorize('update', $advert);
-
-        $advert->update($this->validateRequest()); // @refactor - move to form request
+        $advert->update([
+            'revision' => array_diff_assoc($request->validated(), $advert->getAttributes())
+        ]);
 
         return redirect(route('adverts'));
     }
@@ -132,7 +140,7 @@ class AdvertsController extends Controller
     {
         $this->authorize('update', $advert);
 
-        $advert->delete();
+        $advert->archive();
 
         if(request()->expectsJson())
         {
@@ -140,42 +148,5 @@ class AdvertsController extends Controller
         }
      
         return redirect()->back();        
-    }
-
-    /**
-     * Validate a request.
-     * 
-     * @return array
-     */
-    protected function validateRequest() 
-    {
-        $attributes = request()->validate([
-            'city_id' => 'required|exists:cities,id',
-            'street_id' => 'sometimes|exists:streets,id',
-            'title' => 'required|spamfree',
-            'description' => 'required|spamfree',
-            'available_from' => 'nullable',
-            'minimum_stay' => 'nullable',
-            'maximum_stay' => 'nullable',
-            'landlord' => 'sometimes',
-            'rent' => 'required',
-            'deposit' => 'sometimes',
-            'bills' => 'sometimes',
-            'property_type' => 'sometimes',
-            'property_size' => 'sometimes',
-            'living_room' => 'sometimes',
-            'room_size' => 'sometimes',
-            'furnished' => 'sometimes',
-            'broadband' => 'sometimes',
-            'smoking' => 'sometimes',
-            'pets' => 'sometimes',
-            'occupation' => 'sometimes',
-            'couples' => 'sometimes',
-            'gender' => 'sometimes',
-            'minimum_age' => 'sometimes',
-            'maximum_age' => 'sometimes'
-        ]);
-
-        return $attributes;
     }
 }

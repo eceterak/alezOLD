@@ -1,5 +1,5 @@
 <template>
-    <div class="alert-flash p-3 text-white rounded" :class="'alert-' + level" v-show="show" v-text="body"></div>
+    <div class="alert alert-flash" :class="'alert-' + level" v-show="show" v-text="body"></div>
 </template>
 
 <script>
@@ -11,7 +11,7 @@
         data() {
             return {
                 show: false,
-                level: 'sucess',
+                level: 'success',
                 body: this.message
             }
         },

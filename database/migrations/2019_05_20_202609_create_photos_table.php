@@ -17,7 +17,7 @@ class CreatePhotosTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('advert_id')->nullable();
             $table->string('url')->unique();
-            $table->boolean('featured')->default(false);
+            $table->tinyInteger('order')->nullable();
             $table->timestamps();
 
             $table->foreign('advert_id')->references('id')->on('adverts')->onDelete('cascade');

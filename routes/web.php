@@ -54,13 +54,16 @@ Route::get('/pokoje/{city}/{advert}', 'AdvertsController@show')->name('adverts.s
 Route::group(['middleware' => ['auth', 'verified']], function() 
 {
     // Subscriptions //@refactor to API
+    Route::get('/moj-alez/obserwowane', 'CitySubscriptionsController@index')->name('subscriptions');
     Route::post('/pokoje/{city}/obserwuj', 'CitySubscriptionsController@store')->name('city.subscribe');
     Route::delete('/pokoje/{city}/obserwuj', 'CitySubscriptionsController@destroy')->name('city.unsubscribe');
 
     // User account
     Route::get('/moj-alez', 'HomeController@index')->name('home');
+    Route::get('/moj-alez/archiwum', 'ArchivesController@index')->name('archives');
     Route::get('/moj-alez/ustawienia', 'Auth\UserSettingsController@index')->name('settings');
-    Route::get('/moj-alez/ogloszenia', 'AdvertsController@mine')->name('adverts.mine'); // @Refactor
+    Route::post('/moj-alez/ustawienia', 'Auth\UserSettingsController@update')->name('settings.update');
+    Route::post('/moj-alez', 'Auth\UserSettingsController@destroy')->name('account.delete');
 
     // Passwords
     Route::get('/moj-alez/zmien-haslo', 'Auth\PasswordChangeController@index')->name('password.change');
@@ -70,6 +73,7 @@ Route::group(['middleware' => ['auth', 'verified']], function()
     Route::group(['namespace' => 'Conversations'], function() {
         Route::get('/moj-alez/odebrane', 'InboxController@index')->name('conversations.inbox');
         Route::get('/moj-alez/wyslane', 'SentController@index')->name('conversations.sent');
+        Route::get('/moj-alez/{advert}/odebrane', 'AdvertConversationController@show')->name('conversations.advert');
         Route::post('/pokoje/{city}/{advert}/odpowiedz', 'ConversationsController@store')->name('conversations.store');
         Route::get('/moj-alez/odebrane/{conversation}', 'ConversationsController@show')->name('conversations.show');
         Route::post('/moj-alez/odebrane/{conversation}', 'MessagesController@store')->name('conversations.reply');
@@ -83,7 +87,7 @@ Route::group(['middleware' => ['auth', 'verified']], function()
     Route::delete('/pokoje/{city}/{advert}', 'AdvertsController@destroy')->name('adverts.destroy');
 
     // Favourites //@refactor to API
-    Route::get('/moj-alez/obserwowane', 'FavouritesController@index')->name('favourites');
+    Route::get('/moj-alez/ulubione', 'FavouritesController@index')->name('favourites');
     Route::post('/pokoje/{city}/{advert}/ulubione', 'FavouritesController@store')->name('adverts.favourite.store');
     Route::delete('/pokoje/{city}/{advert}/ulubione', 'FavouritesController@destroy')->name('adverts.favourite.delete');
 
@@ -91,6 +95,11 @@ Route::group(['middleware' => ['auth', 'verified']], function()
     Route::get('/uzytkownicy/{user}/notyfikacje', 'UserNotificationsController@index')->name('profiles.notifications');
     Route::delete('/uzytkownicy/{user}/notyfikacje/{notification}', 'UserNotificationsController@destroy')->name('profiles.notifications.delete');
 });
+
+// Pages
+Route::get('/regulamin', 'PagesController@termsAndConditions')->name('termsAndConditions');
+Route::get('/polityka-prywatnosci', 'PagesController@privacyPolicy')->name('privacyPolicy');
+Route::get('/o-nas', 'PagesController@aboutUs')->name('aboutUs');
 
 // Cities
 Route::get('/miasta', 'CitiesController@index')->name('cities');
@@ -107,9 +116,15 @@ Route::get('/pokoje/{city}/ajax/adverts', 'AjaxController@index')->name('ajax.ci
 
 // Api
 Route::post('/api/uzytkownicy/{user}/avatars', 'Api\AvatarsController@store')->middleware('auth')->name('api.users.avatars.store');
+Route::delete('/api/uzytkownicy/{user}/avatars', 'Api\AvatarsController@destroy')->middleware('auth')->name('api.users.avatars.delete');
+
 Route::post('/api/ogloszenia/zdjecia', 'Api\PhotosUploadController@store')->middleware('auth')->name('api.adverts.photos.store');
 Route::delete('/api/ogloszenia/zdjecia/{photo}', 'Api\PhotosUploadController@destroy')->middleware('auth')->name('api.adverts.photos.delete');
+Route::patch('/api/ogloszenia/zdjecia/{advert}', 'Api\PhotosUploadController@update')->middleware('auth')->name('api.adverts.photos.update');
+Route::patch('/api/zdjecia/{advert}', 'Api\PhotosOrderController@update')->middleware('auth')->name('api.photos.order.update');
 
 // Auth
 Auth::routes(['verify' => true]);
 Auth::routes();
+
+Route::get('/email-zweryfikowany', 'Auth\VerificationController@success')->middleware(['auth', 'verified'])->name('verification.success');

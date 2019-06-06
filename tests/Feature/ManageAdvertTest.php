@@ -16,7 +16,9 @@ class ManageAdvertTest extends TestCase
     {
         parent::setUp();
 
-        $this->advert = AdvertFactory::create();
+        $this->advert = AdvertFactory::create([
+            'pets' => false
+        ]);
     }
 
     use RefreshDatabase;
@@ -24,14 +26,56 @@ class ManageAdvertTest extends TestCase
     /** @test */
     public function owner_of_the_advert_can_update_it() 
     {
+        $this->withoutExceptionHandling();
+
         $this->actingAs($this->advert->user)->get(route('adverts.edit', [$this->advert->city->slug, $this->advert->slug]));
 
-        $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), $attributes = raw(Advert::class, [
+        $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), [
             'city_id' => $this->advert->city->id,
             'street_id' => $this->advert->city->id,
-        ]))->assertRedirect(route('adverts'));
+            'title' => 'some dummy title',
+            'description' => 'description has been updated',
+            'rent' => 2000,
+            'pets' => 1
+        ])->assertRedirect(route('adverts'));
 
-        $this->assertDatabaseHas('adverts', $attributes);
+        $this->assertEquals($this->advert->fresh()->revision, [
+            'title' => 'some dummy title',
+            'description' => 'description has been updated',
+            'rent' => 2000,
+            'pets' => 1
+        ]);
+
+        $this->actingAs($this->advert->user)
+            ->get(route('adverts.edit', [$this->advert->city->slug, $this->advert->slug]))
+            ->assertSee('some dummy title');
+    }
+
+    /** @test */
+    public function changes_are_not_visible_to_the_users_until_advert_is_revised_by_the_admin() 
+    {
+        $this->withoutExceptionHandling();
+
+        $this->actingAs($this->advert->user)->get(route('adverts.edit', [$this->advert->city->slug, $this->advert->slug]));
+
+        $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), [
+            'city_id' => $this->advert->city->id,
+            'street_id' => $this->advert->city->id,
+            'title' => 'some dummy title',
+            'description' => 'description has been updated',
+            'rent' => 2000,
+            'pets' => 1
+        ])->assertRedirect(route('adverts'));
+
+        tap($this->advert->fresh(), function($advert) 
+        {
+            $this->assertNotEquals($advert->title, 'some dummy title');
+
+            $advert->acceptRevision();
+
+            $this->assertEquals($advert->title, 'some dummy title');
+        });
+        
     }
 
     /** @test */
@@ -45,13 +89,15 @@ class ManageAdvertTest extends TestCase
             'street_id' => $this->advert->city->id
         ]))->assertRedirect(route('adverts'));
 
+        $this->advert->fresh()->acceptRevision();
+
         $this->assertEquals('the-title-is-updated', $this->advert->fresh()->slug);
     }
 
     /** @test */
     public function user_cannot_update_adverts_of_others() 
     {
-        $this->withoutExceptionHandling();
+        $this->withoutExceptionHandling(); // Do not remove.
 
         $this->expectException('Illuminate\Auth\Access\AuthorizationException');
 
@@ -65,7 +111,9 @@ class ManageAdvertTest extends TestCase
     {
         $this->actingAs($this->advert->user)->delete(route('adverts.destroy', [$this->advert->city->slug, $this->advert->slug]))->assertRedirect();
 
-        $this->assertDatabaseMissing('adverts', $this->advert->only('id'));
+        $this->assertTrue($this->advert->fresh()->archived);
+
+        $this->get(route('adverts.show', [$this->advert->city->slug, $this->advert->slug]))->assertSeeText('Ogłoszenie zakończone.');
     }
 
     /** @test */

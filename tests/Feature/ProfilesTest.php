@@ -16,8 +16,8 @@ class ProfilesTest extends TestCase
     {
         $user = create(User::class);
 
-        $this->get(route('profiles.show', $user->name))
-            ->assertSee($user->name);
+        $this->get(route('profiles.show', $user->id))
+            ->assertSee($user->fresh()->name);
     }
 
     /** @test */
@@ -27,7 +27,7 @@ class ProfilesTest extends TestCase
 
         $advert = AdvertFactory::ownedBy($user)->create();
 
-        $this->get(route('profiles.show', $user->name))
+        $this->get(route('profiles.show', $user->id))
             ->assertSee($advert->title);
     }
 }

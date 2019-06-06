@@ -1,5 +1,6 @@
 <template>
-    <button class="btn btn-link" @click="addFavourite" v-if="authorize('notAnOwner', this.advert)">
+    <button class="btn btn-link p-0 accountWarning" @click="addFavourite" v-if="authorize('notAnOwner', this.advert)">
+        <small class="mr-2" v-text="info"></small>
         <i :class="classes"></i>
     </button>
 </template>
@@ -12,7 +13,7 @@
 
         data() {
             return {
-                advert: this.advert
+                isFavourited: this.advert.isFavourited
             }
         },
 
@@ -20,20 +21,19 @@
             classes() {
                 return ['fa-heart', this.isFavourited ? 'fas' : 'far'];
             },
+
             endpoint() {
                 return '/pokoje/' + this.advert.city.slug + '/' + this.advert.slug + '/ulubione'
-            }
-        },
+            },
 
-        data() {
-            return {
-                isFavourited: this.advert.isFavourited
+            info() {
+                return ! this.isFavourited ? 'Dodaj do ulubionych' : 'W Twoich ulubionych';
             }
         },
 
         methods: {   
             addFavourite() {
-                return this.isFavourited ? this.destroy() : this.create();
+                if(this.authorize('hasVerifiedEmail')) return this.isFavourited ? this.destroy() : this.create();
             },
 
             create() {

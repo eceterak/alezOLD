@@ -20,15 +20,55 @@ class ReadAdvertsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_view_all_adverts()
+    public function a_user_can_view_all_verified_adverts()
     {
         $this->get(route('adverts'))->assertSee($this->advert->title);
     }
 
     /** @test */
-    public function a_user_can_view_a_single_advert()
+    public function unverified_adverts_should_not_be_listed()
     {
+        $advert = AdvertFactory::create([
+            'verified' => false
+        ]);
+
+        $this->get(route('adverts'))->assertDontSee($advert->title);
+    }
+
+    /** @test */
+    public function archived_adverts_are_should_not_be_listed()
+    {
+        $this->advert->archive();
+
+        $this->get(route('adverts'))->assertDontSee($this->advert->title);
+    }
+
+    /** @test */
+    public function a_user_can_view_a_single_advert()
+    {        
         $this->get(route('adverts.show', [$this->advert->city->slug, $this->advert->slug]))->assertSee($this->advert->title);
+    }
+
+    /** @test */
+    public function unverified_advert_should_not_be_accessible()
+    {
+        $advert = AdvertFactory::create([
+            'verified' => false
+        ]);
+
+        $this->get(route('adverts.show', [$advert->city->slug, $advert->slug]))->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_user_can_see_her_advert_even_if_it_is_still_unverified()
+    {
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create([
+            'verified' => false
+        ]);
+
+        $this->get(route('adverts.show', [$advert->city->slug, $advert->slug]))->assertSee($advert->title);
     }
 
     /** @test */
@@ -47,5 +87,34 @@ class ReadAdvertsTest extends TestCase
         $this->call('GET', route('adverts.show', [$advert->city->slug, $advert->slug]));
 
         $this->assertEquals(1, $advert->fresh()->visits);
+    }
+
+    /** @test */
+    public function a_user_can_view_her_adverts()
+    {
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create();
+
+        $archivedAdvert = AdvertFactory::ownedBy($user)->create([
+            'archived' => true
+        ]);
+
+        $this->get(route('home'))->assertSee($advert->title)->assertDontSee($archivedAdvert->title);
+    }
+
+
+    /** @test */
+    public function a_user_can_view_her_archived_adverts()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signIn();
+
+        $archivedAdvert = AdvertFactory::ownedBy($user)->create([
+            'archived' => true
+        ]);
+
+        $this->get(route('archives'))->assertSee($archivedAdvert->title);
     }
 }

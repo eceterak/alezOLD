@@ -10,15 +10,24 @@ use App\Advert;
 class AdvertObserver
 {
     /**
-     * Generate a slug when creating a new room.
+     * Generate the slug using advert title.
+     * 
+     * @param  \App\Advert $advert
+     * @return void
+     */
+    public function creating(Advert $advert)
+    {
+        $advert->slug = $advert->title;
+    }
+
+    /**
+     * Send a confirmation mail.
      * 
      * @param  \App\Advert $advert
      * @return void
      */
     public function created(Advert $advert)
     {
-        $advert->update(['slug' => $advert->title]);
-
         $advert->city->subscriptions
             ->where('user_id', '!=', $advert->user_id)
             ->each(function($subscription) use ($advert) {
@@ -29,13 +38,13 @@ class AdvertObserver
     }
 
     /**
-     * Update slug if title changed but slug didn't.
+     * Update slug if title has changed.
      *
      * @param  \App\Advert  $advert
      * @return void
      */
-    public function updated(Advert $advert)
-    {
-        if($advert->isDirty('title') && $advert->isClean('slug')) $advert->update(['slug' => $advert->title]);
+    public function updating(Advert $advert)
+    {        
+        if($advert->isDirty('title') && $advert->isClean('slug')) $advert->slug = $advert->title;
     }
 }

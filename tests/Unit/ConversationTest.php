@@ -52,4 +52,28 @@ class ConversationTest extends TestCase
 
         $this->assertSame($user->id, $conversation->sender->id);
     }
+
+    /** @test */
+    public function it_can_recognize_who_interlocutor_is()
+    {
+        $advert = AdvertFactory::create();
+
+        $user = $this->signIn();
+
+        $conversation = $advert->inquiry('Hi bruh');
+
+        $this->assertSame($advert->user->id, $conversation->interlocutor->id);
+    }
+
+    /** @test */
+    public function it_has_messages()
+    {
+        $advert = AdvertFactory::create();
+
+        $user = $this->signIn();
+
+        $conversation = $advert->inquiry('Hi bruh');
+
+        $this->assertCount(1, $conversation->messages);
+    }
 }

@@ -16,6 +16,8 @@ class ConversationFactory
     {
         $advert = AdvertFactory::create();
 
-        return $advert->inquiry('Testing', create(User::class));
+        $user = auth()->user() ?? create(User::class);
+
+        return $advert->inquiry('Testing', $user);
     }
 }

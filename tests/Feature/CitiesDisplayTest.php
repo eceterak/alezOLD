@@ -26,7 +26,7 @@ class CitiesDisplayTest extends TestCase
     }
 
     /** @test */
-   public function adverts_from_other_cities_shouldnt_be_visible_in_the_city()
+    public function adverts_from_other_cities_shouldnt_be_visible_in_the_city()
     {
         $city = create(City::class);
 
@@ -35,15 +35,36 @@ class CitiesDisplayTest extends TestCase
         $this->get(route('cities.show', $city->slug))->assertDontSee($advertNotInCity->title); 
     }
 
+
     /** @test */
-   public function show_suggested_cities_on_main_page()
-   {
-        $citySuggested = create(City::class, [
-            'suggested' => true
+    public function unverified_adverts_should_not_be_listed()
+    {
+        $advert = AdvertFactory::create([
+            'verified' => false
         ]);
 
-        $this->get(route('index'))->assertSee($citySuggested->name);
-   }
+        $this->get(route('cities.show', $advert->city->slug))->assertDontSee($advert->title); 
+    }
+
+    /** @test */
+    public function archived_adverts_are_should_not_be_listed()
+    {
+        $advert = AdvertFactory::create();
+
+        $advert->archive();
+
+        $this->get(route('cities.show', $advert->city->slug))->assertDontSee($advert->title); 
+    }
+
+    /** @test */
+    public function show_suggested_cities_on_main_page()
+    {
+            $citySuggested = create(City::class, [
+                'suggested' => true
+            ]);
+
+            $this->get(route('index'))->assertSee($citySuggested->name);
+    }
 
     /** @test */
     public function dont_show_nonsuggested_cities_on_main_page()

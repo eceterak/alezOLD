@@ -8,7 +8,6 @@ use App\Advert;
 
 class City extends Model
 {
-
     use Searchable;
 
     /**
@@ -134,11 +133,9 @@ class City extends Model
      */
     public function subscribe() 
     {
-        $this->subscriptions()->create([
+        return $this->subscriptions()->create([
             'user_id' => auth()->id()
         ]);
-
-        return $this;
     }
 
     /**
@@ -158,8 +155,6 @@ class City extends Model
      */
     public function getIsSubscribedAttribute() 
     {
-        return $this->subscriptions()
-            ->where('user_id', auth()->id())
-            ->exists();
+        return (bool) (auth()->user()) ? $this->subscriptions()->where('user_id', auth()->id())->exists() : false;
     }
 }

@@ -112,7 +112,9 @@ class CityTest extends TestCase
     {
         $user = $this->signIn();
 
-        $city = create(City::class)->subscribe();
+        $city = create(City::class);
+
+        $city->subscribe();
 
         $this->assertTrue($city->isSubscribed);
     }
@@ -124,7 +126,9 @@ class CityTest extends TestCase
 
         $this->signIn();
 
-        $city = create(City::class)->subscribe();
+        $city = create(City::class);
+
+        $city->subscribe();
 
         $advert = AdvertFactory::city($city)->create();
 

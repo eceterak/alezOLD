@@ -29,7 +29,7 @@ class Message extends Model
 
         static::created(function($message)
         {
-            $message->conversation->users->except(auth()->id())[0]->notify(new YouHaveANewMessage($message->conversation));
+            $message->receiver->notify(new YouHaveANewMessage($message->conversation));
         });
     }
 
@@ -51,5 +51,15 @@ class Message extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * 
+     * 
+     * @return
+     */
+    public function receiver() 
+    {
+        return $this->belongsTo(User::class, 'to_id');
     }
 }
