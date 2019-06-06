@@ -160,7 +160,7 @@ class AdvertTest extends TestCase
             'order' => 0
         ]);
         
-        $this->assertEquals('/storage/photos/room.jpg', $advert->featured_photo_path);
+        $this->assertEquals('https://alez.s3.eu-central-1.amazonaws.com/photos/room.jpg', $advert->featured_photo_path);
     }
 
     /** @test */

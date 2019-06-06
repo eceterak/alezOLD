@@ -22,7 +22,7 @@ class PhotosUploadController extends Controller
         ]);
 
         $photo = Photo::create([
-            'url' => request()->file('photo')->store('photos', 'public')
+            'url' => request()->file('photo')->store('photos', 's3')
         ]);
 
         return response()->json([
@@ -38,7 +38,7 @@ class PhotosUploadController extends Controller
      */
     public function destroy(Photo $photo) 
     {
-        Storage::disk('public')->delete($photo->url);
+        Storage::disk('s3')->delete($photo->url);
 
         $photo->delete();
 
@@ -58,7 +58,7 @@ class PhotosUploadController extends Controller
         ]);
 
         $photo = $advert->photos()->create([
-            'url' => request()->file('photo')->store('photos', 'public'),
+            'url' => request()->file('photo')->store('photos', 's3'),
             'order' => ($advert->photos()->max('order') + 1)
         ]);
 

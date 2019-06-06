@@ -126,7 +126,7 @@ class AdvertsController extends Controller
             'revision' => array_diff_assoc($request->validated(), $advert->getAttributes())
         ]);
 
-        return redirect(route('adverts'));
+        return redirect(route('home'));
     }
 
     /**

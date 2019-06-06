@@ -37,7 +37,7 @@ class ManageAdvertTest extends TestCase
             'description' => 'description has been updated',
             'rent' => 2000,
             'pets' => 1
-        ])->assertRedirect(route('adverts'));
+        ])->assertRedirect(route('home'));
 
         $this->assertEquals($this->advert->fresh()->revision, [
             'title' => 'some dummy title',

@@ -33,7 +33,7 @@ class PhotosUploadTest extends TestCase
         $this->assertArrayHasKey('url', $upload);
         $this->assertArrayHasKey('id', $upload);
 
-        Storage::disk('public')->assertExists("photos/{$file->hashName()}");
+        Storage::disk('s3')->assertExists("photos/{$file->hashName()}");
 
         $this->post(route('adverts.store'), AdvertFactory::raw([
             'photos' => $upload['id']
@@ -64,7 +64,7 @@ class PhotosUploadTest extends TestCase
 
         $this->assertCount(2, $advert->photos);
 
-        $this->assertEquals('/storage/photos/featured.jpg', $advert->featured_photo_path);
+        $this->assertEquals('https://alez.s3.eu-central-1.amazonaws.com/photos/featured.jpg', $advert->featured_photo_path);
     }
 
     /** @test */
@@ -116,7 +116,7 @@ class PhotosUploadTest extends TestCase
 
         $this->assertCount(0, Photo::all());
 
-        Storage::disk('public')->assertMissing("photos/{$file->hashName()}");
+        Storage::disk('s3')->assertMissing("photos/{$file->hashName()}");
     }
 
     /** @test */

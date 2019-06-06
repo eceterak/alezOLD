@@ -30316,7 +30316,11 @@ var render = function() {
                       _vm._v(" "),
                       _c("img", {
                         staticClass: "img-fluid",
-                        attrs: { src: "/storage/" + image.url }
+                        attrs: {
+                          src:
+                            "https://alez.s3.eu-central-1.amazonaws.com/" +
+                            image.url
+                        }
                       })
                     ]
                   )

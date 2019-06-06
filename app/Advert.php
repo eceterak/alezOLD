@@ -242,7 +242,7 @@ class Advert extends Model
     {
         $featured = $this->photos()->where('order', 0)->first();
 
-        return ($featured) ? '/storage/'.$featured->url : '/storage/photos/notfound.jpg';
+        return ($featured) ? 'https://alez.s3.eu-central-1.amazonaws.com/'.$featured->url : '/storage/photos/notfound.jpg';
     }
 
     /**

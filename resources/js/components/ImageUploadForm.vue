@@ -8,7 +8,7 @@
                         <p class="position-absolute p-2" style="top: 0; right: 0;">
                             <a href="#" @click.prevent="destroy(image, index)"><i class="fas fa-times"></i></a>
                         </p>
-                        <img :src="'/storage/' + image.url" class="img-fluid">
+                        <img :src="'https://alez.s3.eu-central-1.amazonaws.com/' + image.url" class="img-fluid">
                     </div>
                 </div>
                 <div class="col-2 px-2" slot="footer" v-if="images.length < 6">
