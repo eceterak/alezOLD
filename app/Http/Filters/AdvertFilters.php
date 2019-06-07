@@ -4,7 +4,6 @@ namespace App\Filters;
 
 class AdvertFilters extends QueryFilter
 {
-
     protected $filters = [
         'sort', 
         'rentmin', 'rentmax', 
@@ -34,7 +33,7 @@ class AdvertFilters extends QueryFilter
         switch($value)
         {
             case 'date':
-                $this->builder->orderBy('created_at', 'asc');
+                $this->builder->orderBy('created_at', 'desc');
             break;
 
             case 'rent_desc': 

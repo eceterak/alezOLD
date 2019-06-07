@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Iluminate\Http\Request;
+use Illuminate\Foundation\Auth\RedirectsUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
+    use AuthenticatesUsers;
+
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -20,8 +25,6 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-
-    use AuthenticatesUsers;
 
     /**
      * Create a new controller instance.
@@ -36,22 +39,84 @@ class LoginController extends Controller
     }
 
     /**
-     * Handle an authentication attempt.
+     * Show the application's login form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+    /**
+     * Custom login method to axtend authentication with active field.
      *
      * @param  \Illuminate\Http\Request $request
      *
      * @return Response
      */
-    public function authenticate(Request $request)
+    public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $this->validateLogin($request);
 
-        $email = $request->email;
-        $password = $request->password;
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
 
-        if(Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'active' => true])) 
-        {
-            return redirect()->{$this->redirectTo()};
+            return $this->sendLockoutResponse($request);
         }
+
+        if(Auth::attempt($this->credentials($request), $request->filled('remember'))) 
+        {
+            return $this->sendLoginResponse($request);
+        }
+
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse($request);
+    }
+
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function credentials(Request $request)
+    {
+        return [
+            'email' => $request->login_email,
+            'password' => $request->login_password,
+            'active' => true
+        ];
+    }
+
+    /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            'login_email' => 'required|string',
+            'login_password' => 'required|string',
+        ]);
+    }
+
+    /**
+     * Get the failed login response instance.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function sendFailedLoginResponse()
+    {
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.failed')],
+        ])->redirectTo(route('login').'#login');
     }
 }

@@ -19,14 +19,14 @@
             </div>
         </div>
     </div>
-    {{ $adverts->onEachSide(1)->links() }}
 @empty
     @if(request()->except(['sort', 'page']))
         <p>Nie znaleziono żadnych ogłoszeń spełniających podane kryteria.</p>
-    @else
+        @else
         <p>Brak ogłoszeń</p>
     @endif
 @endforelse
+{{ $adverts->onEachSide(1)->links() }}
 
 {{-- Vue.js aproach --}}
 {{--<city-view :initial-adverts-count="{{ $city->adverts_count }}" inline-template>

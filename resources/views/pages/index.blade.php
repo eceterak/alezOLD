@@ -25,7 +25,7 @@
     @if($suggestedCities->count())
         <div class="row justify-content-center mt-5">
             <div class="col-10 px-0">
-                <h5 class="mb-3">Pokoje w miastach</h5>
+                <h5 class="mb-3">Popularne miasta</h5>
                 <div id="suggested-list" class="row">
                     @foreach($suggestedCities as $city)
                         <div class="col-3 mb-3"><a href="{{ route('cities.show', $city->slug) }}"><i class="fas fa-city suggested-icon"></i>{{ $city->name }}</a></div>

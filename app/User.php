@@ -216,38 +216,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Desactivate the account, archive all of users adverts.
-     * Favourites, subscriptions and notifications are deleted trough
-     * mysql foreign key cascade delete.
-     * 
-     * @return
-     */
-    public function deleteAccount() 
-    {
-        auth()->logout();
-        
-        $this->update([
-            'name' => 'deleted',
-            'active' => false,
-            'email' => 'deleted',
-            'password' => 'deleted',
-            'bio' => 'deleted',
-            'deleted_at' => now()
-        ]);
-
-        $this->adverts()->update([
-            'archived' => true
-        ]);
-
-        $this->deleteAvatar();
-
-        $this->favourites()->delete();
-        $this->subscriptions()->delete();
-        $this->notifications()->delete();
-        $this->activities()->delete();
-    }
-
-    /**
      * Check if user has unready notifications of a given type.
      * 
      * @param string $type
@@ -294,5 +262,37 @@ class User extends Authenticatable implements MustVerifyEmail
     public function acceptsEmailNotifications()
     {
         return $this->email_notifications;
+    }
+
+    /**
+     * Desactivate the account, archive all of users adverts.
+     * Favourites, subscriptions and notifications are deleted trough
+     * mysql foreign key cascade delete.
+     * 
+     * @return
+     */
+    public function deleteAccount() 
+    {
+        auth()->logout();
+        
+        $this->update([
+            'name' => 'deleted',
+            'active' => false,
+            'email' => 'deleted',
+            'password' => 'deleted',
+            'bio' => 'deleted',
+            'deleted_at' => now()
+        ]);
+
+        $this->adverts()->update([
+            'archived' => true
+        ]);
+
+        $this->deleteAvatar();
+
+        $this->favourites()->delete();
+        $this->subscriptions()->delete();
+        $this->notifications()->delete();
+        $this->activities()->delete();
     }
 }

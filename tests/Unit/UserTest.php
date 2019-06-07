@@ -16,23 +16,6 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function user_can_login() 
-    {
-        $this->get(route('login'))->assertSuccessful();
-
-        $user = create(User::class, [
-            'password' => bcrypt($password = 'test123')
-        ]);
-
-        $this->post(route('login'), [
-            'email' => $user->email,
-            'password' => $password
-        ])->assertRedirect();
-
-        $this->assertAuthenticatedAs($user);
-    }
-
-    /** @test */
     public function user_can_have_adverts() 
     {
         $advert = AdvertFactory::ownedBy($user = $this->signIn())->create();
