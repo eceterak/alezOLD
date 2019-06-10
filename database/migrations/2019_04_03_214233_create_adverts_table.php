@@ -21,12 +21,13 @@ class CreateAdvertsTable extends Migration
             $table->unsignedInteger('street_id')->nullable();
             $table->boolean('verified')->default(false);
             $table->boolean('archived')->default(false);
-            $table->string('slug')->nullable()->unique();
+            $table->string('slug')->unique();
             $table->unsignedInteger('visits')->default(0);
+            $table->string('phone', 13)->nullable();
             $table->text('revision')->nullable();
             
             // $$$.
-            $table->unsignedSmallInteger('rent')->nullable();
+            $table->unsignedSmallInteger('rent');
             $table->unsignedSmallInteger('deposit')->nullable();
             $table->unsignedSmallInteger('bills')->nullable();
             
@@ -47,7 +48,7 @@ class CreateAdvertsTable extends Migration
             $table->boolean('parking')->default(false);
             
             // Advert details.
-            $table->enum('room_size', ['single', 'double', 'triple'])->default('single')->nullable();
+            $table->enum('room_size', ['single', 'double', 'triple'])->default('single');
             $table->boolean('furnished')->default(false);
             $table->boolean('broadband')->default(false);
             

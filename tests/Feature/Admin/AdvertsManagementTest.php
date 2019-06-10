@@ -30,7 +30,7 @@ class AdvertsManagementTest extends TestCase
 
         $advert = Advert::where('title', $attributes['title'])->first();
 
-        $this->get(route('admin.adverts'))->assertSee($advert->shortTitle());
+        $this->get(route('admin.adverts'))->assertSee($advert->title);
     }
 
     /** @test */
@@ -47,10 +47,11 @@ class AdvertsManagementTest extends TestCase
         $this->patch(route('admin.adverts.update', [$advert->slug]), $attributes = raw(Advert::class, [
             'city_id' => $advert->city->id,
             'street_id' => $advert->street->id,
+            'title' => 'some dummy title',
             'verified' => false
         ]))->assertRedirect(route('admin.adverts'));
 
-        $this->assertDatabaseHas('adverts', $attributes);
+        $this->assertEquals($attributes['title'], $advert->fresh()->title);
     }
 
     /** @test */

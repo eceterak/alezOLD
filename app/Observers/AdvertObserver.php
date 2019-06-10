@@ -34,7 +34,7 @@ class AdvertObserver
                 $subscription->user->notify(new AdvertWasAdded($advert->city, $advert));
             });
 
-        Mail::to($advert->user)->send(new AdvertCreatedConfirmationMail());
+        //Mail::to($advert->user)->send(new AdvertCreatedConfirmationMail());
     }
 
     /**

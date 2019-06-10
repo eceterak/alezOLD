@@ -80,8 +80,8 @@
     </div>
     <div class="row">
         <div class="form-group col-4">
-            <label for="room_size">Wielkość pokoju</label>
-            <select name="room_size" id="room_size" class="form-control">
+            <label for="room_size">Wielkość pokoju*</label>
+            <select name="room_size" id="room_size" class="form-control" required>
                 <option value>wybierz</option>
                 <option value="single" {{ (isset($advert)) ? ($advert->room_size == 'single') ? 'selected' : '' :  (old('room_size') == 'single') ? 'selected' : '' }}>jednoosobowy</option>
                 <option value="double" {{ (isset($advert)) ? ($advert->room_size == 'double') ? 'selected' : '' :  (old('room_size') == 'double') ? 'selected' : '' }}>dwuosobowy</option>
@@ -217,6 +217,13 @@
         <div class="custom-control custom-checkbox col-4">
             <input type="checkbox" name="smoking" id="smoking" value="1" class="custom-control-input" {{ (isset($advert)) ? ($advert->smoking) ? 'checked' : '' :  (old('smoking')) ? 'checked' : '' }}>
             <label for="smoking" class="custom-control-label">Tylko dla niepalących</label>
+        </div>
+    </div>
+    <h5 class="card-title pb-1 border-bottom">Dane kontaktowe</h5>
+    <div class="row">
+        <div class="form-group col-4">
+            <label for="title">Numer telefonu</label>
+            <input type="number" name="phone" id="phone" class="form-control" value="{{ (!is_null(auth()->user()->phone)) ? auth()->user()->phone :  old('phone') }}">
         </div>
     </div>
     @if($method == 'POST')

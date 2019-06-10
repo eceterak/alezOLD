@@ -129,12 +129,13 @@ class City extends Model
     /**
      * Subscribe to a city.
      * 
+     * @param App\User $user
      * @return this
      */
-    public function subscribe() 
+    public function subscribe($user = null) 
     {
         return $this->subscriptions()->create([
-            'user_id' => auth()->id()
+            'user_id' => $user->id ?: auth()->id()
         ]);
     }
 

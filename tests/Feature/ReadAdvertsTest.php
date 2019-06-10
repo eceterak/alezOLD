@@ -22,7 +22,7 @@ class ReadAdvertsTest extends TestCase
     /** @test */
     public function a_user_can_view_all_verified_adverts()
     {
-        $this->get(route('adverts'))->assertSee($this->advert->title);
+        $this->get(route('adverts'))->assertSeeText($this->advert->title);
     }
 
     /** @test */
@@ -68,7 +68,7 @@ class ReadAdvertsTest extends TestCase
             'verified' => false
         ]);
 
-        $this->get(route('adverts.show', [$advert->city->slug, $advert->slug]))->assertSee($advert->title);
+        $this->get(route('adverts.show', [$advert->city->slug, $advert->slug]))->assertSeeText($advert->title);
     }
 
     /** @test */
@@ -100,21 +100,49 @@ class ReadAdvertsTest extends TestCase
             'archived' => true
         ]);
 
-        $this->get(route('home'))->assertSee($advert->title)->assertDontSee($archivedAdvert->title);
+        $this->get(route('home'))->assertSeeText($advert->title)->assertDontSee($archivedAdvert->title);
     }
-
 
     /** @test */
     public function a_user_can_view_her_archived_adverts()
     {
-        $this->withoutExceptionHandling();
-
         $user = $this->signIn();
 
         $archivedAdvert = AdvertFactory::ownedBy($user)->create([
             'archived' => true
         ]);
 
-        $this->get(route('archives'))->assertSee($archivedAdvert->title);
+        $this->get(route('archives'))->assertSeeText($archivedAdvert->title);
+    }
+
+    /** @test */
+    public function phone_number_can_be_fetch_when_reading_an_advert()
+    {
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create([
+            'phone' => 600500300
+        ]);
+
+        $response = $this->json('GET', route('api.adverts.phone', $advert->slug))->decodeResponseJson();
+
+        $this->assertEquals('600 500 300', $response['phone']);
+    }
+
+    /** @test */
+    public function if_user_hides_her_phone_number_it_wont_be_visible_when_looking_at_advert()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create();
+
+        $this->get(route('adverts.show', [$advert->city->slug, $advert->slug]))->assertSeeText('Telefon');
+
+        $user->hide_phone = true;
+        $user->save();
+
+        $this->get(route('adverts.show', [$advert->city->slug, $advert->slug]))->assertDontSeeText('Telefon');
     }
 }

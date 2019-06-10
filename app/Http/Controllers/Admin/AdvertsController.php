@@ -53,7 +53,6 @@ class AdvertsController extends Controller
     public function store(Request $request) 
     {
         $attributes = $this->validateRequest($request);
-        $attributes['slug'] = $request->title;
 
         $advert = auth()->user()->adverts()->create($attributes);
 

@@ -67,12 +67,6 @@
         watch: {
             images() {
                 this.ids = this.images.map(img => img.id).join(',');
-
-                var photo = this.images[0];
-
-                // axios.patch('/api/ogloszenia/zdjecia/' + photo.id)
-                //     .then(photo.featured = true)
-                //     .catch(error => flash(error.response.data.errors.photo[0], 'danger'));
             }
         },
 
@@ -114,7 +108,7 @@
                     .then()
                     .catch(error => flash(error.response.data.errors.photo[0], 'danger'));
             },
-            orderChanged(e) {
+            orderChanged() {
                 axios.post('/api/zdjecia/' + this.advert.slug, {
                     photos: this.ids,
                     _method: 'patch'

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class UserSettingsController extends Controller
 {
@@ -28,11 +28,15 @@ class UserSettingsController extends Controller
     public function update() 
     {
         $attributes = request()->validate([
-            'bio' => 'sometimes'
+            'bio' => 'sometimes',
+            'phone' => 'sometimes|digits_between:9,13'
         ]);
 
         if(request()->has('email_notifications')) $attributes['email_notifications'] = true;
         else $attributes['email_notifications'] = false;
+
+        if(request()->has('hide_phone')) $attributes['hide_phone'] = true;
+        else $attributes['hide_phone'] = false;
 
         auth()->user()->update($attributes);
 

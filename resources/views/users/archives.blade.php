@@ -3,15 +3,11 @@
 @section('lead')
 
     @include('users._menu', [
-        'title' => 'Twoje ogłoszenia',
-        'subtitle' => 'Tutaj znajdziesz swoje ogłoszenia'
+        'title' => 'Ogłoszenia archiwalne',
+        'subtitle' => 'Tutaj znajdziesz swoje archiwalne ogłoszenia'
     ])
 
     <div class="card">
-        <ul class="list-group list-group-horizontal small">
-            <li class="list-group-item border-0 bg-transparent"><a href="{{ route('home') }}">Aktywne</a></li>
-            <li class="list-group-item border-0 bg-transparent"><a href="{{ route('archives') }}">Archiwum</a></li>
-        </ul>
 
         @if($adverts->count())
             <table class="table">
@@ -63,8 +59,8 @@
             {{ $adverts->links() }}
         </div>
         @else
-            <div class="card-body text-center pt-0">
-                <p>Nie masz żadnych archiwalnych ogłoszeń.</p>
+            <div class="card-body text-center">
+                <p class="card-text">Nie masz żadnych archiwalnych ogłoszeń.</p>
             </div>
         @endif
     </div>

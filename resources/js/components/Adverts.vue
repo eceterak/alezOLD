@@ -1,13 +1,14 @@
 <template>
     <div>
         <advert v-for="(advert, index) in items" v-bind:key="advert.id" v-bind:data="advert" @deleted="remove(index)"></advert>
-        <paginator :dataSet="dataSet" @changed="fetch"></paginator>
+        <!-- <paginator :dataSet="dataSet" @changed="fetch"></paginator> -->
     </div>
 </template>
 
 <script>
 
     import Advert from './Advert.vue';
+    import Paginator from './Paginator.vue';
     import collection from '../mixins/collection.js';
 
     export default {

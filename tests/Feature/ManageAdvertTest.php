@@ -26,14 +26,13 @@ class ManageAdvertTest extends TestCase
     /** @test */
     public function owner_of_the_advert_can_update_it() 
     {
-        $this->withoutExceptionHandling();
-
-        $this->actingAs($this->advert->user)->get(route('adverts.edit', [$this->advert->city->slug, $this->advert->slug]));
+        $this->actingAs($this->advert->user)->get(route('adverts.edit', [$this->advert->city->slug, $this->advert->slug]))->assertSuccessful();
 
         $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), [
             'city_id' => $this->advert->city->id,
             'street_id' => $this->advert->city->id,
             'title' => 'some dummy title',
+            'room_size' => $this->advert->room_size,
             'description' => 'description has been updated',
             'rent' => 2000,
             'pets' => 1
@@ -63,6 +62,7 @@ class ManageAdvertTest extends TestCase
             'street_id' => $this->advert->city->id,
             'title' => 'some dummy title',
             'description' => 'description has been updated',
+            'room_size' => 'single',
             'rent' => 2000,
             'pets' => 1
         ])->assertRedirect(route('home'));
@@ -113,7 +113,7 @@ class ManageAdvertTest extends TestCase
 
         $this->assertTrue($this->advert->fresh()->archived);
 
-        $this->get(route('adverts.show', [$this->advert->city->slug, $this->advert->slug]))->assertSeeText('Ogłoszenie zakończone.');
+        $this->get(route('adverts.show', [$this->advert->city->slug, $this->advert->slug]))->assertSeeText('Ogłoszenie zakończone');
     }
 
     /** @test */

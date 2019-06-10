@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('avatar_path')->nullable();
             $table->text('bio')->nullable();
+            $table->string('phone', 13)->nullable();
+            $table->boolean('hide_phone')->default(false);
             $table->boolean('email_notifications')->default(true);
             $table->rememberToken();
             $table->unsignedTinyInteger('role')->default(0);

@@ -7,8 +7,8 @@
         'subtitle' => 'Zapisane ogłoszenia'
     ])
 
-    @if($favourites->count())
-        <div class="card">
+    <div class="card">
+        @if($favourites->count())
             <table class="table">
                 <tbody>
                     @foreach($favourites as $favourite)
@@ -33,5 +33,10 @@
             </table>
         </div>
         {{ $favourites->links() }}
-    @endif
+        @else
+            <div class="card-body text-center">
+                <p class="card-text">Nie masz żadnych zapisanych ogłoszeń</p>
+            </div>
+        @endif
+    </div>
 @endsection

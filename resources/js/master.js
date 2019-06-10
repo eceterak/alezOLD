@@ -49,11 +49,11 @@ $(function() {
         dateFormat: 'yy-mm-dd'
     });
 
+    // Poppa
     $('#advert-form-va').validation({
         requiredMessage: function(name) {
             return name + ' jest wymagany';
-        },
-        liveValidation: true
+        }
     });
 
     /** 
@@ -61,20 +61,18 @@ $(function() {
      */ 
 
     // Tabs
-    $(function () {
-        var hash = window.location.hash;
+    var hash = window.location.hash;
 
-        if(hash) {
-            $('nav.nav a').removeClass('active');
-            $('.tab-pane').removeClass('show active');
-            $('nav.nav a[href="' + hash + '"]').addClass('active');
-            $(hash).addClass('show active');
-        }
+    if(hash) {
+        $('nav.nav a').removeClass('active');
+        $('.tab-pane').removeClass('show active');
+        $('nav.nav a[href="' + hash + '"]').addClass('active');
+        $(hash).addClass('show active');
+    }
 
-        $('.nav-tabs a').click(function (e) {
-            $(this).tab('show');
-            window.location.hash = this.hash;
-        });
+    $('.nav-tabs a').click(function (e) {
+        $(this).tab('show');
+        window.location.hash = this.hash;
     });
 
     // Tooltip
@@ -98,6 +96,12 @@ $(function() {
         $(this).find('form#confirmationForm').attr('action', endpoint);
     });
 
+    $('.user-menu li a').each(function(key, item) {
+        if(item.href == window.location.href) {
+            $(item).addClass('active');
+        }
+    });
+
     // Disable empty inputs when applying filters to clear the url a bit.
     $('form[name="advertFiltersForm"]').submit(function(e) {
         var inputs = $('input, select', this);
@@ -111,4 +115,8 @@ $(function() {
         });
     });
 
+    // mBox
+    $('.mBox').mBox({
+        imagesPerPage: 5
+    });
 });

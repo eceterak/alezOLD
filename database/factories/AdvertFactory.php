@@ -11,10 +11,11 @@ $factory->define(App\Advert::class, function (Faker $faker) {
         'verified' => true,
         'archived' => false,
         'visits' => 0,
+        'phone' => 500600700,
         'landlord' => $faker->randomElement(['live_in', 'live_out', 'tenetant', 'agent', 'former']),
         
         // Availability.
-        'available_from' => $faker->date(),
+        'available_from' => $faker->date,
         'minimum_stay' => $faker->numberBetween(0, 24),
         'maximum_stay' => $faker->numberBetween(0, 24),
 

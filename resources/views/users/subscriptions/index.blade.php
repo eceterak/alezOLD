@@ -7,8 +7,8 @@
         'subtitle' => 'Miasta które obserwujesz'
     ])
 
-    @if($subscriptions->count())
-        <h5>Miasta</h5>
+    <h5 class="mt-4">Obserwowane miasta</h5>
+        @if($subscriptions->count())
         <div class="card mb-4">
             <table class="table">
                 <tbody>
@@ -27,10 +27,16 @@
                 </tbody>
             </table>
         </div>
-    @endif
+        @else
+            <div class="card">
+                <div class="card-body text-center">
+                    <p class="card-text">Nie obserwujesz żadnych miast</p>
+                </div>
+            </div>
+        @endif
 
-    @if($notifications->count())
-        <h5>Nowe ogłoszenia w obserwowanych miastach</h5>
+    <h5 class="mt-4">Powiadomienia</h5>
+        @if($notifications->count())
         <div class="card mb-4">
             <table class="table">
                 <tbody>
@@ -42,5 +48,12 @@
                 </tbody>
             </table>
         </div>
+    @else
+        <div class="card">
+            <div class="card-body text-center">
+                <p class="card-text">Nie masz żadnych powiadomień</p>
+            </div>
+        </div>
     @endif
+
 @endsection

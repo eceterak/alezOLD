@@ -123,6 +123,8 @@ Route::delete('/api/ogloszenia/zdjecia/{photo}', 'Api\PhotosUploadController@des
 Route::patch('/api/ogloszenia/zdjecia/{advert}', 'Api\PhotosUploadController@update')->middleware('auth')->name('api.adverts.photos.update');
 Route::patch('/api/zdjecia/{advert}', 'Api\PhotosOrderController@update')->middleware('auth')->name('api.photos.order.update');
 
+Route::get('/api/ogloszenia/{advert}/phone', 'Api\DisplayPhoneNumberController@show')->name('api.adverts.phone');
+
 // Auth
 Auth::routes(['verify' => true]);
 Auth::routes();

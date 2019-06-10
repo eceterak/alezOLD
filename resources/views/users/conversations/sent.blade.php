@@ -7,8 +7,8 @@
         'subtitle' => 'Wysłane wiadomości'
     ])
 
-    @if($conversations->count())
-        <div class="card">
+    <div class="card">
+        @if($conversations->count())
             <table class="table">
                 <tbody>
                     @foreach($conversations as $conversation)
@@ -45,7 +45,11 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
-    @endif
+        @else
+            <div class="card-body text-center">
+                <p class="card-text">Nie masz żadnych wysłanych wiadomości</p>
+            </div>
+        @endif
+    </div>
 
 @endsection

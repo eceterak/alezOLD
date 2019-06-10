@@ -1,25 +1,31 @@
 @extends('layouts.master')
-@section('content')
-    <header class="flex mb-4 justify-between items-center">
-        <h3 class="text-grey-darker">Pokoje na wynajem</h3>
+@section('lead')
+    <header class="d-flex justify-content-between mb-4">
+        <div>
+            <h3 class="text-grey-darker">Wszystkie pokoje na wynajem</h3>
+            <p class="text-grey-darker mt-1">
+                {{ ($adverts->total() > 1) ? 'Znaleziono '.$adverts->total().' ogłoszeń' : ($adverts->total() <= 0 ? '' : 'Znaleziono 1 ogłoszenie') }}
+            </p>
+        </div>
     </header>
-    <main class="flex flex-col">
-        @forelse($adverts as $advert)
-            <article class="card lg:flex mb-4">
-                <div class="flex lg:static lg:w-1/8 items-center justify-center mb-0 lg:mb-0 sm:mb-2">
-                    <img src="/storage/notfound.png">
-                </div>
-                <div class="lg:static lg:w-7/8 lg:pl-2">
-                    <header>
-                        <h3 class="font-normal text-lg mb-2"><a href="{{ route('adverts.show', [$advert->city->slug, $advert->slug]) }}">{{ $advert->title }}</a></h3>
-                    </header>
-                    <section>
-                        <p class="text-grey-darker">{{ str_limit($advert->description, 100) }}</p>
-                    </section>
-                </div>
-            </article>
-        @empty
-            <div>Brak ogloszen</div>
-        @endforelse
+    <main>
+        <div class="small">
+            <span class="text-grey-darker">Sortuj:</span>
+            <div class="d-inline-block">
+                <ul class="list-group list-group-horizontal sort-group">
+                    <li class="list-group-item border-0 bg-transparent {{ (request()->has('sort') && request()->sort == 'date') ? 'disabled' : '' }}"><a href="{{ request()->fullUrlWithQuery(['sort' => 'date']) }}">Najnowsze</a></li>
+                    <li class="list-group-item border-0 bg-transparent {{ (request()->has('sort') && request()->sort == 'rent_asc') ? 'disabled' : '' }}"><a href="{{ request()->fullUrlWithQuery(['sort' => 'rent_asc']) }}">Najtańsze</a></li>
+                    <li class="list-group-item border-0 bg-transparent {{ (request()->has('sort') && request()->sort == 'rent_desc') ? 'disabled' : '' }}"><a href="{{ request()->fullUrlWithQuery(['sort' => 'rent_desc']) }}">Najdroższe</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-9">
+                @include('adverts._list')
+            </div>
+            <div class="col-3">
+                @include('cities._filters')
+            </div>
+        </div>
     </main>
 @endsection

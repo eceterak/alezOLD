@@ -32,7 +32,7 @@ class CitiesController extends Controller
     {        
         $adverts = $this->getAdverts($city, $filters);
 
-        // Leave it in the case I will use and vue to display advers.
+        // Leave it in the case I will use vue to display advers.
         if(request()->wantsJson())
         {
             return $adverts;
@@ -41,7 +41,7 @@ class CitiesController extends Controller
         return view('cities.show')->with([
             'city' => $city,
             'adverts' => $adverts
-        ]);    
+        ]);
     }
 
     /**

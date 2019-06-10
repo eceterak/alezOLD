@@ -3,18 +3,24 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Facades\Tests\Setup\AdvertFactory;
+use App\Photo;
 
 class PhotoTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function testExample()
+    use RefreshDatabase;
+
+    /** @test */
+    public function it_belongs_to_an_advert()
     {
-        $this->assertTrue(true);
+        $advert = AdvertFactory::create();
+
+        $photo = create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 0
+        ]);
+
+        $this->assertEquals($advert->id, $photo->advert->id);
     }
 }

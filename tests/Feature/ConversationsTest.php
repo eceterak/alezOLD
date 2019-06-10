@@ -25,7 +25,7 @@ class ConversationsTest extends TestCase
         
         Notification::fake();
 
-        $this->get(route('adverts.show', [$advert->city->slug, $advert->slug]))->assertSee('Napisz wiadomosc');
+        $this->get(route('adverts.show', [$advert->city->slug, $advert->slug]))->assertSee('Napisz wiadomość');
         
         $this->post(route('conversations.store', [$advert->city->slug, $advert->slug]), $attributes = [
             'body' => 'Hi mate I want this room'

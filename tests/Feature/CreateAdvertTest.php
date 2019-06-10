@@ -8,8 +8,8 @@ use App\Mail\AdvertCreatedConfirmationMail;
 use Facades\Tests\Setup\AdvertFactory;
 use Illuminate\Support\Facades\Mail;
 use App\Advert;
-use App\Street;
 use App\User;
+use App\City;
 
 class CreateAdvertTest extends TestCase
 {
@@ -42,19 +42,16 @@ class CreateAdvertTest extends TestCase
 
     /** @test */
     public function user_can_create_an_advert()
-    {   
+    {           
         $this->actingAs($this->user())->get(route('adverts.create'))->assertStatus(200);
 
-        $street = create(Street::class);
+        $city = create(City::class);
         
         $response = $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
-            'city_id' => $street->city->id,
-            'street_id' => $street->id
+            'city_id' => $city->id,
         ]))->assertRedirect(route('home'));
         
         Advert::where('title', $attributes['title'])->first();
-        
-        //dd($response->headers->get('Location'))
     }
 
     /** @test */
@@ -64,11 +61,10 @@ class CreateAdvertTest extends TestCase
 
         $this->actingAs($this->user())->get(route('adverts.create'))->assertStatus(200);
 
-        $street = create(Street::class);
+        $city = create(City::class);
         
         $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
-            'city_id' => $street->city->id,
-            'street_id' => $street->id
+            'city_id' => $city->id,
         ]))
         ->assertRedirect(route('home'));
 
@@ -104,19 +100,32 @@ class CreateAdvertTest extends TestCase
     /** @test */
     public function user_may_only_post_one_advert_per_minute()
     {
-        $this->withoutExceptionHandling();
+        $this->withoutExceptionHandling(); // Do not remove.
 
         $this->signIn();
 
-        $street = create(Street::class);
+        $city = create(City::class);
                 
         $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
-            'city_id' => $street->city->id,
-            'street_id' => $street->id
-        ]))->assertRedirect(route('home'));
+            'city_id' => $city->id
+        ]));
 
         $this->expectException(\Exception::class);
                         
-        $this->post(route('adverts.store'))->assertRedirect();
+        $this->post(route('adverts.store', [
+            'cirt_id' => $city->id
+        ]))->assertRedirect();
+    }
+
+    /** @test */
+    public function if_user_has_added_phone_number_to_her_profile_it_is_visible_on_create_advert_page()
+    {
+        $user = $this->signIn();
+
+        $user->phone = 500600700;
+
+        $user->save();
+
+        $this->get(route('adverts.create'))->assertSee($user->phone);
     }
 }

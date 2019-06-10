@@ -18,7 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'active', 'email', 'password', 'bio', 'email_notifications', 'avatar_path', 'notifications_count', 'deleted_at'
+        'name', 'active', 'email', 'password', 'bio', 'phone', 'hide_phone', 'email_notifications', 'avatar_path', 'notifications_count', 'deleted_at'
     ];
 
     /**
@@ -38,7 +38,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'active' => 'boolean',
         'email_verified_at' => 'datetime',
-        'email_notifications' => 'boolean'
+        'email_notifications' => 'boolean',
+        'hide_phone' => 'boolean'
     ];
 
     /**
@@ -237,7 +238,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $count = $notifications_count ?? $this->unreadNotifications()->count();
 
-        return $this->attributes['notifications_count'] = ($count > 99) ? '99+' : $count;
+        return ($count > 99) ? '99+' : $count;
     }
 
     /**

@@ -65,7 +65,7 @@ class CitiesManagementTest extends TestCase
 
         $advert = AdvertFactory::create();
 
-        $this->get(route('admin.cities.adverts', $advert->city->slug))->assertSee($advert->shortTitle());
+        $this->get(route('admin.cities.adverts', $advert->city->slug))->assertSee($advert->title);
     }
 
     /** @test */

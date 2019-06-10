@@ -11,7 +11,21 @@ class Photo extends Model
      */
     protected $guarded = [];
 
+    /**
+     * @var array
+     */
     protected $casts = [
         'featured' => 'boolean'
     ];
+
+    /**
+     * Photo belongs to advert.
+     * Useful when having access to single photo and wanting to get all sibilings trough advert.
+     * 
+     * @return App\Advert
+     */
+    public function advert() 
+    {
+        return $this->belongsTo(Advert::class);
+    }
 }

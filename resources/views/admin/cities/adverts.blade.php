@@ -20,7 +20,7 @@
                 <tbody>
                     @foreach($city->adverts as $advert)
                         <tr>
-                            <td><a href="{{ route('admin.adverts.edit', $advert->slug) }}">{{ $advert->shortTitle() }}</a></td>
+                            <td><a href="{{ route('admin.adverts.edit', $advert->slug) }}">{{ $advert->title }}</a></td>
                             <td><a href="{{ route('admin.cities.edit', $advert->city->slug) }}">{{ $advert->city->name }}</a></td>
                         </tr>
                     @endforeach

@@ -7,8 +7,15 @@
             <div class="col-md-10">
                 <div class="card-body h-100">
                     <div class="d-flex justify-content-between">
-                        <h5 class="card-title"><a href="{{ route('adverts.show', [$advert->city->slug, $advert->slug]) }}">{{ $advert->title }}</a></h5>
-                        <h3 color="text-warning">{{ $advert->rent }}<small class="text-muted">&nbsp;zł/mc</small></h3>
+                        <div>
+                            <h5 class="card-title mb-0">
+                                <a href="{{ route('adverts.show', [$advert->city->slug, $advert->slug]) }}">{{ $advert->title }}</a>
+                            </h5>
+                            <p class="small text-muted mb-4">{{ $advert->room_size_translated }}</p>
+                        </div>
+                        <div>
+                            <h3 class="mb-0">{{ $advert->rent }}<small class="text-muted">&nbsp;zł/mc</small></h3>
+                        </div>
                     </div>
                     <div class="card-text">{{ str_limit($advert->description, 100) }}</div>
                     <div class="d-flex align-items-end justify-content-between">

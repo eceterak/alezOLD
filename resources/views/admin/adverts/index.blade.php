@@ -21,7 +21,7 @@
                 <tbody>
                     @foreach($adverts as $advert)
                         <tr>
-                            <td><a href="{{ route('admin.adverts.edit', $advert->slug) }}">{{ str_limit($advert->title, 20, '...') }}</a></td>
+                            <td><a href="{{ route('admin.adverts.edit', $advert->slug) }}">{{ $advert->title }}</a></td>
                             <td class="fit"><a href="{{ route('admin.cities.edit', $advert->city->slug) }}">{{ $advert->city->name }}</a></td>
                             <td>{{ $advert->created_at->day.'/'.$advert->created_at->month.'/'.$advert->created_at->year }}</td>
                         </tr>

@@ -9,6 +9,7 @@ use App\Advert;
 use App\City;
 use App\Photo;
 use App\Http\Requests\UpdateAdvertRequest;
+use Illuminate\Support\Facades\Input;
 
 class AdvertsController extends Controller
 {
@@ -22,7 +23,12 @@ class AdvertsController extends Controller
     public function index(AdvertFilters $filters) 
     {
         return view('adverts.index')->with([
-            'adverts' => Advert::filter($filters)->where('verified', true)->where('archived', false)->get()
+            'adverts' => Advert::latest()
+                                ->where('verified', true)
+                                ->where('archived', false)
+                                ->filter($filters)
+                                ->paginate(24)
+                                ->appends(Input::except('page'))
         ]);
     }
 
@@ -50,7 +56,7 @@ class AdvertsController extends Controller
 
         return view('adverts.show')->with([
             'advert' => $advert->load(array('photos' => function($query) {
-                $query->orderBy('order', 'asc');
+                $query->where('order', '!=', 0)->orderBy('order', 'asc');
             }))
         ]);
     }

@@ -4,7 +4,7 @@
         <div>
             <h3 class="text-grey-darker">Pokoje na wynajem w <a href="{{ route('cities.show', $city->slug) }}">{{ ucfirst($city->name) }}</a></h3>
             <p class="text-grey-darker mt-1">
-                {{ ($adverts->total() > 1) ? 'Znaleziono '.$adverts->total().' ogłoszeń' : ($adverts->total() <= 0 ? '' : 'Znaleziono 1 ogłoszenie') }}
+                {{ ($adverts->total() > 1) ? 'Znaleziono '.$adverts->total().' ogłoszeń' : ($adverts->total() <= 0 ? '' : 'Znaleziono 1 ogłoszenie') }} <a href="#">pokaż na mapie</a>
             </p>
             <div>
                 <subscribe-button :active="{{ json_encode($city->isSubscribed) }}"></subscribe-button>
@@ -15,10 +15,10 @@
         <div class="small">
             <span class="text-grey-darker">Sortuj:</span>
             <div class="d-inline-block">
-                <ul class="list-group list-group-horizontal">
-                    <li class="list-group-item border-0 bg-transparent"><a href="{{ request()->fullUrlWithQuery(['sort' => 'date']) }}">Najnowsze</a></li>
-                    <li class="list-group-item border-0 bg-transparent"><a href="{{ request()->fullUrlWithQuery(['sort' => 'rent_asc']) }}">Najtańsze</a></li>
-                    <li class="list-group-item border-0 bg-transparent"><a href="{{ request()->fullUrlWithQuery(['sort' => 'rent_desc']) }}">Najdroższe</a></li>
+                <ul class="list-group list-group-horizontal sort-group">
+                    <li class="list-group-item border-0 bg-transparent {{ (request()->has('sort') && request()->sort == 'date') ? 'disabled' : '' }}"><a href="{{ request()->fullUrlWithQuery(['sort' => 'date']) }}">Najnowsze</a></li>
+                    <li class="list-group-item border-0 bg-transparent {{ (request()->has('sort') && request()->sort == 'rent_asc') ? 'disabled' : '' }}"><a href="{{ request()->fullUrlWithQuery(['sort' => 'rent_asc']) }}">Najtańsze</a></li>
+                    <li class="list-group-item border-0 bg-transparent {{ (request()->has('sort') && request()->sort == 'rent_desc') ? 'disabled' : '' }}"><a href="{{ request()->fullUrlWithQuery(['sort' => 'rent_desc']) }}">Najdroższe</a></li>
                 </ul>
             </div>
         </div>

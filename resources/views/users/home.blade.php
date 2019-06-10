@@ -8,11 +8,6 @@
     ])
 
     <div class="card">
-        <ul class="list-group list-group-horizontal small">
-            <li class="list-group-item border-0 bg-transparent"><a href="{{ route('home') }}">Aktywne</a></li>
-            <li class="list-group-item border-0 bg-transparent"><a href="{{ route('archives') }}">Archiwum</a></li>
-        </ul>
-
         @if($adverts->count())
             <table class="table">
                 <tbody>
@@ -81,7 +76,7 @@
                 </div>
             </div>
         @else
-            <div class="card-body text-center pt-0">
+            <div class="card-body text-center">
                 <p>Nie masz żadnych aktywnych ogłoszeń.</p>
                 <a href="{{ route('adverts.create') }}" class="btn btn btn-secondary ml-2">Dodaj jedno już teraz!</a>
             </div>

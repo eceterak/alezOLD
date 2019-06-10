@@ -100,9 +100,9 @@ class PhotosUploadTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Storage::fake('public');
+        $user = $this->signIn();
 
-        $this->signIn();
+        $advert = AdvertFactory::ownedBy($user)->create();
 
         $file = UploadedFile::fake()->image('photo.jpg');
 
@@ -117,6 +117,50 @@ class PhotosUploadTest extends TestCase
         $this->assertCount(0, Photo::all());
 
         Storage::disk('s3')->assertMissing("photos/{$file->hashName()}");
+    }
+
+    /** @test */
+    public function only_an_owner_can_delete_a_photo_from_existing_advert()
+    {
+        $this->signIn();
+
+        $advert = AdvertFactory::create();
+
+        $photo = create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 0
+        ]);
+
+        $this->json('DELETE', route('api.adverts.photos.delete', $photo->id))->assertStatus(403);        
+    }
+
+    /** @test */
+    public function when_photo_is_deleted_order_of_the_other_photos_is_updated()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create();
+
+        $firstPhoto = create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 0
+        ]);
+        
+        $secondPhoto = create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 1
+        ]);
+
+        $thirdPhoto = create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 2
+        ]);
+
+        $this->json('DELETE', route('api.adverts.photos.delete', $firstPhoto->id));
+
+        $this->assertEquals([0, 1], array_column($advert->photos->toArray(), 'order'));
     }
 
     /** @test */
@@ -137,10 +181,6 @@ class PhotosUploadTest extends TestCase
             'advert_id' => $advert->id,
             'order' => 2
         ]);
-                
-        $secondPhoto = create(Photo::class, [
-            'order' => 1
-        ]);
 
         $this->json('PATCH', route('api.photos.order.update', $advert->slug), [
             'photos' => '2, 1'
@@ -155,8 +195,6 @@ class PhotosUploadTest extends TestCase
     /** @test */
     public function order_can_be_only_changed_on_photos_which_belongs_to_an_advert()
     {
-        $this->withoutExceptionHandling();
-
         $user = $this->signIn();
 
         $advert = AdvertFactory::ownedBy($user)->create();
@@ -171,7 +209,7 @@ class PhotosUploadTest extends TestCase
             'order' => 2
         ]);
                 
-        $notBelongsToAnAdvert = create(Photo::class, [
+        $doesNotBelongsToAnAdvert = create(Photo::class, [
             'order' => 1
         ]);
 
@@ -212,6 +250,16 @@ class PhotosUploadTest extends TestCase
     }
 
     /** @test */
+    public function only_an_owner_can_add_photos_to_existing_advert()
+    {
+        $this->signIn();
+
+        $advert = AdvertFactory::create();
+
+        $upload = $this->json('PATCH', route('api.adverts.photos.update', $advert->slug))->assertStatus(403);
+    }
+
+    /** @test */
     public function uploaded_photo_must_determine_its_order()
     {
         $this->withoutExceptionHandling();
@@ -233,5 +281,25 @@ class PhotosUploadTest extends TestCase
         ])->decodeResponseJson();
         
         $this->assertEquals(1, $advert->photos->last()->order);
+    }
+
+    /** @test */
+    public function if_adverts_exists_and_user_add_a_first_photo_its_order_should_be_0()
+    {
+        $this->withoutExceptionHandling();
+
+        Storage::fake('public');
+
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create();
+
+        $file = UploadedFile::fake()->image('photozz.jpg');
+
+        $upload = $this->json('PATCH', route('api.adverts.photos.update', $advert->slug), [
+            'photo' => $file
+        ])->decodeResponseJson();
+        
+        $this->assertEquals(0, $advert->photos->last()->order);
     }
 }
