@@ -270,7 +270,10 @@ class User extends Authenticatable implements MustVerifyEmail
      * Favourites, subscriptions and notifications are deleted trough
      * mysql foreign key cascade delete.
      * 
-     * @return
+     * !important Set the phone number to null and update all adverts 
+     * so phone wont be visible anymore.
+     * 
+     * @return void
      */
     public function deleteAccount() 
     {
@@ -279,14 +282,16 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->update([
             'name' => 'deleted',
             'active' => false,
-            'email' => 'deleted',
-            'password' => 'deleted',
+            'email' => 'deleted@'.$this->id,
+            'password' => 'deleted@'.$this->id,
             'bio' => 'deleted',
+            'phone' => null,
             'deleted_at' => now()
         ]);
 
         $this->adverts()->update([
-            'archived' => true
+            'archived' => true,
+            'phone' => null
         ]);
 
         $this->deleteAvatar();

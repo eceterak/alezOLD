@@ -58,6 +58,6 @@ class AdvertPolicy
      */
     public function inquiry(User $user, Advert $advert) 
     {            
-        return ! $user->is($advert->user);
+        return ! $user->is($advert->user) && ! $advert->archived && $advert->verified;
     }
 }

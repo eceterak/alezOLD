@@ -20,6 +20,7 @@ class Conversation extends Model
     {
         return $this->belongsTo(Advert::class);
     }
+
     /**
      * Get both of the users participating in the conversation.
      * 
@@ -54,11 +55,14 @@ class Conversation extends Model
      * As conversation has always only two participants
      * and one of them is logged in, grab the second one who is the interlocutor.
      * 
+     * @param App\User $user
      * @return App\User
      */
-    public function interlocutor() 
+    public function interlocutor($user = null) 
     {
-        return $this->users->except(auth()->id())[0];
+        $user = $user ?? auth()->user();
+
+        return $this->users->except($user->id)[0];
     }
 
     /**
@@ -85,17 +89,16 @@ class Conversation extends Model
      * Send a message.
      * 
      * @param string $body
-     * @param App\Advert $advert
      * @param App\User $user
      * @return void
      */
-    public function reply($body, $advert, $user = null) 
+    public function reply($body, $user = null) 
     {
         $user = $user ?? auth()->user();
 
         $this->messages()->create([
             'user_id' => $user->id,
-            'to_id' => $this->interlocutor->id,
+            'to_id' => $this->interlocutor($user)->id,
             'body' => $body
         ]);
     }
@@ -110,5 +113,15 @@ class Conversation extends Model
         $key = auth()->user()->visitedConversationCacheKey($this);
 
         return $this->updated_at > cache($key);
+    }
+
+    /**
+     * Check if both participants of a conversation are still active.
+     * 
+     * @return bool
+     */
+    public function areUsersActive() 
+    {
+        return ! $this->users()->where('active', false)->exists();
     }
 }

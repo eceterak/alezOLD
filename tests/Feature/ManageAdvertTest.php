@@ -9,6 +9,7 @@ use App\Advert;
 
 class ManageAdvertTest extends TestCase
 {
+    use RefreshDatabase;
 
     protected $advert;
 
@@ -20,8 +21,6 @@ class ManageAdvertTest extends TestCase
             'pets' => false
         ]);
     }
-
-    use RefreshDatabase;
 
     /** @test */
     public function owner_of_the_advert_can_update_it() 
@@ -53,7 +52,7 @@ class ManageAdvertTest extends TestCase
     /** @test */
     public function changes_are_not_visible_to_the_users_until_advert_is_revised_by_the_admin() 
     {
-        $this->withoutExceptionHandling();
+        //$this->withoutExceptionHandling();
 
         $this->actingAs($this->advert->user)->get(route('adverts.edit', [$this->advert->city->slug, $this->advert->slug]));
 
@@ -114,6 +113,16 @@ class ManageAdvertTest extends TestCase
         $this->assertTrue($this->advert->fresh()->archived);
 
         $this->get(route('adverts.show', [$this->advert->city->slug, $this->advert->slug]))->assertSeeText('Ogłoszenie zakończone');
+    }
+
+    /** @test */
+    public function when_deleting_an_advert_phone_number_is_deleted()
+    {
+        $this->actingAs($this->advert->user)->delete(route('adverts.destroy', [$this->advert->city->slug, $this->advert->slug]))->assertRedirect();
+
+        $this->assertTrue($this->advert->fresh()->archived);
+
+        $this->assertNull($this->advert->fresh()->phone);
     }
 
     /** @test */

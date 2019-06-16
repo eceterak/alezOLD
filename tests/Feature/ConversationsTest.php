@@ -17,8 +17,6 @@ class ConversationsTest extends TestCase
     /** @test */
     public function a_user_can_start_a_conversation()
     {
-        $this->withoutExceptionHandling();
-
         $this->signIn();
         
         $advert = AdvertFactory::create();
@@ -63,6 +61,48 @@ class ConversationsTest extends TestCase
     }
 
     /** @test */
+    public function only_participants_of_a_conversation_can_reply() 
+    {
+        $advert = AdvertFactory::create();
+        
+        $john = $this->signIn();
+        
+        $conversation = $advert->inquiry('Hi mate');
+        
+        $adam = $this->signIn();
+        
+        $this->post(route('conversations.reply', $conversation->id), $attributes = [
+            'body' => 'I do agree'
+        ])->assertSessionHasErrors('self');
+    }
+    
+    /** @test */
+    public function conversation_can_not_be_continued_if_any_of_participants_deleted_an_account() 
+    {
+        $this->withoutExceptionHandling();
+
+        $advert = AdvertFactory::create();
+        
+        $john = $this->signIn();
+        
+        $conversation = $advert->inquiry('Hi mate');
+
+        $john->deleteAccount();
+        
+        $this->signIn($advert->user);
+        
+        Notification::fake();
+
+        $this->get(route('conversations.show', $conversation->id))->assertDontSeeText('Odpowiedz');
+
+        $this->get(route('conversations.show', $conversation->id))->assertSeeText('Twój rozmówca skasował konto');
+
+        $this->post(route('conversations.reply', $conversation->id), [])->assertRedirect(route('conversations.show', $conversation->id))->assertSessionHasErrors('self');
+
+        Notification::assertNotSentTo($john, YouHaveANewMessage::class);
+    }
+
+    /** @test */
     public function only_participant_of_conversation_can_view_it() 
     {
         $conversation = ConversationFactory::create();
@@ -90,7 +130,63 @@ class ConversationsTest extends TestCase
             $this->assertFalse($conversation->hasNewMessagesFor($user));
         });
     }
+
+    /** @test */
+    public function inquiry_cannot_be_sent_if_advert_was_deleted()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn();
         
+        $advert = AdvertFactory::create();
+
+        $advert->archive();
+        
+        Notification::fake();
+        
+        $this->post(route('conversations.store', [$advert->city->slug, $advert->slug]))->assertRedirect()->assertSessionHasErrors('self');
+
+        Notification::assertNotSentTo($advert->user, YouHaveANewMessage::class, function($notification, $channels) {
+            return (in_array('mail', $channels) && in_array('database', $channels));
+        });
+    }
+    
+    /** @test */
+    public function inquiry_cannot_be_sent_if_advert_is_not_verified_yet()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->signIn();
+        
+        $advert = AdvertFactory::create([
+            'verified' => false
+        ]);
+        
+        Notification::fake();
+        
+        $this->post(route('conversations.store', [$advert->city->slug, $advert->slug]))->assertRedirect()->assertSessionHasErrors('self');
+
+        Notification::assertNotSentTo($advert->user, YouHaveANewMessage::class, function($notification, $channels) {
+            return (in_array('mail', $channels) && in_array('database', $channels));
+        });
+    }
+
+    /** @test */
+    public function a_user_should_not_be_able_to_start_a_conversation_with_herself()
+    {
+        $user = $this->signIn();
+        
+        $advert = AdvertFactory::ownedBy($user)->create();
+        
+        Notification::fake();
+        
+        $this->post(route('conversations.store', [$advert->city->slug, $advert->slug]))->assertRedirect()->assertSessionHasErrors('self');
+
+        Notification::assertNotSentTo($advert->user, YouHaveANewMessage::class, function($notification, $channels) {
+            return (in_array('mail', $channels) && in_array('database', $channels));
+        });
+    }
+
     /** @test */
     public function a_user_can_participate_in_many_conversations()
     {
@@ -134,15 +230,5 @@ class ConversationsTest extends TestCase
         $this->signIn($conversation->advert->user);
 
         $this->get(route('conversations.advert', $conversation->advert->slug))->assertSee($conversation->messages->first()->body);
-    }
-
-    /** @test */
-    public function a_user_should_not_be_able_to_start_a_conversation_with_herself()
-    {
-        $user = $this->signIn();
-        
-        $advert = AdvertFactory::ownedBy($user)->create();
-        
-        $response = $this->post(route('conversations.store', [$advert->city->slug, $advert->slug]))->assertRedirect()->assertSessionHasErrors();
     }
 }

@@ -53,7 +53,8 @@ $(function() {
     $('#advert-form-va').validation({
         requiredMessage: function(name) {
             return name + ' jest wymagany';
-        }
+        },
+        liveValidation: false
     });
 
     /** 
@@ -119,4 +120,12 @@ $(function() {
     $('.mBox').mBox({
         imagesPerPage: 5
     });
+
+    $.fn.goTo = function() {
+        if($(this).length > 0) {
+            $(document.documentElement, document.body).animate({
+                scrollTop: $(this).offset().top
+            }, 600);
+        }
+    }
 });

@@ -9,7 +9,6 @@ use App\Favourite;
 
 class FavouritesTest extends TestCase
 {
-
     use RefreshDatabase;
 
     /** @test */

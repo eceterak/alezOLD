@@ -118,20 +118,4 @@ class CityTest extends TestCase
 
         $this->assertTrue($city->isSubscribed);
     }
-
-    /** @test */
-    public function it_can_notify_a_subscribers_about_a_when_a_new_advert_is_added()
-    {
-        Notification::fake();
-
-        $this->signIn();
-
-        $city = create(City::class);
-
-        $city->subscribe();
-
-        $advert = AdvertFactory::city($city)->create();
-
-        Notification::assertSentTo(auth()->user(), AdvertWasAdded::class);
-    }
 }

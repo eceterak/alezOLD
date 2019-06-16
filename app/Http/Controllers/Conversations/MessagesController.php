@@ -15,14 +15,21 @@ class MessagesController extends Controller
      */
     public function store(Conversation $conversation) 
     {
-        $this->authorize('view', $conversation);
+        try 
+        {
+            $this->authorize('reply', $conversation);
+        }
+        catch(\Exception $e)
+        {
+            return redirect()->route('conversations.show', $conversation->id)->withErrors(['self' => 'Nie udało się wysłać wiadomości. Możliwe, że konto rozmówcy zostało właśnie usunięte.']);
+        }
 
         request()->validate([
             'body' => 'required'
         ]);
 
-        $conversation->reply(request()->body, $conversation->advert);
+        $conversation->reply(request()->body);    
 
-        return redirect()->back();
+        return redirect()->route('conversations.show', $conversation->id);
     }
 }

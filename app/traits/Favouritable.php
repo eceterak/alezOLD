@@ -30,12 +30,17 @@ trait Favouritable
     }
 
     /**
+     * Add object to favourite.
+     * 
+     * @param App\User $user
      * @return this
      */
-    public function favourite() 
+    public function favourite($user = null) 
     {
+        $user = $user ?? auth()->user();
+
         $attributes = [
-            'user_id' => auth()->user()->id
+            'user_id' => $user->id
         ];
 
         if(!$this->favourites()->where($attributes)->exists()) 

@@ -11,6 +11,7 @@ use App\Notifications\YouHaveANewMessage;
 use App\Conversation;
 use App\Advert;
 use App\City;
+use App\Notifications\AdvertWasAdded;
 
 class NotificationsTest extends TestCase
 {
@@ -24,7 +25,7 @@ class NotificationsTest extends TestCase
     }
 
     /** @test */
-    public function a_notification_is_prepared_when_a_subscribed_city_receives_a_new_advert_that_is_not_by_current_user()
+    public function a_notification_is_prepared_when_a_subscribed_city_receives_a_new_verified_advert()
     {
         $city = create(City::class);
 
@@ -32,13 +33,32 @@ class NotificationsTest extends TestCase
         
         tap(auth()->user(), function($user) use ($city) {
 
-            AdvertFactory::city($city)->ownedBy(auth()->user())->create();
+            Notification::fake();
+
+            $advert = AdvertFactory::city($city)->create();
+
+            $advert->verify();
+
+            Notification::assertSentTo($user, AdvertWasAdded::class);
+        });
+    }
+
+    /** @test */
+    public function when_subscribed_city_receives_a_new_advert_notification_wont_be_sent_to_owner_of_the_advert()
+    {
+        $city = create(City::class);
+
+        $city->subscribe();
+        
+        tap(auth()->user(), function($user) use ($city) {
             
-            $this->assertCount(0, $user->notifications);
+            Notification::fake();
 
-            AdvertFactory::city($city)->create();
+            $advert = AdvertFactory::city($city)->ownedBy(auth()->user())->create();
 
-            $this->assertCount(1, $user->fresh()->notifications);
+            $advert->verify();
+            
+            Notification::assertNotSentTo($user, AdvertWasAdded::class);
         });
     }
 

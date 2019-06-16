@@ -4,12 +4,13 @@
         <div>
             <h3 class="text-grey-darker">Pokoje na wynajem w <a href="{{ route('cities.show', $city->slug) }}">{{ ucfirst($city->name) }}</a></h3>
             <p class="text-grey-darker mt-1">
-                {{ ($adverts->total() > 1) ? 'Znaleziono '.$adverts->total().' ogłoszeń' : ($adverts->total() <= 0 ? '' : 'Znaleziono 1 ogłoszenie') }} <a href="#">pokaż na mapie</a>
+                {{ ($adverts->total() > 1) ? 'Znaleziono '.$adverts->total().' ogłoszeń' : ($adverts->total() <= 0 ? '' : 'Znaleziono 1 ogłoszenie') }}
             </p>
             <div>
                 <subscribe-button :active="{{ json_encode($city->isSubscribed) }}"></subscribe-button>
             </div>
         </div>
+        {{-- <a href="#">pokaż na mapie</a> --}}
     </header>
     <main>
         <div class="small">

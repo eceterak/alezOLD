@@ -188,8 +188,8 @@ class AdvertFilters extends QueryFilter
      */
     public function smoking($value = null)
     {
-        if($value == 'nonsmokers') $this->builder->where('smoking', false);
-        elseif($value == 'smokers') $this->builder->where('smoking', true);
+        if($value == 'nonsmokers') $this->builder->where('smoking', 'n');
+        elseif($value == 'smokers') $this->builder->where('smoking', 'y');
 
         return $this->builder;
     }

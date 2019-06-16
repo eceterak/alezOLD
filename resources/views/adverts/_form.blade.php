@@ -188,6 +188,14 @@
                 <option value="professional" {{ (isset($advert)) ? ($advert->occupation == 'professional') ? 'selected' : '' :  (old('occupation') == 'professional') ? 'selected' : '' }}>Zatrudniony</option>
             </select>
         </div>
+        <div class="form-group col-4">
+            <label for="gender">Dla palących</label>
+            <select name="smoking" id="smoking" class="form-control">
+                <option value>Brak preferencji</option>
+                <option value="n" {{ (isset($advert)) ? ($advert->smoking == 'n') ? 'selected' : '' :  (old('smoking') == 'n') ? 'selected' : '' }}>Dla niepalących</option>
+                <option value="y" {{ (isset($advert)) ? ($advert->smoking == 'y') ? 'selected' : '' :  (old('smoking') == 'y') ? 'selected' : '' }}>Dla palących</option>
+            </select>
+        </div>
     </div>
     <div class="row">
         <div class="form-group col-4">
@@ -213,10 +221,6 @@
         <div class="custom-control custom-checkbox col-4">
             <input type="checkbox" name="pets" id="pets" value="1" class="custom-control-input" {{ (isset($advert)) ? ($advert->pets) ? 'checked' : '' :  (old('pets')) ? 'checked' : '' }}>
             <label for="pets" class="custom-control-label">Zwierzeta</label>
-        </div>
-        <div class="custom-control custom-checkbox col-4">
-            <input type="checkbox" name="smoking" id="smoking" value="1" class="custom-control-input" {{ (isset($advert)) ? ($advert->smoking) ? 'checked' : '' :  (old('smoking')) ? 'checked' : '' }}>
-            <label for="smoking" class="custom-control-label">Tylko dla niepalących</label>
         </div>
     </div>
     <h5 class="card-title pb-1 border-bottom">Dane kontaktowe</h5>

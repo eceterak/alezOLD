@@ -7,6 +7,7 @@ use App\Filters\QueryFilter;
 use App\Traits\RecordsActivity;
 use App\Traits\Favouritable;
 use Carbon\Carbon;
+use App\Notifications\AdvertWasAdded;
 
 class Advert extends Model
 {
@@ -159,6 +160,28 @@ class Advert extends Model
     }
 
     /**
+     * Determine the latitude. If advert does not belong to the street, get value of city coordinates.
+     * As Lat and lon attriutes are required for both city and street, it never should be null or 0.
+     * 
+     * @return float
+     */
+    public function getLatAttribute() 
+    {
+        return (!is_null($this->street)) ? $this->street->lat : $this->city->lat;
+    }
+
+    /**
+     * Determine the longtitude. If advert does not belong to the street, get value of city coordinates.
+     * As Lat and lon attriutes are required for both city and street, it never should be null or 0.
+     * 
+     * @return float
+     */
+    public function getLonAttribute() 
+    {
+        return (!is_null($this->street)) ? $this->street->lon : $this->city->lon;
+    }
+
+    /**
      * Display only three digits of phone number and hide the rest with X.
      * 
      * @return string
@@ -244,7 +267,7 @@ class Advert extends Model
     {
         if(is_null($this->minimum_stay)) return 'brak preferencji';
 
-        return ($this->minimum_stay == 1) ? $this->minimum_stay.' miesiąc' : $this->minimum_stay.' miesięcy';
+        return trans_choice('app.month', $this->minimum_stay, ['value' => $this->minimum_stay]);
     }
 
     /**
@@ -256,7 +279,7 @@ class Advert extends Model
     {
         if(is_null($this->maximum_stay)) return 'brak preferencji';
 
-        return ($this->maximum_stay == 1) ? $this->maximum_stay.' miesiąc' : $this->maximum_stay.' miesięcy';
+        return trans_choice('app.month', $this->maximum_stay, ['value' => $this->maximum_stay]);
     }
 
     /**
@@ -340,7 +363,9 @@ class Advert extends Model
      */
     public function getSmokingTranslatedAttribute() 
     {
-        return $this->smoking ? 'tak' : 'nie';
+        if(is_null($this->smoking)) return 'brak preferencji';
+
+        return ($this->smoking == 'y') ? 'tak' : 'nie';
     }
     
     /**
@@ -387,6 +412,7 @@ class Advert extends Model
 
     /**
      * Verify an advert.
+     * Send notification to the users after advert was verified.
      * 
      * @return this
      */
@@ -396,6 +422,12 @@ class Advert extends Model
             'verified' => true
         ]);
 
+        $this->city->subscriptions
+            ->where('user_id', '!=', $this->user_id)
+            ->each(function($subscription) {
+                $subscription->user->notify(new AdvertWasAdded($this->city, $this));
+            });
+
         //$this->recordActivity('verified_advert');
 
         return $this;
@@ -403,13 +435,15 @@ class Advert extends Model
 
     /**
      * Archive an advert.
+     * !important to set phone number to null to not show it to the users anymore.
      * 
      * @return this
      */
     public function archive() 
     {
         $this->update([
-            'archived' => true
+            'archived' => true,
+            'phone' => null
         ]);
 
         //$this->recordActivity('deleted_advert');
@@ -429,13 +463,13 @@ class Advert extends Model
         $user = ($user) ?? auth()->user();
 
         $conversation = $this->conversations()->create();
-
+        
         // Update the conversation_user pivot table.
         $conversation->users()->sync([$user->id, $this->user->id]);
-
+        
         // Send a message.
-        $conversation->reply($body, $this, $user);
-
+        $conversation->reply($body, $user);
+        
         return $conversation;
     }
 

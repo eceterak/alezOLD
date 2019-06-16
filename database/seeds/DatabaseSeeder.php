@@ -6,6 +6,9 @@ use App\User;
 use App\City;
 use App\Street;
 use Facades\Tests\Setup\AdvertFactory;
+use Faker\Generator as Faker;
+use Illuminate\Support\Facades\Mail;
+use App\Photo;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,8 +17,10 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(Faker $faker)
     {   
+        Mail::fake();
+
         $city = create(City::class, [
             'name' => 'Kraków',
             'community' => 'm. Kraków',
@@ -28,10 +33,11 @@ class DatabaseSeeder extends Seeder
             'city_id' => $city->id
         ]);
 
-        create(User::class, [
+        $marek = create(User::class, [
             'name' => 'marek',
             'email' => 'bartula.marek@gmail.com',
             'email_verified_at' => now(),
+            'email_notifications' => false,
             'password' => Hash::make('marro2'),
             'remember_token' => '',
             'role' => 1
@@ -43,6 +49,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'test-'.$i,
                 'email' => $i.'-test@gmail.com',
                 'email_verified_at' => now(),
+                'email_notifications' => false,
                 'password' => Hash::make('test123'),
                 'remember_token' => '',
                 'role' => 0
@@ -50,7 +57,29 @@ class DatabaseSeeder extends Seeder
 
             $city->subscribe($user);
 
-            AdvertFactory::ownedBy($user)->street($street)->create();
+            $advert = AdvertFactory::ownedBy($user)->street($street)->create();
+
+            create(Photo::class, [
+                'advert_id' => $advert->id,
+                'url' => 'photos/ANPWkwfMT5ztPlOovsLnC3UQAyJlCUU2ykdmGm6N.jpeg',
+                'order' => 0
+            ]);
+
+            create(Photo::class, [
+                'advert_id' => $advert->id,
+                'url' => 'photos/F5Ls7pfWCVAXLUqNZ1bGJ4eNDfBOvvE1bBTwT0p6.jpeg',
+                'order' => 1
+            ]);
+
+            create(Photo::class, [
+                'advert_id' => $advert->id,
+                'url' => 'photos/zZTmwO8CgbV568sq97O0J1WKbrfJ75BRskh1Ww61.jpeg',
+                'order' => 2
+            ]);
+
+            $advert->inquiry($faker->paragraph, $marek);
+
+            $advert->favourite($user);
         }
 
     }

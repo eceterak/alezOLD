@@ -53,7 +53,7 @@ class CreateAdvertsTable extends Migration
             $table->boolean('broadband')->default(false);
             
             // Desired tenetant.
-            $table->boolean('smoking')->default(false);
+            $table->enum('smoking', ['y', 'n'])->nullable();
             $table->boolean('pets')->default(false);
             $table->boolean('couples')->default(false);
             $table->enum('gender', ['m', 'f'])->nullable();

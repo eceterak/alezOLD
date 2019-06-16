@@ -42,7 +42,13 @@
                 <tbody>
                     @foreach($notifications as $notification)
                         <tr>
-                            <td>{!! $notification->data['message'] !!}</td>
+                            <td>
+                                @if($notification->unread())
+                                    <strong>{!! $notification->data['message'] !!}</strong>
+                                @else
+                                    {!! $notification->data['message'] !!}
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

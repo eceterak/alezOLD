@@ -118,8 +118,8 @@ Route::get('/pokoje/{city}/ajax/adverts', 'AjaxController@index')->name('ajax.ci
 Route::post('/api/uzytkownicy/{user}/avatars', 'Api\AvatarsController@store')->middleware('auth')->name('api.users.avatars.store');
 Route::delete('/api/uzytkownicy/{user}/avatars', 'Api\AvatarsController@destroy')->middleware('auth')->name('api.users.avatars.delete');
 
-Route::post('/api/ogloszenia/zdjecia', 'Api\PhotosUploadController@store')->middleware('auth')->name('api.adverts.photos.store');
-Route::delete('/api/ogloszenia/zdjecia/{photo}', 'Api\PhotosUploadController@destroy')->middleware('auth')->name('api.adverts.photos.delete');
+Route::post('/api/ogloszenia/zdjecia/{key}', 'Api\PhotosUploadController@store')->middleware('auth')->name('api.adverts.photos.store');
+Route::delete('/api/ogloszenia/zdjecia/{photo}/{key}', 'Api\PhotosUploadController@destroy')->middleware('auth')->name('api.adverts.photos.delete');
 Route::patch('/api/ogloszenia/zdjecia/{advert}', 'Api\PhotosUploadController@update')->middleware('auth')->name('api.adverts.photos.update');
 Route::patch('/api/zdjecia/{advert}', 'Api\PhotosOrderController@update')->middleware('auth')->name('api.photos.order.update');
 
@@ -128,5 +128,3 @@ Route::get('/api/ogloszenia/{advert}/phone', 'Api\DisplayPhoneNumberController@s
 // Auth
 Auth::routes(['verify' => true]);
 Auth::routes();
-
-Route::get('/email-zweryfikowany', 'Auth\VerificationController@success')->middleware(['auth', 'verified'])->name('verification.success');

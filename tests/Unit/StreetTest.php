@@ -9,7 +9,6 @@ use App\Street;
 
 class StreetTest extends TestCase
 {
-
     use RefreshDatabase;
 
     /** @test */

@@ -377,9 +377,9 @@ class AdvertTest extends TestCase
     /** @test */
     public function it_returns_occupation_attribute_in_polish()
     {
-        $this->advert->occupation = null;
+        $this->advert->smoking = null;
 
-        $this->assertEquals('brak preferencji', $this->advert->occupation_translated);
+        $this->assertEquals('brak preferencji', $this->advert->smoking_translated);
 
         $this->advert->occupation = 'student';
 
@@ -417,11 +417,15 @@ class AdvertTest extends TestCase
     /** @test */
     public function it_returns_smoking_attribute_in_polish()
     {
-        $this->advert->smoking = false;
+        $this->advert->occupation = null;
+
+        $this->assertEquals('brak preferencji', $this->advert->occupation_translated);
+
+        $this->advert->smoking = 'n';
 
         $this->assertEquals('nie', $this->advert->smoking_translated);
 
-        $this->advert->smoking = true;
+        $this->advert->smoking = 'y';
 
         $this->assertEquals('tak', $this->advert->smoking_translated);
     }
@@ -448,5 +452,33 @@ class AdvertTest extends TestCase
         $this->advert->pets = true;
 
         $this->assertEquals('tak', $this->advert->pets_translated);
+    }
+    
+    /** @test */
+    public function it_can_fetch_latitude()
+    {
+        $this->advert->street->lat = 20.5;
+        
+        $this->assertSame($this->advert->lat, $this->advert->street->lat);
+
+        $this->advert->street = null;
+
+        $this->advert->city->lat = 30.5;
+
+        $this->assertSame($this->advert->lat, $this->advert->city->lat);
+    }
+    
+    /** @test */
+    public function it_can_fetch_longtitude()
+    {
+        $this->advert->street->lon = 20.5;
+        
+        $this->assertSame($this->advert->lon, $this->advert->street->lon);
+
+        $this->advert->street = null;
+
+        $this->advert->city->lon = 30.5;
+
+        $this->assertSame($this->advert->lon, $this->advert->city->lon);
     }
 }

@@ -3,12 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\RecordsActivity;
 
 class Favourite extends Model
 {
-    use RecordsActivity;
-
     /**
      * Eager the advert.
      * 

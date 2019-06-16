@@ -4,11 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use App\Traits\Subscribable;
 use App\Advert;
 
 class City extends Model
 {
-    use Searchable;
+    use Searchable, Subscribable;
 
     /**
      * @var array
@@ -89,16 +90,6 @@ class City extends Model
     }
 
     /**
-     * City has many subscribers.
-     * 
-     * @return App\CitySubscription
-     */
-    public function subscriptions() 
-    {
-        return $this->hasMany(CitySubscription::class);
-    }
-
-    /**
      * Add a new street.
      * 
      * @param array $attributes
@@ -124,38 +115,5 @@ class City extends Model
         }
 
         $this->attributes['slug'] = $slug;
-    }
-
-    /**
-     * Subscribe to a city.
-     * 
-     * @param App\User $user
-     * @return this
-     */
-    public function subscribe($user = null) 
-    {
-        return $this->subscriptions()->create([
-            'user_id' => $user->id ?: auth()->id()
-        ]);
-    }
-
-    /**
-     * Unsubscribe from a city.
-     * 
-     * @return void
-     */
-    public function unsubscribe() 
-    {
-        $this->subscriptions()->where('user_id', auth()->id())->delete();
-    }
-
-    /**
-     * Check if authenticated user is subscribing to a city.
-     * 
-     * @return bool
-     */
-    public function getIsSubscribedAttribute() 
-    {
-        return (bool) (auth()->user()) ? $this->subscriptions()->where('user_id', auth()->id())->exists() : false;
     }
 }

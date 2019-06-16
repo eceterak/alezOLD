@@ -54,9 +54,9 @@ class Message extends Model
     }
 
     /**
+     * Get a user who received a message.
      * 
-     * 
-     * @return
+     * @return App\User
      */
     public function receiver() 
     {

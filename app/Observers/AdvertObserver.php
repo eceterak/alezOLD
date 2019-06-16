@@ -28,13 +28,7 @@ class AdvertObserver
      */
     public function created(Advert $advert)
     {
-        $advert->city->subscriptions
-            ->where('user_id', '!=', $advert->user_id)
-            ->each(function($subscription) use ($advert) {
-                $subscription->user->notify(new AdvertWasAdded($advert->city, $advert));
-            });
-
-        //Mail::to($advert->user)->send(new AdvertCreatedConfirmationMail());
+        Mail::to($advert->user)->send(new AdvertCreatedConfirmationMail());
     }
 
     /**

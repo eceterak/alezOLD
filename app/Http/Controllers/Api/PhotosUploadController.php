@@ -3,40 +3,56 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Photo;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 use App\Advert;
+use App\Photo;
 
 class PhotosUploadController extends Controller
 {
     /**
-     * Upload a new photo and return its id and url.
+     * As there no advert yet, we are using temp key to check how many adverts 
+     * were added to the database already. If there is less than 7 of them,
+     * upload a new photo and return its id and url so it can be displayed on frontend.
      * 
+     * @param string $temp
      * @return json
      */
-    public function store() 
+    public function store($temp) 
     {
-        request()->validate([
-            'photo' => 'required|image|max:1000'
-        ]);
+        if(Photo::where('temp', $temp)->count() < 7)
+        {
+            request()->validate([
+                'photo' => 'required|image|max:1000'
+            ]);
+    
+            $photo = Photo::create([
+                'url' => request()->file('photo')->store('photos', 's3'),
+                'temp' => $temp
+            ]);
 
-        $photo = Photo::create([
-            'url' => request()->file('photo')->store('photos', 's3')
-        ]);
-
-        return response()->json([
-            'id' => $photo->id,
-            'url' => $photo->url
-        ]);
+            $response = [[
+                'id' => $photo->id,
+                'url' => $photo->url
+            ], 200];
+        }
+        else
+        {
+            $response = [[
+                'status' => 'error',
+                'message' => 'Możesz dodać maksymalnie 7 zdjęć.'
+            ], 500];
+        }
+        
+        return response()->json(...$response);
     }
 
     /**
      * Remove a file from disk and a record from database.
      * 
+     * @param string $temp
      * @return response
      */
-    public function destroy(Photo $photo) 
+    public function destroy(Photo $photo, $temp) 
     {
         if($photo->advert) 
         {
@@ -47,17 +63,32 @@ class PhotosUploadController extends Controller
                     'order' => $photo->order - 1
                 ]);
             });
+    
+            Storage::disk('s3')->delete($photo->url);
+    
+            $photo->delete();
+        }
+        elseif($photo->temp == $temp)
+        {            
+            Storage::disk('s3')->delete($photo->url);
+    
+            $photo->delete();
+        }
+        else 
+        {
+            return response([
+                'message' => 'Zdjęcie nie może zostać usunięte'
+            ], 500);
         }
 
-        Storage::disk('s3')->delete($photo->url);
-
-        $photo->delete();
-
-        return response(204);
+        return response([
+            'message' => 'Zdjęcie usunięte'
+        ], 200);
     }
 
     /**
      * Add another photo to existing advert.
+     * Only 7 photos per advert are allowed.
      * 
      * @param Advert $advert
      * @return response
@@ -66,20 +97,30 @@ class PhotosUploadController extends Controller
     {
         $this->authorize('update', $advert);
 
-        request()->validate([
-            'photo' => 'required|image|max:1000'
-        ]);
-
-        if($advert->photos()->exists()) $order = $advert->photos()->max('order') + 1;
-
-        $photo = $advert->photos()->create([
-            'url' => request()->file('photo')->store('photos', 's3'),
-            'order' => (isset($order)) ? $order : 0
-        ]);
-
-        return response()->json([
-            'id' => $photo->id,
-            'url' => $photo->url
-        ]);
+        if($advert->photos->count() < 7) 
+        {
+            request()->validate([
+                'photo' => 'required|image|max:3000'
+            ]);
+    
+            if($advert->photos()->exists()) $order = $advert->photos()->max('order') + 1;
+    
+            $photo = $advert->photos()->create([
+                'url' => request()->file('photo')->store('photos', 's3'),
+                'order' => (isset($order)) ? $order : 0
+            ]);
+    
+            return response()->json([
+                'id' => $photo->id,
+                'url' => $photo->url
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Możesz dodać maksymalnie 7 zdjęć.'
+            ], 500);
+        }
     }
 }

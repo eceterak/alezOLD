@@ -6,6 +6,7 @@ use App\Filters\AdvertFilters;
 use App\City;
 use App\Advert;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\DB;
 
 class CitiesController extends Controller
 {
@@ -29,8 +30,18 @@ class CitiesController extends Controller
      * @return view
      */
     public function show(City $city, AdvertFilters $filters) 
-    {        
-        $adverts = $this->getAdverts($city, $filters);
+    {
+       $adverts = $this->getAdverts($city, $filters);
+
+        // $cities = DB::table('cities')
+        //         ->selectRaw('id, (6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(lon) - radians(?)) + sin(radians(?)) * sin(radians(lat)))) 
+        //         AS distance', [$city->lat, $city->lon, $city->lat])
+        //         ->havingRaw('distance < ?', [10])
+        //         ->pluck('id');
+
+        // return $c4;
+
+        // return $adverts;
 
         // Leave it in the case I will use vue to display advers.
         if(request()->wantsJson())
@@ -57,7 +68,7 @@ class CitiesController extends Controller
 
         if($city->exists)
         {
-            $adverts->where('city_id', $city->id);
+            $adverts->whereIn('city_id', [1]);
         }
 
         // Append any get parameters to keep them in url after navigating to a different page.

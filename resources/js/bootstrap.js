@@ -43,6 +43,7 @@ Vue.component('adverts', require('./components/Adverts.vue').default);
 Vue.component('favourite', require('./components/Favourite.vue').default);
 Vue.component('phone-number', require('./components/PhoneNumber.vue').default);
 Vue.component('subscribe-button', require('./components/SubscribeButton.vue').default);
+Vue.component('google-map', require('./components/GoogleMap.vue').default);
 Vue.component('flash-message', require('./components/FlashMessage.vue').default);
 Vue.component('avatar-form', require('./components/AvatarForm.vue').default);
 

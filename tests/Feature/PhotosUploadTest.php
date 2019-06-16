@@ -9,26 +9,31 @@ use Illuminate\Http\UploadedFile;
 use Facades\Tests\Setup\AdvertFactory;
 use App\Advert;
 use App\Photo;
+use Illuminate\Support\Str;
 
 class PhotosUploadTest extends TestCase
 {
-
     use RefreshDatabase;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->uuid = Str::uuid()->toString();
+    }
 
     /** @test */
     public function user_can_upload_a_photo_when_creating_a_new_advert()
     {
-        Storage::fake('public');
+        Storage::fake('s3');
 
         $this->signIn();
 
-        $this->get(route('adverts.create'));
-
         $file = UploadedFile::fake()->image('photo.jpg');
 
-        $upload = $this->json('POST', route('api.adverts.photos.store'), [
+        $upload = $this->json('POST', route('api.adverts.photos.store', $this->uuid), [
             'photo' => $file
-        ])->decodeResponseJson();
+        ])->assertStatus(200)->decodeResponseJson();
 
         $this->assertArrayHasKey('url', $upload);
         $this->assertArrayHasKey('id', $upload);
@@ -45,15 +50,32 @@ class PhotosUploadTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_more_than_to_7_photos_to_a_new_advert()
+    {
+        $this->signIn();
+
+        $photos = create(Photo::class, [
+            'temp' => $this->uuid
+        ], 7);
+
+        $upload = $this->json('POST', route('api.adverts.photos.store', $this->uuid), [
+            'photo' => 'something'
+        ])->assertStatus(500)->decodeResponseJson();
+
+        $this->assertEquals($upload['message'], 'Możesz dodać maksymalnie 7 zdjęć.');
+    }
+
+    /** @test */
     public function when_creating_an_advert_first_uploaded_photo_is_always_a_featured_one()
     {
         $this->signIn();
 
-        $featuredPhoto = Photo::create([
+        $featuredPhoto = create(Photo::class, [
             'url' => 'photos/featured.jpg'
         ]);
-        $standardPhoto = Photo::create([
-            'url' => 'photos/standard.jpg'
+
+        $standardPhoto = create(Photo::class, [
+            'temp' => $featuredPhoto->temp
         ]);
 
         $this->post(route('adverts.store'), AdvertFactory::raw([
@@ -72,7 +94,7 @@ class PhotosUploadTest extends TestCase
     {
         $user = $this->signIn();
 
-        $response = $this->json('POST', route('api.adverts.photos.store'), [
+        $response = $this->json('POST', route('api.adverts.photos.store', $this->uuid), [
             'photo' => 'Not an image'
         ])->assertStatus(422);
     }
@@ -84,7 +106,7 @@ class PhotosUploadTest extends TestCase
 
         $file = UploadedFile::fake()->image('photo.jpg')->size(5000);
 
-        $upload = $this->json('POST', route('api.adverts.photos.store'), [
+        $upload = $this->json('POST', route('api.adverts.photos.store', $this->uuid), [
             'photo' => $file
         ])->assertJsonValidationErrors('photo');
     }
@@ -92,13 +114,53 @@ class PhotosUploadTest extends TestCase
     /** @test */
     public function only_members_can_add_photos()
     {
-        $response = $this->json('POST', route('api.adverts.photos.store'))->assertStatus(401);
+        $response = $this->json('POST', route('api.adverts.photos.store', $this->uuid))->assertStatus(401);
     }
 
     /** @test */
-    public function a_photo_can_be_deleted()
+    public function a_photo_can_be_deleted_while_creating_a_new_advert()
     {
-        $this->withoutExceptionHandling();
+        Storage::fake('s3');
+
+        $this->signIn();
+
+        $file = UploadedFile::fake()->image('photo.jpg');
+
+        $upload = $this->json('POST', route('api.adverts.photos.store', $this->uuid), [
+            'photo' => $file
+        ])->decodeResponseJson();
+        
+        $photo = Photo::first();
+
+        Storage::disk('s3')->assertExists("photos/{$file->hashName()}");
+        
+        $this->json('DELETE', route('api.adverts.photos.delete', [$upload['id'], $this->uuid]))->assertStatus(200);
+        
+        Storage::disk('s3')->assertMissing("photos/{$file->hashName()}");
+        
+        $this->assertDatabaseMissing('photos', $photo->toArray());
+    }
+
+    /** @test */
+    public function photo_can_not_be_deleted_while_creating_a_new_advert_and_provided_a_wrong_token()
+    {
+        Storage::fake('s3');
+
+        $this->signIn();
+
+        $file = UploadedFile::fake()->image('photo.jpg');
+
+        $upload = $this->json('POST', route('api.adverts.photos.store', $this->uuid), [
+            'photo' => $file
+        ])->decodeResponseJson();
+
+        $response = $this->json('DELETE', route('api.adverts.photos.delete', [$upload['id'], 'some-fake-token']))->assertStatus(500);
+    }
+
+    /** @test */
+    public function a_photo_of_an_existing_advert_can_be_deleted()
+    {
+        Storage::fake('s3');
 
         $user = $this->signIn();
 
@@ -106,17 +168,19 @@ class PhotosUploadTest extends TestCase
 
         $file = UploadedFile::fake()->image('photo.jpg');
 
-        $upload = $this->json('POST', route('api.adverts.photos.store'), [
+        $upload = $this->json('PATCH', route('api.adverts.photos.update', $advert->slug), [
             'photo' => $file
         ])->decodeResponseJson();
 
-        $this->assertCount(1, Photo::all());
+        Storage::disk('s3')->assertExists("photos/{$file->hashName()}");
 
-        $this->json('DELETE', route('api.adverts.photos.delete', $upload['id']));
-
-        $this->assertCount(0, Photo::all());
+        $this->assertCount(1, $advert->photos);
+        
+        $this->json('DELETE', route('api.adverts.photos.delete', [$upload['id'], $this->uuid]))->assertStatus(200);
 
         Storage::disk('s3')->assertMissing("photos/{$file->hashName()}");
+        
+        $this->assertCount(0, $advert->fresh()->photos);      
     }
 
     /** @test */
@@ -131,13 +195,13 @@ class PhotosUploadTest extends TestCase
             'order' => 0
         ]);
 
-        $this->json('DELETE', route('api.adverts.photos.delete', $photo->id))->assertStatus(403);        
+        $this->json('DELETE', route('api.adverts.photos.delete', [$photo->id, $this->uuid]))->assertStatus(403);        
     }
 
     /** @test */
     public function when_photo_is_deleted_order_of_the_other_photos_is_updated()
     {
-        $this->withoutExceptionHandling();
+        Storage::fake('s3');
 
         $user = $this->signIn();
 
@@ -158,7 +222,7 @@ class PhotosUploadTest extends TestCase
             'order' => 2
         ]);
 
-        $this->json('DELETE', route('api.adverts.photos.delete', $firstPhoto->id));
+        $this->json('DELETE', route('api.adverts.photos.delete', [$firstPhoto->id, $this->uuid]));
 
         $this->assertEquals([0, 1], array_column($advert->photos->toArray(), 'order'));
     }
@@ -166,8 +230,6 @@ class PhotosUploadTest extends TestCase
     /** @test */
     public function a_user_can_change_order_of_photos()
     {
-        $this->withoutExceptionHandling();
-
         $user = $this->signIn();
 
         $advert = AdvertFactory::ownedBy($user)->create();
@@ -187,7 +249,7 @@ class PhotosUploadTest extends TestCase
         ]);
 
         $response = $this->getJson(route('adverts.show', [$advert->city->slug, $advert->slug]))->json();
-
+        
         $this->assertEquals([2, 1], array_column($response['photos'], 'id'));
     }
 
@@ -225,9 +287,7 @@ class PhotosUploadTest extends TestCase
     /** @test */
     public function a_user_can_add_photos_to_existing_advert()
     {
-        $this->withoutExceptionHandling();
-
-        Storage::fake('public');
+        Storage::fake('s3');
 
         $user = $this->signIn();
 
@@ -244,9 +304,33 @@ class PhotosUploadTest extends TestCase
         ])->decodeResponseJson();
 
         $this->assertArrayHasKey('url', $upload);
-        $this->assertArrayHasKey('id', $upload);;
+        $this->assertArrayHasKey('id', $upload);
+
+        Storage::disk('s3')->assertExists("photos/{$file->hashName()}");
 
         $this->assertCount(2, $advert->photos);
+    }
+
+    /** @test */
+    public function a_user_can_add_more_than_7_photos_to_an_existing_advert()
+    {
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create();
+
+        create(Photo::class, [
+            'advert_id' => $advert->id
+        ], 7);
+
+        $file = UploadedFile::fake()->image('photo.jpg');
+
+        $upload = $this->json('PATCH', route('api.adverts.photos.update', $advert->slug), [
+            'photo' => $file
+        ])->assertStatus(500)->decodeResponseJson();
+
+        $this->assertArrayHasKey('status', $upload);
+
+        $this->assertCount(7, $advert->photos);
     }
 
     /** @test */
@@ -262,9 +346,7 @@ class PhotosUploadTest extends TestCase
     /** @test */
     public function uploaded_photo_must_determine_its_order()
     {
-        $this->withoutExceptionHandling();
-
-        Storage::fake('public');
+        Storage::fake('s3');
 
         $user = $this->signIn();
 
@@ -286,9 +368,7 @@ class PhotosUploadTest extends TestCase
     /** @test */
     public function if_adverts_exists_and_user_add_a_first_photo_its_order_should_be_0()
     {
-        $this->withoutExceptionHandling();
-
-        Storage::fake('public');
+        Storage::fake('s3');
 
         $user = $this->signIn();
 

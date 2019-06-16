@@ -35,9 +35,9 @@ $factory->define(App\Advert::class, function (Faker $faker) {
         'broadband' => $faker->boolean(),
 
         // Desired tenetant.
-        'smoking' => $faker->boolean(),
         'pets' => $faker->boolean(),
         'occupation' => $faker->randomElement(['student', 'professional']),
+        'smoking' => $faker->randomElement(['y', 'n']),
         'couples' => $faker->boolean(),
         'gender' => $faker->randomElement(['m', 'f']),
         'minimum_age' => $faker->numberBetween(16, 80),

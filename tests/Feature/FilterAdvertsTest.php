@@ -12,8 +12,10 @@ class FilterAdvertsTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function aadverts_can_be_ordered_by_rent_asc_and_desc()
+    public function adverts_can_be_ordered_by_rent_asc_and_desc()
     {
+        $this->withoutExceptionHandling();
+
         $city = create(City::class);
 
         $advertWithHighRent = AdvertFactory::city($city)->create([
@@ -235,11 +237,11 @@ class FilterAdvertsTest extends TestCase
         $city = create(City::class);
 
         $advertForNonSmokers = AdvertFactory::city($city)->create([
-            'smoking' => false
+            'smoking' => 'n'
         ]);
 
         $advertForSmokers = AdvertFactory::city($city)->create([
-            'smoking' => true
+            'smoking' => 'y'
         ]);
 
         $response = $this->getJson(route('cities.show', [$city->slug, 'smoking' => 'nonsmokers']))->json();

@@ -54,6 +54,22 @@ class ConversationTest extends TestCase
     }
 
     /** @test */
+    public function it_can_check_if_any_of_the_users_did_not_deleted_an_account()
+    {
+        $advert = AdvertFactory::create();
+
+        $user = $this->signIn();
+
+        $conversation = $advert->inquiry('Hi bruh');
+
+        $this->assertTrue($conversation->areUsersActive());
+        
+        $user->deleteAccount();
+        
+        $this->assertFalse($conversation->areUsersActive());
+    }
+
+    /** @test */
     public function it_can_recognize_who_interlocutor_is()
     {
         $advert = AdvertFactory::create();

@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\AdvertFactory;
 use App\User;
@@ -23,6 +22,6 @@ class MessageTest extends TestCase
 
         $this->assertInstanceOf(User::class, $receiver = $conversation->messages->first()->receiver);
 
-        $this->assertEquals(1, $receiver->id);
+        $this->assertEquals($advert->user->name, $receiver->name);
     }
 }

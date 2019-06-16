@@ -23,7 +23,13 @@
     <header class="d-flex justify-content-between align-items-center">
         <div>
             <h2 class="font-normal">{{ $advert->title }}</h2>
-            <p><a href="{{ route('cities.show', $advert->city->slug) }}"><i class="fas fa-map-marker fa-sm mr-2"></i>{{ $advert->city->name }}</a>@isset($advert->street),&nbsp;{{ $advert->street->name }} @endisset</p>
+            <p>
+                <a href="#map" onclick="$('#map').goTo()">
+                    <i class="fas fa-map-marker fa-sm mr-2"></i>
+                    {{ $advert->city->name }}
+                    @isset($advert->street),&nbsp;{{ $advert->street->name }} @endisset
+                </a>
+            </p>
             {{-- <p class="text-muted">Dodano {{ $advert->created_at->format('d.m.Y') }}</p> --}}
         </div>
         <div>
@@ -120,16 +126,17 @@
                             <p>Telefon</p>
                             <phone-number :advert="{{ $advert }}"></phone-number>
                         @endif
+                        {{-- @if($advert->user->adverts->count() > 1)
+                            <p class="small mt-3">Więcej od {!! ucfirst($advert->user->path) !!}</p>
+                            @foreach($advert->user->adverts->except($advert->id) as $item)
+                                <a href="{{ route('adverts.show', [$item->city->slug, $item->slug]) }}">{{ $item->title }}</a>
+                            @endforeach
+                        @endif --}}
                     </div>
                 </div>
             </div>
             <div class="mt-5">
-                <iframe 
-                    frameborder="0" 
-                    style="width: 100%;"
-                    src="https://www.google.com/maps/embed/v1/place?q=place_id:EiZBZGFtYSBCb2NoZW5rYSwgMzAtNjkzIEtyYWvDs3csIFBvbGFuZCIuKiwKFAoSCe11HENBQxZHEb3kqO9aLkrGEhQKEgnRGE41wEQWRxG_ikd2tbZrtA&key=AIzaSyCIGt4_PBVT77N2e6is2UPyTi-5MfPzazM" 
-                    allowfullscreen>
-                </iframe>
+                <google-map lat="{{ $advert->lat }}" lon="{{ $advert->lon}}"></google-map>
             </div>
         </div>
     </div>

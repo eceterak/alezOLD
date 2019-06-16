@@ -22,4 +22,16 @@ class ConversationPolicy
     {
         return $conversation->users->contains($user);
     }
+
+    /**
+     * Check if user can reply and if any of the account was not already deleted.
+     * 
+     * @param User $user
+     * @param Conversation $conversation
+     * @return bool
+     */
+    public function reply(User $user, Conversation $conversation) 
+    {
+        return $conversation->users->contains($user) && $conversation->areUsersActive();
+    }
 }

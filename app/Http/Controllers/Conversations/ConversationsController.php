@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Conversations;
 use App\Http\Controllers\Controller;
 use App\Conversation;
 use App\Advert;
-use Illuminate\Support\Facades\Gate;
 
 class ConversationsController extends Controller
 {
@@ -43,11 +42,11 @@ class ConversationsController extends Controller
         }
         catch(\Exception $e)
         {
-            return back()->withErrors(['self' => 'To ogłoszenie należy od Ciebie ;)']);
+            return back()->withErrors(['self' => 'Nie udało się wysłać wiadomości. Możliwe, że ogłoszenie zostało właśnie usunięte.']);
         }
         
         $advert->inquiry(request()->body);
 
-        return redirect()->back()->with('flash', 'Wiadomość została wysłana');
+        return redirect()->route('adverts.show', [$advert->city->slug, $advert->slug])->with('flash', 'Wiadomość została wysłana');
     }
 }

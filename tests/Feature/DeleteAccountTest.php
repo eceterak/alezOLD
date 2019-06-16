@@ -20,13 +20,23 @@ class DeleteAccountTest extends TestCase
     {
         $user = $this->signIn();
 
+        $user->avatar_path = 'avatars/some.jpg';
+
+        $user->save();
+
         $this->post(route('account.delete'));
 
         tap($user->fresh(), function($user) 
         {
-            $this->assertFalse($user->fresh()->active);
+            $this->assertFalse($user->active);
 
-            $this->assertEquals(now(), $user->fresh()->deleted_at);
+            $this->assertNull($user->phone);
+
+            $this->assertEquals('deleted@'.$user->id, $user->email);
+
+            $this->assertEquals('/storage/avatars/notfound.jpg', $user->avatar_path);
+
+            $this->assertEquals(now(), $user->deleted_at);
         });
     }
     
@@ -40,6 +50,18 @@ class DeleteAccountTest extends TestCase
         $user->deleteAccount();
 
         $this->assertTrue($advert->fresh()->archived);
+    }
+
+    /** @test */
+    public function when_user_deletes_an_account_all_of_her_adverts_with_phone_numbers_are_set_to_null()
+    {
+        $user = $this->signIn();
+
+        $advert = AdvertFactory::ownedBy($user)->create();
+
+        $user->deleteAccount();
+
+        $this->assertNull($advert->fresh()->phone);
     }
     
     /** @test */

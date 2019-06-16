@@ -39,16 +39,8 @@ class VerificationController extends Controller
      */
     public function redirectTo() 
     {
-        return route('verification.success');
-    }
+        session()->flash('flash', 'Adres email został pomyślnie zweryfikowany.');
 
-    /**
-     * Redirect to home after successfull verification.
-     * 
-     * @return string
-     */
-    public function success() 
-    {
-        return view('auth.verified');
+        return route('home');
     }
 }

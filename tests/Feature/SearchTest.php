@@ -9,7 +9,6 @@ use App\City;
 
 class SearchTest extends TestCase
 {
-
     use RefreshDatabase;
 
     /** @test */
