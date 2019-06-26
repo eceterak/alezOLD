@@ -31,19 +31,9 @@ class CitiesController extends Controller
      */
     public function show(City $city, AdvertFilters $filters) 
     {
-       $adverts = $this->getAdverts($city, $filters);
+        $adverts = $this->getAdverts($city, $filters);
 
-        // $cities = DB::table('cities')
-        //         ->selectRaw('id, (6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(lon) - radians(?)) + sin(radians(?)) * sin(radians(lat)))) 
-        //         AS distance', [$city->lat, $city->lon, $city->lat])
-        //         ->havingRaw('distance < ?', [10])
-        //         ->pluck('id');
-
-        // return $c4;
-
-        // return $adverts;
-
-        // Leave it in the case I will use vue to display advers.
+        // Kepp it in the case I will use vue to display advers.
         if(request()->wantsJson())
         {
             return $adverts;
@@ -66,10 +56,13 @@ class CitiesController extends Controller
     {
         $adverts = Advert::latest()->where('verified', true)->where('archived', false)->filter($filters);
 
-        if($city->exists)
-        {
-            $adverts->whereIn('city_id', [1]);
-        }
+        $cities = DB::table('cities')
+            ->selectRaw('id, (6371 * acos(cos(radians(?)) * cos(radians(lat)) * cos(radians(lon) - radians(?)) + sin(radians(?)) * sin(radians(lat)))) 
+            AS distance', [$city->lat, $city->lon, $city->lat])
+            ->havingRaw('distance < ?', [request()->has('radius') ? request('radius') : 1])
+            ->pluck('id');
+            
+        $adverts->whereIn('city_id', $cities);
 
         // Append any get parameters to keep them in url after navigating to a different page.
         return $adverts->paginate(24)->appends(Input::except('page'));

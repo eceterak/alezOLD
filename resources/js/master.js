@@ -31,7 +31,7 @@ $(function() {
             $('#city').val(ui.item.label);
             $('#city_id').val(ui.item.value);
 
-            $('form[name="search_master_form"]').submit();
+            //$('form[name="search_master_form"]').submit();
             return false;
         }
     });

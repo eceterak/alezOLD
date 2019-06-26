@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\AdvertFactory;
 use Illuminate\Notifications\DatabaseNotification;
 use App\Advert;
 
@@ -15,15 +14,13 @@ class NotificationTest extends TestCase
     /** @test */
     public function notification_has_a_subject() 
     {
-        $advert = AdvertFactory::create();
-        
-        $this->signIn();
-        
-        $advert->inquiry('Hi mate');
+        $notification = create(DatabaseNotification::class);
 
-        $this->assertEquals('App\Conversation', $advert->user->notifications->first()->subject_type);
+        $advert = Advert::find($notification->subject_id);
 
-        $this->assertEquals($advert->id, $advert->user->notifications->first()->subject_id);
+        $this->assertEquals('App\Advert', $notification->subject_type);
+
+        $this->assertSame($advert->id, $notification->subject_id);
     }
 
     /** @test */

@@ -12,7 +12,7 @@
                                 <h5 class="card-title mb-0">
                                     <a href="{{ route('adverts.show', [$advert->city->slug, $advert->slug]) }}">{{ $advert->title }}</a>
                                 </h5>
-                                <p class="small text-muted mb-4">{{ $advert->room_size_translated }}</p>
+                                <p class="small text-muted mb-4">Pokój {{ $advert->room_size_translated }}, {{ $advert->city->name }}</p>
                             </div>
                             <div>
                                 <h3 class="mb-0">{{ $advert->rent }}<small class="text-muted">&nbsp;zł/mc</small></h3>

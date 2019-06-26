@@ -3,27 +3,36 @@
 namespace App\Http\Controllers\Conversations;
 
 use App\Http\Controllers\Controller;
+use App\Exceptions\MessageException;
 use App\Conversation;
 
 class MessagesController extends Controller
 {
     /**
-     * Send a message.
+     * Before sending a message, check if both accounts are still active, 
+     * authenticated user has a permision to view the conversation
+     * and is not posting too frequently without an answer.
+     * If any of checks fails, redirect catch custom Exception 
+     * and redirect back with a message.
      * 
      * @param Request $request
      * @return redirect
      */
     public function store(Conversation $conversation) 
     {
+        $this->authorize('view', $conversation);
+
         try 
         {
-            $this->authorize('reply', $conversation);
-        }
-        catch(\Exception $e)
-        {
-            return redirect()->route('conversations.show', $conversation->id)->withErrors(['self' => 'Nie udało się wysłać wiadomości. Możliwe, że konto rozmówcy zostało właśnie usunięte.']);
-        }
+            $conversation->areUsersActive();
 
+            $conversation->messagingTooFrequently();
+        }
+        catch(MessageException $e)
+        {
+            return redirect()->route('conversations.show', $conversation->id)->withErrors(['messageError' => $e->getMessage()]);
+        }
+        
         request()->validate([
             'body' => 'required'
         ]);
@@ -31,5 +40,6 @@ class MessagesController extends Controller
         $conversation->reply(request()->body);    
 
         return redirect()->route('conversations.show', $conversation->id);
+        
     }
 }

@@ -37,7 +37,7 @@ window.flash = function(message, level = 'success') {
 
 };
 
-// Load components.
+// Components
 Vue.component('image-upload-form', require('./components/ImageUploadForm.vue').default);
 Vue.component('adverts', require('./components/Adverts.vue').default);
 Vue.component('favourite', require('./components/Favourite.vue').default);
@@ -46,6 +46,7 @@ Vue.component('subscribe-button', require('./components/SubscribeButton.vue').de
 Vue.component('google-map', require('./components/GoogleMap.vue').default);
 Vue.component('flash-message', require('./components/FlashMessage.vue').default);
 Vue.component('avatar-form', require('./components/AvatarForm.vue').default);
+Vue.component('user-notifications', require('./components/UserNotifications.vue').default);
 
 // Initialize a Vue.
 const app = new Vue({
@@ -67,5 +68,6 @@ try {
     // Require after jQuery UI
     require('./combobox');
     require('./mBox');
+    require('./poppa.js');
     require('bootstrap');
 } catch (e) {}

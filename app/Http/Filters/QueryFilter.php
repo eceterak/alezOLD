@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 abstract class QueryFilter 
 {
-
     /**
      * @var Request $request
      */
@@ -17,7 +16,6 @@ abstract class QueryFilter
      * @var Builder $builder
      */
     protected $builder;
-
     /**
      * @var array
      */

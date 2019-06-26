@@ -19,6 +19,7 @@ class CreatePhotosTable extends Migration
             $table->string('url');
             $table->tinyInteger('order')->nullable();
             $table->uuid('temp')->nullable();
+            $table->boolean('verified')->default(false);
             $table->timestamps();
 
             $table->foreign('advert_id')->references('id')->on('adverts')->onDelete('cascade');

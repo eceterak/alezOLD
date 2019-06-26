@@ -53,7 +53,8 @@ class CitiesController extends Controller
     public function adverts(City $city) 
     {
         return view('admin.cities.adverts')->with([
-            'city' => $city->load('adverts')
+            'city' => $city,
+            'adverts' => $city->adverts()->paginate(24)
         ]);
     }
     

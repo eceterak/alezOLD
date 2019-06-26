@@ -156,7 +156,6 @@
         </div>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/poppa.js') }}"></script>
     <script src="{{ asset('js/master.js') }}"></script>
 </body>
 </html>

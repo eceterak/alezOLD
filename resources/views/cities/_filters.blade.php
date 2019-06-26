@@ -1,5 +1,18 @@
 <form action="{{ url()->full() }}" method="GET" class="form" name="advertFiltersForm">
     <section class="filter-group">
+        <p class="filter-title">Zasięg wyszukiwania</p>
+        <div class="form-group">
+            <select name="radius" id="radius" class="form-control">
+                <option value>0 km</option>
+                <option value="5" {{ (request('radius') == 5) ? 'selected' : '' }}>5 km</option>
+                <option value="10" {{ (request('radius') == 10) ? 'selected' : '' }}>10 km</option>
+                <option value="15" {{ (request('radius') == 15) ? 'selected' : '' }}>15 km</option>
+                <option value="25" {{ (request('radius') == 25) ? 'selected' : '' }}>25 km</option>
+                <option value="50" {{ (request('radius') == 50) ? 'selected' : '' }}>50 km</option>
+            </select>
+        </div>
+    </section>
+    <section class="filter-group">
         <p class="filter-title">Czynsz</p>
         <div class="row">
             <div class="form-group col-6">

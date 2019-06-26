@@ -4,8 +4,8 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\User;
 use Facades\Tests\Setup\AdvertFactory;
+use App\User;
 
 class ProfilesTest extends TestCase
 {

@@ -38,31 +38,18 @@ class RecordActivityTest extends TestCase
     {
         $advert = AdvertFactory::create();
 
-        $title = $advert->title;
-
-        $advert->update([
-            'title' => 'updated'
-        ]);
+        $this->actingAs($advert->user)->patch(route('adverts.update', [$advert->city->slug, $advert->slug]), [
+            'city_id' => $advert->city->id,
+            'street_id' => $advert->street->id,
+            'title' => 'some dummy title',
+            'room_size' => $advert->room_size,
+            'description' => 'description has been updated',
+            'rent' => 2000,
+            'pets' => 1
+        ])->assertRedirect(route('home'));
 
         $this->assertCount(2, $advert->activities);
-        
-        tap($advert->activities->last(), function($activity) use ($title)
-        {
-            $this->assertEquals('updated_advert', $activity->description);
-
-            $expected = [
-                'before' => [
-                    'title' => $title,
-                    'slug' => str_slug($title)
-                ],
-                'after' => [
-                    'title' => 'updated',
-                    'slug' => 'updated'
-                ]
-            ];
-
-            $this->assertEquals($expected, $activity->changes);
-        });
+        $this->assertEquals('updated_advert', $advert->activities->last()->description);
     }
 
     /** @test */
@@ -75,6 +62,7 @@ class RecordActivityTest extends TestCase
         $advert->verify();
 
         $this->assertCount(2, $advert->activities);
+        $this->assertEquals('verified_advert', $advert->activities->last()->description);
     }
 
     /** @test */
@@ -85,7 +73,7 @@ class RecordActivityTest extends TestCase
         $advert->archive();
 
         $this->assertCount(2, $advert->activities);
-        //$this->assertEquals('deleted_advert', $advert->activities->last()->description);
+        $this->assertEquals('deleted_advert', $advert->activities->last()->description);
     }
 
     /** @test */

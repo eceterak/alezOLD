@@ -24,14 +24,14 @@ class SearchController extends Controller
 
             $city = City::where('name', $name)->orderBy('importance')->first();
         }
+        
+        if($city) 
+        {
+            $radius = request()->filled('radius') ? 'radius='.request('radius') : null;
 
-        if($city) return redirect()->route('cities.show', [$city->slug]);
+            return ($radius) ? redirect()->route('cities.show', [$city->slug, $radius]) : redirect()->route('cities.show', [$city->slug]);
+        }
         
         return redirect()->route('adverts'); // City not found, display all adverts.
-    }
-
-    public function test()
-    {
-        
     }
 }

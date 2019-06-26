@@ -4,20 +4,26 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateAdvertRequest;
+use App\Http\Requests\UpdateAdvertRequest;
+use Illuminate\Support\Facades\Input;
+use App\Filters\AdminAdvertFilters;
 use App\Advert;
 
 class AdvertsController extends Controller
 {
 
     /**
-     * Display all Adverts.
+     * Display all adverts.
      * 
      * @return view
      */
-    public function index() 
+    public function index(AdminAdvertFilters $filters) 
     {
+        $adverts = Advert::latest()->filter($filters);
+
         return view('admin.adverts.index')->with([
-            'adverts' => Advert::latest()->get()
+            'adverts' => $adverts->paginate(24)->appends(Input::except('page'))
         ]);
     }
 
@@ -40,7 +46,9 @@ class AdvertsController extends Controller
     public function edit(Advert $advert) 
     {
         return view('admin.adverts.edit')->with([
-            'advert' => $advert
+            'advert' => $advert->load(array('photos' => function($query) {
+                $query->orderBy('order', 'asc');
+            }))
         ]);
     }
 
@@ -50,11 +58,9 @@ class AdvertsController extends Controller
      * @param Request $request
      * @return redirect
      */
-    public function store(Request $request) 
+    public function store(CreateAdvertRequest $request) 
     {
-        $attributes = $this->validateRequest($request);
-
-        $advert = auth()->user()->adverts()->create($attributes);
+        $advert = auth()->user()->adverts()->create($request->validated());
 
         return redirect(route('admin.adverts'));
     }
@@ -66,15 +72,9 @@ class AdvertsController extends Controller
      * @param Request $request
      * @return redirect
      */
-    public function update(Advert $advert, Request $request) 
+    public function update(Advert $advert, UpdateAdvertRequest $request) 
     {
-        if($request->verified) $advert->verify();
-        else
-        {
-            $attributes = $this->validateRequest($request);
-            $attributes['slug'] = $request->title;
-            $advert->update($attributes);
-        }
+        $advert->update($request->validated());
 
         return redirect(route('admin.adverts'));
     }
@@ -84,46 +84,15 @@ class AdvertsController extends Controller
      * 
      * @return redirect
      */
-    public function destroy(Advert $Advert) 
+    public function destroy(Advert $advert) 
     {
-        $Advert->delete();
+        $advert->archive();
 
+        if(request()->expectsJson())
+        {
+            return response(['status' => 'Ogłoszenie usunięte']); // @refactor - vue component
+        }
+     
         return redirect(route('admin.adverts'));
-    }
-    
-    /**
-     * Validate a data.
-     * 
-     * @param Request $request
-     * @return array
-     */
-    protected function validateRequest() 
-    {
-        return request()->validate([
-            'city_id' => 'required',
-            'street_id' => 'sometimes',
-            'title' => 'required',
-            'description' => 'required',
-            'available_from' => 'sometimes',
-            'minimum_stay' => 'sometimes',
-            'maximum_stay' => 'sometimes',
-            'landlord' => 'sometimes',
-            'rent' => 'required',
-            'deposit' => 'sometimes',
-            'bills' => 'required',
-            'property_type' => 'sometimes',
-            'property_size' => 'sometimes',
-            'living_room' => 'sometimes',
-            'room_size' => 'sometimes',
-            'furnished' => 'sometimes',
-            'broadband' => 'sometimes',
-            'smoking' => 'sometimes',
-            'pets' => 'sometimes',
-            'occupation' => 'sometimes',
-            'couples' => 'sometimes',
-            'gender' => 'sometimes',
-            'minimum_age' => 'sometimes',
-            'maximum_age' => 'sometimes'
-        ]);
     }
 }

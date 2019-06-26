@@ -15,7 +15,7 @@ class Photo extends Model
      * @var array
      */
     protected $casts = [
-        'featured' => 'boolean'
+        'verified' => 'boolean'
     ];
 
     /**

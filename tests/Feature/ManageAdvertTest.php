@@ -25,11 +25,13 @@ class ManageAdvertTest extends TestCase
     /** @test */
     public function owner_of_the_advert_can_update_it() 
     {
+        $this->withoutExceptionHandling();
+        
         $this->actingAs($this->advert->user)->get(route('adverts.edit', [$this->advert->city->slug, $this->advert->slug]))->assertSuccessful();
 
         $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), [
             'city_id' => $this->advert->city->id,
-            'street_id' => $this->advert->city->id,
+            'street_id' => $this->advert->street->id,
             'title' => 'some dummy title',
             'room_size' => $this->advert->room_size,
             'description' => 'description has been updated',
@@ -52,13 +54,11 @@ class ManageAdvertTest extends TestCase
     /** @test */
     public function changes_are_not_visible_to_the_users_until_advert_is_revised_by_the_admin() 
     {
-        //$this->withoutExceptionHandling();
-
         $this->actingAs($this->advert->user)->get(route('adverts.edit', [$this->advert->city->slug, $this->advert->slug]));
 
         $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), [
             'city_id' => $this->advert->city->id,
-            'street_id' => $this->advert->city->id,
+            'street_id' => $this->advert->street->id,
             'title' => 'some dummy title',
             'description' => 'description has been updated',
             'room_size' => 'single',
@@ -74,7 +74,6 @@ class ManageAdvertTest extends TestCase
 
             $this->assertEquals($advert->title, 'some dummy title');
         });
-        
     }
 
     /** @test */
@@ -85,12 +84,16 @@ class ManageAdvertTest extends TestCase
         $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), $attributes = raw(Advert::class, [
             'title' => 'The title is updated',
             'city_id' => $this->advert->city->id,
-            'street_id' => $this->advert->city->id
+            'street_id' => $this->advert->street->id
         ]));
 
-        $this->advert->fresh()->acceptRevision();
-
-        $this->assertEquals('the-title-is-updated', $this->advert->fresh()->slug);
+        tap($this->advert->fresh(), function($advert) 
+        {   
+            $advert->acceptRevision();
+            
+            $this->assertEquals('the-title-is-updated', $advert->fresh()->slug);
+            
+        });
     }
 
     /** @test */

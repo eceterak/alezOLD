@@ -10,7 +10,6 @@ class AdvertPolicy
 {
     use HandlesAuthorization;
 
-
     /**
      * Checks if given user can manage a Advert.
      * 
@@ -27,6 +26,7 @@ class AdvertPolicy
 
     /**
      * Checks if given user can manage a Advert.
+     * Always return true for admin.
      * 
      * @param User $user
      * @param Advert $advert
@@ -34,11 +34,13 @@ class AdvertPolicy
      */
     public function update(User $user, Advert $advert) 
     {
+        if($user->isAdmin()) return true;
+
         return $user->is($advert->user);
     }
 
     /**
-     * Checks if given user can manage a Advert.
+     * Checks if given user can create Advert.
      * 
      * @param User $user
      * @param Advert $advert

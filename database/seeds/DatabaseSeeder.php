@@ -25,7 +25,18 @@ class DatabaseSeeder extends Seeder
             'name' => 'Kraków',
             'community' => 'm. Kraków',
             'county' => 'm. Kraków',
-            'state' => 'Małopolska'
+            'state' => 'Małopolska',
+            'lat' => 50.065045, 
+            'lon' => 19.942371
+        ]);
+
+        $cityNearBy = create(City::class, [
+            'name' => 'Wieliczka',
+            'community' => 'm. Kraków',
+            'county' => 'm. Kraków',
+            'state' => 'Małopolska',
+            'lat' => 49.987054, 
+            'lon' => 20.064649
         ]);
 
         $street = create(Street::class, [

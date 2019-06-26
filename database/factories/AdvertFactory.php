@@ -16,8 +16,8 @@ $factory->define(App\Advert::class, function (Faker $faker) {
         
         // Availability.
         'available_from' => $faker->date,
-        'minimum_stay' => $faker->numberBetween(0, 24),
-        'maximum_stay' => $faker->numberBetween(0, 24),
+        'minimum_stay' => 12,
+        'maximum_stay' => 24,
 
         // $$$
         'rent' => $faker->numberBetween(300, 1500),

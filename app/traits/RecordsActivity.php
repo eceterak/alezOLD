@@ -19,7 +19,7 @@ trait RecordsActivity
      * @var array
      */
     protected static $recordableEvents = [
-        'created', 'updated'
+        'created'
     ];
 
     /**

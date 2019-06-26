@@ -167,6 +167,18 @@ class AdvertTest extends TestCase
     }
 
     /** @test */
+    public function it_can_be_revised()
+    {
+        $attributes = [
+            'title' => 'foo'
+        ];
+
+        $this->advert->revise($attributes);
+
+        $this->assertEquals($this->advert->fresh()->revision, $attributes);
+    }
+
+    /** @test */
     public function it_can_check_for_pending_revision()
     {
         $this->advert->revision = [
@@ -202,6 +214,22 @@ class AdvertTest extends TestCase
         $this->advert->acceptRevision();
         
         $this->assertEquals($this->advert->fresh()->title, 'foo');
+
+        $this->assertNull($this->advert->fresh()->revision);
+    }
+
+    /** @test */
+    public function it_can_reject_pending_revisions()
+    {
+        $this->advert->revision = [
+            'title' => 'foo',
+        ];
+
+        $this->advert->rejectRevision();
+        
+        $this->assertEquals($this->advert->fresh()->title, $this->advert->title);
+
+        $this->assertNull($this->advert->fresh()->revision);
     }
 
     /** @test */

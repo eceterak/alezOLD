@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Mail\AdvertCreatedConfirmationMail;
+use App\Mail\AdvertVerifiedConfirmationMail;
 use Facades\Tests\Setup\AdvertFactory;
 use Illuminate\Support\Facades\Mail;
 use App\Advert;
@@ -59,16 +60,25 @@ class CreateAdvertTest extends TestCase
     {
         Mail::fake();
 
-        $this->actingAs($this->user())->get(route('adverts.create'))->assertStatus(200);
-
         $city = create(City::class);
         
-        $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
+        $this->actingAs($this->user())->post(route('adverts.store'), $attributes = raw(Advert::class, [
             'city_id' => $city->id,
-        ]))
-        ->assertRedirect(route('home'));
+        ]))->assertRedirect(route('home'));
 
         Mail::assertQueued(AdvertCreatedConfirmationMail::class);
+    }
+
+    /** @test */
+    public function email_is_sent_to_owner_after_advert_is_verified()
+    {
+        Mail::fake();
+        
+        $advert = AdvertFactory::create();
+
+        $advert->verify();
+
+        Mail::assertQueued(AdvertVerifiedConfirmationMail::class);
     }
 
     /** @test */

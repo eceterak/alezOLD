@@ -34,6 +34,18 @@ class SearchTest extends TestCase
     }
 
     /** @test */
+    public function user_can_increase_search_radius() 
+    {
+        $city = create(City::class);
+
+        $this->get(route('search.index', [
+            'city' => 'ignore this value',
+            'city_id' => $city->id,
+            'radius' => 10
+        ]))->assertRedirect(route('cities.show', [$city->slug, 'radius=10']));
+    }
+
+    /** @test */
     public function search_by_query_with_commas() 
     {
         $city = create(City::class);

@@ -7,11 +7,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Notification;
 use Facades\Tests\Setup\AdvertFactory;
-use App\Notifications\YouHaveANewMessage;
+use App\Notifications\AdvertWasAdded;
 use App\Conversation;
 use App\Advert;
 use App\City;
-use App\Notifications\AdvertWasAdded;
+use App\User;
+use App\Notifications\AdvertNeedsVerification;
 
 class NotificationsTest extends TestCase
 {
@@ -89,28 +90,6 @@ class NotificationsTest extends TestCase
     } 
 
     /** @test */
-    public function a_user_can_disable_email_notifications()
-    {
-        $user = auth()->user();
-
-        Notification::fake();
-        
-        $this->post(route('settings.update'), [])->assertRedirect(route('settings'));
-
-        $this->assertFalse($user->acceptsEmailNotifications());
-        
-        $advert = AdvertFactory::ownedBy($user)->create();
-        
-        $this->signIn();
-
-        $advert->inquiry('Email notification should not be sent.');
-
-        Notification::assertSentTo($user, YouHaveANewMessage::class, function($notification, $channels) {
-            return (!in_array('mail', $channels) && in_array('database', $channels));
-        });
-    }
-
-    /** @test */
     public function a_user_can_fetch_unread_notifications_of_a_given_type()
     {
         create(DatabaseNotification::class);
@@ -146,7 +125,7 @@ class NotificationsTest extends TestCase
     {
         $this->withoutExceptionHandling(); // Do not remove - false positive.
 
-        create(DatabaseNotification::class, [
+        $notification = create(DatabaseNotification::class, [
             'data' => ['message' => 'Nowe ogłoszenie w Foo']
         ]);
         

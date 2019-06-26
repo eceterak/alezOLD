@@ -127,10 +127,8 @@ class AdvertsController extends Controller
      * @return redirect
      */
     public function update($city, Advert $advert, UpdateAdvertRequest $request) 
-    {        
-        $advert->update([
-            'revision' => array_diff_assoc($request->validated(), $advert->getAttributes())
-        ]);
+    {      
+        $advert->revise($request->validated());
 
         return redirect(route('home'));
     }

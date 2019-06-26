@@ -35,6 +35,18 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'admin', 'prefix' => 'admi
     Route::get('/pokoje/{advert}', 'AdvertsController@edit')->name('admin.adverts.edit');
     Route::patch('/pokoje/{advert}', 'AdvertsController@update')->name('admin.adverts.update');
     Route::delete('/pokoje/{advert}', 'AdvertsController@destroy')->name('admin.adverts.destroy');
+
+    // Verification
+    Route::post('/pokoje/{advert}/weryfikuj', 'AdvertsVerificationController@store')->name('admin.adverts.verify');
+    // Revision
+    Route::post('/pokoje/{advert}/zmiany', 'AdvertsRevisionController@store')->name('admin.adverts.revision.store');
+    Route::delete('/pokoje/{advert}/zmiany', 'AdvertsRevisionController@destroy')->name('admin.adverts.revision.destroy');
+
+    // Profiles
+    Route::get('/uzytkownicy', 'ProfilesController@index')->name('admin.profiles');
+
+    // Notifications
+    Route::get('/notyfikacje', 'NotificationsController@index')->name('admin.notifications');
 });
 
 
@@ -118,10 +130,14 @@ Route::get('/pokoje/{city}/ajax/adverts', 'AjaxController@index')->name('ajax.ci
 Route::post('/api/uzytkownicy/{user}/avatars', 'Api\AvatarsController@store')->middleware('auth')->name('api.users.avatars.store');
 Route::delete('/api/uzytkownicy/{user}/avatars', 'Api\AvatarsController@destroy')->middleware('auth')->name('api.users.avatars.delete');
 
+// Photos
 Route::post('/api/ogloszenia/zdjecia/{key}', 'Api\PhotosUploadController@store')->middleware('auth')->name('api.adverts.photos.store');
 Route::delete('/api/ogloszenia/zdjecia/{photo}/{key}', 'Api\PhotosUploadController@destroy')->middleware('auth')->name('api.adverts.photos.delete');
 Route::patch('/api/ogloszenia/zdjecia/{advert}', 'Api\PhotosUploadController@update')->middleware('auth')->name('api.adverts.photos.update');
 Route::patch('/api/zdjecia/{advert}', 'Api\PhotosOrderController@update')->middleware('auth')->name('api.photos.order.update');
+
+Route::post('/api/zdjecia/{advert}/weryfikuj', 'Api\PhotosVerificationController@store')->middleware('admin')->name('api.photos.verify.bulk');
+Route::patch('/api/zdjecia/{photo}/weryfikuj', 'Api\PhotosVerificationController@update')->middleware('admin')->name('api.photos.verify');
 
 Route::get('/api/ogloszenia/{advert}/phone', 'Api\DisplayPhoneNumberController@show')->name('api.adverts.phone');
 

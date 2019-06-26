@@ -245,12 +245,12 @@ class PhotosUploadTest extends TestCase
         ]);
 
         $this->json('PATCH', route('api.photos.order.update', $advert->slug), [
-            'photos' => '2, 1'
+            'photos' => "{$secondPhoto->id}, {$firstPhoto->id}"
         ]);
 
         $response = $this->getJson(route('adverts.show', [$advert->city->slug, $advert->slug]))->json();
         
-        $this->assertEquals([2, 1], array_column($response['photos'], 'id'));
+        $this->assertEquals([$secondPhoto->id, $firstPhoto->id], array_column($response['photos'], 'id'));
     }
 
 
@@ -276,12 +276,12 @@ class PhotosUploadTest extends TestCase
         ]);
 
         $this->json('PATCH', route('api.photos.order.update', $advert->slug), [
-            'photos' => '2, 1, 3'
+            'photos' => "{$secondPhoto->id}, {$firstPhoto->id}, {$doesNotBelongsToAnAdvert->id}"
         ]);
 
         $response = $this->getJson(route('adverts.show', [$advert->city->slug, $advert->slug]))->json();
 
-        $this->assertEquals([2, 1], array_column($response['photos'], 'id'));
+        $this->assertEquals([$secondPhoto->id, $firstPhoto->id], array_column($response['photos'], 'id'));
     }
 
     /** @test */
@@ -381,5 +381,74 @@ class PhotosUploadTest extends TestCase
         ])->decodeResponseJson();
         
         $this->assertEquals(0, $advert->photos->last()->order);
+    }
+
+    /** @test */
+    public function admin_can_verify_a_photo()
+    {        
+        $this->signInAdmin();
+
+        $advert = AdvertFactory::create();
+
+        $photo = create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 0,
+            'verified' => false
+        ]);
+
+        $this->json('PATCH', route('api.photos.verify', $photo->id))->assertStatus(200);
+
+        $this->assertTrue($photo->fresh()->verified);
+    }
+
+    /** @test */
+    public function admin_can_verify_all_photos_at_once()
+    {
+        $this->signInAdmin();
+
+        $advert = AdvertFactory::create();
+
+        create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 0,
+            'verified' => false
+        ], 5);
+
+        $this->json('POST', route('api.photos.verify.bulk', $advert->slug))->assertStatus(200);
+
+        $advert->photos->each(function($photo) 
+        {
+            $this->assertTrue($photo->verified);
+        });
+    }
+
+    /** @test */
+    public function only_admin_can_verify_a_photo()
+    {
+        $advert = AdvertFactory::create();
+
+        $photo = create(Photo::class, [
+            'advert_id' => $advert->id,
+            'order' => 0,
+            'verified' => false
+        ]);
+
+        $this->json('PATCH', route('api.photos.verify', $photo->id))->assertRedirect(route('admin.login'));
+
+        $this->signIn();
+
+        $this->json('PATCH', route('api.photos.verify', $photo->id))->assertRedirect(route('index'));
+    }
+
+    /** @test */
+    public function only_admin_can_verify_all_photos_at_once()
+    {
+        $advert = AdvertFactory::create();
+
+        $this->json('POST', route('api.photos.verify.bulk', $advert->slug))->assertRedirect(route('admin.login'));
+        
+        $this->signIn();
+        
+        $this->json('POST', route('api.photos.verify.bulk', $advert->slug))->assertRedirect(route('index'));
     }
 }

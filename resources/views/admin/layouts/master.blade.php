@@ -7,39 +7,52 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Alez.pl - pokoje na wynajem') }}</title>
-    <link rel="stylesheet" href="{{ mix('admin/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/dashboard.css') }}">
+    <script>    
+        window.App = {!! json_encode([
+            'signedIn' =>  Auth::check(),
+            'user' => Auth::user()
+        ]) !!};
+    </script>
 </head>
-<body class="bg-grey-lighter">
-    <div class="flex h-screen">
-        <div class="lg:w-1/6 lg:block md:hidden bg-brown-darkest text-white px-5">
-            <div class="border-b border-grey py-6">ALEZ.pl</div>
-            <nav class="navigator">
-                <ul>
-                    <li><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                    <li><a href="{{ route('admin.cities') }}">Miasta</a></li>
-                    <li><a href="{{ route('admin.adverts') }}">Pokoje</a></li>
-                    <li><a href="{{ route('admin.adverts') }}">Użytkownicy</a></li>
-                </ul>
-            </nav>
-        </div>
-        <div class="lg:w-5/6 sm:w-full bg-creamy">
-            <div class="border-b border-grey p-6">
-                <div id="breadcrumbs">
-                    <ul class="flex list-reset">
-                        <li><a href="{{ route('admin.dashboard') }}">Home</a></li>
-                        @if(count(Request::segments())) 
-                            @for($i = 1; $i < count(Request::segments()); $i++)
-                                <li>&nbsp;/&nbsp;{{ ucfirst(Request::segments()[$i]) }}</li>
-                            @endfor
-                        @endif
-                    </ul>
+<body class="bg-secondary">
+    <div class="container" id="app">
+        <div class="shadow bg-dashboard">
+            <nav class="d-flex justify-content-between navbar bg-primary">
+                <a href="{{ route('admin.dashboard') }}" class="text-white navbar-brand">Alez</a>
+                <div class="text-white">
+                    @if($notifications = auth()->user()->notifications_count)
+                        <a href="{{ route('admin.notifications') }}" class="btn btn-sm btn-light text-dark"><i class="fas fa-bell mr-1"></i>{{ $notifications }}</a>
+                    @endif
+                    <span class="mx-2">{{ auth()->user()->name }}</span>
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline-block">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-light"><i class="fas fa-power-off"></i></button>
+                    </form>
                 </div>
-            </div>
-            <div class="p-6">
-                @yield('content')
+            </nav>
+            @include('admin.layouts._menu')
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('admin.dashboard') }}">Home</a>
+                    </li>
+                    @if(count(Request::segments())) 
+                        @for($i = 1; $i < count(Request::segments()); $i++)
+                            <li class="breadcrumb-item">{{ ucfirst(Request::segments()[$i]) }}</li>
+                        @endfor
+                    @endif
+                </ol>
+            </nav>
+            <div class="pb-4">
+                <div class="container">
+                    @yield('content')
+                </div>
             </div>
         </div>
     </div>
-    <script src="{{ mix('admin/js/app.js') }}"></script>
+    <flash-message message="{{ session('flash') }}"></flash-message>
+    <script src="{{ asset('admin/js/app.js') }}"></script>
 </body>
 </html>

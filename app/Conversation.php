@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\MessageException;
 
 class Conversation extends Model
 {
@@ -38,7 +39,7 @@ class Conversation extends Model
      */
     public function messages()
     {
-        return $this->hasMany(Message::class)->latest();
+        return $this->hasMany(Message::class);
     }
 
     /**
@@ -122,6 +123,23 @@ class Conversation extends Model
      */
     public function areUsersActive() 
     {
-        return ! $this->users()->where('active', false)->exists();
+        if($this->users()->where('active', false)->exists()) throw new MessageException('Nie udało się wysłać wiadomości. Możliwe, że konto rozmówcy zostało właśnie usunięte.');
+    }
+
+    /**
+     * Fetch last 6 messages, and check if they are all belong to same, authenticated user.
+     * If they are, it means that user is probably spamming.
+     * 
+     * @return Exception MessageException
+     */
+    public function messagingTooFrequently() 
+    {
+        $messages = $this->messages()->latest()->limit(6)->pluck('user_id');
+
+        $check = $messages->count() > 5 && $messages->every(function($value) {
+            return $value == auth()->id();
+        });
+
+        if($check) throw new MessageException('Too frequent');
     }
 }

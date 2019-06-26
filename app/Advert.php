@@ -8,6 +8,10 @@ use App\Traits\RecordsActivity;
 use App\Traits\Favouritable;
 use Carbon\Carbon;
 use App\Notifications\AdvertWasAdded;
+use Illuminate\Notifications\DatabaseNotification;
+use App\Notifications\AdvertNeedsRevision;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdvertVerifiedConfirmationMail;
 
 class Advert extends Model
 {
@@ -428,7 +432,13 @@ class Advert extends Model
                 $subscription->user->notify(new AdvertWasAdded($this->city, $this));
             });
 
-        //$this->recordActivity('verified_advert');
+        $this->recordActivity('verified_advert');
+
+        DatabaseNotification::where('subject_id', $this->id)->where('type', 'App\Notifications\AdvertNeedsVerification')->each(function($notification) {
+            $notification->markAsRead();
+        });
+
+        Mail::to($this->user)->send(new AdvertVerifiedConfirmationMail($this));
 
         return $this;
     }
@@ -446,7 +456,7 @@ class Advert extends Model
             'phone' => null
         ]);
 
-        //$this->recordActivity('deleted_advert');
+        $this->recordActivity('deleted_advert');
 
         return $this;
     }
@@ -495,19 +505,43 @@ class Advert extends Model
     }
 
     /**
+     * Instead of updating advert, update revision attribute.
+     * This way, users wont be able to update advert with harmful data.
+     * 
+     * @param array $attributes
+     * @return
+     */
+    public function revise($attributes) 
+    {
+        $this->update([
+            'revision' => array_diff_assoc($attributes, $this->getAttributes())
+        ]);
+
+        // Record activity by hand
+        $this->recordActivity('updated_advert');
+
+        User::where('role', 1)->get()->each(function($admin)
+        {
+            $admin->notify(new AdvertNeedsRevision($this));
+        });
+    }
+
+    /**
      * Check if there are any unsaved (unverified) changes to the model and update the model.
      * 
      * @return $this
      */
     public function loadPendingRevision() 
     {
-        if($this->has_pending_revision)
+        if($this->hasPendingRevision)
         {
             foreach($this->revision as $key => $value)
             {
                 $this->{$key} = $value;
             }
         }
+
+        $this->revision = null;
 
         return $this;
     }
@@ -520,5 +554,25 @@ class Advert extends Model
     public function acceptRevision() 
     {
         $this->loadPendingRevision()->save();
+
+        DatabaseNotification::where('subject_id', $this->id)->where('type', 'App\Notifications\AdvertNeedsRevision')->each(function($notification) {
+            $notification->markAsRead();
+        });
+    }
+
+    /**
+     * Reject a revision.
+     * 
+     * @return void
+     */
+    public function rejectRevision() 
+    {
+        $this->revision = null;
+
+        DatabaseNotification::where('subject_id', $this->id)->where('type', 'App\Notifications\AdvertNeedsRevision')->each(function($notification) {
+            $notification->markAsRead();
+        });
+
+        $this->save();
     }
 }

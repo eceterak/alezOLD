@@ -5,7 +5,6 @@ namespace App\Policies;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use App\Conversation;
 use App\User;
-use App\Advert;
 
 class ConversationPolicy
 {
@@ -32,6 +31,6 @@ class ConversationPolicy
      */
     public function reply(User $user, Conversation $conversation) 
     {
-        return $conversation->users->contains($user) && $conversation->areUsersActive();
+        return $conversation->users->contains($user);
     }
 }

@@ -17,7 +17,8 @@
                 <p class="alert {{ ($message->user->id == auth()->id()) ? 'alert-success' : 'alert-warning' }}">{{ $message->body }}</p>
             </div>
         @endforeach
-        @if($conversation->areUsersActive())
+        @if($conversation->interlocutor->active)
+            @include('components._errors')
             <form action="{{ route('conversations.reply', $conversation->id) }}" method="POST" class="mt-4">
                 @csrf
                 <div class="form-group">

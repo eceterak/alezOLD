@@ -2,10 +2,11 @@
 
 namespace App\Observers;
 
-use App\Mail\AdvertCreatedConfirmationMail;
-use App\Notifications\AdvertWasAdded;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\AdvertCreatedConfirmationMail;
 use App\Advert;
+use App\User;
+use App\Notifications\AdvertNeedsVerification;
 
 class AdvertObserver
 {
@@ -29,6 +30,11 @@ class AdvertObserver
     public function created(Advert $advert)
     {
         Mail::to($advert->user)->send(new AdvertCreatedConfirmationMail());
+
+        User::where('role', 1)->get()->each(function($admin) use ($advert)
+        {
+            $admin->notify(new AdvertNeedsVerification($advert));
+        });
     }
 
     /**

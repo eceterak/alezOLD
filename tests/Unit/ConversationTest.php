@@ -6,6 +6,8 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\ConversationFactory;
 use Facades\Tests\Setup\AdvertFactory;
+use App\Message;
+use App\Exceptions\MessageException;
 
 class ConversationTest extends TestCase
 {
@@ -61,12 +63,23 @@ class ConversationTest extends TestCase
         $user = $this->signIn();
 
         $conversation = $advert->inquiry('Hi bruh');
-
-        $this->assertTrue($conversation->areUsersActive());
         
         $user->deleteAccount();
         
-        $this->assertFalse($conversation->areUsersActive());
+        $this->expectException(MessageException::class);
+        $conversation->areUsersActive();
+    }
+
+    /** @test */
+    public function it_can_check_if_user_has_not_trying_to_send_too_many_messages_without_a_reply()
+    {
+        $user = $this->signIn();
+
+        $conversation = ConversationFactory::messageCount(6)->create();
+
+        $this->expectException(MessageException::class);
+
+        $conversation->messagingTooFrequently();
     }
 
     /** @test */

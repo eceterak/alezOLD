@@ -1,15 +1,15 @@
-require('../bootstrap');
+require('./bootstrap');
 
-$(document).ready(function() {
+// $(document).ready(function() {
 
-    var menu = $('.navigator ul li a');
+//     var menu = $('.navigator ul li a');
 
-    var path = window.location.pathname.replace('/admin/', '').split('/');
+//     var path = window.location.pathname.replace('/admin/', '').split('/');
 
-    menu.each(function(key, value) {
-        if(location.href == value) {
-            //console.log(value);
-        }
-    })
+//     menu.each(function(key, value) {
+//         if(location.href == value) {
+//             //console.log(value);
+//         }
+//     })
 
-});
+// });

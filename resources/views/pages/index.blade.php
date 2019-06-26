@@ -11,9 +11,19 @@
         <div class="col-10 bg-primary rounded shadow-sm p-4">
             <form action="{{ route('search.index') }}" method="get" name="search_master_form" autocomplete="off" id="search_master_form">
                 <div class="row">
-                    <div class="col-10 form-group mb-0 autocomplete">
+                    <div class="col-8 form-group mb-0 autocomplete">
                         <input type="text" placeholder="Wpisz miasto..." autocomplete="off" name="city" id="city" class="form-control form-control-lg">
                         <input type="hidden" name="city_id" id="city_id">
+                    </div>
+                    <div class="col-2 form-group mb-0 pl-0">
+                        <select name="radius" id="radius" class="form-control form-control-lg">
+                            <option value>+ 0 km</option>
+                            <option value="5" {{ (request('radius') == 5) ? 'selected' : '' }}>+ 5 km</option>
+                            <option value="10" {{ (request('radius') == 10) ? 'selected' : '' }}>+ 10 km</option>
+                            <option value="15" {{ (request('radius') == 15) ? 'selected' : '' }}>+ 15 km</option>
+                            <option value="25" {{ (request('radius') == 25) ? 'selected' : '' }}>+ 25 km</option>
+                            <option value="50" {{ (request('radius') == 50) ? 'selected' : '' }}>+ 50 km</option>
+                        </select>
                     </div>
                     <div class="col-2 pl-0">
                         <button class="btn btn-block btn-lg bg-white">Szukaj</button>

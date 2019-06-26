@@ -9,6 +9,7 @@ $factory->define(App\Photo::class, function (Faker $faker) {
 
     return [
         'url' => 'photos/'.$file->hashName(),
-        'temp' => Str::uuid()->toString()
+        'temp' => Str::uuid()->toString(),
+        'verified' => true
     ];
 });

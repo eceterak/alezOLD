@@ -37,6 +37,14 @@ class ConversationsTest extends TestCase
     }
 
     /** @test */
+    public function only_participants_of_conversation_can_view_it() 
+    {
+        $conversation = ConversationFactory::create();
+
+        $this->actingAs($this->user())->get(route('conversations.show', $conversation->id))->assertStatus(403);
+    }
+
+    /** @test */
     public function participant_of_conversation_can_reply() 
     {
         $advert = AdvertFactory::create();
@@ -73,14 +81,24 @@ class ConversationsTest extends TestCase
         
         $this->post(route('conversations.reply', $conversation->id), $attributes = [
             'body' => 'I do agree'
-        ])->assertSessionHasErrors('self');
+        ])->assertStatus(403);
+    }
+
+    /** @test */
+    public function a_user_can_send_up_to_6_replies_in_a_row_without_answer_before_spam_protection_kicks_in()
+    {
+        $this->signIn();
+        
+        $conversation = ConversationFactory::messageCount(6)->create();
+
+        $this->post(route('conversations.reply', $conversation->id), $attributes = [
+            'body' => 'I do agree'
+        ])->assertSessionHasErrors('messageError');
     }
     
     /** @test */
     public function conversation_can_not_be_continued_if_any_of_participants_deleted_an_account() 
     {
-        $this->withoutExceptionHandling();
-
         $advert = AdvertFactory::create();
         
         $john = $this->signIn();
@@ -93,29 +111,19 @@ class ConversationsTest extends TestCase
         
         Notification::fake();
 
-        $this->get(route('conversations.show', $conversation->id))->assertDontSeeText('Odpowiedz');
+        $this->get(route('conversations.show', $conversation->id))->assertDontSeeText('Odpowiedz')->assertSeeText('Twój rozmówca skasował konto');
 
-        $this->get(route('conversations.show', $conversation->id))->assertSeeText('Twój rozmówca skasował konto');
-
-        $this->post(route('conversations.reply', $conversation->id), [])->assertRedirect(route('conversations.show', $conversation->id))->assertSessionHasErrors('self');
+        $this->post(route('conversations.reply', $conversation->id), [])->assertRedirect(route('conversations.show', $conversation->id))->assertSessionHasErrors('messageError');
 
         Notification::assertNotSentTo($john, YouHaveANewMessage::class);
     }
 
     /** @test */
-    public function only_participant_of_conversation_can_view_it() 
-    {
-        $conversation = ConversationFactory::create();
-
-        $this->actingAs($this->user())->get(route('conversations.show', $conversation->id))->assertStatus(403);
-    }
-
-    /** @test */
     public function a_conversation_can_check_if_authenticated_user_has_read_new_messages()
     {
-        $advert = AdvertFactory::create();
-
         $this->signIn();
+        
+        $advert = AdvertFactory::create();
         
         $conversation = $advert->inquiry('Just testing');
 
@@ -221,10 +229,8 @@ class ConversationsTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_read_all_conversations_about_the_advert()
+    public function a_user_can_view_all_conversations_about_the_advert()
     {
-        $this->withoutExceptionHandling();
-
         $conversation = ConversationFactory::create();
 
         $this->signIn($conversation->advert->user);

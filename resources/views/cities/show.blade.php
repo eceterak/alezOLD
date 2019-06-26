@@ -2,7 +2,12 @@
 @section('lead')
     <header class="d-flex justify-content-between mb-4">
         <div>
-            <h3 class="text-grey-darker">Pokoje na wynajem w <a href="{{ route('cities.show', $city->slug) }}">{{ ucfirst($city->name) }}</a></h3>
+            <h3 class="text-grey-darker">
+                Pokoje na wynajem w <a href="{{ route('cities.show', $city->slug) }}">{{ ucfirst($city->name) }}</a>
+                @if(request()->has('radius'))
+                    <small>+{{ request('radius') }}km</small>
+                @endif
+            </h3>
             <p class="text-grey-darker mt-1">
                 {{ ($adverts->total() > 1) ? 'Znaleziono '.$adverts->total().' ogłoszeń' : ($adverts->total() <= 0 ? '' : 'Znaleziono 1 ogłoszenie') }}
             </p>

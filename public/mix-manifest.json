@@ -2,7 +2,8 @@
     "/admin/js/app.js": "/admin/js/app.js",
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/css/master.css": "/css/master.css",
     "/admin/css/app.css": "/admin/css/app.css",
+    "/css/master.css": "/css/master.css",
+    "/admin/css/dashboard.css": "/admin/css/dashboard.css",
     "/js/master.js": "/js/master.js"
 }
