@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-//use App\Traits\Subscribable;
+use App\Traits\Subscribable;
 use App\Advert;
 
 class City extends Model
 {
-    use Searchable;
+    use Searchable, Subscribable;
 
     /**
      * @var array
