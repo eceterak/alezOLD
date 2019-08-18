@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use App\CitySubscription;
 
-trait Subscribable 
+trait Subscribable
 {
     /**
      * City has many subscribers.
