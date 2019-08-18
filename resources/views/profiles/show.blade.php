@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('lead')
+@section('content')
     <header class="flex justify-between mb-4">
         <div>
             <h3 class="text-grey-darker">{!! $profile->path !!}</h3>

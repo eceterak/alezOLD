@@ -7,24 +7,35 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\User;
+use App\Message;
+use App\Advert;
 
 class YouHaveANewMessage extends Notification
 {
     use Queueable;
 
     /**
-     * @var App\subject
+     * @var App\Message
      */
     public $subject;
 
     /**
+     * @var App\Advert
+     */
+    public $advert;
+
+    /**
      * Create a new notification instance.
      *
+     * @param Message $message
+     * @param Advert $advert
      * @return void
      */
-    public function __construct($conversation)
+    public function __construct(Message $message, Advert $advert)
     {
-        $this->subject = $conversation;
+        $this->subject = $message;
+
+        $this->advert = $advert;
     }
 
     /**
@@ -47,10 +58,15 @@ class YouHaveANewMessage extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new MailMessage)->subject('alez.pl - masz nową wiadomość od '.ucfirst($this->subject->user->name))
+                                ->from('alez@alez.pl')
+                                ->replyTo($this->subject->user->email)
+                                ->markdown('emails.conversations.new-message', [
+                                    'to' => $this->subject->receiver,
+                                    'from' => $this->subject->user,
+                                    'message' => $this->subject,
+                                    'advert' => $this->advert
+                                ]);
     }
 
     /**
@@ -62,8 +78,7 @@ class YouHaveANewMessage extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => 'Masz nowa wiadomosc '.$this->subject->advert->title,
-            //'link' => route('adverts.show', [$this->city->slug, $this->advert->slug])
+            'message' => 'Masz nowa wiadomosc'
         ];
     }
 }

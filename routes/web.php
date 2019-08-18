@@ -75,7 +75,7 @@ Route::group(['middleware' => ['auth', 'verified']], function()
     Route::get('/moj-alez/archiwum', 'ArchivesController@index')->name('archives');
     Route::get('/moj-alez/ustawienia', 'Auth\UserSettingsController@index')->name('settings');
     Route::post('/moj-alez/ustawienia', 'Auth\UserSettingsController@update')->name('settings.update');
-    Route::post('/moj-alez', 'Auth\UserSettingsController@destroy')->name('account.delete');
+    Route::delete('/moj-alez', 'Auth\UserSettingsController@destroy')->name('account.delete');
 
     // Passwords
     Route::get('/moj-alez/zmien-haslo', 'Auth\PasswordChangeController@index')->name('password.change');
@@ -86,9 +86,9 @@ Route::group(['middleware' => ['auth', 'verified']], function()
         Route::get('/moj-alez/odebrane', 'InboxController@index')->name('conversations.inbox');
         Route::get('/moj-alez/wyslane', 'SentController@index')->name('conversations.sent');
         Route::get('/moj-alez/{advert}/odebrane', 'AdvertConversationController@show')->name('conversations.advert');
-        Route::post('/pokoje/{city}/{advert}/odpowiedz', 'ConversationsController@store')->name('conversations.store');
+        Route::post('/pokoje/{city}/{advert}/odpowiedz', 'ConversationsController@store')->middleware('throttle:10,1')->name('conversations.store');
         Route::get('/moj-alez/odebrane/{conversation}', 'ConversationsController@show')->name('conversations.show');
-        Route::post('/moj-alez/odebrane/{conversation}', 'MessagesController@store')->name('conversations.reply');
+        Route::post('/moj-alez/odebrane/{conversation}', 'MessagesController@store')->middleware('throttle:15,1')->name('conversations.reply');
     });
 
     // Adverts

@@ -4,12 +4,13 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Facades\Tests\Setup\AdvertFactory;
 use App\Advert;
 
 class ManageAdvertTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     protected $advert;
 
@@ -24,9 +25,7 @@ class ManageAdvertTest extends TestCase
 
     /** @test */
     public function owner_of_the_advert_can_update_it() 
-    {
-        $this->withoutExceptionHandling();
-        
+    {   
         $this->actingAs($this->advert->user)->get(route('adverts.edit', [$this->advert->city->slug, $this->advert->slug]))->assertSuccessful();
 
         $this->patch(route('adverts.update', [$this->advert->city->slug, $this->advert->slug]), [
@@ -34,14 +33,14 @@ class ManageAdvertTest extends TestCase
             'street_id' => $this->advert->street->id,
             'title' => 'some dummy title',
             'room_size' => $this->advert->room_size,
-            'description' => 'description has been updated',
+            'description' => $description = $this->faker->paragraph,
             'rent' => 2000,
             'pets' => 1
         ])->assertRedirect(route('home'));
 
         $this->assertEquals($this->advert->fresh()->revision, [
             'title' => 'some dummy title',
-            'description' => 'description has been updated',
+            'description' => $description,
             'rent' => 2000,
             'pets' => 1
         ]);
@@ -60,7 +59,7 @@ class ManageAdvertTest extends TestCase
             'city_id' => $this->advert->city->id,
             'street_id' => $this->advert->street->id,
             'title' => 'some dummy title',
-            'description' => 'description has been updated',
+            'description' => $this->faker->paragraph,
             'room_size' => 'single',
             'rent' => 2000,
             'pets' => 1

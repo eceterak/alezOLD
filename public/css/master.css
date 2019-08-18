@@ -1,9 +1,3 @@
-@media (min-width: 1200px) {
-  .container {
-    width: 970px;
-  }
-}
-
 .card {
   border: none;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
@@ -132,6 +126,36 @@
 
 .filter-group .form-group {
   margin-bottom: 0rem;
+}
+
+.form-section {
+  font-size: 0.8rem;
+}
+
+.form-section .form-title {
+  background-color: #b1b1b1;
+  color: #fff;
+  padding: 0.5rem;
+  margin: 0;
+  border-radius: 0.25rem;
+  font-size: 0.95rem;
+  font-weight: bold;
+}
+
+.form-section .form-group {
+  align-items: center;
+}
+
+.form-section .form-content {
+  padding: 1.25rem 0;
+}
+
+.form-section .form-content .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-section label {
+  margin: 0px;
 }
 
 .sort-group .disabled a {
@@ -341,5 +365,17 @@
 #mBox p {
   padding: 0;
   margin: 0;
+}
+
+.avatar-cropper .avatar-cropper-footer {
+  flex-direction: row-reverse;
+}
+
+.avatar-cropper .cropper-view-box {
+  border-radius: 50%;
+}
+
+.avatar-cropper .cropper-face {
+  background: transparent;
 }
 

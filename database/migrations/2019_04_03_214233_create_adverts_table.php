@@ -26,15 +26,16 @@ class CreateAdvertsTable extends Migration
             $table->string('phone', 13)->nullable();
             $table->text('revision')->nullable();
             
+            // General info.
+            $table->char('title', 60)->nullable();
+            $table->text('description')->nullable();
+            $table->enum('room_size', ['single', 'double', 'triple'])->default('single');
+            $table->enum('landlord', ['live_in', 'live_out', 'tenetant', 'agent', 'former'])->nullable();
+            
             // $$$.
             $table->unsignedSmallInteger('rent');
             $table->unsignedSmallInteger('deposit')->nullable();
             $table->unsignedSmallInteger('bills')->nullable();
-            
-            // General info.
-            $table->char('title', 50)->nullable();
-            $table->text('description')->nullable();
-            $table->enum('landlord', ['live_in', 'live_out', 'tenetant', 'agent', 'former'])->nullable();
 
             // Availability.
             $table->timestamp('available_from')->useCurrent();
@@ -44,16 +45,17 @@ class CreateAdvertsTable extends Migration
             // Property details.
             $table->enum('property_type', ['block', 'house', 'tenement', 'apartment', 'loft'])->nullable();
             $table->unsignedTinyInteger('property_size')->default('1');
-            $table->boolean('living_room')->default(false);
-            $table->boolean('parking')->default(false);
             
             // Advert details.
-            $table->enum('room_size', ['single', 'double', 'triple'])->default('single');
             $table->boolean('furnished')->default(false);
             $table->boolean('broadband')->default(false);
+            $table->boolean('parking')->default(false);
+            $table->boolean('living_room')->default(false);
+            $table->boolean('garage')->default(false);
+            $table->boolean('garden')->default(false);
             
             // Desired tenetant.
-            $table->enum('smoking', ['y', 'n'])->nullable();
+            $table->boolean('nonsmoking')->default(false);
             $table->boolean('pets')->default(false);
             $table->boolean('couples')->default(false);
             $table->enum('gender', ['m', 'f'])->nullable();

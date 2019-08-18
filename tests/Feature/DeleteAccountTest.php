@@ -24,7 +24,7 @@ class DeleteAccountTest extends TestCase
 
         $user->save();
 
-        $this->post(route('account.delete'));
+        $this->delete(route('account.delete'))->assertRedirect(route('index'));
 
         tap($user->fresh(), function($user) 
         {

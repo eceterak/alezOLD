@@ -20,7 +20,7 @@ window.events = new Vue();
 
 let authorizations = require('../authorizations');
 
-// Authorize will be available on every vue components.
+// Authorize will be available on every vue component.
 window.Vue.prototype.authorize = function(...params) {
     
     if(typeof params[0] === 'string') {
@@ -30,7 +30,7 @@ window.Vue.prototype.authorize = function(...params) {
     return params[0](window.App.user);
 }
 
-// Regeister new global method flash.
+// Register new global method flash.
 window.flash = function(message, level = 'success') {
 
     window.events.$emit('flash', {message, level});

@@ -32,7 +32,8 @@ $(function($) {
 
 		this.form = $(form);
 		this.button = this.form.find(':button');
-		this.inputs = this.getInputs();
+        this.inputs = this.getInputs();
+        this.alert = null;
 		this.ignored = new Array();
 		this.validated = new Array();
 
@@ -54,7 +55,8 @@ $(function($) {
 			liveValidation: true,
 			noValidate: true,
 			disableSubmitInvalid: false, // Live validation must be set to true to make this option work.
-			inputs: {},
+            inputs: {},
+            formInvalidAlertWarning: 'Formularz nie został wypełniony poprawnie. Popraw oznaczone pola.',
 
 			requiredMessage: function(name) {
 				return firstToUpperCase(name + ' is required'); // @todo input name empty
@@ -588,7 +590,29 @@ $(function($) {
 			$input.removeClass('is-invalid');
 			div.remove();
 
-		},
+        },
+        
+		/**
+		 * Display and scroll to alert.
+		 */ 
+        displayWarningAlert: function() {
+
+            // Check if alert is already displayed. If not, add create it and prepend to the form.
+            if(!this.alert) {
+                this.alert = $('<div/>', {
+                    'class': 'alert alert-danger',
+                    'text': this.settings.formInvalidAlertWarning
+                });
+                
+                this.form.prepend(this.alert);
+            }
+
+            //Scroll to the alert.
+            $(document.documentElement, document.body).animate({
+                scrollTop: this.alert.offset().top - 80 // 80 px offset.
+            }, 600);
+
+        },
 
 		/**
 		 * Main validation method.
@@ -630,11 +654,19 @@ $(function($) {
     
                 }, this));
     
+                // Form is not valid.
                 if(validated.length) {
-                    // Scroll to the top.
+
+                    this.displayWarningAlert();
+
                     // Create alert - not valid.
                     if(this.settings.preventDefault === true) event.preventDefault();
                     if(this.settings.disableSubmitInvalid === true && this.settings.liveValidation === true) this.button.attr('disabled', true);
+                    
+                }
+                else {
+                    // Form is valid, remove alert.
+                    this.alert.remove();
                 }
     
                 this.inputs.forEach($.proxy(function(input, key) {

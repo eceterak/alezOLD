@@ -27,7 +27,7 @@ class ConversationsTest extends TestCase
         
         $this->post(route('conversations.store', [$advert->city->slug, $advert->slug]), $attributes = [
             'body' => 'Hi mate I want this room'
-        ])->assertRedirect(route('adverts.show', [$advert->city->slug, $advert->slug]));
+        ])->assertRedirect(route('conversations.show', $advert->conversations->first()->id));
 
         $this->assertCount(1, $advert->conversations);
 

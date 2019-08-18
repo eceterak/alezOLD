@@ -14,7 +14,7 @@ class NotificationsController extends Controller
     public function index() 
     {
         return view('admin.notifications.index')->with([
-            'notifications' => auth()->user()->unreadNotifications()->latest()->paginate(24)
+            'notifications' => auth()->user()->unreadNotifications()->where('type', '!=', 'App\Notifications\YouHaveANewMessage')->latest()->paginate(24)
         ]);
     }
 }

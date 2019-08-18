@@ -12,10 +12,8 @@ class FilterAdvertsTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function adverts_can_be_ordered_by_rent_asc_and_desc()
+    public function adverts_can_be_ordered_by_rent()
     {
-        $this->withoutExceptionHandling();
-
         $city = create(City::class);
 
         $advertWithHighRent = AdvertFactory::city($city)->create([
@@ -31,11 +29,9 @@ class FilterAdvertsTest extends TestCase
         ]);
 
         $response = $this->getJson(route('cities.show', [$advertWithHighRent->city->slug, 'sort' => 'rent_desc']))->json();
-
         $this->assertEquals([1000, 500, 200], array_column($response['data'], 'rent'));
 
         $response = $this->getJson(route('cities.show', [$advertWithHighRent->city->slug, 'sort' => 'rent_asc']))->json();
-
         $this->assertEquals([200, 500, 1000], array_column($response['data'], 'rent'));
     }
 
@@ -57,43 +53,10 @@ class FilterAdvertsTest extends TestCase
         ]);
 
         $response = $this->getJson(route('cities.show', [$advertWithHighRent->city->slug, 'rentmin' => 300]))->json();
-
         $this->assertNotContains(200, array_column($response['data'], 'rent'));
 
         $response = $this->getJson(route('cities.show', [$advertWithHighRent->city->slug, 'rentmax' => 600]))->json();
-
         $this->assertNotContains(1000, array_column($response['data'], 'rent'));
-    }
-
-    /** @test */
-    public function adverts_can_be_filtered_by_minimum_and_maximum_stay()
-    {
-        $this->withoutExceptionHandling();
-
-        $city = create(City::class);
-
-        $advertLongStay = AdvertFactory::city($city)->create([
-            'minimum_stay' => 1,
-            'maximum_stay' => 36
-        ]);
-
-        $advertWithAverageStay = AdvertFactory::city($city)->create([
-            'minimum_stay' => 3,
-            'maximum_stay' => 12
-        ]);
-
-        $advertWithShortStay = AdvertFactory::city($city)->create([
-            'minimum_stay' => 1,
-            'maximum_stay' => 3
-        ]);
-
-        $response = $this->getJson(route('cities.show', [$advertLongStay->city->slug, 'staymin' => 3]))->json();
-
-        $this->assertCount(1, $response['data']);
-
-        $response = $this->getJson(route('cities.show', [$advertLongStay->city->slug, 'staymax' => 12]))->json();
-
-        $this->assertNotContains(36, array_column($response['data'], 'maximum_stay'));
     }
 
     /** @test */
@@ -125,82 +88,9 @@ class FilterAdvertsTest extends TestCase
 
         $this->assertCount(1, $response['data']);
     }
-
+        
     /** @test */
-    public function adverts_can_be_filtered_by_gender()
-    {
-        $city = create(City::class);
-
-        $advertFemaleOnly = AdvertFactory::city($city)->create([
-            'gender' => 'f'
-        ]);
-
-        $advertMaleOnly = AdvertFactory::city($city)->create([
-            'gender' => 'm'
-        ]);
-
-        $response = $this->getJson(route('cities.show', [$advertFemaleOnly->city->slug, 'gender' => 'f']))->json();
-
-        $this->assertCount(1, $response['data']);
-
-        $response = $this->getJson(route('cities.show', [$advertFemaleOnly->city->slug, 'gender' => 'm']))->json();
-
-        $this->assertCount(1, $response['data']);
-    }
-
-    /** @test */
-    public function adverts_can_be_filtered_by_occupation()
-    {
-        $city = create(City::class);
-
-        $advertForStudent = AdvertFactory::city($city)->create([
-            'occupation' => 'student'
-        ]);
-
-        $advertForProfessional = AdvertFactory::city($city)->create([
-            'occupation' => 'professional'
-        ]);
-
-        $response = $this->getJson(route('cities.show', [$advertForStudent->city->slug, 'occupation' => 'student']))->json();
-
-        $this->assertCount(1, $response['data']);
-
-        $response = $this->getJson(route('cities.show', [$advertForStudent->city->slug, 'occupation' => 'professional']))->json();
-
-        $this->assertCount(1, $response['data']);
-    }
-    
-    /** @test */
-    public function adverts_can_be_filtered_by_minimum_and_maximum_age()
-    {
-        $city = create(City::class);
-
-        $advertForOlder = AdvertFactory::city($city)->create([
-            'minimum_age' => 50,
-            'maximum_age' => 99
-        ]);
-
-        $advertForAnyone = AdvertFactory::city($city)->create([
-            'minimum_age' => 1,
-            'maximum_age' => 50
-        ]);
-
-        $advertForYounger = AdvertFactory::city($city)->create([
-            'minimum_age' => 1,
-            'maximum_age' => 20
-        ]);
-
-        $response = $this->getJson(route('cities.show', [$city->slug, 'agemin' => 40]))->json();
-
-        $this->assertNotContains(1, array_column($response['data'], 'minimum_age'));
-
-        $response = $this->getJson(route('cities.show', [$city->slug, 'agemax' => 50]))->json();
-
-        $this->assertNotContains(99, array_column($response['data'], 'maximum_age'));
-    }
-    
-    /** @test */
-    public function adverts_can_be_filtered_availability()
+    public function adverts_can_be_filtered_by_availability()
     {
         $city = create(City::class);
 
@@ -219,63 +109,165 @@ class FilterAdvertsTest extends TestCase
         ]);
 
         $response = $this->getJson(route('cities.show', [$city->slug, 'availability' => 'now']))->json();
-
         $this->assertCount(1, $response['data']);
         $this->assertContains($advertAvailableNow->title, array_column($response['data'], 'title'));
 
         $response = $this->getJson(route('cities.show', [$city->slug, 'availability' => 30]))->json();
-
         $this->assertCount(2, $response['data']);
         $this->assertNotContains($advertAvailableIn90Days->title, array_column($response['data'], 'title'));
 
         $response = $this->getJson(route('cities.show', [$city->slug, 'availability' => 90]))->json();
-
         $this->assertCount(3, $response['data']);
+    }
+
+    /** @test */
+    public function adverts_can_be_filtered_by_gender()
+    {
+        $city = create(City::class);
+
+        $advertFemaleOnly = AdvertFactory::city($city)->create([
+            'gender' => 'f',
+            'couples' => false
+        ]);
+
+        $advertMaleOnly = AdvertFactory::city($city)->create([
+            'gender' => 'm',
+            'couples' => false
+        ]);
+
+        $advertForCouples = AdvertFactory::city($city)->create([
+            'couples' => true
+        ]);
+
+        $this->get(route('cities.show', [$advertFemaleOnly->city->slug, 'gender' => 'f']))
+            ->assertSeeText($advertFemaleOnly->title)
+            ->assertDontSeeText($advertMaleOnly->title);
+
+        $this->get(route('cities.show', [$advertFemaleOnly->city->slug, 'gender' => 'm']))
+            ->assertSeeText($advertMaleOnly->title)
+            ->assertDontSeeText($advertFemaleOnly->title);
+        
+        $this->get(route('cities.show', [$advertFemaleOnly->city->slug, 'gender' => 'couples']))
+            ->assertSeeText($advertForCouples->title)
+            ->assertDontSeeText($advertMaleOnly->title)
+            ->assertDontSeeText($advertFemaleOnly->title);
+    }
+
+    /** @test */
+    public function adverts_can_be_filtered_by_minimum_and_maximum_stay_duration()
+    {
+        $city = create(City::class);
+
+        $advertAnyStay = AdvertFactory::city($city)->create([
+            'minimum_stay' => null,
+            'maximum_stay' => null
+        ]);
+
+        
+        $advertShortStay = AdvertFactory::city($city)->create([
+            'minimum_stay' => 1,
+            'maximum_stay' => 36
+        ]);
+
+        $advertLongStay = AdvertFactory::city($city)->create([
+            'minimum_stay' => 12,
+            'maximum_stay' => 24
+        ]);
+        
+        $this->get(route('cities.show', [$advertLongStay->city->slug, 'staymin' => 3]))
+            ->assertSeeText($advertShortStay->title)
+            ->assertSeeText($advertAnyStay->title)
+            ->assertDontSeeText($advertLongStay->title);
+
+        $this->get(route('cities.show', [$advertLongStay->city->slug, 'staymax' => 26]))
+            ->assertSeeText($advertAnyStay->title)
+            ->assertSeeText($advertLongStay->title)
+            ->assertDontSeeText($advertShortStay->title);
+    }
+
+    /** @test */
+    public function adverts_can_be_filtered_by_occupation()
+    {
+        $city = create(City::class);
+
+        $advertForStudent = AdvertFactory::city($city)->create([
+            'occupation' => 'student'
+        ]);
+
+        $advertForProfessional = AdvertFactory::city($city)->create([
+            'occupation' => 'professional'
+        ]);
+
+        $response = $this->getJson(route('cities.show', [$advertForStudent->city->slug, 'occupation' => 'student']))->json();
+        $this->assertCount(1, $response['data']);
+
+        $response = $this->getJson(route('cities.show', [$advertForStudent->city->slug, 'occupation' => 'professional']))->json();
+        $this->assertCount(1, $response['data']);
     }
     
     /** @test */
-    public function adverts_can_be_filtered_smoking_preferences()
+    public function adverts_can_be_filtered_by_minimum_and_maximum_age()
     {
         $city = create(City::class);
 
-        $advertForNonSmokers = AdvertFactory::city($city)->create([
-            'smoking' => 'n'
+        $advertForAny = AdvertFactory::city($city)->create([
+            'minimum_age' => null,
+            'maximum_age' => null
         ]);
 
-        $advertForSmokers = AdvertFactory::city($city)->create([
-            'smoking' => 'y'
+        $advertForOlder = AdvertFactory::city($city)->create([
+            'minimum_age' => 50,
+            'maximum_age' => 99
         ]);
 
-        $response = $this->getJson(route('cities.show', [$city->slug, 'smoking' => 'nonsmokers']))->json();
+        $advertForYounger = AdvertFactory::city($city)->create([
+            'minimum_age' => 18,
+            'maximum_age' => 30
+        ]);
 
-        $this->assertNotContains($advertForSmokers->title, array_column($response['data'], 'title'));
+        $this->get(route('cities.show', [$city->slug, 'agemin' => 40]))
+            ->assertSeeText($advertForOlder->title)
+            ->assertSeeText($advertForAny->title)
+            ->assertDontSeeText($advertForYounger->title);
 
-        $response = $this->getJson(route('cities.show', [$city->slug, 'smoking' => 'smokers']))->json();
+        $this->get(route('cities.show', [$city->slug, 'agemin' => 18, 'agemax' => 30]))
+            ->assertDontSeeText($advertForOlder->title)
+            ->assertSeeText($advertForAny->title)
+            ->assertSeeText($advertForYounger->title);
+    }
+    
+    /** @test */
+    public function adverts_can_be_filtered_by_furniture()
+    {
+        $advertWithFurniture = AdvertFactory::create([
+            'furnished' => true
+        ]);
 
-        $this->assertNotContains($advertForNonSmokers->title, array_column($response['data'], 'title'));
+        $advertWithoutFurniture = AdvertFactory::create([
+            'city_id' => $advertWithFurniture->city->id,
+            'furnished' => false
+        ]);
+
+        $this->get(route('cities.show', [$advertWithFurniture->city->slug, 'furnished' => 1]))
+            ->assertSeeText($advertWithFurniture->title)
+            ->assertDontSeeText($advertWithoutFurniture->title);
     }
 
     /** @test */
-    public function adverts_can_be_filtered_by_those_which_accepts_pats()
+    public function adverts_can_be_filtered_by_broadband()
     {
-        $city = create(City::class);
-
-        $advertAcceptsPets = AdvertFactory::city($city)->create([
-            'pets' => true
+        $advertWithBroadband = AdvertFactory::create([
+            'broadband' => true
         ]);
 
-        $advertDoesNotAcceptsPets = AdvertFactory::city($city)->create([
-            'pets' => false
+        $advertWithoutBroadband = AdvertFactory::create([
+            'city_id' => $advertWithBroadband->city->id,
+            'broadband' => false
         ]);
 
-        $response = $this->getJson(route('cities.show', [$city->slug, 'pets' => 1]))->json();
-
-        $this->assertContains($advertAcceptsPets->title, array_column($response['data'], 'title'));
-        $this->assertNotContains($advertDoesNotAcceptsPets->title, array_column($response['data'], 'title'));
-
-        $response = $this->getJson(route('cities.show', [$city->slug]))->json();
-
-        $this->assertCount(2, $response['data']);
+        $this->get(route('cities.show', [$advertWithBroadband->city->slug, 'broadband' => 1]))
+            ->assertSeeText($advertWithBroadband->title)
+            ->assertDontSeeText($advertWithoutBroadband->title);
     }
 
     /** @test */
@@ -291,14 +283,9 @@ class FilterAdvertsTest extends TestCase
             'parking' => false
         ]);
 
-        $response = $this->getJson(route('cities.show', [$city->slug, 'parking' => 1]))->json();
-
-        $this->assertContains($advertWithParking->title, array_column($response['data'], 'title'));
-        $this->assertNotContains($advertWithoutParking->title, array_column($response['data'], 'title'));
-
-        $response = $this->getJson(route('cities.show', [$city->slug]))->json();
-
-        $this->assertCount(2, $response['data']);
+        $this->get(route('cities.show', [$city->slug, 'parking' => 1]))
+            ->assertSeeText($advertWithParking->title)
+            ->assertDontSeeText($advertWithoutParking->title);
     }
 
     /** @test */
@@ -313,80 +300,78 @@ class FilterAdvertsTest extends TestCase
             'living_room' => 0
         ]);
 
-        $response = $this->get(route('cities.show', [$advertWith->city->slug, 'livingroom' => 1]))
-            ->assertSee($advertWith->title)
-            ->assertDontSee($advertWithout->title);
+        $this->get(route('cities.show', [$advertWith->city->slug, 'livingroom' => 1]))
+            ->assertSeeText($advertWith->title)
+            ->assertDontSeeText($advertWithout->title);
     }
 
     /** @test */
-    public function admin_can_filter_adverts_by_verification_status()
+    public function adverts_can_be_filtered_by_garage()
     {
-        $this->signInAdmin();
-
-        $verifiedAdvert = AdvertFactory::create([
-            'verified' => true
+        $advertWithGarage = AdvertFactory::create([
+            'garage' => true
         ]);
 
-        $unVerifiedAdvert = AdvertFactory::create([
-            'verified' => false
+        $advertWithoutGarage = AdvertFactory::create([
+            'city_id' => $advertWithGarage->city->id,
+            'garage' => false
         ]);
 
-        $this->get(route('admin.adverts', ['verified' => 'n']))
-            ->assertSee($unVerifiedAdvert->title)
-            ->assertDontSee($verifiedAdvert->title);
-
-        $this->get(route('admin.adverts', ['verified' => 'y']))
-            ->assertSee($verifiedAdvert->title)
-            ->assertDontSee($unVerifiedAdvert->title);
+        $this->get(route('cities.show', [$advertWithGarage->city->slug, 'garage' => 1]))
+            ->assertSeeText($advertWithGarage->title)
+            ->assertDontSeeText($advertWithoutGarage->title);
     }
 
     /** @test */
-    public function admin_can_filter_adverts_by_revision_status()
+    public function adverts_can_be_filtered_by_garden()
     {
-        $this->withoutExceptionHandling();
-
-        $this->signInAdmin();
-
-        $advert = AdvertFactory::create([
-            'revision' => null
+        $advertWithGarden = AdvertFactory::create([
+            'garden' => true
         ]);
 
-        $advertWithRevision = AdvertFactory::create([
-            'revision' => [
-                'title' => 'asd'
-            ]
+        $advertWithoutGarden = AdvertFactory::create([
+            'city_id' => $advertWithGarden->city->id,
+            'garden' => false
         ]);
 
-        $this->get(route('admin.adverts', ['revised' => 'y']))
-            ->assertSee($advert->title)
-            ->assertDontSee($advertWithRevision->title);
-
-        $this->get(route('admin.adverts', ['revised' => 'n']))
-            ->assertSee($advertWithRevision->title)
-            ->assertDontSee($advert->title);
+        $this->get(route('cities.show', [$advertWithGarden->city->slug, 'garden' => 1]))
+            ->assertSeeText($advertWithGarden->title)
+            ->assertDontSeeText($advertWithoutGarden->title);
     }
 
     /** @test */
-    public function admin_can_filter_adverts_by_archivision_status()
+    public function adverts_can_be_filtered_smoking_preferences()
     {
-        $this->withoutExceptionHandling();
+        $city = create(City::class);
 
-        $this->signInAdmin();
-
-        $advert = AdvertFactory::create([
-            'archived' => false
+        $advertForSmokers = AdvertFactory::city($city)->create([
+            'nonsmoking' => false
         ]);
 
-        $archivedAdvert = AdvertFactory::create([
-            'archived' => true
+        $advertForNonSmokers = AdvertFactory::city($city)->create([
+            'nonsmoking' => true
         ]);
 
-        $this->get(route('admin.adverts', ['archived' => 'y']))
-            ->assertSee($archivedAdvert->title)
-            ->assertDontSee($advert->title);
+        $response = $this->getJson(route('cities.show', [$city->slug, 'smoking' => 1]))->json();
+        $this->assertContains($advertForSmokers->title, array_column($response['data'], 'title'));
+        $this->assertNotContains($advertForNonSmokers->title, array_column($response['data'], 'title'));
+    }
 
-        $this->get(route('admin.adverts', ['archived' => 'n']))
-            ->assertSee($advert->title)
-            ->assertDontSee($archivedAdvert->title);
+    /** @test */
+    public function adverts_can_be_filtered_by_those_which_accepts_pets()
+    {
+        $city = create(City::class);
+
+        $advertAcceptsPets = AdvertFactory::city($city)->create([
+            'pets' => true
+        ]);
+
+        $advertDoesNotAcceptsPets = AdvertFactory::city($city)->create([
+            'pets' => false
+        ]);
+
+        $response = $this->getJson(route('cities.show', [$city->slug, 'pets' => 1]))->json();
+        $this->assertContains($advertAcceptsPets->title, array_column($response['data'], 'title'));
+        $this->assertNotContains($advertDoesNotAcceptsPets->title, array_column($response['data'], 'title'));
     }
 }

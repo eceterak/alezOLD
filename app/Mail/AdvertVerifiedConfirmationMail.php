@@ -13,7 +13,7 @@ class AdvertVerifiedConfirmationMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     /**
-     * @var Advert
+     * @var App\Advert
      */
     public $advert;
 
@@ -27,7 +27,7 @@ class AdvertVerifiedConfirmationMail extends Mailable implements ShouldQueue
     {
         $this->advert = $advert;
 
-        $this->subject = 'alez.pl - Twoje ogłoszenie zostało pomyślnie zweryfikowane. '.$this->advert->title;
+        $this->subject = 'alez.pl - Twoje ogłoszenie zostało pomyślnie zweryfikowane.';
     }
 
     /**
@@ -37,6 +37,6 @@ class AdvertVerifiedConfirmationMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->markdown('emails.adverts.verified-confirmation');
+        return $this->from('alez@alez.pl')->markdown('emails.adverts.verified-confirmation');
     }
 }

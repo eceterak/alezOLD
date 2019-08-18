@@ -43,13 +43,15 @@ class CreateAdvertTest extends TestCase
 
     /** @test */
     public function user_can_create_an_advert()
-    {           
+    {         
+        $this->withoutExceptionHandling();
+        
         $this->actingAs($this->user())->get(route('adverts.create'))->assertStatus(200);
 
         $city = create(City::class);
         
         $response = $this->post(route('adverts.store'), $attributes = raw(Advert::class, [
-            'city_id' => $city->id,
+            'city_id' => $city->id
         ]))->assertRedirect(route('home'));
         
         Advert::where('title', $attributes['title'])->first();

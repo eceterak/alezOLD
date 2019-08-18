@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('lead')
+@section('content')
     <header class="flex mb-4 justify-between items-center">
         <h3 class="text-grey-darker">Miasta</h3>
     </header>

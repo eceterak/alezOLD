@@ -1,12 +1,9 @@
 @component('mail::message')
-# Yo ziom
+<h2>Cześć {{ ucfirst($advert->user->name) }},</h2>
 
-Własnie dodales nowe ogloszenie! GJ mate.
+Twoje ogłoszenie zostało dodane i oczekuje na weryfikację przez administratora. Pamiętaj, że do czasu weryfikacji, ogłoszenie nie będzie widoczne dla innych użytkowników.
 
-@component('mail::button', ['url' => ''])
-Button Text
+@component('mail::button', ['url' => route('adverts.show', [$advert->city->slug, $advert->slug])])
+Twoje ogłoszenie
 @endcomponent
-
-Thanks,<br>
-{{ config('app.name') }}
 @endcomponent

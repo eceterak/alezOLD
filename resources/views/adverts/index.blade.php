@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('lead')
+@section('content')
     <header class="d-flex justify-content-between mb-4">
         <div>
             <h3 class="text-grey-darker">Wszystkie pokoje na wynajem</h3>

@@ -1,6 +1,6 @@
 <template>
-    <button class="btn btn-secondary accountWarning" @click="showPhoneNumber">
-        <small class="mr-2" v-text="phone"></small><i class="fas fa-phone"></i>
+    <button class="btn btn-light accountWarning font-weight-bold rounded-sm btn-block" @click="showPhoneNumber">
+        <i class="fas fa-phone fa-flip-horizontal mr-2"></i><span class="mr-2 mb-0" v-text="phone"></span>pokaż
     </button>
 </template>
 

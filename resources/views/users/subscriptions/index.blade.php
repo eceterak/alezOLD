@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('lead')
+@section('content')
 
     @include('users._menu', [
         'title' => 'Obserwowane',

@@ -20,16 +20,22 @@ class SearchController extends Controller
         }
         else 
         {
-            $name = (strpos(request()->city, ',')) ? strtolower(explode(',', request()->city)[0]) : request()->city;
+            $name = (strpos(request()->search, ',')) ? strtolower(explode(',', request()->search)[0]) : request()->search;
 
             $city = City::where('name', $name)->orderBy('importance')->first();
         }
         
         if($city) 
         {
-            $radius = request()->filled('radius') ? 'radius='.request('radius') : null;
+            $attributes = [
+                $city->slug, 
+            ];
 
-            return ($radius) ? redirect()->route('cities.show', [$city->slug, $radius]) : redirect()->route('cities.show', [$city->slug]);
+            if(request()->filled('radius')) array_push($attributes, 'radius='.request('radius'));
+
+            if(request()->filled('room_size')) array_push($attributes, 'roomsize='.request('room_size'));
+            
+            return redirect()->route('cities.show', $attributes);
         }
         
         return redirect()->route('adverts'); // City not found, display all adverts.

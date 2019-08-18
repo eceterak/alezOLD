@@ -1,6 +1,8 @@
+<h5 class="mb-4">Logowanie</h5>  
 <form method="POST" action="{{ route('login') }}" class="form">
     @csrf
     <div class="form-group">
+        <label for="login_email">Email</label>
         <input id="login_email" type="email" placeholder="Email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" name="login_email" value="{{ old('login_email') }}" required autofocus>
         @if ($errors->has('email'))
             <span class="invalid-feedback" role="alert">
@@ -9,6 +11,7 @@
         @endif
     </div>
     <div class="form-group">
+        <label for="login_password">Hasło</label>
         <input id="login_password" type="password" placeholder="Hasło" class="form-control{{ $errors->has('login_password') ? ' is-invalid' : '' }}" name="login_password" required>
         @if ($errors->has('login_password'))
             <span class="invalid-feedback" role="alert">
@@ -30,4 +33,4 @@
 <div class="small mt-4">
     <p class="card-text">Logując się ackeptuję <a href="{{ route('termsAndConditions') }}" target="_blank" rel="noopener noreferrer">Regulamin serwisu alez.pl.</a></p>
     <p class="card-text text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam ea possimus est delectus exercitationem? Error ducimus animi culpa impedit quisquam voluptatum saepe repellendus, nihil nobis, illo, ipsum ab. Laudantium, doloremque?</p>
-</div>
+</div>     

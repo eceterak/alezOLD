@@ -44,9 +44,13 @@ class ConversationsController extends Controller
         {
             return back()->withErrors(['self' => 'Nie udało się wysłać wiadomości. Możliwe, że ogłoszenie zostało właśnie usunięte.']);
         }
-        
-        $advert->inquiry(request()->body);
 
-        return redirect()->route('adverts.show', [$advert->city->slug, $advert->slug])->with('flash', 'Wiadomość została wysłana');
+        request()->validate([
+            'body' => 'required|min:2|max:2000'
+        ]);
+        
+        $conversation = $advert->inquiry(request()->body);
+
+        return redirect()->route('conversations.show', [$conversation->id])->with('flash', 'Wiadomość została wysłana');
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('lead')
+@section('content')
     @if(!$advert->verified)
         <div class="alert alert-warning shadow-sm">
             <p class="mb-2 font-weight-bold">Ogłoszenie oczekuje na weryfikację</p>

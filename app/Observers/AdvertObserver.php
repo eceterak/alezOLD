@@ -29,7 +29,7 @@ class AdvertObserver
      */
     public function created(Advert $advert)
     {
-        Mail::to($advert->user)->send(new AdvertCreatedConfirmationMail());
+        Mail::to($advert->user)->send(new AdvertCreatedConfirmationMail($advert));
 
         User::where('role', 1)->get()->each(function($admin) use ($advert)
         {

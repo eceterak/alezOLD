@@ -35,7 +35,11 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $cities->links() }}
+                @if($cities->hasPages())
+                <div class="card-footer">
+                    {{ $cities->links() }}
+                </div>
+            @endif
             @else
                 <p>Brak miast do wyświetlenia</p>
             @endif

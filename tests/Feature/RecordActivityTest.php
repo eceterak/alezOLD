@@ -4,13 +4,14 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Facades\Tests\Setup\AdvertFactory;
 use App\Activity;
 use App\City;
 
 class RecordActivityTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /** @test */
     public function creating_an_advert_records_an_activity()
@@ -43,7 +44,7 @@ class RecordActivityTest extends TestCase
             'street_id' => $advert->street->id,
             'title' => 'some dummy title',
             'room_size' => $advert->room_size,
-            'description' => 'description has been updated',
+            'description' => $this->faker->paragraph,
             'rent' => 2000,
             'pets' => 1
         ])->assertRedirect(route('home'));

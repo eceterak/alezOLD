@@ -15,7 +15,7 @@ class SentController extends Controller
     {
         return view('users.conversations.sent')->with([
             'profile' => $user = auth()->user(),
-            'conversations' => auth()->user()->conversations()->whereHas('messages', function($query) use($user) {
+            'conversations' => auth()->user()->conversations()->latest()->whereHas('messages', function($query) use($user) {
                 $query->where('user_id', '=', $user->id);
             })->paginate()
         ]);

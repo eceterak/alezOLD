@@ -16,16 +16,18 @@ class AvatarsController extends Controller
     public function store() 
     {
         request()->validate([
-            'avatar' => 'required|image|max:200'
+            'avatar' => 'required|image|max:400'
         ]);
 
         auth()->user()->deleteAvatar();
 
         auth()->user()->update([
-            'avatar_path' => request()->file('avatar')->store('avatars', 'public')
+            'avatar_path' => $url = request()->file('avatar')->store('avatars', 'public')
         ]);
 
-        return response([], 204);
+        return response()->json([
+            'url' => $url
+        ]);
     }
 
     /**

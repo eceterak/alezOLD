@@ -1,5 +1,4 @@
 /** Axios */
-
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
@@ -14,7 +13,6 @@ else {
 }
 
 /** Vue */
-
 window.Vue = require('vue');
 window.events = new Vue();
 
@@ -47,6 +45,7 @@ Vue.component('google-map', require('./components/GoogleMap.vue').default);
 Vue.component('flash-message', require('./components/FlashMessage.vue').default);
 Vue.component('avatar-form', require('./components/AvatarForm.vue').default);
 Vue.component('user-notifications', require('./components/UserNotifications.vue').default);
+Vue.component('search-bar', require('./components/SearchBar.vue').default);
 
 // Initialize a Vue.
 const app = new Vue({
@@ -54,7 +53,6 @@ const app = new Vue({
 });
 
 /** JS */
-
 try {
     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
@@ -64,10 +62,14 @@ try {
     require('jquery-ui/ui/widgets/button');
     //require('jquery-ui/ui/widgets/tooltip');
     require('jquery-ui/ui/widgets/datepicker');
+    require('jquery-ui/ui/widgets/selectmenu');
     
     // Require after jQuery UI
     require('./combobox');
     require('./mBox');
-    require('./poppa.js');
+    require('./poppa');
     require('bootstrap');
+
+    // This one last.
+    require('./master');
 } catch (e) {}

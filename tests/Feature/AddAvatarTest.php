@@ -38,7 +38,9 @@ class AddAvatarTest extends TestCase
 
         $response = $this->json('POST', route('api.users.avatars.store', $user->name), [
             'avatar' => $file
-        ]);
+        ])->assertStatus(200)->decodeResponseJson();
+
+        $this->assertArrayHasKey('url', $response);
 
         $this->assertEquals("/storage/avatars/{$file->hashName()}", auth()->user()->avatar_path);
         

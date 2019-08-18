@@ -6,7 +6,6 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Facades\Tests\Setup\ConversationFactory;
 use Facades\Tests\Setup\AdvertFactory;
-use App\Message;
 use App\Exceptions\MessageException;
 
 class ConversationTest extends TestCase
@@ -24,11 +23,13 @@ class ConversationTest extends TestCase
     /** @test */
     public function it_can_reply()
     {
+        $this->withoutExceptionHandling();
+
         $this->signIn();
 
         $conversation = ConversationFactory::create();
         
-        $conversation->reply('Thanks mate', $conversation->advert);
+        $conversation->reply('Thanks mate');
 
         $this->assertCount(2, $conversation->messages);
     }

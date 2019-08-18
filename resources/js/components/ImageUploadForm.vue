@@ -45,7 +45,7 @@
 
         data() {
             return {
-                maxSize: 3072,
+                maxSize: 4096,
                 images: [],
                 ids: false,
                 error: false,
@@ -107,12 +107,12 @@
             checkSize(file) {
                 const maxSize = this.maxSize;
 
-                let size = file.size / maxSize / maxSize;
+                let size = file.size / 1024 / maxSize;
 
                 if(size > 1) throw "Plik jest zbyt duży, maksymalny rozmiar to " + maxSize / 1024  + " mb";
             },
             checkCount() {
-                if(this.images.length >= 7) throw "Możesz dodać maksymalnie " + this.maxImages + " zdjęć";
+                if(this.images.length >= 7) throw "Możesz dodać maksymalnie " + this.maxImages + " zdjęć. Maksymalny rozmiar zdjęcia to " + this.maxSize / 1024 + " mb.";
             },
             async persist(photo) {
                 var data = new FormData();
@@ -145,6 +145,7 @@
         pointer-events: none;
         opacity: 0.4;
     }
+    
     .spinner {
         position: absolute;
         top: 50%;

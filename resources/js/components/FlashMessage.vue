@@ -1,5 +1,10 @@
 <template>
-    <div class="alert alert-flash" :class="'alert-' + level" v-show="show" v-text="body"></div>
+    <div class="alert alert-flash alert-dismissible fade show" role="alert" :class="'alert-' + level" v-show="show">
+    <p class="mb-0" v-text="body"></p>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
 </template>
 
 <script>
@@ -41,7 +46,7 @@
             hide() {
                 setTimeout(() => {
                     this.show = false;
-                }, 3000);
+                }, 10000);
             }
         }
     }

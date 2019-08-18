@@ -38,14 +38,31 @@
                     @include('components._errors')
                     <div class="mt-4">
                         <a href="{{ route('password.change') }}" class="btn btn-secondary btn-sm">Zmień hasło</a>
-                        <form action="{{ route('account.delete') }}" method="POST" class="d-inline">
-                            @csrf
-                            <button class="btn btn-danger btn-sm">Usuń konto</button>
-                        </form>
+                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#accountDeleteConfirmation" data-endpoint="{{ route('account.delete') }}">Usuń konto</button>
                     </div>
                 </div>
                 <div class="col-3">
                     <avatar-form :user="{{ $profile }}"></avatar-form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="accountDeleteConfirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <h6 class="mb-0">Czy na pewno chcesz usunąć swoje konto?</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('account.delete') }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm">Usuń konto</button>
+                        <button type="button" class="btn btn-secondary ml-2 btn-sm" data-dismiss="modal">Anuluj</button>
+                    </form>
                 </div>
             </div>
         </div>

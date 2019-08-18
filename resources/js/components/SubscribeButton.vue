@@ -1,8 +1,7 @@
 <template>
-    <div>
-        <p class="d-inline small mr-1" v-text="info"></p>
+    <span>
         <button class="accountWarning" :class="classes" @click="subscribe">Obserwuj</button>
-    </div>
+    </span>
 </template>
 
 <script>

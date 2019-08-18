@@ -21,9 +21,7 @@ class PhotosUploadController extends Controller
     {
         if(Photo::where('temp', $temp)->count() < 7)
         {
-            request()->validate([
-                'photo' => 'required|image|max:1000'
-            ]);
+            $this->validateRequest();
     
             $photo = Photo::create([
                 'url' => request()->file('photo')->store('photos', 's3'),
@@ -99,9 +97,7 @@ class PhotosUploadController extends Controller
 
         if($advert->photos->count() < 7) 
         {
-            request()->validate([
-                'photo' => 'required|image|max:3000'
-            ]);
+            $this->validateRequest();
     
             if($advert->photos()->exists()) $order = $advert->photos()->max('order') + 1;
     
@@ -122,5 +118,17 @@ class PhotosUploadController extends Controller
                 'message' => 'Możesz dodać maksymalnie 7 zdjęć.'
             ], 500);
         }
+    }
+
+    /**
+     * Validate a request.
+     * 
+     * @return void
+     */
+    public function validateRequest() 
+    {
+        request()->validate([
+            'photo' => 'required|image|max:4000'
+        ]);        
     }
 }

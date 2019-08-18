@@ -95,33 +95,33 @@
 
 $(function () {
   // jQuery
-  $('#city', 'form[name="search_master_form"]').autocomplete({
-    minLength: 3,
-    delay: 500,
-    source: function source(request, response) {
-      axios.get('/ajax/cities', {
-        params: {
-          city: request.term
-        }
-      }).then(function (cities) {
-        response($.map(cities.data, function (city) {
-          return {
-            label: city.name + ', ' + city.county + ', ' + city.state,
-            value: city.id
-          };
-        }));
-      });
-    },
-    focus: function focus(event, ui) {
-      $('#city').val(ui.item.label);
-    },
-    select: function select(event, ui) {
-      $('#city').val(ui.item.label);
-      $('#city_id').val(ui.item.value); //$('form[name="search_master_form"]').submit();
-
-      return false;
-    }
-  });
+  // $('#search', 'form[name="search_master_form"]').autocomplete({
+  //     minLength: 3,
+  //     delay: 500,
+  //     source: function(request, response) {
+  //         axios.get('/ajax/cities', {
+  //             params: {
+  //                 search: request.term
+  //             }
+  //         })
+  //         .then(function(cities) {
+  //             response($.map(cities.data, function(city) {
+  //                 return {
+  //                     label: city.name + ', ' + city.county + ', ' + city.state,
+  //                     value: city.id
+  //                 }
+  //             }));       
+  //         });
+  //     },
+  //     focus: function(event, ui) {
+  //         $('#city').val(ui.item.label);
+  //     },
+  //     select: function(event, ui) {
+  //         $('#search').val(ui.item.label);
+  //         $('#city_id').val(ui.item.value);
+  //         return false;
+  //     }
+  // });
   $('#city_id', 'form[name="create_new_advert"]').combobox({
     required: true,
     requiredMessage: 'Miasto jest wymagane'
@@ -131,11 +131,12 @@ $(function () {
   });
   $('#available_from', 'form[name="create_new_advert"]').datepicker({
     dateFormat: 'yy-mm-dd'
-  }); // Poppa
+  }); //$('#search_master_form select[name="room_size"]').selectmenu();
+  // Poppa
 
   $('#advert-form-va').validation({
     requiredMessage: function requiredMessage(name) {
-      return name + ' jest wymagany';
+      return 'To pole jest wymagane';
     },
     liveValidation: false
   });

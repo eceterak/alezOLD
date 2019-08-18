@@ -90,28 +90,6 @@ class PhotosUploadTest extends TestCase
     }
 
     /** @test */
-    public function a_valid_photo_must_be_provided()
-    {
-        $user = $this->signIn();
-
-        $response = $this->json('POST', route('api.adverts.photos.store', $this->uuid), [
-            'photo' => 'Not an image'
-        ])->assertStatus(422);
-    }
-
-    /** @test */
-    public function a_photo_cannot_be_over_3_mb()
-    {
-        $user = $this->signIn();
-
-        $file = UploadedFile::fake()->image('photo.jpg')->size(5000);
-
-        $upload = $this->json('POST', route('api.adverts.photos.store', $this->uuid), [
-            'photo' => $file
-        ])->assertJsonValidationErrors('photo');
-    }
-
-    /** @test */
     public function only_members_can_add_photos()
     {
         $response = $this->json('POST', route('api.adverts.photos.store', $this->uuid))->assertStatus(401);

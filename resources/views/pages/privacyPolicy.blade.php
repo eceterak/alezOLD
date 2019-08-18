@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('lead')
+@section('content')
 
     <div class="card">
         <div class="card-body text-justify">

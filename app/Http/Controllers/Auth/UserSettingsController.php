@@ -52,6 +52,6 @@ class UserSettingsController extends Controller
     {
         auth()->user()->deleteAccount();
 
-        redirect()->route('index')->with('flash', 'Konto zostało usunięte.');
+        return redirect()->route('index')->with('flash', 'Konto zostało usunięte.');
     }
 }

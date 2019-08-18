@@ -1,6 +1,10 @@
 @extends('layouts.master')
 
-@section('lead')
+@section('breadcrumbs')
+<h4>O nas</h4>
+@endsection
+
+@section('content')
 
     <div class="card">
         <div class="card-body text-justify">

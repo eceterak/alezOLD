@@ -1,40 +1,38 @@
 $(function() {
 
     // jQuery
+    // $('#search', 'form[name="search_master_form"]').autocomplete({
 
-    $('#city', 'form[name="search_master_form"]').autocomplete({
+    //     minLength: 3,
+    //     delay: 500,
 
-        minLength: 3,
-        delay: 500,
+    //     source: function(request, response) {
+    //         axios.get('/ajax/cities', {
+    //             params: {
+    //                 search: request.term
+    //             }
+    //         })
+    //         .then(function(cities) {
+    //             response($.map(cities.data, function(city) {
+    //                 return {
+    //                     label: city.name + ', ' + city.county + ', ' + city.state,
+    //                     value: city.id
+    //                 }
+    //             }));       
+    //         });
+    //     },
 
-        source: function(request, response) {
-            axios.get('/ajax/cities', {
-                params: {
-                    city: request.term
-                }
-            })
-            .then(function(cities) {
-                response($.map(cities.data, function(city) {
-                    return {
-                        label: city.name + ', ' + city.county + ', ' + city.state,
-                        value: city.id
-                    }
-                }));       
-            });
-        },
+    //     focus: function(event, ui) {
+    //         $('#city').val(ui.item.label);
+    //     },
 
-        focus: function(event, ui) {
-            $('#city').val(ui.item.label);
-        },
-
-        select: function(event, ui) {
-            $('#city').val(ui.item.label);
-            $('#city_id').val(ui.item.value);
-
-            //$('form[name="search_master_form"]').submit();
-            return false;
-        }
-    });
+    //     select: function(event, ui) {
+    //         $('#search').val(ui.item.label);
+    //         $('#city_id').val(ui.item.value);
+            
+    //         return false;
+    //     }
+    // });
 
     $('#city_id', 'form[name="create_new_advert"]').combobox({
         required: true,
@@ -49,10 +47,12 @@ $(function() {
         dateFormat: 'yy-mm-dd'
     });
 
+    //$('#search_master_form select[name="room_size"]').selectmenu();
+
     // Poppa
     $('#advert-form-va').validation({
         requiredMessage: function(name) {
-            return name + ' jest wymagany';
+            return 'To pole jest wymagane';
         },
         liveValidation: false
     });

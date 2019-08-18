@@ -201,7 +201,7 @@ class Advert extends Model
     }
 
     /**
-     * As bills can be null, cast it to integer.
+     * As bills can be null, cast it to integer to be able to display 0.
      * 
      * @return int
      */
@@ -211,7 +211,7 @@ class Advert extends Model
     }
    
     /**
-     * As deposit can be null, cast it to integer.
+     * As deposit can be null, cast it to integer to be able to display 0.
      * 
      * @return int
      */
@@ -295,6 +295,16 @@ class Advert extends Model
     {
         return $this->furnished ? 'tak' : 'nie';
     }
+
+    /**
+     * Return string representation of garden attribute.
+     * 
+     * @return string
+     */
+    public function getGardenTranslatedAttribute() 
+    {
+        return $this->garden ? 'tak' : 'nie';
+    }
   
     /**
      * Return broadband attribute in polish instead of boolean 
@@ -305,7 +315,17 @@ class Advert extends Model
     {
         return $this->broadband ? 'tak' : 'nie';
     }
- 
+   
+    /**
+     * Return living_room attribute in polish instead of boolean 
+     * 
+     * @return string
+     */
+    public function getLivingRoomTranslatedAttribute() 
+    {
+        return $this->living_room ? 'tak' : 'nie';
+    }
+
     /**
      * Return parking attribute in polish instead of boolean 
      * 
@@ -314,6 +334,16 @@ class Advert extends Model
     public function getParkingTranslatedAttribute() 
     {
         return $this->parking ? 'tak' : 'nie';
+    }
+
+    /**
+     * Return string representation of garage attribute.
+     * 
+     * @return string
+     */
+    public function getGarageTranslatedAttribute() 
+    {
+        return $this->garage ? 'tak' : 'nie';
     }
 
     /**
@@ -361,15 +391,13 @@ class Advert extends Model
     }
     
     /**
-     * Return smoking attribute in polish instead of boolean 
+     * Return nonsmoking attribute in polish instead of boolean 
      * 
      * @return string
      */
-    public function getSmokingTranslatedAttribute() 
+    public function getNonsmokingTranslatedAttribute() 
     {
-        if(is_null($this->smoking)) return 'brak preferencji';
-
-        return ($this->smoking == 'y') ? 'tak' : 'nie';
+        return $this->nonsmoking ? 'nie' : 'tak';
     }
     
     /**

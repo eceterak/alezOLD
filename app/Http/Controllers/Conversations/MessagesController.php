@@ -34,7 +34,7 @@ class MessagesController extends Controller
         }
         
         request()->validate([
-            'body' => 'required'
+            'body' => 'required|min:2|max:2000'
         ]);
 
         $conversation->reply(request()->body);    

@@ -1,7 +1,6 @@
 <template>
-    <button class="btn btn-link p-0 accountWarning" @click="addFavourite" v-if="authorize('notAnOwner', this.advert)">
-        <small class="mr-2" v-text="info"></small>
-        <i :class="classes"></i>
+    <button class="btn btn-link p-0 accountWarning " @click="addFavourite" v-if="authorize('notAnOwner', this.advert)">
+        <i :class="classes" class="fa-heart favourite-heart"></i>
     </button>
 </template>
 
@@ -19,7 +18,7 @@
 
         computed: {
             classes() {
-                return ['fa-heart', this.isFavourited ? 'fas' : 'far'];
+                return this.isFavourited ? 'fas' : 'far';
             },
 
             endpoint() {
@@ -53,3 +52,17 @@
     }
 </script>
 
+<style>
+    .favourite-heart {
+        background-color: #f3f2f2;
+        padding: .75rem;
+        border-radius: 50%;
+        color: #3b4249;
+    }
+
+    #breadcrumbs .favourite-heart {
+        background-color: #FFF;
+        padding: .75rem;
+        font-size: 1.2rem;
+    }
+</style>

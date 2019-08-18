@@ -29,9 +29,12 @@ class AjaxController extends Controller
      */
     public function cities(Request $request) 
     {
-        $city = $request->city;
+        $city = $request->search;
 
-        $cities = DB::table('cities')->selectRaw('id, name, county, state')->whereRaw("name COLLATE utf8mb4_unicode_520_ci LIKE ?", $city.'%')->get();
+        $cities = DB::table('cities')->selectRaw('id, name, county, state')
+                                    ->whereRaw("name COLLATE utf8mb4_unicode_520_ci LIKE ?", $city.'%')
+                                    ->limit(10)->orderBy('importance', 'DESC')
+                                    ->get();
 
         return response()->json($cities);
     }

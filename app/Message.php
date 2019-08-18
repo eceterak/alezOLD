@@ -29,7 +29,7 @@ class Message extends Model
 
         static::created(function($message)
         {
-            $message->receiver->notify(new YouHaveANewMessage($message->conversation));
+            $message->receiver->notify(new YouHaveANewMessage($message, $message->conversation->advert));
         });
     }
 

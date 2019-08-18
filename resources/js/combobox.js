@@ -19,7 +19,7 @@
             .attr("title", "")
             .attr('required', this.options.required)
             .attr('data-validation-rqmessage', this.options.requiredMessage)
-            .addClass("form-control custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+            .addClass("form-control form-control-sm custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
             .attr('disabled', this.options.disabled)
             .autocomplete({
                 delay: 0,
@@ -91,7 +91,7 @@
         _source: function(request, response) {
             axios.get(this.options.url, {
                 params: {
-                    city: request.term
+                    search: request.term
                 }
             })
             .then(function(cities) {

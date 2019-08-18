@@ -2071,6 +2071,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['message'],
   data: function data() {
@@ -2106,7 +2111,7 @@ __webpack_require__.r(__webpack_exports__);
 
       setTimeout(function () {
         _this2.show = false;
-      }, 3000);
+      }, 10000);
     }
   }
 });
@@ -30822,16 +30827,45 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", {
-    directives: [
-      { name: "show", rawName: "v-show", value: _vm.show, expression: "show" }
-    ],
-    staticClass: "alert alert-flash",
-    class: "alert-" + _vm.level,
-    domProps: { textContent: _vm._s(_vm.body) }
-  })
+  return _c(
+    "div",
+    {
+      directives: [
+        { name: "show", rawName: "v-show", value: _vm.show, expression: "show" }
+      ],
+      staticClass: "alert alert-flash alert-dismissible fade show",
+      class: "alert-" + _vm.level,
+      attrs: { role: "alert" }
+    },
+    [
+      _c("p", {
+        staticClass: "mb-0",
+        domProps: { textContent: _vm._s(_vm.body) }
+      }),
+      _vm._v(" "),
+      _vm._m(0)
+    ]
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "alert",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  }
+]
 render._withStripped = true
 
 
@@ -46246,7 +46280,7 @@ if (token) {
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 window.events = new Vue();
 
-var authorizations = __webpack_require__(/*! ../authorizations */ "./resources/js/authorizations.js"); // Authorize will be available on every vue components.
+var authorizations = __webpack_require__(/*! ../authorizations */ "./resources/js/authorizations.js"); // Authorize will be available on every vue component.
 
 
 window.Vue.prototype.authorize = function () {
@@ -46259,7 +46293,7 @@ window.Vue.prototype.authorize = function () {
   }
 
   return params[0](window.App.user);
-}; // Regeister new global method flash.
+}; // Register new global method flash.
 
 
 window.flash = function (message) {
@@ -46501,7 +46535,7 @@ $.widget("custom.combobox", {
     this._createAutocomplete();
   },
   _createAutocomplete: function _createAutocomplete() {
-    this.input = $("<input>").appendTo(this.wrapper).attr("title", "").attr('required', this.options.required).attr('data-validation-rqmessage', this.options.requiredMessage).addClass("form-control custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left").attr('disabled', this.options.disabled).autocomplete({
+    this.input = $("<input>").appendTo(this.wrapper).attr("title", "").attr('required', this.options.required).attr('data-validation-rqmessage', this.options.requiredMessage).addClass("form-control form-control-sm custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left").attr('disabled', this.options.disabled).autocomplete({
       delay: 0,
       minLength: 3,
       source: this.options._source ? this.options._source : $.proxy(this, "_source")
@@ -46553,7 +46587,7 @@ $.widget("custom.combobox", {
   _source: function _source(request, response) {
     axios.get(this.options.url, {
       params: {
-        city: request.term
+        search: request.term
       }
     }).then(function (cities) {
       response($.map(cities.data, function (city) {

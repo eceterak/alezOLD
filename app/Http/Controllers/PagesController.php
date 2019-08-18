@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\City;
+use App\Advert;
 
 class PagesController extends Controller
 {
@@ -14,7 +15,8 @@ class PagesController extends Controller
     public function index() 
     {
         return view('pages.index')->with([
-            'suggestedCities' => City::where('suggested', true)->limit(12)->orderBy('importance', 'DESC')->get()
+            'suggestedCities' => City::where('suggested', true)->limit(3)->orderBy('importance', 'DESC')->get(),
+            'adverts' => Advert::orderBy('visits', 'DESC')->where('verified', true)->where('archived', false)->limit(6)->get()
         ]);
     }
 

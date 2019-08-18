@@ -14,7 +14,7 @@
 
 <script>
     export default {
-        props: ['btnText'],
+        props: ['btnText', 'maxSize'],
         methods: {
             launchFilePicker() {
                 this.$refs.file.click();
@@ -23,17 +23,35 @@
                 if(e.target.files.length) {
                     let file = e.target.files[0];
 
-                    let reader = new FileReader();
+                    try {
+                        this.checkSize(file);
 
-                    reader.readAsDataURL(file);
-
-                    reader.onload = e => {
-                        this.$emit('loaded', {
-                            src: e.target.result,
-                            file: file
-                        })
-                    };
+                        this.persist(file);
+                    } 
+                    catch(error) {
+                        flash(error, 'danger');
+                    }
+                    
                 }
+            },
+            checkSize(file) {
+                const maxSize = this.maxSize;
+
+                let size = file.size / maxSize / maxSize;
+
+                if(size > 1) throw "Plik jest zbyt duży, maksymalny rozmiar to " + maxSize + " kB";
+            },
+            persist(file) {
+                let reader = new FileReader();
+
+                reader.readAsDataURL(file);
+
+                reader.onload = e => {
+                    this.$emit('loaded', {
+                        src: e.target.result,
+                        file: file
+                    })
+                };
             }
         }    
     }
