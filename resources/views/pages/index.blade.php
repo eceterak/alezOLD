@@ -7,21 +7,21 @@
                 <div class="px-5 mb-4 mb-md-0">
                     <img src="{{ asset('images/hand.png') }}" alt="">
                     <h5 class="my-3">Najlepsze ceny</h5>
-                    <p>Every 3 minutes someone finds a flatmate on SpareRoom. With the biggest selection of ads, you'll find yours.</p>
+                    <p>Tylko tutaj znajdziesz pokoje w cenach nie powodujących zawrotów głowy. Zacznij szukać już dziś.</p>
                 </div>
             </div>
             <div class="col-md-4 pl-0 text-center">
                 <div class="px-5 mb-4 mb-md-0">
                     <img src="{{ asset('images/insurance.png') }}" alt="">
-                    <h5 class="my-3">Najlepsze ceny</h5>
-                    <p>Every 3 minutes someone finds a flatmate on SpareRoom. With the biggest selection of ads, you'll find yours.</p>
+                    <h5 class="my-3">Najwyższa jakość</h5>
+                    <p>Każde ogłoszenie zostaje dokładnie sprawdzone i zweryfikowane przez nasz zespół jeszcze przed opublikowaniem.</p>
                 </div>
             </div>
             <div class="col-md-4 pl-0 text-center">
                 <div class="px-5 mb-4 mb-md-0">
                     <img src="{{ asset('images/hotel.png') }}" alt="">
-                    <h5 class="my-3">Najlepsze ceny</h5>
-                    <p>Every 3 minutes someone finds a flatmate on SpareRoom. With the biggest selection of ads, you'll find yours.</p>
+                    <h5 class="my-3">Darmowe ogłoszenia</h5>
+                    <p>Na alez.pl możesz dodawać swoje ogłoszenie całkowicie za darmo i bez limitów! To naprawdę proste!</p>
                 </div>
             </div>
         </div>
