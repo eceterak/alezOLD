@@ -2207,7 +2207,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['lat', 'lon'],
+  props: ['lat', 'lon', 'api'],
   mounted: function mounted() {
     var _this = this;
 

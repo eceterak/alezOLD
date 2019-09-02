@@ -146,7 +146,7 @@
                         </div>
                     @endif 
                     <div class="mt-5">
-                        <google-map lat="{{ $advert->lat }}" lon="{{ $advert->lon}}"></google-map>
+                        <google-map lat="{{ $advert->lat }}" lon="{{ $advert->lon}}" api="{{ env('APP_NAME') }}"></google-map>
                     </div>
                 </div>
             </div>

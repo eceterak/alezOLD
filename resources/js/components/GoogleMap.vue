@@ -8,7 +8,8 @@
     export default {
         props: [
             'lat',
-            'lon'
+            'lon',
+            'api'
         ],
 
         mounted() {
