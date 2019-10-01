@@ -112,6 +112,7 @@ Route::group(['middleware' => ['auth', 'verified']], function()
 Route::get('/regulamin', 'PagesController@termsAndConditions')->name('termsAndConditions');
 Route::get('/polityka-prywatnosci', 'PagesController@privacyPolicy')->name('privacyPolicy');
 Route::get('/o-nas', 'PagesController@aboutUs')->name('aboutUs');
+Route::get('/contact', 'PagesController@contact')->name('contact');
 
 // Cities
 Route::get('/miasta', 'CitiesController@index')->name('cities');

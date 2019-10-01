@@ -1,30 +1,31 @@
-<nav class="navbar navbar-expand-lg {{ isset($class) ? $class : '' }}" id="navbar-top">
+<nav class="navbar {{ isset($class) ? $class : '' }}" id="navbar-top">
     <div class="container">
         <a href="{{ route('index') }}" class="navbar-brand">www.alez.pl</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-top">
+        {{-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-top">
             <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="menu-top">
-            <ul class="navbar-nav nav-pills mr-auto align-items-center">
+        </button> --}}
+        <div id="menu-top">
+            {{-- <ul class="navbar-nav nav-pills mr-auto align-items-center">
                 <li class="nav-item">
-                    <a href="{{ route('index') }}" class="nav-link active">Strona główna</a>
+                    <a href="{{ route('index') }}" class="nav-link">Strona główna</a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('aboutUs') }}" class="nav-link">O nas</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('aboutUs') }}" class="nav-link">Kontakt</a>
+                    <a href="{{ route('contact') }}" class="nav-link">Kontakt</a>
                 </li>
-            </ul>
-            <ul class="nav">
-                <li class="nav-item">
-                    @guest
-                        <a href="{{ route('login') }}" class="btn btn-link font-weight-bold">Logowanie/rejestracja</a>
-                    @endguest
-                    @auth
-                        <div class="dropdown d-inline-block mx-2">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
+            </ul> --}}
+            <ul class="nav ml-auto d-none d-lg-flex">
+                @guest
+                    <li class="nav-item">
+                        <a href="{{ route('login') }}" class="btn btn-link font-weight-bold d-none d-md-block">Logowanie/rejestracja</a>
+                    </li>
+                @endguest
+                @auth
+                    <li class="nav-item dropdown">
+                        <div class="dropdown d-lg-inline-block mr-2">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ auth()->user()->name }}
                                 @if($notifications = auth()->user()->notifications_count)
                                     <span class="badge badge-light mx-1">{{ $notifications }}</span>
@@ -52,10 +53,18 @@
                                 </form>
                             </div>
                         </div>
-                    @endauth
-                </li>
+                    </li>
+                @endauth
                 <li class="nav-item">
                     <a href="{{ route('adverts.create') }}" class="btn btn-primary font-weight-bold">Dodaj ogłoszenie</a>
+                </li>
+            </ul>
+            <ul class="nav ml-auto d-lg-none">
+                <li class="nav-item">
+                    <a href="{{ route('home') }}" class="btn btn-link font-weight-bold"><i class="fas fa-user fa-lg"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('adverts.create') }}" class="btn btn-link font-weight-bold"><i class="fas fa-plus fa-lg"></i></a>
                 </li>
             </ul>
         </div>

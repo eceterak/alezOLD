@@ -49,4 +49,14 @@ class PagesController extends Controller
     {
         return view('pages.privacyPolicy');
     }
+
+    /**
+     * 
+     * 
+     * @return view
+     */
+    public function contact() 
+    {
+        return view('pages.contact');
+    }
 }

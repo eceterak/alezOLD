@@ -1,11 +1,11 @@
 <template>
     <div class="mb-4">
-        <p class="mb-2 small">Pierwsze zdjęcie jest miniaturką. Możesz przeciągać zdjęcia aby zmienić ich kolejność.</p>
-        <div class="position-relative p-3 rounded border-grey border">
+        <p class="mb-2">Pierwsze zdjęcie jest miniaturką. Możesz przeciągać zdjęcia aby zmienić ich kolejność.</p>
+        <div class="image-upload position-relative p-3 rounded">
             <div class="spinner" v-show="isUploading"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>
             <draggable v-model="images" draggable=".photo" class="row mx-n2 photos-list" @end="orderChanged" :class="isUploading ? 'disabled-content' : ''">
                 <div class="col-2 px-2 photo photo-item" v-for="(image, index) in images" :key="image.id">
-                    <div class="d-flex position-relative justify-content-center align-items-center h-10 border rounded">
+                    <div class="d-flex position-relative justify-content-center align-items-center h-12 border rounded image-container">
                         <p class="position-absolute p-2" style="top: 0; right: 0;">
                             <a href="#" @click.prevent="destroy(image, index)"><i class="fas fa-times"></i></a>
                         </p>
@@ -13,7 +13,7 @@
                     </div>
                 </div>
                 <div class="col-2 px-2 photo-item" slot="footer" v-if="images.length < maxImages">
-                    <div class="d-flex justify-content-center align-items-center h-10 border rounded" @click="launchFilePicker()">
+                    <div class="d-flex justify-content-center align-items-center h-12 border rounded image-container" @click="launchFilePicker()">
                         <input type="file"
                             ref="file"
                             @change="onFileChange"
@@ -139,7 +139,11 @@
     }
 </script>
 
-<style>
+<style >
+
+</style>
+
+<style lang="scss" scoped>
 
     .disabled-content {
         pointer-events: none;
@@ -154,13 +158,22 @@
         z-index: 999;
     }
 
-    .photos-list .photo-item:first-child div {
+    .image-upload {
+        background-color: #f7f7f9;
+        
+        .image-container {
+            border: 1px solid #d6dde4 !important;
+            color: #d6dde4;
+        }
+    }
+
+    /* .photos-list .photo-item:first-child div {
         border: 1px solid teal!important;
     }
 
     .photos-list .photo-item:last-child {
         margin-top: 1rem;
-    }
+    } */
 
 </style>
 

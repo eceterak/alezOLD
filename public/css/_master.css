@@ -1,57 +1,34 @@
 /* Navbar top */
 
 #navbar-top {
+  padding: 0.5rem 0;
   font-weight: 700;
   box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.2);
-}
-
-#navbar-top.navbar-dark .container > a.navbar-brand {
-  background: url("/images/alez.png") no-repeat 50% -2px;
-  background-size: cover;
-  text-indent: -1000rem;
-  width: 135px;
-  height: 39px;
-  margin-right: 2rem;
-  margin-left: -6px;
+  /* Logo */
+  /* Links */
+  /* Navbar-dark styles */
 }
 
 @media (min-width: 992px) {
-  #navbar-top.navbar-dark.navbar-expand-lg .navbar-nav .nav-item {
-    padding: 0 1.2rem;
+  #navbar-top {
+    padding: 1.5rem 0;
   }
-
-  #navbar-top.navbar-dark.navbar-expand-lg .navbar-nav .nav-item .nav-link {
-    padding: 0;
-  }
-}
-
-#navbar-top.navbar-dark #menu-top a.nav-link,
-#navbar-top.navbar-dark #menu-top a.btn-link {
-  color: #FFF;
-}
-
-#navbar-top.navbar-dark #menu-top a.nav-link.active,
-#navbar-top.navbar-dark #menu-top a.btn-link.active {
-  padding: 0.6rem 1.2rem;
 }
 
 #navbar-top .container > a.navbar-brand {
-  background: url("/images/alez.svg") no-repeat 50% -2px;
+  background: url("/images/alez.png") no-repeat 50% -2px;
   background-size: cover;
   text-indent: -1000rem;
-  width: 135px;
-  height: 39px;
+  width: 115px;
+  height: 34px;
   margin-right: 2rem;
   margin-left: -6px;
 }
 
 @media (min-width: 992px) {
-  #navbar-top.navbar-expand-lg .navbar-nav .nav-item {
-    padding: 0 1.2rem;
-  }
-
-  #navbar-top.navbar-expand-lg .navbar-nav .nav-item .nav-link {
-    padding: 0;
+  #navbar-top .container > a.navbar-brand {
+    width: 135px;
+    height: 39px;
   }
 }
 
@@ -64,6 +41,20 @@
 #navbar-top #menu-top a.btn-link.active {
   color: #FFF;
   padding: 0.6rem 1.2rem;
+}
+
+#navbar-top.navbar-dark {
+  /* Logo */
+}
+
+#navbar-top.navbar-dark .container > a.navbar-brand {
+  background: url("/images/alez.png") no-repeat 50% -2px;
+  background-size: cover;
+}
+
+#navbar-top.navbar-dark #menu-top a.nav-link,
+#navbar-top.navbar-dark #menu-top a.btn-link {
+  color: #FFF;
 }
 
 /* Hero */
@@ -221,6 +212,16 @@
   border-radius: 0.25rem;
 }
 
+/* User settings */
+
+.list-group-btn .list-group-item {
+  padding: 0.5rem 0.5rem;
+}
+
+.list-group-btn .list-group-item:first-child {
+  padding-left: 0;
+}
+
 /* Footer */
 
 #footer .container > .row > .col-lg-4 > a.navbar-brand {
@@ -270,14 +271,13 @@
   border-top: 2px solid #e8ebef;
 }
 
+/* Create advert form */
+
 .form-section {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
 }
 
 .form-section .form-title {
-  background-color: #b1b1b1;
-  color: #fff;
-  padding: 0.5rem;
   margin: 0;
   border-radius: 0.25rem;
   font-size: 0.95rem;
@@ -299,6 +299,46 @@
 .form-section label {
   margin: 0;
 }
+
+.custom-pagination {
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+  margin-bottom: 0px;
+  margin-top: 2rem;
+}
+
+.custom-pagination .custom-page-item.active .custom-page-link {
+  color: #FFF;
+  background-color: #02807e;
+}
+
+.custom-pagination .custom-page-item.control .custom-page-link {
+  color: #919191;
+}
+
+.custom-pagination .custom-page-item .custom-page-link {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 40px;
+  margin: 0 0.75rem;
+  text-align: center;
+  position: relative;
+  display: block;
+  padding: 0;
+  color: #3b4249;
+  background-color: #f7f7f9;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.custom-pagination .custom-page-item .custom-page-link:hover {
+  background-color: #cbcbd8;
+}
+
+/***********/
+
+/* Legacy */
 
 #suggested-list {
   display: flex;
@@ -353,13 +393,13 @@
 
 .inputfile + label {
   display: inline-block;
-  color: grey;
+  color: #d6dde4;
   cursor: pointer;
 }
 
 .inputfile:focus + label,
 .inputfile + label:hover {
-  color: grey;
+  color: #d6dde4;
 }
 
 .inputfile:focus + label {
@@ -377,6 +417,10 @@
 
 .h-10 {
   height: 10rem;
+}
+
+.h-12 {
+  height: 12rem;
 }
 
 .custom-control {
@@ -400,10 +444,6 @@
 .table .fit {
   width: 1px;
   white-space: nowrap;
-}
-
-.pagination {
-  margin-bottom: 0px;
 }
 
 .modal {

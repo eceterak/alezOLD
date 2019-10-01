@@ -1,24 +1,12 @@
 @extends('layouts.master')
 
-@section('lead')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Verify Your Email Address') }}</div>
+@section('breadcrumbs')
+    <h3 class="mb-0">Zweryfikuj adres email</h3>
+@endsection
 
-                <div class="card-body">
-                    @if (session('flash'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('flash') }}
-                        </div>
-                    @endif
-
-                    {{ __('Before proceeding, please check your email for a verification link.') }}
-                    {{ __('If you did not receive the email') }}, <a href="{{ route('verification.resend') }}">{{ __('click here to request another') }}</a>.
-                </div>
-            </div>
-        </div>
+@section('content')
+    <div>
+        {{ __('Aby kontynuować zweryfikuj swój adres email. W tym celu kliknij na') }}
+        {{ __('Jeśli nie otrzymałeś wiadomości weryfikacyjnej') }}, <a href="{{ route('verification.resend') }}">{{ __('kliknij tutaj aby ponowić ... ') }}</a>.
     </div>
-</div>
 @endsection

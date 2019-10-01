@@ -31,6 +31,14 @@
         <footer id="footer" class="border-top">
             @include('layouts.components._footer')
         </footer>
+        <flash-message message="{{ session('flash') }}"></flash-message>
+        @if(!Request::is('login'))
+            @if(!auth()->user())
+                @include('layouts.components._modal-login')
+            @elseif(auth()->user() && !auth()->user()->hasVerifiedEmail())
+                @include('layouts.components._modal-account-unverified')
+            @endif
+        @endif
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>

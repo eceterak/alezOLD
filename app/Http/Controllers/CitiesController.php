@@ -65,6 +65,6 @@ class CitiesController extends Controller
         $adverts->whereIn('city_id', $cities);
 
         // Append any get parameters to keep them in url after navigating to a different page.
-        return $adverts->paginate(24)->appends(Input::except('page'));
+        return $adverts->paginate(5)->appends(Input::except('page'));
     }
 }

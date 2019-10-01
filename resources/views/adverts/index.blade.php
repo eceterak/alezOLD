@@ -1,31 +1,19 @@
 @extends('layouts.master')
-@section('content')
-    <header class="d-flex justify-content-between mb-4">
+@section('breadcrumbs')
+    <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h3 class="text-grey-darker">Wszystkie pokoje na wynajem</h3>
-            <p class="text-grey-darker mt-1">
-                {{ ($adverts->total() > 1) ? 'Znaleziono '.$adverts->total().' ogłoszeń' : ($adverts->total() <= 0 ? '' : 'Znaleziono 1 ogłoszenie') }}
-            </p>
+            <h3>Wszystkie ogłoszenia</h3>
+            <p class="mb-0">{{ ($adverts->total() > 1) ? 'Znaleziono '.$adverts->total().' ogłoszeń' : ($adverts->total() <= 0 ? '' : 'Znaleziono 1 ogłoszenie') }}</p>
         </div>
-    </header>
-    <main>
-        <div class="small">
-            <span class="text-grey-darker">Sortuj:</span>
-            <div class="d-inline-block">
-                <ul class="list-group list-group-horizontal sort-group">
-                    <li class="list-group-item border-0 bg-transparent {{ (request()->has('sort') && request()->sort == 'date') ? 'disabled' : '' }}"><a href="{{ request()->fullUrlWithQuery(['sort' => 'date']) }}">Najnowsze</a></li>
-                    <li class="list-group-item border-0 bg-transparent {{ (request()->has('sort') && request()->sort == 'rent_asc') ? 'disabled' : '' }}"><a href="{{ request()->fullUrlWithQuery(['sort' => 'rent_asc']) }}">Najtańsze</a></li>
-                    <li class="list-group-item border-0 bg-transparent {{ (request()->has('sort') && request()->sort == 'rent_desc') ? 'disabled' : '' }}"><a href="{{ request()->fullUrlWithQuery(['sort' => 'rent_desc']) }}">Najdroższe</a></li>
-                </ul>
-            </div>
+    </div>
+@endsection
+@section('content')
+    <div class="row">
+        <div class="col-3">
+            @include('cities._filters')
         </div>
-        <div class="row">
-            <div class="col-9">
-                @include('adverts._list')
-            </div>
-            <div class="col-3">
-                @include('cities._filters')
-            </div>
+        <div class="col-md-9 pl-4">
+            @include('adverts._list')
         </div>
-    </main>
+    </div>
 @endsection

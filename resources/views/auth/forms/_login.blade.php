@@ -3,10 +3,10 @@
     @csrf
     <div class="form-group">
         <label for="login_email">Email</label>
-        <input id="login_email" type="email" placeholder="Email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" name="login_email" value="{{ old('login_email') }}" required autofocus>
-        @if ($errors->has('email'))
+        <input id="login_email" type="email" placeholder="Email" class="form-control {{ $errors->login->has('email') ? ' is-invalid' : '' }}" name="login_email" value="{{ old('login_email') }}" required autofocus>
+        @if($errors->login->has('email'))
             <span class="invalid-feedback" role="alert">
-                <strong>{{ $errors->first('email') }}</strong>
+                <strong>{{ $errors->login->first('email') }}</strong>
             </span>
         @endif
     </div>
@@ -19,18 +19,14 @@
             </span>
         @endif
     </div>
-    <div class="custom-control custom-checkbox mb-4">
-        <input type="checkbox" name="remember" id="remember" value="1" class="custom-control-input" checked {{ old('remember') ? 'checked' : '' }}>
-        <label for="remember" class="custom-control-label">Zapamiętaj mnie</label>
-    </div>
-    <div class="d-flex justify-content-between form-group mb-0">
+    <div class="d-flex justify-content-between form-group mb-0 my-4">
         <button type="submit" class="btn btn-primary">Zaloguj</button>
         @if (Route::has('password.request'))
             <a class="btn btn-link" href="{{ route('password.request') }}">Nie pamiętasz hasła?</a>
         @endif
     </div>
 </form>
-<div class="small mt-4">
+<div class="small">
     <p class="card-text">Logując się ackeptuję <a href="{{ route('termsAndConditions') }}" target="_blank" rel="noopener noreferrer">Regulamin serwisu alez.pl.</a></p>
     <p class="card-text text-justify">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam ea possimus est delectus exercitationem? Error ducimus animi culpa impedit quisquam voluptatum saepe repellendus, nihil nobis, illo, ipsum ab. Laudantium, doloremque?</p>
 </div>     

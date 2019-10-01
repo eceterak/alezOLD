@@ -140,7 +140,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getPathAttribute() 
     {
-        return (!$this->active) ? '<span class="text-muted">konto usunięte</span>' : '<a href="'.route('profiles.show', $this->id).'" class="text-dark">'.$this->name.'</a>';
+        return (!$this->active) ? '<span class="text-muted">konto usunięte</span>' : '<a href="'.route('profiles.show', $this->id).'" class="text-dark">'.ucfirst($this->name).'</a>';
     }
 
     /**

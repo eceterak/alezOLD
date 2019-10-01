@@ -21,6 +21,7 @@
                 </li>
                 <li class="nav-item row">
                     <a href="{{ route('termsAndConditions') }}" class="nav-link col-6">Regulamin serwisu</a>
+                    <a href="{{ route('contact') }}" class="nav-link col-6">Kontakt</a>
                 </li>
             </ul>
         </div>

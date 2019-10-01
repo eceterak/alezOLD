@@ -65,7 +65,7 @@ class LoginController extends Controller
             return $this->sendLockoutResponse($request);
         }
 
-        if(Auth::attempt($this->credentials($request), $request->filled('remember'))) 
+        if(Auth::attempt($this->credentials($request), true)) 
         {
             return $this->sendLoginResponse($request);
         }
@@ -117,6 +117,6 @@ class LoginController extends Controller
     {
         throw ValidationException::withMessages([
             $this->username() => [trans('auth.failed')],
-        ])->redirectTo(route('login').'#login');
+        ])->errorBag('login')->redirectTo(route('login'));
     }
 }

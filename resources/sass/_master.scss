@@ -1,62 +1,33 @@
+@import "variables";
+
 /* Navbar top */
 #navbar-top {
+    padding: .5rem 0;
     font-weight: 700;
-    -webkit-box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.2);
-    -moz-box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.2);
     box-shadow: 0px 1px 0px 0px rgba(255, 255, 255, 0.2);
 
-    &.navbar-dark {
-        .container > a.navbar-brand {
-            background: url('/images/alez.png') no-repeat 50% -2px;
-            background-size: cover;
-            text-indent: -1000rem;
-            width: 135px;
-            height: 39px;
-            margin-right: 2rem;
-            margin-left: -6px;
-        }
-    
-        @media(min-width: 992px) {
-            &.navbar-expand-lg .navbar-nav .nav-item {
-                padding: 0 1.2rem;
-    
-                .nav-link {
-                    padding: 0;
-                }  
-            } 
-        }
-    
-        #menu-top {
-            a.nav-link, a.btn-link {
-                color: #FFF;
-    
-                &.active {
-                    padding: .6rem 1.2rem;
-                }
-            }
-        }
+
+    @media(min-width: map-get($grid-breakpoints, 'lg')) {
+        padding: 1.5rem 0;
     }
 
+    /* Logo */
     .container > a.navbar-brand {
-        background: url('/images/alez.svg') no-repeat 50% -2px;
+        background: url('/images/alez.png') no-repeat 50% -2px;
         background-size: cover;
         text-indent: -1000rem;
-        width: 135px;
-        height: 39px;
+        width: 115px;
+        height: 34px;
         margin-right: 2rem;
         margin-left: -6px;
+
+        @media(min-width: map-get($grid-breakpoints, 'lg')) {
+            width: 135px;
+            height: 39px;
+        }   
     }
 
-    @media(min-width: 992px) {
-        &.navbar-expand-lg .navbar-nav .nav-item {
-            padding: 0 1.2rem;
-
-            .nav-link {
-                padding: 0;
-            }  
-        } 
-    }
-
+    /* Links */
     #menu-top {
         a.nav-link, a.btn-link {
             color: #3b4249;
@@ -64,6 +35,22 @@
             &.active {
                 color: #FFF;
                 padding: .6rem 1.2rem;
+            }
+        }
+    }
+
+    /* Navbar-dark styles */
+    &.navbar-dark {
+
+        /* Logo */
+        .container > a.navbar-brand {
+            background: url('/images/alez.png') no-repeat 50% -2px;
+            background-size: cover;
+        }
+    
+        #menu-top {
+            a.nav-link, a.btn-link {
+                color: #FFF;
             }
         }
     }
@@ -228,6 +215,18 @@
     }
 }
 
+/* User settings */
+.list-group-btn {
+
+    .list-group-item {
+        &:first-child {
+            padding-left: 0;
+        }
+
+        padding: 0.5rem .5rem;
+    }
+}
+
 /* Footer */
 #footer {
     .container > .row > .col-lg-4 > a.navbar-brand {
@@ -278,13 +277,11 @@
     }
 }
 
+/* Create advert form */
 .form-section {
-    font-size: .8rem;
+    font-size: .9rem;
 
     .form-title {
-        background-color: #b1b1b1;
-        color: #fff;
-        padding: .5rem;
         margin: 0;
         border-radius: .25rem;
         font-size: .95rem;
@@ -308,9 +305,51 @@
     }
 }
 
+.custom-pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    margin-bottom: 0px;
+    margin-top: 2rem;
 
+    .custom-page-item {
 
+        &.active {
+            .custom-page-link {
+                color: $body-bg;
+                background-color: $primary;
+            }
+        }
 
+        &.control {
+            .custom-page-link {
+                color: #919191;
+            }
+        }
+        
+        .custom-page-link {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 40px;
+            margin: 0 .75rem;
+            text-align: center;
+            position: relative;
+            display: block;
+            padding: 0;
+            color: $body-color;
+            background-color: #f7f7f9;
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+            &:hover {
+                background-color: darken(#f7f7f9, 15%);
+            }
+        }
+    }
+}
+
+/***********/
+/* Legacy */
 #suggested-list {
     display: flex;
     flex-wrap: wrap;
@@ -363,12 +402,12 @@
 
     &+label {
         display: inline-block;
-        color: grey;
+        color: #d6dde4;
         cursor: pointer;
     }
     
     &:focus + label, & + label:hover {
-        color: grey;
+        color: #d6dde4;
     }
 
     &:focus + label {
@@ -387,6 +426,10 @@
 
 .h-10 {
     height: 10rem;
+}
+
+.h-12 {
+    height: 12rem;
 }
 
 .custom-control {
@@ -408,10 +451,6 @@
         width: 1px;
         white-space: nowrap;
     }
-}
-
-.pagination {
-    margin-bottom: 0px;
 }
 
 .modal {

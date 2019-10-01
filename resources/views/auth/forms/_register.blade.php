@@ -3,28 +3,28 @@
     @csrf
     <div class="form-group">
         <label for="name">Imię</label>
-        <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
-        @if ($errors->has('name'))
+        <input id="name" type="text" class="form-control{{ $errors->register->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
+        @if ($errors->register->has('name'))
             <span class="invalid-feedback" role="alert">
-                <strong>{{ $errors->first('name') }}</strong>
+                <strong>{{ $errors->register->first('name') }}</strong>
             </span>
         @endif
     </div>
     <div class="form-group">
         <label for="name">Email</label>
-        <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
-        @if ($errors->has('email'))
+        <input id="email" type="email" class="form-control{{ $errors->register->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
+        @if ($errors->register->has('email'))
             <span class="invalid-feedback" role="alert">
-                <strong>{{ $errors->first('email') }}</strong>
+                <strong>{{ $errors->register->first('email') }}</strong>
             </span>
         @endif
     </div>
     <div class="form-group">
         <label for="name">Hasło</label>
-        <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"  name="password" required>
-        @if ($errors->has('password'))
+        <input id="password" type="password" class="form-control{{ $errors->register->has('password') ? ' is-invalid' : '' }}"  name="password" required>
+        @if ($errors->register->has('password'))
         <span class="invalid-feedback" role="alert">
-            <strong>{{ $errors->first('password') }}</strong>
+            <strong>{{ $errors->register->first('password') }}</strong>
         </span>
         @endif
     </div>

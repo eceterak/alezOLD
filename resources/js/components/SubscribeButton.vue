@@ -1,6 +1,6 @@
 <template>
     <span>
-        <button class="accountWarning" :class="classes" @click="subscribe">Obserwuj</button>
+        <button class="accountWarning" :class="classes" @click="subscribe" v-text="info"></button>
     </span>
 </template>
 
@@ -20,7 +20,7 @@
             },
 
             info() {
-                return ! this.isActive ? 'Dodaj do obserwowanych i otrzymuj notyfikacje o nowych pokojach na wynajem' : 'Obserwujesz to miasto';
+                return ! this.isActive ? 'Obserwuj' : 'Obserwowane';
             }
         },
 

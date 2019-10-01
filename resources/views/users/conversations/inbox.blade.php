@@ -1,7 +1,9 @@
 @extends('layouts.master')
+
 @section('breadcrumbs')
     @include('users._menu')
 @endsection
+
 @section('content')
     @if($conversations->count())
         <div class="card">
@@ -49,5 +51,4 @@
             </div>
         </div>
     @endif
-
 @endsection

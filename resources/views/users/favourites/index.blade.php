@@ -1,14 +1,12 @@
 @extends('layouts.master')
 
+@section('breadcrumbs')
+    @include('users._menu')
+@endsection
+
 @section('content')
-
-    @include('users._menu', [
-        'title' => 'Ulubione',
-        'subtitle' => 'Zapisane ogłoszenia'
-    ])
-
-    <div class="card">
-        @if($favourites->count())
+    @if($favourites->count())
+        <div class="card">
             <table class="table">
                 <tbody>
                     @foreach($favourites as $favourite)
@@ -34,8 +32,10 @@
         </div>
         {{ $favourites->links() }}
         @else
-            <div class="card-body text-center">
-                <p class="card-text">Nie masz żadnych zapisanych ogłoszeń</p>
+            <div class="card">
+                <div class="card-body text-center">
+                    <p class="card-text">Nie masz żadnych zapisanych ogłoszeń</p>
+                </div>
             </div>
         @endif
     </div>

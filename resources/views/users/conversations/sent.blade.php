@@ -1,14 +1,12 @@
 @extends('layouts.master')
 
-@section('lead')
+@section('breadcrumbs')
+    @include('users._menu')
+@endsection
 
-    @include('users._menu', [
-        'title' => 'Wysłane',
-        'subtitle' => 'Wysłane wiadomości'
-    ])
-
-    <div class="card">
-        @if($conversations->count())
+@section('content')
+    @if($conversations->count())
+        <div class="card">
             <table class="table">
                 <tbody>
                     @foreach($conversations as $conversation)
@@ -51,5 +49,4 @@
             </div>
         @endif
     </div>
-
 @endsection

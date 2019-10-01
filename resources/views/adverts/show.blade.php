@@ -1,12 +1,12 @@
 @extends('layouts.master')
 @section('breadcrumbs')
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h3 class="text-grey-darker">{{ $advert->title }}</h3>
-            <p class="text-grey-darker mt-1 mb-0">
-                <a href="#map" onclick="$('#map').goTo()" class="btn btn-light text-primary font-weight-bold">
-                    <i class="fas fa-map-marker fa-sm mr-2"></i>{{ $advert->city->name }} @isset($advert->street),&nbsp;{{ $advert->street->name }} @endisset
-                </a>
+            <h3>{{ $advert->title }}</h3>
+            <p class="mb-0">
+                <button onclick="$('#map').goTo()" class="btn btn-light text-primary font-weight-bold">
+                    <i class="fas fa-map-marker fa-sm mr-2"></i>{{ $advert->city->name }}@isset($advert->street),&nbsp;{{ $advert->street->name }} @endisset
+                </button>
             </p>
         </div>
         <favourite :advert="{{ $advert }}"></favourite>
@@ -19,37 +19,31 @@
     @if(!$advert->verified)
         <div class="alert alert-warning">Ogłoszenie oczekuje na weryfikację przez administratora</div>
     @endif
-    {{-- <p class="text-muted">Dodano {{ $advert->created_at->format('d.m.Y') }}</p> --}}
-    {{-- <header class="d-flex justify-content-between align-items-center">
-        <div>
-        </div>
-        <div>
-            <h3><strong>{{ $advert->rent }}</strong><small class="ml-1 text-xs text-grey-darker">zł /miesiąc</small></h3>
-        </div>
-    </header> --}}
     <div class="row">
         <div class="col-md-4 pr-4">
             <div class="card card-dark mb-4">
                 <div class="card-body">
-                    <h3 class="mb-0"><strong>{{ $advert->rent }}</strong>&nbsp;<small class="ml-1 text-xs text-grey-darker">zł/miesiąc</small></h3>
+                    <h3 class="mb-0 text-center">
+                        <strong>{{ $advert->rent }}</strong>&nbsp;<small class="ml-1 text-xs text-grey-darker">zł/miesiąc @if($advert->bills) + media @endif</small>
+                    </h3>
                 </div>
             </div>
-            <div class="card card-dark border-bottom-2">
+            <div class="card card-dark mb-4">
+                <div class="card-body">
+                    @if($advert->hasVisiblePhoneNumber())
+                        <phone-number :advert="{{ $advert }}"></phone-number>
+                    @endif
+                </div>
+            </div>
+            <div class="card card-dark border-bottom-2 mb-4">
                 <div class="card-body row">
                     <div class="col-4">
-                        <img src="{{ $advert->user->avatar_path }}" alt="" class="card-img-top img-fluid rounded-circle mb-2" style="width: 5rem; height: 5rem;">
-                        {{-- @if($advert->user->adverts->count() > 1)
-                            <p class="small mt-3">Więcej od {!! ucfirst($advert->user->path) !!}</p>
-                            @foreach($advert->user->adverts->except($advert->id) as $item)
-                                <a href="{{ route('adverts.show', [$item->city->slug, $item->slug]) }}">{{ $item->title }}</a>
-                            @endforeach
-                        @endif --}}
+                        <img src="{{ $advert->user->avatar_path }}" alt="" class="card-img-top img-fluid rounded-circle" style="width: 5rem; height: 5rem;">
                     </div>
-                    <div class="col-8">
+                    <div class="col-8 pr-0">
                         <p class="font-weight-bold">{!! ucfirst($advert->user->path) !!}</p>
-                        @if($advert->hasVisiblePhoneNumber())
-                            <phone-number :advert="{{ $advert }}"></phone-number>
-                        @endif
+                        {{-- <p class="text-muted">Dodano {{ $advert->created_at->format('d.m.Y') }}</p> --}}
+                        <a href="{{ route('profiles.show', $advert->user->id) }}" class="btn btn-outline-primary btn-sm px-3 py-2">Ogłoszenia użytkownika</a>
                     </div>
                 </div>
             </div>
