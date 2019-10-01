@@ -61,10 +61,10 @@
             </ul>
             <ul class="nav ml-auto d-lg-none">
                 <li class="nav-item">
-                    <a href="{{ route('home') }}" class="btn btn-link font-weight-bold"><i class="fas fa-user fa-lg"></i></a>
+                    <a href="{{ route('home') }}" class="btn btn-link"><i class="fas fa-user fa-lg"></i></a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('adverts.create') }}" class="btn btn-link font-weight-bold"><i class="fas fa-plus fa-lg"></i></a>
+                    <a href="{{ route('adverts.create') }}" class="btn btn-link pr-0"><i class="fas fa-plus fa-lg"></i></a>
                 </li>
             </ul>
         </div>
