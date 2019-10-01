@@ -23,7 +23,7 @@
             </header>
             <section class="container">
                 <header class="text-center text-white">
-                    <h1 class="hero-header">Znajdź swój kawałek podłogi</h1>
+                    <h1 class="hero-header">Twoj kawałek podłogi</h1>
                     <p class="hero-sub">Pokoje na wynajem w największych miastach Polski</p>
                 </header>
             </section>
