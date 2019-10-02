@@ -62,7 +62,7 @@
 
     #breadcrumbs .favourite-heart {
         background-color: #FFF;
-        padding: .5rem;
+        padding: .75rem;
         font-size: 1.2rem;
     }
 </style>

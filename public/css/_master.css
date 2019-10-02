@@ -264,6 +264,23 @@
   }
 }
 
+/* Advert sort */
+
+.sort-group .list-group-item {
+  padding-top: 0;
+}
+
+@media (min-width: 992px) {
+  .sort-group .list-group-item {
+    padding-top: 0.75rem;
+  }
+}
+
+.sort-group .disabled a {
+  color: #6c757d;
+  font-weight: bold;
+}
+
 /* Login */
 
 #login-form .login-or {
@@ -370,7 +387,13 @@
 }
 
 .form-section label {
-  margin: 0;
+  margin-bottom: 0.25rem;
+}
+
+@media (min-width: 992px) {
+  .form-section label {
+    margin: 0;
+  }
 }
 
 .custom-pagination {
@@ -521,11 +544,6 @@
 
 .modal {
   top: 150px;
-}
-
-.sort-group .disabled a {
-  color: #6c757d;
-  font-weight: bold;
 }
 
 .avatar-cropper .avatar-cropper-footer {

@@ -7402,7 +7402,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.favourite-heart {\n    background-color: #f3f2f2;\n    padding: .6rem;\n    border-radius: 50%;\n    color: #3b4249;\n}\n#breadcrumbs .favourite-heart {\n    background-color: #FFF;\n    padding: .5rem;\n    font-size: 1.2rem;\n}\n", ""]);
+exports.push([module.i, "\n.favourite-heart {\n    background-color: #f3f2f2;\n    padding: .6rem;\n    border-radius: 50%;\n    color: #3b4249;\n}\n#breadcrumbs .favourite-heart {\n    background-color: #FFF;\n    padding: .75rem;\n    font-size: 1.2rem;\n}\n", ""]);
 
 // exports
 
@@ -33045,7 +33045,10 @@ var render = function() {
             _vm._l(_vm.images, function(image, index) {
               return _c(
                 "div",
-                { key: image.id, staticClass: "col-2 px-2 photo photo-item" },
+                {
+                  key: image.id,
+                  staticClass: "col-6 col-lg-2 px-2 photo photo-item"
+                },
                 [
                   _c(
                     "div",
@@ -33095,7 +33098,7 @@ var render = function() {
               ? _c(
                   "div",
                   {
-                    staticClass: "col-2 px-2 photo-item",
+                    staticClass: "col-6 col-lg-2 px-2 photo-item",
                     attrs: { slot: "footer" },
                     slot: "footer"
                   },

@@ -20,6 +20,48 @@
         <div class="alert alert-warning">Ogłoszenie oczekuje na weryfikację przez administratora</div>
     @endif
     <div class="row">
+        <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mBox row">
+                            <div class="col-8">
+                                <div class="mb-4">
+                                    <img src="{{ $advert->featured_photo_path }}" class="img-fluid">
+                                </div>
+                            </div>
+                            <div class="col-4 pr-0">
+                                <div class="row mb-4">
+                                    @forelse($advert->photos as $photo)
+                                        <div class="col-6"><img src="https://alez.s3.eu-central-1.amazonaws.com/{{ $photo->url }}" alt="" class="img-fluid"></div>
+                                    @empty
+                                        
+                                    @endforelse
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <h5 class="card-title">Opis</h5>
+                            <p class="card-text">{{ $advert->description }}</p>
+                        </div>
+                        @if(!$advert->archived)
+                            <div>
+                                <h5 class="card-title">Napisz wiadomość</h5>
+                                <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <textarea name="body" id="body" class="form-control accountWarning" placeholder="Twoja wiadomość..." rows="4"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary font-weight-bold accountWarning">Wyślij wiadomość</button>
+                                </form>
+                                @include('components._errors')
+                            </div>
+                        @endif 
+                        <div class="mt-5">
+                            <google-map lat="{{ $advert->lat }}" lon="{{ $advert->lon}}" api="{{ env('APP_NAME') }}"></google-map>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <div class="col-md-4 pr-4">
             <div class="card card-dark mb-4">
                 <div class="card-body">
@@ -100,48 +142,6 @@
                         <dt class="mb-0 col-6">Zwierzęta OK</dt>
                     <dl class="mb-0 col-6">{{ $advert->pets_translated }}</dl>
                     </dl>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <div class="mBox row">
-                        <div class="col-8">
-                            <div class="mb-4">
-                                <img src="{{ $advert->featured_photo_path }}" class="img-fluid">
-                            </div>
-                        </div>
-                        <div class="col-4 pr-0">
-                            <div class="row mb-4">
-                                @forelse($advert->photos as $photo)
-                                    <div class="col-6"><img src="https://alez.s3.eu-central-1.amazonaws.com/{{ $photo->url }}" alt="" class="img-fluid"></div>
-                                @empty
-                                    
-                                @endforelse
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-4">
-                        <h5 class="card-title">Opis</h5>
-                        <p class="card-text">{{ $advert->description }}</p>
-                    </div>
-                    @if(!$advert->archived)
-                        <div>
-                            <h5 class="card-title">Napisz wiadomość</h5>
-                            <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST">
-                                @csrf
-                                <div class="form-group">
-                                    <textarea name="body" id="body" class="form-control accountWarning" placeholder="Twoja wiadomość..." rows="4"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary font-weight-bold accountWarning">Wyślij wiadomość</button>
-                            </form>
-                            @include('components._errors')
-                        </div>
-                    @endif 
-                    <div class="mt-5">
-                        <google-map lat="{{ $advert->lat }}" lon="{{ $advert->lon}}" api="{{ env('APP_NAME') }}"></google-map>
-                    </div>
                 </div>
             </div>
         </div>

@@ -252,6 +252,23 @@
     }
 }
 
+/* Advert sort */
+.sort-group {
+
+    .list-group-item {
+        padding-top: 0;
+
+        @media(min-width: map-get($grid-breakpoints, 'lg')) {
+            padding-top: .75rem;
+        }
+    }
+
+    .disabled a {
+        color: #6c757d;
+        font-weight: bold;
+    }
+}
+
 /* Login */
 #login-form {
     .login-or {
@@ -360,7 +377,11 @@
     }
 
     label {
-        margin: 0;
+        margin-bottom: .25rem;
+
+        @media(min-width: map-get($grid-breakpoints, 'lg')) {
+            margin: 0;
+        }
     }
 }
 
@@ -514,11 +535,6 @@
 
 .modal {
     top: 150px;
-}
-
-.sort-group .disabled a {
-    color: #6c757d;
-    font-weight: bold;
 }
 
 .avatar-cropper {

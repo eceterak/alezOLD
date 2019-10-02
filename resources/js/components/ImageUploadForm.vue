@@ -4,7 +4,7 @@
         <div class="image-upload position-relative p-3 rounded">
             <div class="spinner" v-show="isUploading"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>
             <draggable v-model="images" draggable=".photo" class="row mx-n2 photos-list" @end="orderChanged" :class="isUploading ? 'disabled-content' : ''">
-                <div class="col-2 px-2 photo photo-item" v-for="(image, index) in images" :key="image.id">
+                <div class="col-6 col-lg-2 px-2 photo photo-item" v-for="(image, index) in images" :key="image.id">
                     <div class="d-flex position-relative justify-content-center align-items-center h-12 border rounded image-container">
                         <p class="position-absolute p-2" style="top: 0; right: 0;">
                             <a href="#" @click.prevent="destroy(image, index)"><i class="fas fa-times"></i></a>
@@ -12,7 +12,7 @@
                         <img :src="'https://alez.s3.eu-central-1.amazonaws.com/' + image.url" class="img-fluid">
                     </div>
                 </div>
-                <div class="col-2 px-2 photo-item" slot="footer" v-if="images.length < maxImages">
+                <div class="col-6 col-lg-2 px-2 photo-item" slot="footer" v-if="images.length < maxImages">
                     <div class="d-flex justify-content-center align-items-center h-12 border rounded image-container" @click="launchFilePicker()">
                         <input type="file"
                             ref="file"

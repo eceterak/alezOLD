@@ -10,11 +10,11 @@
 @endsection
 @section('content')
     <div class="row">
+        <div class="col-md-9 pl-lg-4">
+            @include('adverts._list')
+        </div>
         <div class="col-3 d-none d-lg-block">
             @include('cities._filters')
-        </div>
-        <div class="col-md-9 pl-4">
-            @include('adverts._list')
         </div>
     </div>
 @endsection
