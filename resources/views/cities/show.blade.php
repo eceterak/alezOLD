@@ -10,7 +10,7 @@
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-3">
+        <div class="col-3 d-none d-lg-block">
             @include('cities._filters')
         </div>
         <div class="col-md-9 pl-4">

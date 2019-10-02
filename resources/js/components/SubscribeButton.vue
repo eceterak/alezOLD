@@ -1,6 +1,6 @@
 <template>
     <span>
-        <button class="accountWarning" :class="classes" @click="subscribe" v-text="info"></button>
+        <button class="accountWarning btn btn-link" @click="subscribe"><span class="d-none d-lg-inline mr-2" v-text="info"></span><i class="fa-lg" :class="classes"></i></button>
     </span>
 </template>
 
@@ -16,11 +16,11 @@
 
         computed: {
             classes() {
-                return ['btn', 'btn-sm', this.isActive ? 'btn-primary' : 'btn-outline-primary'];
+                return this.isActive ? ['fas', 'fa-star'] : ['far', 'fa-star'];
             },
 
             info() {
-                return ! this.isActive ? 'Obserwuj' : 'Obserwowane';
+                return ! this.isActive ? 'Dodaj do obserwowanych' : 'Obserwowane';
             }
         },
 

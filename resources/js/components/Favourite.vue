@@ -1,6 +1,6 @@
 <template>
     <button class="btn btn-link p-0 accountWarning " @click="addFavourite" v-if="authorize('notAnOwner', this.advert)">
-        <i :class="classes" class="fa-heart favourite-heart"></i>
+        <i :class="classes" class="fa-heart favourite-heart fa-sm"></i>
     </button>
 </template>
 
@@ -55,14 +55,14 @@
 <style>
     .favourite-heart {
         background-color: #f3f2f2;
-        padding: .75rem;
+        padding: .6rem;
         border-radius: 50%;
         color: #3b4249;
     }
 
     #breadcrumbs .favourite-heart {
         background-color: #FFF;
-        padding: .75rem;
+        padding: .5rem;
         font-size: 1.2rem;
     }
 </style>

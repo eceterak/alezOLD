@@ -91,13 +91,37 @@
   }
 }
 
+/* Breadcrumbs */
+
 #breadcrumbs {
   background-color: #f7f7f9;
-  padding: 2rem 0;
+  padding: 1rem 0;
+}
+
+@media (min-width: 992px) {
+  #breadcrumbs {
+    padding: 2rem 0;
+  }
 }
 
 #breadcrumbs h3 {
-  font-size: 1.5rem;
+  font-size: 1rem;
+}
+
+@media (min-width: 992px) {
+  #breadcrumbs h3 {
+    font-size: 1.4rem;
+  }
+}
+
+#breadcrumbs p {
+  font-size: 0.85rem;
+}
+
+@media (min-width: 992px) {
+  #breadcrumbs p {
+    font-size: 0.95rem;
+  }
 }
 
 #breadcrumbs .user-menu .nav-item {
@@ -158,8 +182,14 @@
 /* Popular cities */
 
 #popular-cities h5 {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: normal;
+}
+
+@media (min-width: 992px) {
+  #popular-cities h5 {
+    font-size: 1rem;
+  }
 }
 
 #popular-cities .btn-primary {
@@ -204,6 +234,34 @@
 .filter-group label {
   margin: 0;
   align-self: center;
+}
+
+/* Advert list */
+
+.advert-list .advert .card-body {
+  padding: 1rem;
+}
+
+.advert-list .advert .title {
+  font-size: 1rem;
+}
+
+@media (min-width: 992px) {
+  .advert-list .advert .title {
+    font-size: 1.14rem;
+  }
+}
+
+.advert-list .advert .price {
+  font-size: 1.25rem;
+  margin-top: 0.25rem;
+}
+
+@media (min-width: 992px) {
+  .advert-list .advert .price {
+    font-size: 1.6625rem;
+    margin-top: 0;
+  }
 }
 
 /* Login */

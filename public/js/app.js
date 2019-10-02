@@ -2769,10 +2769,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     classes: function classes() {
-      return ['btn', 'btn-sm', this.isActive ? 'btn-primary' : 'btn-outline-primary'];
+      return this.isActive ? ['fas', 'fa-star'] : ['far', 'fa-star'];
     },
     info: function info() {
-      return !this.isActive ? 'Obserwuj' : 'Obserwowane';
+      return !this.isActive ? 'Dodaj do obserwowanych' : 'Obserwowane';
     }
   },
   methods: {
@@ -7402,7 +7402,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.favourite-heart {\n    background-color: #f3f2f2;\n    padding: .75rem;\n    border-radius: 50%;\n    color: #3b4249;\n}\n#breadcrumbs .favourite-heart {\n    background-color: #FFF;\n    padding: .75rem;\n    font-size: 1.2rem;\n}\n", ""]);
+exports.push([module.i, "\n.favourite-heart {\n    background-color: #f3f2f2;\n    padding: .6rem;\n    border-radius: 50%;\n    color: #3b4249;\n}\n#breadcrumbs .favourite-heart {\n    background-color: #FFF;\n    padding: .5rem;\n    font-size: 1.2rem;\n}\n", ""]);
 
 // exports
 
@@ -32886,7 +32886,7 @@ var render = function() {
         },
         [
           _c("i", {
-            staticClass: "fa-heart favourite-heart",
+            staticClass: "fa-heart favourite-heart fa-sm",
             class: _vm.classes
           })
         ]
@@ -33575,12 +33575,20 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("span", [
-    _c("button", {
-      staticClass: "accountWarning",
-      class: _vm.classes,
-      domProps: { textContent: _vm._s(_vm.info) },
-      on: { click: _vm.subscribe }
-    })
+    _c(
+      "button",
+      {
+        staticClass: "accountWarning btn btn-link",
+        on: { click: _vm.subscribe }
+      },
+      [
+        _c("span", {
+          staticClass: "d-none d-lg-inline mr-2",
+          domProps: { textContent: _vm._s(_vm.info) }
+        }),
+        _c("i", { staticClass: "fa-lg", class: _vm.classes })
+      ]
+    )
   ])
 }
 var staticRenderFns = []

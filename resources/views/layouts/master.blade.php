@@ -25,7 +25,7 @@
                 </section>
             </div>
         </header>
-        <main class="container py-4">
+        <main class="container py-1 py-lg-4">
             @yield('content')
         </main>
         <footer id="footer" class="border-top">
