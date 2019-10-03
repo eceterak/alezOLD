@@ -8,6 +8,7 @@
     @if($adverts->count())
         <div class="advert-list">
             @foreach($adverts as $advert)
+<<<<<<< HEAD
                 <div class="advert mb-3 pb-3 border-bottom">
                     <div class="row no-gutters">
                         <div class="col-4 col-lg-2 d-flex align-items-center">
@@ -26,17 +27,43 @@
                                     <p class="small mb-0 font-weight-bold d-inline">
                                         @if($advert->conversations->count() > 0)        
                                             <a href="{{ route('conversations.advert', $advert->slug) }}">{{ $advert->conversations->count() }}
+=======
+                <div class="card advert mb-3">
+                    <div class="card-body">
+                        <div class="row no-gutters">
+                            <div class="col-4 col-lg-2 d-flex align-items-center">
+                                <a href="{{ route('adverts.show', [$advert->city->slug, $advert->slug]) }}"><img src="{{ $advert->featured_photo_path }}" class="img-fluid"></a>
+                            </div>
+                            <div class="col-8 col-lg-10 pl-3">
+                                <div class="row h-100 align-content-lg-center">
+                                    <div class="col-12 col-lg-7 pr-0">
+                                        <h5 class="title mb-0">
+                                            <a href="{{ route('adverts.show', [$advert->city->slug, $advert->slug]) }}">{{ $advert->title }}</a>
+                                        </h5>
+                                        <p class="small text-muted mb-0">Pokój {{ $advert->room_size_translated }}, {{ $advert->city->name }}</p>
+                                    </div>
+                                    <div class="col-lg-2 pr-0 text-lg-center my-2 my-lg-0">
+                                        <p class="small font-weight-bold mb-0 d-inline mr-4">{{ $advert->visits }}<span class="mt-2 text-xs ml-2"><i class="fas fa-eye"></i></span></p>
+                                        <p class="small mb-0 font-weight-bold d-inline">
+                                            @if($advert->conversations->count() > 0)        
+                                                <a href="{{ route('conversations.advert', $advert->slug) }}">{{ $advert->conversations->count() }}
+                                                    <span class="mt-2 text-xs ml-2">
+                                                        <i class="fas fa-envelope"></i>
+                                                    </span>
+                                                </a>
+                                            @else
+                                                {{ $advert->conversations->count() }}
+>>>>>>> 15ac1e857bcc019b8e56e5adbb56ae2465c9fc78
                                                 <span class="mt-2 text-xs ml-2">
                                                     <i class="fas fa-envelope"></i>
                                                 </span>
-                                            </a>
-                                        @else
-                                            {{ $advert->conversations->count() }}
-                                            <span class="mt-2 text-xs ml-2">
-                                                <i class="fas fa-envelope"></i>
-                                            </span>
-                                        @endif
-                                    </p>
+                                            @endif
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-3 text-lg-right">
+                                        <a href="{{ route('adverts.edit', [$advert->city->slug, $advert->slug]) }}" class="btn btn-sm btn-primary mr-2 font-weight-bold">Edytuj</a>
+                                        <button class="btn btn-sm btn-danger d-inline font-weight-bold" data-toggle="modal" data-target="#advertDeleteConfirmationModal" data-endpoint="{{ route('adverts.destroy', [$advert->city->slug, $advert->slug]) }}">Zakończ</button>
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 text-lg-right">
                                     <a href="{{ route('adverts.edit', [$advert->city->slug, $advert->slug]) }}" class="btn btn-sm btn-primary mr-2 font-weight-bold">Edytuj</a>
