@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('breadcrumbs')
-    <h3>Logowanie / Rejestracja</h3>
+    <h3 class="mb-0">Logowanie / Rejestracja</h3>
 @endsection
 @section('content')
     <div class="row position-relative" id="login-form">

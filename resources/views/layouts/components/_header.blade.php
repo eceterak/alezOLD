@@ -60,7 +60,7 @@
                 </li>
             </ul>
             <ul class="nav ml-auto d-lg-none">
-                <li class="nav-item">
+                <li class="nav-item dropdown">
                     <a href="{{ route('home') }}" class="btn btn-link"><i class="fas fa-user fa-lg"></i></a>
                 </li>
                 <li class="nav-item">

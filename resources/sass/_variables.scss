@@ -83,13 +83,16 @@ $border-radius-lg: 2.1rem;
 // Buttons + Forms
 $input-btn-padding-y: .6rem;
 $input-btn-padding-x: 1.2rem;
-$input-btn-border-width: $border-width;
 
 $input-btn-padding-y-sm: .25rem;
-$btn-padding-x-sm: 1rem;
+$input-btn-padding-x-sm: .5rem;
+
+$input-btn-border-width: $border-width;
+
 $input-btn-line-height-sm: $line-height-sm;
 
 // Buttons
+$btn-font-size-sm: 80%;
 $btn-border-radius: 1.5rem;
 $btn-border-width: $input-btn-border-width;
 
