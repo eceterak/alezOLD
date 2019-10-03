@@ -8,12 +8,13 @@
     @if($conversations->count())
         <div class="card">
             <div class="card-body">
-                <div class="row">
+                <div class="row align-items-center">
                     @foreach($conversations as $conversation)
-                        <div class="col-lg-2 d-flex justify-content-center align-items-center">
-                            <p class="mb-0 font-weight-bold">{!! $conversation->interlocutor->path !!}</p>
+                        <div class="col-lg-2 text-center">
+                            {{-- <img src="{{ $conversation->interlocutor->avatar_path }}" alt="" class="card-img-top img-fluid rounded-circle" style="width: 2.5rem; height: 2.5rem;"> --}}
+                            <p class="mb-3 mb-lg-0 font-weight-bold">{!! $conversation->interlocutor->path !!}</p>
                         </div>
-                        <div class="col-lg-9 pl-0">
+                        <div class="col-lg-8 pr-lg-0">
                             <div class="d-flex justify-content-between">
                                 <h5 @if($conversation->advert->archived) style="text-decoration: line-through;" @endif>
                                     <a href="{{ route('adverts.show', [$conversation->advert->city->slug, $conversation->advert->slug]) }}">{{ $conversation->advert->title }}<i class="fas fa-link fa-xs ml-1"></i></a>
@@ -27,7 +28,7 @@
                                 @endif
                             </p>
                         </div>
-                        <div class="col-lg-1 d-flex justify-content-center align-items-center">
+                        <div class="col-lg-2 text-right">
                             <p class="mb-0 text-muted">
                                 @if($conversation->updated_at->diffInDays() < 1)
                                     {{ $conversation->updated_at->format('H:i') }}

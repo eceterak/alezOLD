@@ -229,11 +229,11 @@
 .advert-list {
     .advert {
         .card-body {
-            padding: 1rem;
+            padding: .5rem;
         }
 
         .title {
-            font-size: 1rem;
+            font-size: .9rem;
 
             @media(min-width: map-get($grid-breakpoints, 'lg')) {
                 font-size: 1.14rem;
@@ -256,10 +256,12 @@
 .sort-group {
 
     .list-group-item {
-        padding-top: 0;
+        padding: 0 .5rem .75rem .5rem;
+        border: none;
+        background: transparent;
 
         @media(min-width: map-get($grid-breakpoints, 'lg')) {
-            padding-top: .75rem;
+            padding: 0.75rem 1.25rem;
         }
     }
 
@@ -327,16 +329,26 @@
 }
 
 /* Messages */
-.alert-primary {
-    color: #FFF;
-    background-color: #02807e;
-    border-color: #02807e;
-}
+.conversation {
+    h4 {
+        font-size: 1.25rem;
 
-.alert-light {
-    color: #3b4249;
-    background-color: #f7f7f9;
-    border-color: #f7f7f9;
+        @media(min-width: map-get($grid-breakpoints, 'lg')) {
+            font-size: 1.425rem;
+        }
+    }
+
+    .alert-primary {
+        color: #FFF;
+        background-color: #02807e;
+        border-color: #02807e;
+    }
+    
+    .alert-light {
+        color: #3b4249;
+        background-color: #f7f7f9;
+        border-color: #f7f7f9;
+    }
 }
 
 /* Components */
@@ -427,6 +439,17 @@
         }
     }
 }
+
+/* Media */
+@media(min-width: map-get($grid-breakpoints, 'lg')) {
+    .btn-sm, .btn-group-sm > .btn {
+        padding: 0.25rem 1rem;
+    }
+}
+
+
+
+
 
 /***********/
 /* Legacy */

@@ -7,5 +7,11 @@
         <li class="nav-item"><a href="{{ route('subscriptions') }}" class="nav-link">Obserwowane</a></li>
         <li class="nav-item"><a href="{{ route('favourites') }}" class="nav-link">Ulubione</a></li>
         <li class="nav-item"><a href="{{ route('settings') }}" class="nav-link">Ustawienia</a></li>
+        <li class="nav-item">
+            <form action="{{ route('logout') }}" method="POST" class="dropdown-item">
+                @csrf
+                <button type="submit" class="btn btn-link">Wyloguj</button>
+            </form>
+        </li>
     </ul>
 </div>

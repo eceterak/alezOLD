@@ -239,11 +239,11 @@
 /* Advert list */
 
 .advert-list .advert .card-body {
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 .advert-list .advert .title {
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 @media (min-width: 992px) {
@@ -267,12 +267,14 @@
 /* Advert sort */
 
 .sort-group .list-group-item {
-  padding-top: 0;
+  padding: 0 0.5rem 0.75rem 0.5rem;
+  border: none;
+  background: transparent;
 }
 
 @media (min-width: 992px) {
   .sort-group .list-group-item {
-    padding-top: 0.75rem;
+    padding: 0.75rem 1.25rem;
   }
 }
 
@@ -334,13 +336,23 @@
 
 /* Messages */
 
-.alert-primary {
+.conversation h4 {
+  font-size: 1.25rem;
+}
+
+@media (min-width: 992px) {
+  .conversation h4 {
+    font-size: 1.425rem;
+  }
+}
+
+.conversation .alert-primary {
   color: #FFF;
   background-color: #02807e;
   border-color: #02807e;
 }
 
-.alert-light {
+.conversation .alert-light {
   color: #3b4249;
   background-color: #f7f7f9;
   border-color: #f7f7f9;
@@ -430,6 +442,15 @@
 
 .custom-pagination .custom-page-item .custom-page-link:hover {
   background-color: #cbcbd8;
+}
+
+/* Media */
+
+@media (min-width: 992px) {
+  .btn-sm,
+  .btn-group-sm > .btn {
+    padding: 0.25rem 1rem;
+  }
 }
 
 /***********/
