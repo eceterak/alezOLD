@@ -32798,7 +32798,7 @@ var render = function() {
           _vm._v(" "),
           !_vm.isDefaultAvatar
             ? _c(
-                "p",
+                "div",
                 {
                   staticClass: "position-absolute p-2",
                   staticStyle: { top: "0", right: "0" }
@@ -32822,7 +32822,7 @@ var render = function() {
             : _vm._e(),
           _vm._v(" "),
           _c("img", {
-            staticClass: "img-fluid rounded-circle p-4",
+            staticClass: "img-fluid rounded-circle p-6 p-lg-4",
             class: _vm.isUploading ? "disabled-content" : "",
             attrs: { src: _vm.avatar }
           })

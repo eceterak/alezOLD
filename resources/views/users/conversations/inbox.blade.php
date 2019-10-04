@@ -14,7 +14,8 @@
                         <img src="{{ $conversation->interlocutor->avatar_path }}" alt="" class="card-img-top img-fluid rounded-circle" style="width: 2.5rem; height: 2.5rem;">            
                     </div>
                     <div class="col-9 col-lg-8 pr-lg-0">
-                        <p class="mb-2 font-weight-bold">{!! $conversation->interlocutor->path !!} <a href="{{ route('adverts.show', [$conversation->advert->city->slug, $conversation->advert->slug]) }}">({{ $conversation->advert->title }}<i class="fas fa-link fa-xs ml-1"></i>)</a></p>
+                        <p class="mb-0 font-weight-bold">{!! $conversation->interlocutor->path !!}</p>
+                        <p class="mb-2"><a href="{{ route('adverts.show', [$conversation->advert->city->slug, $conversation->advert->slug]) }}">({{ $conversation->advert->title }}<i class="fas fa-link fa-xs ml-1"></i>)</a></p>
                         <p class="card-text">
                             @if($conversation->hasNewMessagesFor($profile))
                                 <strong><a href="{{ route('conversations.show', $conversation->id) }}">{{ str_limit($conversation->messages()->first()->body, 100) }}</a></strong>
@@ -23,7 +24,7 @@
                             @endif
                         </p>
                     </div>
-                    <div class="d-none col-lg-3 text-right">
+                    <div class="col-lg-3 text-right">
                         <p class="mb-0 text-muted">
                             @if($conversation->updated_at->diffInDays() < 1)
                                 {{ $conversation->updated_at->format('H:i') }}

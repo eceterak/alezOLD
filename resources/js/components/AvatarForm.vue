@@ -2,10 +2,10 @@
     <div class="text-center">
         <div class="d-flex position-relative justify-content-center align-items-center mb-4">
             <div class="spinner" v-show="isUploading"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>
-            <p class="position-absolute p-2" style="top: 0; right: 0;" v-if="!isDefaultAvatar">
+            <div class="position-absolute p-2" style="top: 0; right: 0;" v-if="!isDefaultAvatar">
                 <a href="#" @click.prevent="destroy"><i class="fas fa-times"></i></a>
-            </p>
-            <img :src="avatar" class="img-fluid rounded-circle p-4" :class="isUploading ? 'disabled-content' : ''">
+            </div>
+            <img :src="avatar" class="img-fluid rounded-circle p-6 p-lg-4" :class="isUploading ? 'disabled-content' : ''">
         </div>
         <button class="btn btn-primary text-white font-weight-bold" id="avatar-pick"><i class="fas fa-upload fa-lg"></i><span class="ml-3" v-text="btnText"></span></button>
         <avatar-cropper 

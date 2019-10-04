@@ -143,10 +143,26 @@
 }
 
 /* User menu mobile */
-.user-menu {
-    .nav-link {
+.user-menu-mobile {
+    .list-group-item:first-child {
+        padding-top: 0;
+    }
+
+    .list-group-item:last-child {
+        padding-bottom: 0;
+    }
+
+    .nav-link, .btn-link {
         padding: 0;
         color: $body-color;
+
+    }
+
+    i {
+        color: $gray-600;
+        width: 15px;
+        height: 15px;
+        margin-right: 1rem;
     }
 }
 

@@ -159,9 +159,25 @@
 
 /* User menu mobile */
 
-.user-menu .nav-link {
+.user-menu-mobile .list-group-item:first-child {
+  padding-top: 0;
+}
+
+.user-menu-mobile .list-group-item:last-child {
+  padding-bottom: 0;
+}
+
+.user-menu-mobile .nav-link,
+.user-menu-mobile .btn-link {
   padding: 0;
   color: #3b4249;
+}
+
+.user-menu-mobile i {
+  color: #6c757d;
+  width: 15px;
+  height: 15px;
+  margin-right: 1rem;
 }
 
 /* Search master */

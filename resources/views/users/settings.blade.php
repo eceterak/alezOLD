@@ -6,10 +6,10 @@
 
 @section('content')
     <div class="row">
-        <div class="col-3">
+        <div class="col-lg-3">
             <avatar-form :user="{{ $profile }}"></avatar-form>
         </div>
-        <div class="col-9">
+        <div class="col-lg-9">
             <form action="{{ route('settings.update') }}" method="POST">
                 @csrf
                 <div class="form-group">
