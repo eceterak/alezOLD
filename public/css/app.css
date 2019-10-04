@@ -1935,7 +1935,7 @@ h4,
 
 h5,
 .h5 {
-  font-size: 1.14rem;
+  font-size: 1rem;
 }
 
 h6,
@@ -7065,28 +7065,28 @@ a.badge-dark.focus {
 .list-group-item {
   position: relative;
   display: block;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: -1px;
-  background-color: #fff;
-  border: 1px solid #f2f2f2;
+  padding: 0.75rem 0;
+  margin-bottom: 0;
+  background-color: transparent;
+  border: 0 solid #f2f2f2;
 }
 
 .list-group-item:first-child {
-  border-top-left-radius: 0.25rem;
-  border-top-right-radius: 0.25rem;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .list-group-item:last-child {
   margin-bottom: 0;
-  border-bottom-right-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .list-group-item.disabled,
 .list-group-item:disabled {
   color: #6c757d;
   pointer-events: none;
-  background-color: #fff;
+  background-color: transparent;
 }
 
 .list-group-item.active {
@@ -7101,20 +7101,20 @@ a.badge-dark.focus {
 }
 
 .list-group-horizontal .list-group-item {
-  margin-right: -1px;
+  margin-right: 0;
   margin-bottom: 0;
 }
 
 .list-group-horizontal .list-group-item:first-child {
-  border-top-left-radius: 0.25rem;
-  border-bottom-left-radius: 0.25rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
   border-top-right-radius: 0;
 }
 
 .list-group-horizontal .list-group-item:last-child {
   margin-right: 0;
-  border-top-right-radius: 0.25rem;
-  border-bottom-right-radius: 0.25rem;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
@@ -7124,20 +7124,20 @@ a.badge-dark.focus {
   }
 
   .list-group-horizontal-sm .list-group-item {
-    margin-right: -1px;
+    margin-right: 0;
     margin-bottom: 0;
   }
 
   .list-group-horizontal-sm .list-group-item:first-child {
-    border-top-left-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     border-top-right-radius: 0;
   }
 
   .list-group-horizontal-sm .list-group-item:last-child {
     margin-right: 0;
-    border-top-right-radius: 0.25rem;
-    border-bottom-right-radius: 0.25rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
 }
@@ -7148,20 +7148,20 @@ a.badge-dark.focus {
   }
 
   .list-group-horizontal-md .list-group-item {
-    margin-right: -1px;
+    margin-right: 0;
     margin-bottom: 0;
   }
 
   .list-group-horizontal-md .list-group-item:first-child {
-    border-top-left-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     border-top-right-radius: 0;
   }
 
   .list-group-horizontal-md .list-group-item:last-child {
     margin-right: 0;
-    border-top-right-radius: 0.25rem;
-    border-bottom-right-radius: 0.25rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
 }
@@ -7172,20 +7172,20 @@ a.badge-dark.focus {
   }
 
   .list-group-horizontal-lg .list-group-item {
-    margin-right: -1px;
+    margin-right: 0;
     margin-bottom: 0;
   }
 
   .list-group-horizontal-lg .list-group-item:first-child {
-    border-top-left-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     border-top-right-radius: 0;
   }
 
   .list-group-horizontal-lg .list-group-item:last-child {
     margin-right: 0;
-    border-top-right-radius: 0.25rem;
-    border-bottom-right-radius: 0.25rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
 }
@@ -7196,20 +7196,20 @@ a.badge-dark.focus {
   }
 
   .list-group-horizontal-xl .list-group-item {
-    margin-right: -1px;
+    margin-right: 0;
     margin-bottom: 0;
   }
 
   .list-group-horizontal-xl .list-group-item:first-child {
-    border-top-left-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
     border-top-right-radius: 0;
   }
 
   .list-group-horizontal-xl .list-group-item:last-child {
     margin-right: 0;
-    border-top-right-radius: 0.25rem;
-    border-bottom-right-radius: 0.25rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
 }
@@ -7221,7 +7221,7 @@ a.badge-dark.focus {
 }
 
 .list-group-flush .list-group-item:last-child {
-  margin-bottom: -1px;
+  margin-bottom: 0;
 }
 
 .list-group-flush:first-child .list-group-item:first-child {

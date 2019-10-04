@@ -96,6 +96,7 @@
 #breadcrumbs {
   background-color: #f7f7f9;
   padding: 1rem 0;
+  /* User menu */
 }
 
 @media (min-width: 992px) {
@@ -126,6 +127,10 @@
 
 #breadcrumbs .user-menu .nav-item {
   padding: 0 1rem;
+}
+
+#breadcrumbs .user-menu .nav-item:first-child {
+  padding-left: 0;
 }
 
 #breadcrumbs .user-menu .nav-item .nav-link {
@@ -238,8 +243,16 @@
 
 /* Advert list */
 
-.advert-list .advert .card-body {
-  padding: 0.5rem;
+.advert-list .advert {
+  border-bottom: 1px solid #f2f2f2;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.advert-list .advert:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
 
 .advert-list .advert .title {
@@ -266,19 +279,19 @@
 
 /* Advert sort */
 
-.sort-group .list-group-item {
+.list-group.sort-group .list-group-item {
   padding: 0 0.5rem 0.75rem 0.5rem;
   border: none;
   background: transparent;
 }
 
 @media (min-width: 992px) {
-  .sort-group .list-group-item {
+  .list-group.sort-group .list-group-item {
     padding: 0.75rem 1.25rem;
   }
 }
 
-.sort-group .disabled a {
+.list-group.sort-group .disabled a {
   color: #6c757d;
   font-weight: bold;
 }
@@ -335,6 +348,18 @@
 }
 
 /* Messages */
+
+.conversation-list .conversation {
+  border-bottom: 1px solid #f2f2f2;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.conversation-list .conversation:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
 
 .conversation h4 {
   font-size: 1.25rem;
@@ -408,6 +433,8 @@
   }
 }
 
+/* Pagination */
+
 .custom-pagination {
   display: flex;
   padding-left: 0;
@@ -442,6 +469,13 @@
 
 .custom-pagination .custom-page-item .custom-page-link:hover {
   background-color: #cbcbd8;
+}
+
+/* Components */
+
+.list-group .list-group-item {
+  border-bottom: 1px solid #f2f2f2;
+  margin-bottom: 0;
 }
 
 /* Media */

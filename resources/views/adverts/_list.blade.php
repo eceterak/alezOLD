@@ -2,7 +2,7 @@
     @include('adverts._sort')
     <div class="advert-list">
         @foreach($adverts as $advert)
-            <div class="advert mb-3 pb-3 border-bottom">
+            <div class="advert">
                 <div class="row no-gutters">
                     <div class="col-4 col-lg-2 d-flex align-items-center">
                         <a href="{{ route('adverts.show', [$advert->city->slug, $advert->slug]) }}"><img src="{{ $advert->featured_photo_path }}" class="img-fluid"></a>

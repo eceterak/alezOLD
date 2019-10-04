@@ -6,37 +6,38 @@
 
 @section('content')
     @if($favourites->count())
-        <div class="card">
-            <table class="table">
-                <tbody>
-                    @foreach($favourites as $favourite)
-                        <tr>
-                            <td style="width: 5rem;"><img src="{{ $favourite->advert->featured_photo_path }}" alt="" class="img-fluid"></td>
-                            <td>
-                                <p class="card-text mb-0" @if($favourite->advert->archived) style="text-decoration: line-through;" @endif>
-                                    <a href="{{ route('adverts.show', [$favourite->advert->city->slug, $favourite->advert->slug]) }}">{{ $favourite->advert->title }}</a>
-                                </p>
-                                <p class="card-text"><small>{{ $favourite->advert->created_at }}</small></p>
-                            </td>
-                            <td class="fit">
-                                <form action="{{ route('adverts.favourite.delete', [$favourite->advert->city->slug, $favourite->advert->slug]) }}" method="POST" class="inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-danger d-inline">Usuń</button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        {{ $favourites->links() }}
-        @else
-            <div class="card">
-                <div class="card-body text-center">
-                    <p class="card-text">Nie masz żadnych zapisanych ogłoszeń</p>
+        <div class="advert-list">
+            @foreach($favourites as $favourite)
+                <div class="advert">
+                    <div class="row no-gutters">
+                        <div class="col-4 col-lg-1 d-flex align-items-center">
+                            <a href="{{ route('adverts.show', [$favourite->advert->city->slug, $favourite->advert->slug]) }}"><img src="{{ $favourite->advert->featured_photo_path }}" alt="" class="img-fluid"></a>
+                        </div>
+                        <div class="col-8 col-lg-11 pl-3">
+                            <div class="row h-100 align-content-lg-center">
+                                <div class="col-lg-9 pr-lg-0">
+                                    <h5 class="title mb-0">
+                                        <a href="{{ route('adverts.show', [$favourite->advert->city->slug, $favourite->advert->slug]) }}">{{ $favourite->advert->title }}</a>
+                                    </h5>
+                                    <p class="small text-muted mb-0">Pokój {{ $favourite->advert->room_size_translated }}, {{ $favourite->advert->city->name }}</p>
+                                </div>
+                                <div class="col-lg-3 text-lg-right">
+                                    <form action="{{ route('adverts.favourite.delete', [$favourite->advert->city->slug, $favourite->advert->slug]) }}" method="POST" class="inline-block">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-danger d-inline">Usuń</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            @endforeach
+        </div>
+        {{ $favourites->onEachSide(1)->links() }}
+        @else
+            <p class="text-center mb-0">Nie masz żadnych zapisanych ogłoszeń</p>
         @endif
     </div>
 @endsection
+

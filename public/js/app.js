@@ -50778,10 +50778,12 @@ $(function () {
     var button = $(event.relatedTarget);
     var endpoint = button.data('endpoint');
     $(this).find('form#confirmationForm').attr('action', endpoint);
-  });
+  }); // User menu active item
+
   $('.user-menu li a').each(function (key, item) {
     if (item.href == window.location.href) {
       $(item).addClass('active');
+      $(item).parent().addClass('d-block');
     }
   }); // Disable empty inputs when applying filters to clear the url a bit.
 

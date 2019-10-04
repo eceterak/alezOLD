@@ -7,10 +7,19 @@ $font-size-base: .95rem;
 $font-size-sm: .9rem;
 $body-color: #3b4249;
 
+
 $line-height-base: 1.5;
 $line-height-sm: 1.5;
 
-$h5-font-size: $font-size-base * 1.2;
+
+$h1-font-size: $font-size-base * 2.5;
+$h2-font-size: $font-size-base * 2;
+$h3-font-size: $font-size-base * 1.75;
+$h4-font-size: $font-size-base * 1.5;
+$h5-font-size: 1rem;
+$h6-font-size: $font-size-base;
+
+//$h5-font-size: $font-size-base * 1.2;
 
 // Colors
 $primary: #02807e;
@@ -31,7 +40,6 @@ $gray-400: #ececec;
 $gray-500: #e2e2e2;
 
 // Links
-
 $link-color: $primary !default;
 $link-hover-color: darken($link-color, 15%) !default;
 
@@ -131,4 +139,9 @@ $dropdown-border-color: transparent;
 $modal-content-border-radius: $border-radius;
 
 // Lists
+$list-group-bg: transparent;
+$list-group-border-width: 0;
+$list-group-border-radius: 0;
 $list-group-border-color: $gray-300;
+$list-group-item-padding-y: .75rem;
+$list-group-item-padding-x: 0;

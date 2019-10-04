@@ -97,9 +97,11 @@ $(function() {
         $(this).find('form#confirmationForm').attr('action', endpoint);
     });
 
+    // User menu active item
     $('.user-menu li a').each(function(key, item) {
         if(item.href == window.location.href) {
             $(item).addClass('active');
+            $(item).parent().addClass('d-block');
         }
     });
 

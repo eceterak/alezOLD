@@ -8,7 +8,7 @@
     @if($adverts->count())
         <div class="advert-list">
             @foreach($adverts as $advert)
-                <div class="advert mb-3 pb-3 border-bottom">
+                <div class="advert">
                     <div class="row no-gutters">
                         <div class="col-4 col-lg-2 d-flex align-items-center">
                             <a href="{{ route('adverts.show', [$advert->city->slug, $advert->slug]) }}"><img src="{{ $advert->featured_photo_path }}" class="img-fluid"></a>
@@ -48,9 +48,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="mt-4">
-            {{ $adverts->links() }}
-        </div>
+        {{ $adverts->onEachSide(1)->links() }}
         <div class="modal fade" id="advertDeleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -72,11 +70,9 @@
             </div>
         </div>
     @else
-        <div class="card">
-            <div class="card-body text-center">
-                <p>Nie masz żadnych aktywnych ogłoszeń.</p>
-                <a href="{{ route('adverts.create') }}" class="btn btn btn-secondary ml-2">Dodaj jedno już teraz!</a>
-            </div>
+        <div class="text-center">
+            <p>Nie masz żadnych aktywnych ogłoszeń.</p>
+            <a href="{{ route('adverts.create') }}" class="btn btn btn-secondary ml-2">Dodaj jedno już teraz!</a>
         </div>
     @endif
 @endsection
