@@ -54,9 +54,6 @@
             <div class="modal-content align-items-center">
                 <div class="modal-header border-0 pb-0">
                     <h5 class="mb-0">Czy na pewno chcesz usunąć swoje konto?</h5>
-                    {{-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button> --}}
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('account.delete') }}" method="POST" class="d-inline">

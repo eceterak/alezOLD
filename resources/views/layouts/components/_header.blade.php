@@ -1,21 +1,7 @@
 <nav class="navbar {{ isset($class) ? $class : '' }}" id="navbar-top">
     <div class="container">
         <a href="{{ route('index') }}" class="navbar-brand">www.alez.pl</a>
-        {{-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-top">
-            <span class="navbar-toggler-icon"></span>
-        </button> --}}
         <div id="menu-top">
-            {{-- <ul class="navbar-nav nav-pills mr-auto align-items-center">
-                <li class="nav-item">
-                    <a href="{{ route('index') }}" class="nav-link">Strona główna</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('aboutUs') }}" class="nav-link">O nas</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('contact') }}" class="nav-link">Kontakt</a>
-                </li>
-            </ul> --}}
             <ul class="nav ml-auto d-none d-lg-flex">
                 @guest
                     <li class="nav-item">
@@ -61,7 +47,7 @@
             </ul>
             <ul class="nav ml-auto d-lg-none">
                 <li class="nav-item dropdown">
-                    <a href="{{ route('home') }}" class="btn btn-link"><i class="fas fa-user fa-lg"></i></a>
+                    <a href="{{ route('home-mobile') }}" class="btn btn-link"><i class="fas fa-user fa-lg"></i></a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('adverts.create') }}" class="btn btn-link pr-0"><i class="fas fa-plus fa-lg"></i></a>

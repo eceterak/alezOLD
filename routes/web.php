@@ -72,6 +72,7 @@ Route::group(['middleware' => ['auth', 'verified']], function()
 
     // User account
     Route::get('/moj-alez', 'HomeController@index')->name('home');
+    Route::get('/moj-alez-m', 'HomeMobileController@index')->name('home-mobile'); // Mobile version
     Route::get('/moj-alez/archiwum', 'ArchivesController@index')->name('archives');
     Route::get('/moj-alez/ustawienia', 'Auth\UserSettingsController@index')->name('settings');
     Route::post('/moj-alez/ustawienia', 'Auth\UserSettingsController@update')->name('settings.update');
