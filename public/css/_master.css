@@ -329,6 +329,28 @@
   font-weight: bold;
 }
 
+/* Advert filters */
+
+.filter-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  z-index: 1061;
+  background: #FFF;
+  height: 100%;
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .filter-box {
+    display: block;
+    position: relative;
+    z-index: 1;
+    height: auto;
+  }
+}
+
 /* Login */
 
 #login-form .login-or {

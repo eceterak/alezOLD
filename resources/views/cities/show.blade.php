@@ -1,4 +1,5 @@
 @extends('layouts.master')
+
 @section('breadcrumbs')
     <div class="d-flex justify-content-between align-items-center">
         <div>
@@ -8,12 +9,13 @@
         <subscribe-button :active="{{ json_encode($city->isSubscribed) }}"></subscribe-button>
     </div>
 @endsection
+
 @section('content')
     <div class="row">
-        <div class="col-md-9 pl-lg-4">
+        <div class="col-md-9 pl-md-4">
             @include('adverts._list')
         </div>
-        <div class="col-3 d-none d-lg-block">
+        <div class="col-md-3 d-lg-block filter-box">
             @include('cities._filters')
         </div>
     </div>

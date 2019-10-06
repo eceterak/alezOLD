@@ -1,4 +1,9 @@
-<p class="h5 mt-2">Filtrowanie</p>
+<div class="d-flex justify-content-between">
+    <p class="h5 mt-2">Filtrowanie</p>
+    <button type="button" class="close d-md-none filters-hide" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 <form action="{{ url()->full() }}" method="GET" class="form" name="advertFiltersForm">
     <section class="filter-group">
         <p class="filter-title">Czynsz</p>

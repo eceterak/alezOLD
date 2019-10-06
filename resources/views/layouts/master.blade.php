@@ -17,6 +17,7 @@
 </head>
 <body>
     <div id="app">
+        @yield('pre')
         <header>
             @include('layouts.components._header', ['class' => 'navbar-light'])
             <div id="breadcrumbs">
