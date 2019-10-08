@@ -19,8 +19,8 @@
     @endif
     <div class="row advert">
         <div class="col-lg-8">
-            <div class="mBox advert-photos">
-                <div class="mb-4 mb-lg-2 featured-container">
+            <div class="mBox advert-photos mb-2">
+                <div class="featured-container">
                     <favourite :advert="{{ $advert }}" class="favourite-button d-block d-lg-none"></favourite>
                     <img src="{{ $advert->featured_photo_path }}" class="img-fluid">
                 </div>
@@ -32,7 +32,7 @@
             </div>
             <div class="mb-4">
                 <h4 class="d-block d-lg-none">
-                    <strong>{{ $advert->rent }}</strong>&nbsp;<small class="ml-1 text-xs text-grey-darker">zł/miesiąc @if($advert->bills) + media @endif</small>
+                    <strong><i class="fas fa-dollar-sign mr-2"></i>{{ $advert->rent }}</strong>&nbsp;<small class="ml-1 text-xs text-grey-darker">zł/miesiąc @if($advert->bills) + media @endif</small>
                 </h4>
                 <h5 class="card-title">Opis</h5>
                 <p class="card-text">{{ $advert->description }}</p>
@@ -50,7 +50,7 @@
                     @include('components._errors')
                 </div>
             @endif 
-            <div class="mt-4 mt-lg-5">
+            <div class="mt-4 mb-4 mb-lg-0 mt-lg-5">
                 <google-map lat="{{ $advert->lat }}" lon="{{ $advert->lon}}" api="{{ env('APP_NAME') }}"></google-map>
             </div>
         </div>
@@ -84,7 +84,7 @@
             <div class="my-4 pl-4">
                 <p class="text-primary font-weight-bold"><i class="fas fa-bed"></i> Pokój {{ ucfirst($advert->room_size_translated) }}</p>
             </div>
-            <div class="card card-dark mb-4 border-top-2">
+            <div class="card card-dark border-top-2">
                 <div class="card-body">
                     <p class="card-title text-primary font-weight-bold">Opłaty dodatkowe</p>
                     <dl class="mb-4 row">
@@ -136,6 +136,15 @@
                     </dl>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="row contact-info d-lg-none fixed-bottom bg-primary p-2 text-center">
+        <div class="col-6 border-right-1">
+            <button class="btn btn-link"><i class="fas fa-phone fa-flip-horizontal mr-2"></i>Zadzwoń</button>
+        </div>
+        <div class="col-6">
+            <button class="btn btn-link"><i class="fas fa-envelope mr-2"></i>Napisz</button>            
         </div>
     </div>
     

@@ -366,6 +366,17 @@
     }
 }
 
+.contact-info {
+    .btn-link {
+        color: $body-bg;
+        font-weight: bold;
+    }
+
+    .border-right-1 {
+        border-right: 1px solid #41a09e;
+    }
+}
+
 /* Login */
 #login-form {
     .login-or {

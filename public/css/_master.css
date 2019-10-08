@@ -382,6 +382,15 @@
   justify-content: center;
 }
 
+.contact-info .btn-link {
+  color: #FFF;
+  font-weight: bold;
+}
+
+.contact-info .border-right-1 {
+  border-right: 1px solid #41a09e;
+}
+
 /* Login */
 
 #login-form .login-or {
