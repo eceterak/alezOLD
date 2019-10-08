@@ -1,3 +1,9 @@
+@media (min-width: 992px) {
+  body {
+    font-size: 0.95rem;
+  }
+}
+
 /* Navbar top */
 
 #navbar-top {
@@ -76,7 +82,7 @@
 @media (min-width: 992px) {
   .hero .hero-header {
     margin: 100px 0 0.85rem;
-    font-size: 2.75rem;
+    font-size: 2.95rem;
   }
 }
 
@@ -88,6 +94,16 @@
 @media (min-width: 992px) {
   .hero .hero-sub {
     font-size: 1.15rem;
+  }
+}
+
+.hero .search-bar input {
+  font-size: 0.95rem;
+}
+
+@media (min-width: 992px) {
+  .hero .search-bar {
+    font-size: 1rem;
   }
 }
 
@@ -458,10 +474,17 @@
   background: url("/images/alez.svg") no-repeat 50% -2px;
   background-size: cover;
   text-indent: -1000rem;
-  width: 135px;
-  height: 39px;
+  width: 115px;
+  height: 34px;
   margin-right: 2rem;
   margin-left: -6px;
+}
+
+@media (min-width: 992px) {
+  #footer .container > .row > .col-lg-4 > a.navbar-brand {
+    width: 135px;
+    height: 39px;
+  }
 }
 
 #footer #useful-links .nav .nav-item a.nav-link {

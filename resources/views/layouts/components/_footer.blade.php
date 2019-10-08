@@ -1,4 +1,4 @@
-<section class="container pt-6 pb-5">
+<section class="container py-4 py-lg-6 pb-4 pb-lg-5">
     <div class="row">
         <div class="col-lg-4 pr-lg-6">
             <a href="{{ route('index') }}" class="navbar-brand mb-4">www.alez.pl</a>

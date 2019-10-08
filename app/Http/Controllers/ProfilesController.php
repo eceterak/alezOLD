@@ -8,6 +8,7 @@ class ProfilesController extends Controller
 {
     /**
      * Display a users profile and her adverts.
+     * Display only active and verified adverts.
      * 
      * @param App\User $user
      * @return view
@@ -16,7 +17,7 @@ class ProfilesController extends Controller
     {
         return view('profiles.show')->with([
             'profile' => $user,
-            'adverts' => $user->adverts()->paginate(5)
+            'adverts' => $user->adverts()->where('archived', false)->where('verified', true)->paginate(5)
         ]);
     }
 }

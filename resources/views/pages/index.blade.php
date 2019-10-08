@@ -1,7 +1,8 @@
 @extends('layouts.hero')
 
 @section('content')
-    <section class="container py-6" id="why-alez">
+    <section class="container py-4 py-lg-6" id="why-alez">
+        {{-- <h2 class="text-center">Dlaczego warto używać alez.pl?</h2> --}}
         <div class="row">
             <div class="col-md-4 pl-0 text-center">
                 <div class="px-5 mb-4 mb-md-0">
@@ -28,7 +29,7 @@
     </section>
     @if(isset($adverts) && $adverts->count())
         <div id="most-visited">
-            <section class="container py-6">
+            <section class="container py-4 py-lg-6">
                 <h4>Najczęściej odwiedzane</h4>
                 <div class="row">
                     @foreach($adverts as $advert)

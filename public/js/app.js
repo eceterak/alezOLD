@@ -33272,7 +33272,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "row align-items-center" }, [
-              _c("div", { staticClass: "col-8 col-lg-5 border-separator" }, [
+              _c("div", { staticClass: "col-9 col-lg-5 border-separator" }, [
                 _c(
                   "div",
                   { staticClass: "input-group input-group-lg" },
@@ -33489,14 +33489,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-4 col-lg-2" }, [
+    return _c("div", { staticClass: "col-3 col-lg-2" }, [
       _c(
         "button",
         {
           staticClass:
-            "btn btn-primary font-weight-bold float-right btn-block mr-2"
+            "btn btn-primary font-weight-bold float-right btn-lg-block mr-2"
         },
-        [_vm._v("Szukaj")]
+        [
+          _c("span", { staticClass: "d-none d-lg-inline" }, [_vm._v("Szukaj")]),
+          _c("i", { staticClass: "fas fa-search fa-sm d-lg-none" })
+        ]
       )
     ])
   }

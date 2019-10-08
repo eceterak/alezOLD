@@ -4,7 +4,7 @@
             <div class="bg-white rounded-lg py-2">
                 <form :action="this.endpoint" method="get" name="search_master_form" autocomplete="off" id="search_master_form">
                     <div class="row align-items-center">
-                        <div class="col-8 col-lg-5 border-separator">
+                        <div class="col-9 col-lg-5 border-separator">
                             <div class="input-group input-group-lg">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
@@ -63,8 +63,8 @@
                             </multiselect>
                             <input type="hidden" name="radius" v-model="selectedRadius">
                         </div>
-                        <div class="col-4 col-lg-2">
-                            <button class="btn btn-primary font-weight-bold float-right btn-block mr-2">Szukaj</button>
+                        <div class="col-3 col-lg-2">
+                            <button class="btn btn-primary font-weight-bold float-right btn-lg-block mr-2"><span class="d-none d-lg-inline">Szukaj</span><i class="fas fa-search fa-sm d-lg-none"></i></button>
                         </div>
                     </div>
                 </form>
@@ -199,4 +199,3 @@
     }
 
 </style>
-

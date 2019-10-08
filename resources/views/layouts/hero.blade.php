@@ -27,7 +27,7 @@
                     <p class="hero-sub">Pokoje na wynajem w największych miastach Polski</p>
                 </header>
             </section>
-            <section class="container pt-3 pb-5">
+            <section class="container pt-3 pb-5 search-bar">
                 <search-bar endpoint="{{ route('search.index') }}"></search-bar>
             </section>
             @if(isset($suggestedCities) && $suggestedCities->count())
