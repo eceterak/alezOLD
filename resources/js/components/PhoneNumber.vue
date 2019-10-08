@@ -1,18 +1,18 @@
 <template>
-    <button class="btn btn-light accountWarning font-weight-bold rounded-sm btn-block" @click="showPhoneNumber">
-        <i class="fas fa-phone fa-flip-horizontal mr-3"></i><span class="mr-2 mb-0 phone-number" v-text="phone"></span><small v-if="!visible">pokaż</small>
-    </button>
+    <div @click="showPhoneNumber">
+        <i class="fas fa-phone fa-flip-horizontal mr-3"></i><span class="mb-0 phone-number" v-text="phone"></span><small v-if="!visible && !placeholder" class="ml-2">pokaż</small>
+    </div>
 </template>
 
 <script>
     export default {
         props: [
-            'advert'
+            'advert', 'placeholder'
         ],
 
         data() {
             return {
-                phone: this.advert.PhoneTranslated,
+                phone: this.placeholder ? this.placeholder : this.advert.PhoneTranslated,
                 visible: false
             }
         },
@@ -32,11 +32,3 @@
         }
     }
 </script>
-
-<style lang="scss" scoped>
-
-.phone-number {
-    font-size: 1.1rem;
-}
-
-</style>

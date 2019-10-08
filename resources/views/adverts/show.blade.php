@@ -65,7 +65,9 @@
             <div class="card card-dark mb-4 d-none d-lg-block">
                 <div class="card-body">
                     @if($advert->hasVisiblePhoneNumber())
-                        <phone-number :advert="{{ $advert }}"></phone-number>
+                        <button class="btn btn-light accountWarning font-weight-bold rounded-sm btn-block">
+                            <phone-number :advert="{{ $advert }}"></phone-number>
+                        </button>
                     @endif
                 </div>
             </div>
@@ -74,10 +76,9 @@
                     <div class="col-4">
                         <img src="{{ $advert->user->avatar_path }}" alt="" class="card-img-top img-fluid rounded-circle" style="width: 5rem; height: 5rem;">
                     </div>
-                    <div class="col-8 pr-0">
+                    <div class="col-8 d-flex flex-column">
                         <p class="font-weight-bold">{!! ucfirst($advert->user->path) !!}</p>
-                        {{-- <p class="text-muted">Dodano {{ $advert->created_at->format('d.m.Y') }}</p> --}}
-                        <a href="{{ route('profiles.show', $advert->user->id) }}" class="btn btn-outline-primary btn-sm px-3 py-2">Ogłoszenia użytkownika</a>
+                        <a href="{{ route('profiles.show', $advert->user->id) }}" class="btn btn-outline-primary btn-sm px-3 py-2 mt-auto">Ogłoszenia użytkownika</a>
                     </div>
                 </div>
             </div>
@@ -140,12 +141,37 @@
     </div>
 
     <div class="row contact-info d-lg-none fixed-bottom bg-primary p-2 text-center">
-        <div class="col-6 border-right-1">
-            <button class="btn btn-link"><i class="fas fa-phone fa-flip-horizontal mr-2"></i>Zadzwoń</button>
-        </div>
-        <div class="col-6">
-            <button class="btn btn-link"><i class="fas fa-envelope mr-2"></i>Napisz</button>            
-        </div>
+        @if($advert->hasVisiblePhoneNumber())
+            <div class="col-6 border-right-1">
+                <button class="btn btn-link px-0"><phone-number :advert="{{ $advert }}" placeholder="Zadzwoń"></phone-number></button>
+            </div>
+            <div class="col-6">
+                <button class="btn btn-link contact-show"><i class="fas fa-envelope mr-2"></i>Napisz</button>            
+            </div>
+        @else
+            <div class="col-12">
+                <button class="btn btn-link contact-show"><i class="fas fa-envelope mr-2"></i>Napisz</button>            
+            </div>
+        @endif
     </div>
+
+    @if(!$advert->archived)
+        <div class="contact-modal w-100 p-3">
+            <div class="d-flex justify-content-between">
+                <p class="h5 mt-2">Napisz wiadomość</p>
+                <button type="button" class="close contact-hide" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <textarea name="body" id="body" class="form-control accountWarning" placeholder="Twoja wiadomość..." rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary font-weight-bold accountWarning">Wyślij wiadomość</button>
+            </form>
+            @include('components._errors')
+        </div>
+    @endif 
     
 @endsection

@@ -316,7 +316,7 @@
     }
 }
 
-/* Advert filters */ 
+/* cities.show, adverts.show */ 
 .filter-box {
     position: fixed;
     top: 0;
@@ -335,7 +335,7 @@
     }
 }
 
-/* Advert show */
+/* adverts.show */
 .advert {
 
     .favourite-button {
@@ -374,6 +374,32 @@
 
     .border-right-1 {
         border-right: 1px solid #41a09e;
+    }
+}
+
+.phone-number {
+    font-size: .95rem;
+
+    @media(min-width: map-get($grid-breakpoints, 'lg')) {
+        font-size: 1.1rem;
+    }
+}
+
+.contact-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: auto;
+    z-index: 1061;
+    background: $body-bg;
+    height: 100%;
+    display: none;
+
+    @media(min-width: map-get($grid-breakpoints, 'lg')) {
+        display: block;
+        position: relative;
+        z-index: 1;
+        height: auto;
     }
 }
 

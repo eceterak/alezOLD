@@ -98,15 +98,12 @@ $(function() {
     }
 
     // Display filters on mobile
-    $('.filters-show').on('click', function() {
-        $('.filter-box').slideToggle();
-        $('body').append('<div class = "body-overlay"></div>');
+    $('.filters-show, .filters-hide').on('click', function() {
+        $('.filter-box').fadeToggle('fast');
     });
 
-    $('.filters-hide').on('click', function() {
-        $('.filter-box').slideToggle();
-        $('.body-overlay').fadeOut(function() {
-            this.remove();
-        });     
+    // Display filters on mobile
+    $('.contact-show, .contact-hide').on('click', function() {
+        $('.contact-modal').fadeToggle('fast');
     });
 });

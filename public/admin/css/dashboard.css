@@ -1,1 +1,103 @@
-.bg-dashboard{background-color:#ececec}#top-navbar .nav-fill .nav-item:not(:last-child){border-right:1px solid #e4e4e4}#top-navbar i{margin-right:.5rem;font-size:.8rem}.card{border-radius:.5rem}.card .card-header{padding:.75rem;background:none}.card .card-body{padding:.75rem}.card .card-footer{padding:.75rem;background:none}.table{margin-bottom:0}.table td,.table th{vertical-align:middle}.table th,.table tr:first-child td{border:none}.table .fit{width:1px;white-space:nowrap}.form-section{margin-bottom:1rem}.form-section .form-title{margin-bottom:.75rem}.pagination{margin:0}.inputfile{position:absolute;display:hidden;z-index:0;height:1px;opacity:0;overflow:hidden}.inputfile+label{display:inline-block;color:grey;cursor:pointer}.inputfile+label:hover,.inputfile:focus+label{color:grey}.inputfile:focus+label{outline:1px dotted #000;outline:5px auto -webkit-focus-ring-color}.h-6{height:6rem}.h-8{height:8rem}.h-10{height:10rem}
+.bg-dashboard {
+  background-color: #ECECEC;
+}
+
+#top-navbar .nav-fill .nav-item:not(:last-child) {
+  border-right: 1px solid #e4e4e4;
+}
+
+#top-navbar i {
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.card {
+  border-radius: 0.5rem;
+}
+
+.card .card-header {
+  padding: 0.75rem;
+  background: none;
+}
+
+.card .card-body {
+  padding: 0.75rem;
+}
+
+.card .card-footer {
+  padding: 0.75rem;
+  background: none;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.table tr:first-child td,
+.table th {
+  border: none;
+}
+
+.table .fit {
+  width: 1px;
+  white-space: nowrap;
+}
+
+.form-section {
+  margin-bottom: 1rem;
+}
+
+.form-section .form-title {
+  margin-bottom: 0.75rem;
+}
+
+.pagination {
+  margin: 0px;
+}
+
+.inputfile {
+  position: absolute;
+  display: hidden;
+  z-index: 0;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.inputfile + label {
+  display: inline-block;
+  color: grey;
+  cursor: pointer;
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+  color: grey;
+}
+
+.inputfile:focus + label {
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
+/**
+ * Utilities
+ */
+
+.h-6 {
+  height: 6rem;
+}
+
+.h-8 {
+  height: 8rem;
+}
+
+.h-10 {
+  height: 10rem;
+}
+
