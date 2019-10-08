@@ -180,14 +180,13 @@ $(function () {
 
 
   $('.filters-show').on('click', function () {
-    //$('.filter-box').css('visibility', 'visible');
     $('.filter-box').slideToggle();
-    if ($(document).find('.body-overlay').length == 0) $('body').append('<div class = "body-overlay"></div>'); // Overlay.
+    $('body').append('<div class = "body-overlay"></div>');
   });
   $('.filters-hide').on('click', function () {
     $('.filter-box').slideToggle();
     $('.body-overlay').fadeOut(function () {
-      this.remove(); // Run after fade out is completed.
+      this.remove();
     });
   });
 });

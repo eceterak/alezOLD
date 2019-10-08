@@ -32886,7 +32886,7 @@ var render = function() {
         },
         [
           _c("i", {
-            staticClass: "fa-heart favourite-heart fa-sm",
+            staticClass: "fa-heart favourite-heart",
             class: _vm.classes
           })
         ]
@@ -33581,7 +33581,7 @@ var render = function() {
     _c(
       "button",
       {
-        staticClass: "accountWarning btn btn-link",
+        staticClass: "accountWarning btn btn-link pr-0",
         on: { click: _vm.subscribe }
       },
       [
@@ -50784,14 +50784,13 @@ $(function () {
 
 
   $('.filters-show').on('click', function () {
-    //$('.filter-box').css('visibility', 'visible');
     $('.filter-box').slideToggle();
-    if ($(document).find('.body-overlay').length == 0) $('body').append('<div class = "body-overlay"></div>'); // Overlay.
+    $('body').append('<div class = "body-overlay"></div>');
   });
   $('.filters-hide').on('click', function () {
     $('.filter-box').slideToggle();
     $('.body-overlay').fadeOut(function () {
-      this.remove(); // Run after fade out is completed.
+      this.remove();
     });
   });
 });

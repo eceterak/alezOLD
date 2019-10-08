@@ -1,6 +1,6 @@
 <template>
     <button class="btn btn-link p-0 accountWarning " @click="addFavourite" v-if="authorize('notAnOwner', this.advert)">
-        <i :class="classes" class="fa-heart favourite-heart fa-sm"></i>
+        <i :class="classes" class="fa-heart favourite-heart"></i>
     </button>
 </template>
 

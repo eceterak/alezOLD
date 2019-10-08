@@ -1,6 +1,6 @@
 <template>
     <span>
-        <button class="accountWarning btn btn-link" @click="subscribe"><span class="d-none d-lg-inline mr-2" v-text="info"></span><i class="fa-lg" :class="classes"></i></button>
+        <button class="accountWarning btn btn-link pr-0" @click="subscribe"><span class="d-none d-lg-inline mr-2" v-text="info"></span><i class="fa-lg" :class="classes"></i></button>
     </span>
 </template>
 

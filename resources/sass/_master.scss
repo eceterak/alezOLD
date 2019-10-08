@@ -86,7 +86,7 @@
 /* Breadcrumbs */
 #breadcrumbs {
     background-color: #f7f7f9;
-    padding: 1rem 0;
+    padding: .5rem 0;
 
     @media(min-width: map-get($grid-breakpoints, 'lg')) {
         padding: 2rem 0;
@@ -94,9 +94,11 @@
 
     h3 {
         font-size: 1rem;
+        margin-bottom: .25rem;
 
         @media(min-width: map-get($grid-breakpoints, 'lg')) {
             font-size: 1.4rem;
+            margin-bottom: .5rem;
         } 
     }
 
@@ -330,6 +332,37 @@
         position: relative;
         z-index: 1;
         height: auto;
+    }
+}
+
+/* Advert show */
+.advert {
+
+    .favourite-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 1rem;
+    }
+
+    .advert-photos {
+        .featured-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: auto;
+            overflow: hidden;
+            position: relative;
+
+            @media(min-width: map-get($grid-breakpoints, 'lg')) {
+                height: 400px;
+            }
+        }
+
+        .thumbnail-container {
+            display: flex;
+            justify-content: center;
+        }
     }
 }
 

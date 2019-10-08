@@ -95,7 +95,7 @@
 
 #breadcrumbs {
   background-color: #f7f7f9;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
 }
 
 @media (min-width: 992px) {
@@ -106,11 +106,13 @@
 
 #breadcrumbs h3 {
   font-size: 1rem;
+  margin-bottom: 0.25rem;
 }
 
 @media (min-width: 992px) {
   #breadcrumbs h3 {
     font-size: 1.4rem;
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -349,6 +351,35 @@
     z-index: 1;
     height: auto;
   }
+}
+
+/* Advert show */
+
+.advert .favourite-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1rem;
+}
+
+.advert .advert-photos .featured-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  overflow: hidden;
+  position: relative;
+}
+
+@media (min-width: 992px) {
+  .advert .advert-photos .featured-container {
+    height: 400px;
+  }
+}
+
+.advert .advert-photos .thumbnail-container {
+  display: flex;
+  justify-content: center;
 }
 
 /* Login */

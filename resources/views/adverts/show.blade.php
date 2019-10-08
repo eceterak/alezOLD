@@ -3,13 +3,11 @@
     <div class="d-flex justify-content-between align-items-center">
         <div>
             <h3>{{ $advert->title }}</h3>
-            <p class="mb-0">
-                <button onclick="$('#map').goTo()" class="btn btn-light text-primary font-weight-bold">
-                    <i class="fas fa-map-marker fa-sm mr-2"></i>{{ $advert->city->name }}@isset($advert->street),&nbsp;{{ $advert->street->name }} @endisset
-                </button>
-            </p>
+            <button onclick="$('#map').goTo()" class="btn btn-light btn-sm text-primary font-weight-bold mb-0">
+                <i class="fas fa-map-marker fa-sm mr-2"></i>{{ $advert->city->name }}@isset($advert->street),&nbsp;{{ $advert->street->name }} @endisset
+            </button>
         </div>
-        <favourite :advert="{{ $advert }}"></favourite>
+        <favourite :advert="{{ $advert }}" class="d-none d-lg-block"></favourite>
     </div>
 @endsection
 @section('content')
@@ -19,58 +17,52 @@
     @if(!$advert->verified)
         <div class="alert alert-warning">Ogłoszenie oczekuje na weryfikację przez administratora</div>
     @endif
-    <div class="row">
-        <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="mBox row">
-                            <div class="col-8">
-                                <div class="mb-4">
-                                    <img src="{{ $advert->featured_photo_path }}" class="img-fluid">
-                                </div>
-                            </div>
-                            <div class="col-4 pr-0">
-                                <div class="row mb-4">
-                                    @forelse($advert->photos as $photo)
-                                        <div class="col-6"><img src="https://alez.s3.eu-central-1.amazonaws.com/{{ $photo->url }}" alt="" class="img-fluid"></div>
-                                    @empty
-                                        
-                                    @endforelse
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <h5 class="card-title">Opis</h5>
-                            <p class="card-text">{{ $advert->description }}</p>
-                        </div>
-                        @if(!$advert->archived)
-                            <div>
-                                <h5 class="card-title">Napisz wiadomość</h5>
-                                <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST">
-                                    @csrf
-                                    <div class="form-group">
-                                        <textarea name="body" id="body" class="form-control accountWarning" placeholder="Twoja wiadomość..." rows="4"></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary font-weight-bold accountWarning">Wyślij wiadomość</button>
-                                </form>
-                                @include('components._errors')
-                            </div>
-                        @endif 
-                        <div class="mt-5">
-                            <google-map lat="{{ $advert->lat }}" lon="{{ $advert->lon}}" api="{{ env('APP_NAME') }}"></google-map>
-                        </div>
-                    </div>
+    <div class="row advert">
+        <div class="col-lg-8">
+            <div class="mBox advert-photos">
+                <div class="mb-4 mb-lg-2 featured-container">
+                    <favourite :advert="{{ $advert }}" class="favourite-button d-block d-lg-none"></favourite>
+                    <img src="{{ $advert->featured_photo_path }}" class="img-fluid">
+                </div>
+                <div class="row d-none d-lg-flex">
+                    @foreach($advert->photos as $photo)
+                        <div class="col-2 thumbnail-container"><img src="https://alez.s3.eu-central-1.amazonaws.com/{{ $photo->url }}" alt="" class="img-fluid"></div>
+                    @endforeach
                 </div>
             </div>
-        <div class="col-md-4 pr-4">
-            <div class="card card-dark mb-4">
+            <div class="mb-4">
+                <h4 class="d-block d-lg-none">
+                    <strong>{{ $advert->rent }}</strong>&nbsp;<small class="ml-1 text-xs text-grey-darker">zł/miesiąc @if($advert->bills) + media @endif</small>
+                </h4>
+                <h5 class="card-title">Opis</h5>
+                <p class="card-text">{{ $advert->description }}</p>
+            </div>
+            @if(!$advert->archived)
+                <div class="d-none d-lg-block">
+                    <h5 class="card-title">Napisz wiadomość</h5>
+                    <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <textarea name="body" id="body" class="form-control accountWarning" placeholder="Twoja wiadomość..." rows="4"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary font-weight-bold accountWarning">Wyślij wiadomość</button>
+                    </form>
+                    @include('components._errors')
+                </div>
+            @endif 
+            <div class="mt-4 mt-lg-5">
+                <google-map lat="{{ $advert->lat }}" lon="{{ $advert->lon}}" api="{{ env('APP_NAME') }}"></google-map>
+            </div>
+        </div>
+        <div class="col-lg-4 pr-4">
+            <div class="card card-dark mb-4 d-none d-lg-block">
                 <div class="card-body">
                     <h3 class="mb-0 text-center">
                         <strong>{{ $advert->rent }}</strong>&nbsp;<small class="ml-1 text-xs text-grey-darker">zł/miesiąc @if($advert->bills) + media @endif</small>
                     </h3>
                 </div>
             </div>
-            <div class="card card-dark mb-4">
+            <div class="card card-dark mb-4 d-none d-lg-block">
                 <div class="card-body">
                     @if($advert->hasVisiblePhoneNumber())
                         <phone-number :advert="{{ $advert }}"></phone-number>
