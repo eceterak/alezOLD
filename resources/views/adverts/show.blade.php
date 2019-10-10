@@ -156,21 +156,28 @@
     </div>
 
     @if(!$advert->archived)
-        <div class="contact-modal w-100 p-3">
-            <div class="d-flex justify-content-between">
+        <div class="c-modal contact-modal">
+            <div class="d-flex justify-content-between c-modal-header">
                 <p class="h5 mt-2">Napisz wiadomość</p>
                 <button type="button" class="close contact-hide" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <textarea name="body" id="body" class="form-control accountWarning" placeholder="Twoja wiadomość..." rows="4"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary font-weight-bold accountWarning">Wyślij wiadomość</button>
-            </form>
-            @include('components._errors')
+            <div class="c-modal-body">
+                <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="body">Twoja wiadomość</label>
+                        <textarea name="body" id="body" class="form-control accountWarning" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary font-weight-bold accountWarning btn-block">Wyślij wiadomość</button>
+                </form>
+                @include('components._errors')
+            </div>
         </div>
     @endif 
     
