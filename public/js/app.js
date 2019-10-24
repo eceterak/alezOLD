@@ -50332,9 +50332,8 @@ $(function ($) {
       var container = $('<div/>').attr('id', 'mBox').appendTo('body'); // Very important to append it to the body.#
       // Check if user scrolled down and update the position.
 
-      if (this.scrollPosition > 0) {
-        var top = this.calculatePosition(this.scrollPosition);
-        container.css('top', top);
+      if (this.scrollPosition > 0) {// var top = this.calculatePosition(this.scrollPosition);
+        // container.css('top', top);
       }
 
       return container;
@@ -50676,6 +50675,10 @@ $(function () {
     });
   }
 
+  $('.contact-show').on('focus click', function (event) {
+    event.preventDefault();
+    $('#contact-modal').modal('toggle');
+  });
   $('#advertDeleteConfirmationModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
     var endpoint = button.data('endpoint');
@@ -50716,10 +50719,9 @@ $(function () {
   $('.filters-show, .filters-hide').on('click', function () {
     $('.filter-box').fadeToggle('fast');
   }); // Display filters on mobile
-
-  $('.contact-show, .contact-hide').on('click', function () {
-    $('.contact-modal').fadeToggle('fast');
-  });
+  // $('.contact-show, .contact-hide').on('click', function() {
+  //     $('.contact-modal').fadeToggle('fast');
+  // });
 });
 
 /***/ }),

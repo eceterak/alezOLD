@@ -18692,12 +18692,21 @@ readers do not read off random characters that represent icons */
 #mBox {
   display: none;
   position: absolute;
-  top: 25px;
   left: 50%;
-  -webkit-transform: translate(-50%, 0);
-          transform: translate(-50%, 0);
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
   z-index: 101;
   text-align: center;
+  width: 100%;
+  top: 50%;
+}
+
+@media (min-width: 992px) {
+  #mBox {
+    top: 25px;
+    -webkit-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
+  }
 }
 
 @media (min-width: 576px) {

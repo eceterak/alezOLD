@@ -46867,9 +46867,8 @@ $(function ($) {
       var container = $('<div/>').attr('id', 'mBox').appendTo('body'); // Very important to append it to the body.#
       // Check if user scrolled down and update the position.
 
-      if (this.scrollPosition > 0) {
-        var top = this.calculatePosition(this.scrollPosition);
-        container.css('top', top);
+      if (this.scrollPosition > 0) {// var top = this.calculatePosition(this.scrollPosition);
+        // container.css('top', top);
       }
 
       return container;

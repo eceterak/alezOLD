@@ -56,6 +56,12 @@ $(function() {
         });
     }
 
+    $('.contact-show').on('focus click', function(event) {
+        event.preventDefault();
+
+        $('#contact-modal').modal('toggle');
+    });
+
     $('#advertDeleteConfirmationModal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget);
         var endpoint = button.data('endpoint');
@@ -103,7 +109,7 @@ $(function() {
     });
 
     // Display filters on mobile
-    $('.contact-show, .contact-hide').on('click', function() {
-        $('.contact-modal').fadeToggle('fast');
-    });
+    // $('.contact-show, .contact-hide').on('click', function() {
+    //     $('.contact-modal').fadeToggle('fast');
+    // });
 });

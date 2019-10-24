@@ -363,13 +363,21 @@ body {
         z-index: 1030;
         text-align: center;
         border-bottom: 1px solid $gray-300;
-        padding: .5rem;
+        padding: .5rem 15px;
+
+        p {
+            font-size: 1.25rem;
+        }
 
         @media(min-width: map-get($grid-breakpoints, 'lg')) {
             position: relative;
             text-align: left;
             border-bottom: none;
             padding: 0;
+
+            p {
+                font-size: 1rem;
+            }
         }
 
         .close {
@@ -777,7 +785,7 @@ body {
 }
 
 .modal {
-    top: 150px;
+    //top: 150px;
 }
 
 .avatar-cropper {

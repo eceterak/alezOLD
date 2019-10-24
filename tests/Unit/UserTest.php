@@ -151,6 +151,6 @@ class UserTest extends TestCase
 
         $user->refresh();
 
-        $this->assertEquals('<a href="'.route('profiles.show', $user->id).'">'.$user->name.'</a>', $user->path);
+        $this->assertEquals('<a href="'.route('profiles.show', $user->id).'" class="text-dark">'.$user->name.'</a>', $user->path);
     }
 }

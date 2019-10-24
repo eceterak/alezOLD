@@ -179,9 +179,9 @@ $(function($) {
 			// Check if user scrolled down and update the position.
 			if(this.scrollPosition > 0) {
 
-				var top = this.calculatePosition(this.scrollPosition);
+				// var top = this.calculatePosition(this.scrollPosition);
 
-				container.css('top', top);
+				// container.css('top', top);
 
 			}
 

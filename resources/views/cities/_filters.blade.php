@@ -1,6 +1,6 @@
 <div class="py-6 py-lg-0">
-    <div class="d-flex justify-content-between filters-header">
-        <p class="h5 mt-2">Filtrowanie</p>
+    <div class="d-flex justify-content-between filters-header align-items-center">
+        <p class="h5 m-0 my-lg-2">Filtrowanie</p>
         <button type="button" class="close d-md-none filters-hide" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>

@@ -50,7 +50,7 @@ class AuthTest extends TestCase
         $this->post(route('login'), [
             'login_email' => 'email@email.com',
             'login_password' => 'password123'
-        ])->assertRedirect(route('login').'#login');
+        ])->assertRedirect(route('login'));
     }
 
     /** @test */
@@ -61,6 +61,6 @@ class AuthTest extends TestCase
             'email' => 'john',
             'password' => 'jd1234',
             'password_confirmation' => 'jd1234'
-        ])->assertRedirect(route('login').'#register');
+        ])->assertRedirect(route('login'));
     }
 }
