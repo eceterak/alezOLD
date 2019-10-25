@@ -197,9 +197,16 @@
                                 <input type="text" class="form-control">
                             </div>
                             <div class="form-group">
+                                <label for="email">Telefon</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="form-group">
                                 <label for="body">Twoja wiadomość</label>
                                 <textarea name="body" id="body" class="form-control accountWarning" rows="4"></textarea>
                             </div>
+                            <div class="small">
+                                <p class="card-text mb-3">Logując się ackeptuję <a href="{{ route('termsAndConditions') }}" target="_blank" rel="noopener noreferrer">Regulamin serwisu alez.pl.</a></p>
+                            </div>     
                             <button type="submit" class="btn btn-primary font-weight-bold accountWarning btn-block">Wyślij wiadomość</button>
                         </form>
                         @include('components._errors')

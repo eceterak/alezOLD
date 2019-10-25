@@ -145,4 +145,4 @@ Route::get('/api/ogloszenia/{advert}/phone', 'Api\DisplayPhoneNumberController@s
 
 // Auth
 Auth::routes(['verify' => true]);
-Auth::routes();
+Route::get('/rejestracja', 'Auth\RegisterController@showRegistrationForm')->middleware('guest');

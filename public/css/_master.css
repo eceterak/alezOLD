@@ -111,7 +111,7 @@
 
 #breadcrumbs {
   background-color: #f7f7f9;
-  padding: 0.75rem 0;
+  padding: 1rem 0;
 }
 
 @media (min-width: 992px) {
@@ -795,6 +795,10 @@
 .table .fit {
   width: 1px;
   white-space: nowrap;
+}
+
+.modal .modal-header {
+  align-items: center;
 }
 
 .avatar-cropper .avatar-cropper-footer {
