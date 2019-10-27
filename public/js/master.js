@@ -146,6 +146,10 @@ $(function () {
     event.preventDefault();
     $('#contact-modal').modal('toggle');
   });
+  $('.filters-show').on('focus click', function (event) {
+    event.preventDefault();
+    $('#filters-modal').modal('toggle');
+  });
   $('#advertDeleteConfirmationModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget);
     var endpoint = button.data('endpoint');
@@ -181,14 +185,10 @@ $(function () {
       }, 600);
     }
   }; // Display filters on mobile
-
-
-  $('.filters-show, .filters-hide').on('click', function () {
-    $('.filter-box').fadeToggle('fast');
-  }); // Display filters on mobile
-  // $('.contact-show, .contact-hide').on('click', function() {
-  //     $('.contact-modal').fadeToggle('fast');
+  // $('.filters-show, .filters-hide').on('click', function() {
+  //     $('.filter-box').fadeToggle('fast');
   // });
+
 });
 
 /***/ }),

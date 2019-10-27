@@ -15,7 +15,7 @@
         <div class="col-md-9 pl-md-4">
             @include('adverts._list')
         </div>
-        <div class="col-md-3 d-lg-block filter-box">
+        <div class="col-md-3 d-lg-block">
             @include('cities._filters')
         </div>
     </div>

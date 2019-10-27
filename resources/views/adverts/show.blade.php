@@ -156,32 +156,8 @@
     </div>
 
     @if(!$advert->archived)
-        {{-- <div class="c-modal contact-modal">
-            <div class="d-flex justify-content-between c-modal-header">
-                <p class="h5 mt-2">Napisz wiadomość</p>
-                <button type="button" class="close contact-hide" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="c-modal-body">
-                <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST">
-                    @csrf
-                    <div class="form-group">
-                        <label for="email">E-mail</label>
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="body">Twoja wiadomość</label>
-                        <textarea name="body" id="body" class="form-control accountWarning" rows="4"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary font-weight-bold accountWarning btn-block">Wyślij wiadomość</button>
-                </form>
-                @include('components._errors')
-            </div>
-        </div> --}}
-
         <div class="modal fade" id="contact-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Napisz wiadomość</h5>
@@ -190,7 +166,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST">
+                        <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST" name="contact-form">
                             @csrf
                             <div class="form-group">
                                 <label for="email">E-mail</label>
@@ -205,11 +181,13 @@
                                 <textarea name="body" id="body" class="form-control accountWarning" rows="4"></textarea>
                             </div>
                             <div class="small">
-                                <p class="card-text mb-3">Logując się ackeptuję <a href="{{ route('termsAndConditions') }}" target="_blank" rel="noopener noreferrer">Regulamin serwisu alez.pl.</a></p>
-                            </div>     
-                            <button type="submit" class="btn btn-primary font-weight-bold accountWarning btn-block">Wyślij wiadomość</button>
+                                <p class="mb-0">Logując się ackeptuję <a href="{{ route('termsAndConditions') }}" target="_blank" rel="noopener noreferrer">Regulamin serwisu alez.pl.</a></p>
+                            </div> 
+                            @include('components._errors')
                         </form>
-                        @include('components._errors')
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary font-weight-bold accountWarning btn-block" onclick="$('form[name=contact-form]').submit()">Wyślij wiadomość</button>
                     </div>
                 </div>
             </div>
