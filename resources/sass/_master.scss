@@ -148,10 +148,11 @@ body {
 
         a.nav-link {
             color: #3b4249;
-            text-transform: uppercase;
             font-weight: bold;
             
             @media(min-width: map-get($grid-breakpoints, 'lg')) {
+                text-transform: uppercase;
+
                 &.active {
                     border-bottom: 2px solid #3b4249;
                 }
@@ -177,7 +178,6 @@ body {
     }
 
     i {
-        color: $gray-600;
         width: 15px;
         height: 15px;
         margin-right: 1rem;
@@ -280,6 +280,13 @@ body {
     }
 }
 
+#filters-modal {
+    .filter-group:last-child {
+        margin-bottom: 0;
+    }
+}
+
+
 /* Advert list */
 .advert-list {
     .advert {
@@ -317,7 +324,7 @@ body {
 .list-group.sort-group {
 
     .list-group-item {
-        padding: 0 .5rem .5rem .5rem;
+        padding: 0 .5rem;
         border: none;
         background: transparent;
 
@@ -611,7 +618,7 @@ body {
     }
 }
 
-/* Components */
+/* Card */
 .card-dark {
     background-color: #f7f7f9;
     border-color: #f7f7f9;
@@ -625,6 +632,7 @@ body {
     }
 }
 
+/* List-group */
 .list-group {
     .list-group-item {
         border-bottom: 1px solid $gray-300;
@@ -636,31 +644,10 @@ body {
     }
 }
 
-/* Custom components */
-.c-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow: auto;
-    z-index: 1061;
-    background: $body-bg;
-    height: 100%;
-    width: 100%;
-    display: none;
-
-    .c-modal-header {
-        font-size: 1.25rem;
-        padding: 2rem;
-        padding-bottom: 0;
-
-        .close {
-            font-size: 1.75rem;
-        }
-    }
-
-    .c-modal-body {
-        padding: 2rem;
-    }
+/* Modal */
+.modal-header .close {
+    padding: .75rem;
+    margin: -.75rem -.75rem -.75rem auto;
 }
 
 /* Media */

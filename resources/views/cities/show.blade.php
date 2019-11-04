@@ -17,6 +17,7 @@
         </div>
         <div class="col-md-3 d-lg-block">
             @include('cities._filters')
+            @include('cities._mobile-filters')
         </div>
     </div>
 @endsection

@@ -7,7 +7,9 @@
                 <i class="fas fa-map-marker fa-sm mr-2"></i>{{ $advert->city->name }}@isset($advert->street),&nbsp;{{ $advert->street->name }} @endisset
             </button>
         </div>
-        <favourite :advert="{{ $advert }}" class="d-none d-lg-block"></favourite>
+        <h2 class="mb-0 text-center d-none d-lg-block">
+            <strong>{{ $advert->rent }}</strong>&nbsp;<small class="ml-1 text-xs text-grey-darker">zł/miesiąc @if($advert->bills) + media @endif</small>
+        </h2>
     </div>
 @endsection
 @section('content')
@@ -21,16 +23,17 @@
         <div class="col-lg-8">
             <div class="mBox advert-photos mb-2">
                 <div class="featured-container">
-                    <favourite :advert="{{ $advert }}" class="favourite-button d-block d-lg-none"></favourite>
+                    <favourite :advert="{{ $advert }}" class="favourite-button"></favourite>
                     <img src="{{ $advert->featured_photo_path }}" class="img-fluid">
                 </div>
-                <div class="row d-none d-lg-flex">
+                <div class="row d-none">
                     @foreach($advert->photos as $photo)
                         <div class="col-2 thumbnail-container"><img src="https://alez.s3.eu-central-1.amazonaws.com/{{ $photo->url }}" alt="" class="img-fluid"></div>
                     @endforeach
                 </div>
             </div>
             <div class="mb-4">
+                <p class="small">Pokój {{ ucfirst($advert->room_size_translated) }} na wynajem <a href="{{ route('cities.show', $advert->city->slug) }}">{{ $advert->city->name }}</a>@isset($advert->street),&nbsp;{{ $advert->street->name }} @endisset</p>
                 <h4 class="d-block d-lg-none">
                     <strong><i class="fas fa-dollar-sign mr-2"></i>{{ $advert->rent }}</strong>&nbsp;<small class="ml-1 text-xs text-grey-darker">zł/miesiąc @if($advert->bills) + media @endif</small>
                 </h4>
@@ -40,28 +43,32 @@
             @if(!$advert->archived)
                 <div class="d-none d-lg-block">
                     <h5 class="card-title">Napisz wiadomość</h5>
-                    <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST">
+                    <form action="{{ route('conversations.store', [$advert->city->slug, $advert->slug]) }}" method="POST" name="contact-form">
                         @csrf
                         <div class="form-group">
-                            <textarea name="body" id="body" class="form-control accountWarning" placeholder="Twoja wiadomość..." rows="4"></textarea>
+                            <label for="email">E-mail</label>
+                            <input type="text" class="form-control">
                         </div>
-                        <button type="submit" class="btn btn-primary font-weight-bold accountWarning">Wyślij wiadomość</button>
+                        <div class="form-group">
+                            <label for="email">Telefon</label>
+                            <input type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="body">Twoja wiadomość</label>
+                            <textarea name="body" id="body" class="form-control accountWarning" rows="4"></textarea>
+                        </div>
+                        <div class="small">
+                            <p class="mb-0">Logując się ackeptuję <a href="{{ route('termsAndConditions') }}" target="_blank" rel="noopener noreferrer">Regulamin serwisu alez.pl.</a></p>
+                        </div> 
+                        @include('components._errors')
                     </form>
-                    @include('components._errors')
                 </div>
             @endif 
             <div class="mt-4 mb-4 mb-lg-0 mt-lg-5">
                 <google-map lat="{{ $advert->lat }}" lon="{{ $advert->lon}}" api="{{ env('APP_NAME') }}"></google-map>
             </div>
         </div>
-        <div class="col-lg-4 pr-4">
-            <div class="card card-dark mb-4 d-none d-lg-block">
-                <div class="card-body">
-                    <h3 class="mb-0 text-center">
-                        <strong>{{ $advert->rent }}</strong>&nbsp;<small class="ml-1 text-xs text-grey-darker">zł/miesiąc @if($advert->bills) + media @endif</small>
-                    </h3>
-                </div>
-            </div>
+        <div class="col-lg-4">
             <div class="card card-dark mb-4 d-none d-lg-block">
                 <div class="card-body">
                     @if($advert->hasVisiblePhoneNumber())

@@ -17,6 +17,8 @@ $h4-font-size: $font-size-base * 1.5;
 $h5-font-size: 1rem;
 $h6-font-size: $font-size-base;
 
+$font-weight-normal: 400 !default;
+
 // Colors
 $primary: #02807e;
 $blue: #3490dc;
@@ -145,3 +147,7 @@ $list-group-border-radius: 0;
 $list-group-border-color: $gray-300;
 $list-group-item-padding-y: .75rem;
 $list-group-item-padding-x: 0;
+
+// Close
+$close-font-size: $font-size-base * 2;
+$close-font-weight: $font-weight-normal;
