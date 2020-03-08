@@ -170,6 +170,7 @@
         pointer-events: none;
         opacity: 0.4;
     }
+    
     .spinner {
         position: absolute;
         top: 50%;

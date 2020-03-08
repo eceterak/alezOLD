@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="mb-4">
-                <p class="small">Pokój {{ ucfirst($advert->room_size_translated) }} na wynajem <a href="{{ route('cities.show', $advert->city->slug) }}">{{ $advert->city->name }}</a>@isset($advert->street),&nbsp;{{ $advert->street->name }} @endisset</p>
+                <p class="small mb-2 mb-lg-3">Pokój {{ ucfirst($advert->room_size_translated) }} na wynajem <a href="{{ route('cities.show', $advert->city->slug) }}">{{ $advert->city->name }}</a>@isset($advert->street),&nbsp;{{ $advert->street->name }} @endisset</p>
                 <h4 class="d-block d-lg-none">
                     <strong><i class="fas fa-dollar-sign mr-2"></i>{{ $advert->rent }}</strong>&nbsp;<small class="ml-1 text-xs text-grey-darker">zł/miesiąc @if($advert->bills) + media @endif</small>
                 </h4>

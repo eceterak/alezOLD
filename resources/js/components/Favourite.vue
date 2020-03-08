@@ -22,7 +22,7 @@
             },
 
             endpoint() {
-                return '/pokoje/' + this.advert.city.slug + '/' + this.advert.slug + '/ulubione'
+                return '/pokoje/' + this.advert.city.slug + '/' + this.advert.slug + '/ulubione';
             },
 
             info() {

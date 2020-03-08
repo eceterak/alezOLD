@@ -16,6 +16,7 @@ abstract class QueryFilter
      * @var Builder $builder
      */
     protected $builder;
+    
     /**
      * @var array
      */

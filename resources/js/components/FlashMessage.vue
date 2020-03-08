@@ -51,11 +51,3 @@
         }
     }
 </script>
-
-<style>
-    .alert-flash {
-        position: fixed;
-        bottom: 50px;
-        right: 50px;
-    }
-</style>

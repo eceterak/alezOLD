@@ -589,6 +589,10 @@
   }
 }
 
+/**
+ * COMPONENTS
+ */
+
 /* Pagination */
 
 .custom-pagination {
@@ -671,6 +675,24 @@
   .btn-lg-block {
     display: block;
     width: 100%;
+  }
+}
+
+/* Alerts */
+
+.alert-flash {
+  position: fixed;
+  bottom: 50px;
+  right: 50%;
+  -webkit-transform: translateX(50%);
+          transform: translateX(50%);
+}
+
+@media (min-width: 992px) {
+  .alert-flash {
+    right: 50px;
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
   }
 }
 

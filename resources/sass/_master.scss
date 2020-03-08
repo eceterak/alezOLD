@@ -574,6 +574,10 @@ body {
     }
 }
 
+/**
+ * COMPONENTS
+ */
+
 /* Pagination */
 .custom-pagination {
     display: flex;
@@ -662,6 +666,18 @@ body {
     }
 }
 
+/* Alerts */
+.alert-flash {
+    position: fixed;
+    bottom: 50px;
+    right: 50%;
+    transform: translateX(50%);
+
+    @media(min-width: map-get($grid-breakpoints, 'lg')) {
+        right: 50px;    
+        transform: translateX(0);
+    }
+}
 
 
 
