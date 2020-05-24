@@ -4,6 +4,7 @@
     <div class="form-group">
         <label for="login_email">Email</label>
         <input id="login_email" type="email" placeholder="Email" class="form-control {{ $errors->login->has('email') ? ' is-invalid' : '' }}" name="login_email" value="{{ old('login_email') }}" required autofocus>
+        <small>test123@gg.com</small>
         @if($errors->login->has('email'))
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $errors->login->first('email') }}</strong>
@@ -13,6 +14,7 @@
     <div class="form-group">
         <label for="login_password">Hasło</label>
         <input id="login_password" type="password" placeholder="Hasło" class="form-control{{ $errors->has('login_password') ? ' is-invalid' : '' }}" name="login_password" required>
+        <small>asd1234</small>
         @if ($errors->has('login_password'))
             <span class="invalid-feedback" role="alert">
                 <strong>{{ $errors->first('login_password') }}</strong>
